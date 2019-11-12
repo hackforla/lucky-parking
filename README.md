@@ -1,73 +1,45 @@
-# Project title and description
+# Lucky Parking Project
 
-Include a project description that explains **what** your project is and **why** it exists. Aim for no more than 3-5 concise sentences. For example, you might say:
+Lucky Parking is a project of Hack for LA. Hack for LA is a brigade of a Code for America that exists to help people look for street parking with the least probability of getting citations. From a civic perspective, each citizen is entitled to know the citation history of a given street parking (eg. how, when and why citations are generated) and the possibility of getting new citations when one is seeking street parking.
 
-{Project Name} is a project of Hack for LA. Hack for LA is a brigade of a Code for America that exists to {your mission}. {Project Name} helps {target users} accomplish {goal of project}. The {app/site/thing you're building}'s main features include {very brief feature descriptions}.
 
 ### Project context
 
-Civic projects often exist within a larger context that may include multiple stakeholders, historic relationships, associated research, or other details that are relevant but not *required* for direct contributions. Gathering these details in one place is useful, but the ReadMe isn't that place. Use this section to [link to a Google Doc](#) or other documentation repository where contributors can dig in if they so choose. This is also a good place to link to your Code of Conduct.
+This project will have three phrases.
+- Phase 1: to analyze existing parking citation with data published by the city of LA.
+- Phase 2: to build the function of predicting a street parking spot’s probability of getting citation related to time.
+- Phase 3: to build a real-time platform to help users find nearby vacant street parking spot with least probability of getting citations.
 
-### Technology used
+The deliverables.
+- Phase 1 will include data visualizations of citation analysis.
+- Phase 2 will deliver a map identifying each street parking’s citation history and time related recommendation.
+- Phase 3 will deliver end-user platform and centralized database to provide real time parking search with minimum citation probability. 
 
-- Each platform or framework should get its own bullet.
-- Each platform should include an [active link](#) to the official documentation.
-
-
-
-# How to contribute
-
-Explain the different ways people can contribute. For example:
-
-- Join the team {on Slack/at our weekly hack night/etc}.
-- To help with user research, {do ABC}.
-- To provide design support, {do XYZ}.
-- To contribute to the code, follow the instructions below.
-
-Remember to provide direct links to each channel.
+Weekly Monday meetups will be the primary methods of updates sharing, idea discussions, technical troubleshootings, technical resource exchanges. And here is the preliminary work distributions. 
+- One branch of team member -- focus on data cleaning and analysis. Search for tools and explore approaches to effectively deliver the study. 
+- One branch of team member -- figure out the method of searching available nearby street parking 
+- One branch of team member -- use machine learning to generate citation prediction and recommendation. 
+- One branch of team member -- figure out API, method of incentivization, methods of real-time meter occupancy detect. 
+- Future UX team -- build app platform 
 
 
+### Join our primary collaboration tools
 
-## Installation instructions
-
-1. Step-by-step instructions help new contributors get a development environment up and running quickly.
-2. You'll want to find the balance between being specific enough for novices to follow, without being so specific that you reinvent the wheel by providing overly-basic instructions that can be found elsewhere.
-3. Feel free to adapt this section and its sub-sections to your own processes.
-4. Alternatively, you can move everything from *Installation instructions* through *Testing* to a separate **Contributing.md** file to keep your **ReadMe.md** more succinct.
-
-
-### Working with issues
-
-- Explain how to submit a bug.
-- Explain how to submit a feature request.
-- Explain how to contribute to an existing issue.
-
-To create a new issue, please use the blank issue template (available when you click New Issue).  If you want to create an issue for other projects to use, please create the issue in your own repository and send a slack message to one of your hack night hosts with the link.
+- Join the Slack channel -- #lucky-parking
+- Fill out Team member info sheet 
+- Google Drive
+- Github Repository: https://github.com/hackforla/lucky-parking/ on slack please make a thread on @kegan to add you on GitHub. Please provide Kegan your GitHub username
 
 
-### Working with forks and branches
+### Review available datasets
 
-- Explain your guidelines here.
-
-
-### Working with pull requests and reviews
-
-- Explain your process.
+The Data folder in our Drive has some useful data sets originally published by the city of LA which plays a fundamental part for this project
 
 
-### Testing
+### Review meetup minutes and case studies
 
-- Provide instructions.
+Meetup Minutes is a fundamental tool to track the idea exchanges and help team members to recall the status of this project. We can always go back to our meetup minutes to refresh the status and further develop our projects 
 
+References & Case Studies is the preliminary study that we did for this project. It helps to specialize our position among competitors and help to identify our unique value for this project.  
 
-
-# Contact info
-
-Include at least one way (or more, if possible) to reach your team with questions or comments.
-
-
-### Licensing
-
-Include details about the project's open source status.
-
-*this readme file sourced from [Jessica Sand](http://jessicasand.com/other-stuff/just-enough-docs/)*
+Geo pandas rely on specific coordinates
