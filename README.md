@@ -2,6 +2,31 @@
 
 Lucky Parking is a project of Hack for LA. Hack for LA is a brigade of a Code for America that exists to help people look for street parking with the least probability of getting citations. From a civic perspective, each citizen is entitled to know the citation history of a given street parking (eg. how, when and why citations are generated) and the possibility of getting new citations when one is seeking street parking.
 
+## Setup
+
+We will need Python 3.x and pip, the Python Package Installer to run the code in this project.
+
+#### Install Python Windows
+
+See directions for installing Python on Windows. https://docs.python.org/3.7/using/windows.html
+
+#### Install Mac
+
+Use Homebrew to install Python on Mac.
+
+#### Install Dependencies
+
+Once you have Python 3 installed, create a new virtual environment to hold your dependencies and activate it:
+
+```
+python3 -m venv ~/.virtualenvs/lucky-parking
+source ~/.virtualenvs/lucky-parking/bin/activate
+```
+
+Once the virtual environment is active, navigate to the project folder and install the project dependencies:
+```
+pip install -r requirements.txt
+```
 
 ### Project context
 
