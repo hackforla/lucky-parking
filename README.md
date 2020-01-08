@@ -8,7 +8,7 @@
 
 -Please review <a href="https://drive.google.com/open?id=1-7G2inkbz4o14AHIX1VQjmz-QUESYlhg">LUCKY PARKING_ONBOARDING READ-ME.docx</a> for quick on-board.
 
--Please review <a href="https://drive.google.com/open?id=1gnEUpcPIu8AX5bw1kPIZdubwcDDtsI-y">LA Street Curb Parking Citation Study & Prediction.docx</a> for project introduction
+-Please review <a href="https://drive.google.com/open?id=1gnEUpcPIu8AX5bw1kPIZdubwcDDtsI-y">LA Street Curb Parking Citation Study & Prediction.docx</a> for project description.
 
 ## Technical Prerequisite
 - Have Jupyter Notebook or Google Colab installed on your computer.
