@@ -1,17 +1,23 @@
 # Lucky-parking Project
 
-Lucky-parking is a project of Hack for LA. 
+- A is a project of Hack for LA. 
 
-The project helps people look for nearby street parking with the least probability of getting citations.
+- Helps people look for nearby street parking with the least probability of getting citations.
 
-# Technical Prerequisite
--Have Jupyter Notebook or Google Colab installed on your computer.
+## Project Context
 
--Have GitHub account and join hackforla on GitHub.
+-Please review <a href="https://drive.google.com/open?id=1-7G2inkbz4o14AHIX1VQjmz-QUESYlhg">LUCKY PARKING_ONBOARDING READ-ME.docx</a> for quick on-board.
 
--Go over <a href="https://drive.google.com/open?id=1tu7YlY5sZEVqQPSXqP6LuJs07us314Bokzw9uHbFGdc">GitHub "Branch" workflow</a>. 
+-Please review <a href="https://drive.google.com/open?id=1gnEUpcPIu8AX5bw1kPIZdubwcDDtsI-y">LA Street Curb Parking Citation Study & Prediction.docx</a> for project introduction
 
--Go over <a href="https://drive.google.com/open?id=1Ss07p5bcrYb3LKrww-mLHbCCVKg_DT6V4tswq345ndY">Github "Fork" Workflow</a>. 
+## Technical Prerequisite
+- Have Jupyter Notebook or Google Colab installed on your computer.
+
+- Have GitHub account and joined hackforla on GitHub.
+
+- Go over <a href="https://drive.google.com/open?id=1tu7YlY5sZEVqQPSXqP6LuJs07us314Bokzw9uHbFGdc">GitHub "Branch" workflow</a>. 
+
+- Go over <a href="https://drive.google.com/open?id=1Ss07p5bcrYb3LKrww-mLHbCCVKg_DT6V4tswq345ndY">Github "Fork" Workflow</a>. 
 
 ## Setup
 
@@ -39,8 +45,4 @@ Once the virtual environment is active, navigate to the project folder and insta
 pip install -r requirements.txt
 ```
 
-### Project context
 
--Please review <a href="https://drive.google.com/open?id=1-7G2inkbz4o14AHIX1VQjmz-QUESYlhg">LUCKY PARKING_ONBOARDING READ-ME.docx</a> for quick on-board.
-
--Please review <a href="https://drive.google.com/open?id=1gnEUpcPIu8AX5bw1kPIZdubwcDDtsI-y">LA Street Curb Parking Citation Study & Prediction.docx</a> for project introduction
