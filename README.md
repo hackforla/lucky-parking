@@ -45,4 +45,8 @@ Once the virtual environment is active, navigate to the project folder and insta
 pip install -r requirements.txt
 ```
 
+#### Data Fetch
 
+- For full entry of citation data from 2015 to 2019. Click <a href="https://drive.google.com/open?id=1IEWhjyOa_xGDhjnws2vMGG_53TM2dLOO">Here</a>.
+- For simplified citation data and other related datasets, clone the repo and find it in "data" folder
+- For fetching data directly from city API, please go to https://dev.socrata.com/foundry/data.lacity.org/wjz9-h9np
