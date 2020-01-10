@@ -15,9 +15,9 @@
 
 - Have GitHub account and joined hackforla on GitHub.
 
-- Go over <a href="https://drive.google.com/open?id=1tu7YlY5sZEVqQPSXqP6LuJs07us314Bokzw9uHbFGdc">GitHub "Branch" workflow</a>. 
+- Go over <a href="https://drive.google.com/open?id=1tu7YlY5sZEVqQPSXqP6LuJs07us314Bokzw9uHbFGdc">GitHub "Branch" workflow</a> created by team member. 
 
-- Go over <a href="https://drive.google.com/open?id=1Ss07p5bcrYb3LKrww-mLHbCCVKg_DT6V4tswq345ndY">Github "Fork" Workflow</a>. 
+- Go over <a href="https://drive.google.com/open?id=1Ss07p5bcrYb3LKrww-mLHbCCVKg_DT6V4tswq345ndY">Github "Fork" Workflow</a> created by team member. 
 
 ## Setup
 
