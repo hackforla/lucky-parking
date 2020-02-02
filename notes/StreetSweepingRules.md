@@ -15,7 +15,7 @@ https://www.latimes.com/local/california/la-me-parking-tix-20141230-story.html
 
 https://www.spotangels.com/blog/los-angeles-street-cleaning-holidays-and-rules/
 
-This site provides an interactive real-time parking map in respect of street sweeping data 
+This site provides an interactive real-time parking map in respect of street sweeping and meter regulation data.
 https://www.spotangels.com/
 
 Rules for street parking in Los Angeles:
