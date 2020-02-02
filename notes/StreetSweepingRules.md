@@ -4,7 +4,7 @@ Confirm "Street Sweeping" Citation is 100% once violating the regulation
 
 ## Action Items
 
-We know that the street sweeping citation is that, once you are parking violating the regulation, you will 100% likely to get citation. Please to some research and write a summary to confirm.
+We know that the street sweeping citation is that, once you are parking violating the regulation, you will 100% likely to get citation. Please do some research and write a summary to confirm.
 Please post summary on Google drive or slack.
 
 Also any applicable data or how the street sweeping areas give out tickets
