@@ -1,0 +1,7 @@
+.header {
+  height: 95vh;
+  background-image: url("../../../../logo/logo.png");
+  background-size: cover;
+  background-position: top;
+  position: relative;
+}
