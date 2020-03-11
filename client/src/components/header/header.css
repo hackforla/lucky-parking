@@ -9,54 +9,14 @@
   background-size: cover;
   background-position: top;
 
-  animation-duration: 3s;
+  animation-duration: 1s;
   animation-name: backgroundShowUp;
   animation-timing-function: ease-in;
   position: relative;
   align-content: center;
-  z-index: 2;
+
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.logoTop {
-  background-image: url(../../../../logo/logoTop.png);
-  background-repeat: no-repeat;
-  height: 500px;
-  width: 500px;
-  position: absolute;
-  z-index: 1;
-  transform: translate(0, 50%);
-
-  animation-name: logoTop;
-  animation-iteration-count: 3;
-  animation-timing-function: ease-out;
-  animation-duration: 0.8s;
-}
-
-.logoCenter {
-  background-image: url(../../../../logo/logoCenter.png);
-  background-repeat: no-repeat;
-  height: 500px;
-  width: 500px;
-  position: absolute;
-  z-index: 1;
-  transform: translate(0, 85%);
-}
-
-.logoBottom {
-  background-image: url(../../../../logo/logoBottom.png);
-  background-repeat: no-repeat;
-  height: 500px;
-  width: 500px;
-  position: absolute;
-  z-index: 1;
-  transform: translate(0, 120%);
-}
-
-.logoContainer {
-  display: flex;
   justify-content: center;
 }
 
@@ -70,7 +30,7 @@
 
   animation-name: backgroundShowUp;
   animation-timing-function: ease-out;
-  animation-duration: 4s;
+  animation-duration: 1.5s;
 }
 
 .heading-primary-main {
@@ -82,7 +42,7 @@
 
   animation-name: moveInLeft;
   animation-timing-function: ease-out;
-  animation-duration: 4.5s;
+  animation-duration: 1.5s;
 }
 
 .heading-primary-sub {
@@ -93,26 +53,16 @@
 
   animation-name: moveInRight;
   animation-timing-function: ease-out;
-  animation-duration: 4.5s;
+  animation-duration: 1.5s;
 }
 
 @keyframes backgroundShowUp {
   0% {
     opacity: 0;
   }
-  80% {
-    opacity: 0;
+  50% {
+    opacity: 0.8;
   }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes logoTop {
-  0% {
-    opacity: 0;
-  }
-
   100% {
     opacity: 1;
   }
@@ -123,6 +73,7 @@
     opacity: 0;
     transform: translate(-100px);
   }
+
   80% {
     transform: translateX(20px);
   }
@@ -138,6 +89,7 @@
     opacity: 0;
     transform: translate(100px);
   }
+
   80% {
     transform: translateX(-20px);
   }
