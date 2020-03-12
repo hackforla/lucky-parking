@@ -8,6 +8,9 @@ const Header = () => {
         <span className="heading-primary-main">Lucky Parking</span>
         <span className="heading-primary-sub">Free parking around you</span>
       </h1>
+      <a href="#" className="btn btn-white btn-animated">
+        Discover App
+      </a>
     </div>
   );
 };
