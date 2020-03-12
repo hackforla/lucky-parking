@@ -28,6 +28,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   animation-name: backgroundShowUp;
   animation-timing-function: ease-out;
@@ -36,7 +37,7 @@
 
 .heading-primary-main {
   display: block;
-  font-size: 60px;
+  font-size: 50px;
   font-weight: 400;
   letter-spacing: 35px;
   z-index: 3;
@@ -48,7 +49,7 @@
 
 .heading-primary-sub {
   display: block;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 400;
   letter-spacing: 15px;
 
