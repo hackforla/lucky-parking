@@ -11,9 +11,13 @@
   "author": "The team Lucky Parking",
   "license": "ISC",
   "dependencies": {
+    "dev-server": "webpack-dev-server",
+    "dotenv": "^8.2.0",
+    "dotenv-webpack": "^1.7.0",
+    "mapbox-gl": "^1.8.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "dev-server": "webpack-dev-server"
+    "save": "^2.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",

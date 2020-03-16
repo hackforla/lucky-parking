@@ -1,12 +1,12 @@
 import React from "react";
-import Header from "../header";
+import MapboxGLMap from "../map/map.jsx";
 
 import "./app.css";
 
 const App = () => {
   return (
     <div className="main">
-      <Header />
+      <MapboxGLMap />
     </div>
   );
 };
