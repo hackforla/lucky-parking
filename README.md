@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 #### Data Fetch
 
-- For full entry of citation data from 2015 to 2019. Click <a href="https://drive.google.com/open?id=1IEWhjyOa_xGDhjnws2vMGG_53TM2dLOO">Here</a> to download.
+- For full entry of citation data from 2015 to 2019. Click <a href="https://drive.google.com/open?id=1c4c4m8dW1oHiPS3iXF9CT-C5akz6SA2p">Here</a> to download.
 
 - For simplified citation data and other related datasets, clone the repo and find them in "data" folder
 
