@@ -1,11 +1,11 @@
 import React from "react";
 
-import Map from "../map";
+import MainMap from "../map";
 
 function App() {
   return (
     <div className="App">
-      <Map />
+      <MainMap />
     </div>
   );
 }
