@@ -29,10 +29,15 @@ class MainMap extends React.Component {
         zoom: map.getZoom().toFixed(2)
       });
     });
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+      })
+    );
   }
 
   render() {
-    console.log(process.env.REACT_APP_MAP_BOX_TOKEN);
     return (
       <div>
         <div className="sidebarStyle">
