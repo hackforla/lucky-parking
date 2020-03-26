@@ -1,5 +1,4 @@
 import React from "react";
-
 import MainMap from "../map";
 
 function App() {
