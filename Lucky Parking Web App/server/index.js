@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 3007;
+const router = require("./router.js");
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, "../public")));
 
 // api -> waiter
-app.get("/start", (request, respond) => respond.send("Hello World!"));
+app.use("/api", router);
 
 app.listen(port, () => console.log(`Hello Breeze listening on port ${port}!`));
