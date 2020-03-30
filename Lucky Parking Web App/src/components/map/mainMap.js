@@ -1,6 +1,7 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
 import "./mainMap.css";
+const axios = require("axios");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
@@ -8,13 +9,23 @@ class MainMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lng: 5,
-      lat: 34,
-      zoom: 2
+      lng: -21.92,
+      lat: 64.1436456,
+      zoom: 2,
+      mrkLng: 20,
+      mrkLat: 20
     };
   }
 
   componentDidMount() {
+    axios.get("/api/location").then(data => {
+      console.log(data.data);
+      this.setState({
+        mrkLng: Number(data.data[0].longitude),
+        mrkLat: Number(data.data[0].latitude)
+      });
+    });
+
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -29,12 +40,12 @@ class MainMap extends React.Component {
         zoom: map.getZoom().toFixed(2)
       });
     });
-    map.addControl(
-      new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl
-      })
-    );
+
+    setTimeout(() => {
+      new mapboxgl.Marker()
+        .setLngLat([this.state.mrkLng, this.state.mrkLat])
+        .addTo(map);
+    }, 1000);
   }
 
   render() {
