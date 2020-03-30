@@ -1,0 +1,46 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:3007",
+  "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^4.5.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
+    "deck.gl": "^8.1.0",
+    "express": "^4.17.1",
+    "mapbox-gl": "^1.9.0",
+    "nodemon": "^2.0.2",
+    "pg": "^7.18.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "develop": "nodemon ./server/index.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/compat-data": "~7.8.0"
+  }
+}
