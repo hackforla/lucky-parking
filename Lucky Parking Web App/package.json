@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "deck.gl": "^8.1.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mapbox-gl": "^1.9.0",
     "nodemon": "^2.0.2",
