@@ -6,7 +6,6 @@ const path = require("path");
 
 app.use(express.static(path.join(__dirname, "../public")));
 
-// api -> waiter
 app.use("/api", router);
 
-app.listen(port, () => console.log(`Hello Breeze listening on port ${port}!`));
+app.listen(port, () => console.log(`Listening on port ${port}`));
