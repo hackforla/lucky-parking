@@ -12,10 +12,12 @@ pgClient
   .connect()
   .then(() => {
     console.log("Database connected");
-    pgClient.query(`CREATE TABLE IF NOT EXISTS location (
+    pgClient.query(
+      `CREATE TABLE IF NOT EXISTS location (
     longitude float,
     latitude float
-  )`);
+  );`
+    );
   })
   .catch((err) => console.error(err.stack));
 

@@ -13,16 +13,16 @@ class MainMap extends React.Component {
       lat: 64.1436456,
       zoom: 2,
       mrkLng: 20,
-      mrkLat: 20
+      mrkLat: 20,
     };
   }
 
   componentDidMount() {
-    axios.get("/api/location").then(data => {
+    axios.get("/api/location").then((data) => {
       console.log(data.data);
       this.setState({
         mrkLng: Number(data.data[0].longitude),
-        mrkLat: Number(data.data[0].latitude)
+        mrkLat: Number(data.data[0].latitude),
       });
     });
 
@@ -30,14 +30,14 @@ class MainMap extends React.Component {
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
       center: [this.state.lng, this.state.lat],
-      zoom: this.state.zoom
+      zoom: this.state.zoom,
     });
 
     map.on("move", () => {
       this.setState({
         lng: map.getCenter().lng.toFixed(4),
         lat: map.getCenter().lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2)
+        zoom: map.getZoom().toFixed(2),
       });
     });
 
@@ -57,7 +57,7 @@ class MainMap extends React.Component {
             {this.state.zoom}
           </div>
         </div>
-        <div ref={el => (this.mapContainer = el)} className="mapContainer" />
+        <div ref={(el) => (this.mapContainer = el)} className="mapContainer" />
       </div>
     );
   }
