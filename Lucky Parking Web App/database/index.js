@@ -11,7 +11,7 @@ module.exports = pgClient = new Client({
 pgClient
   .connect()
   .then(() => {
-    console.log("connected");
+    console.log("Database connected");
     pgClient.query(`CREATE TABLE IF NOT EXISTS location (
     longitude float,
     latitude float
