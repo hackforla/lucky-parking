@@ -13,12 +13,16 @@ pgClient
   .then(() => {
     console.log("Database connected");
     pgClient.query(
-      `CREATE TABLE IF NOT EXISTS location (
-    longitude float,
-    latitude float
+      `CREATE TABLE IF NOT EXISTS citations (
+    id INT,
+    issue_date DATE,
+    issue_time INT,
+    location VARCHAR(255),
+    violation_description VARCHAR(255),
+    day_of_week VARCHAR(255),
+    latitude FLOAT,
+    longitude FLOAT
   );`
     );
   })
   .catch((err) => console.error(err.stack));
-
-// COPY location FROM '/Users/EuiHyo_Mi/Desktop/lucky-parking/data/test.csv' DELIMITER ',' CSV HEADER;
