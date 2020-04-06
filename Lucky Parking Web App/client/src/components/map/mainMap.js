@@ -12,21 +12,23 @@ class MainMap extends React.Component {
       lng: -21.92,
       lat: 64.1436456,
       zoom: 2,
-      mrkLng: 20,
-      mrkLat: 20,
+      data: [],
     };
   }
 
-  componentDidMount() {
-    axios.get("/api/location").then((data) => {
-      console.log(data.data);
-      this.setState({
-        mrkLng: Number(data.data[0].longitude),
-        mrkLat: Number(data.data[0].latitude),
+  async componentDidMount() {
+    await axios
+      .get("/api/citation")
+      .then((data) => {
+        for (let i = 0; i < 1000; i++) {
+          this.state.data.push(data.data[i]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    });
 
-    const map = new mapboxgl.Map({
+    const map = await new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
       center: [this.state.lng, this.state.lat],
@@ -41,11 +43,13 @@ class MainMap extends React.Component {
       });
     });
 
-    setTimeout(() => {
-      new mapboxgl.Marker()
-        .setLngLat([this.state.mrkLng, this.state.mrkLat])
+    this.state.data.map((data) => {
+      let el = document.createElement("div");
+      el.className = "marker";
+      return new mapboxgl.Marker(el)
+        .setLngLat([data.longitude, data.latitude])
         .addTo(map);
-    }, 1000);
+    });
   }
 
   render() {
