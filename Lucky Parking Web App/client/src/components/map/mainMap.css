@@ -18,3 +18,12 @@
   padding: 6px;
   font-weight: bold;
 }
+
+.marker {
+  background-color: blue;
+  background-size: cover;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  cursor: pointer;
+}
