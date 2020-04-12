@@ -9,10 +9,11 @@ class MainMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lng: -21.92,
-      lat: 64.1436456,
-      zoom: 2,
+      lng: -117.9,
+      lat: 34,
+      zoom: 10,
       data: [],
+      map: null,
     };
   }
 
@@ -35,21 +36,35 @@ class MainMap extends React.Component {
       zoom: this.state.zoom,
     });
 
-    map.on("move", () => {
+    this.setState({
+      map: map,
+    });
+
+    this.state.map.on("move", () => {
       this.setState({
         lng: map.getCenter().lng.toFixed(4),
         lat: map.getCenter().lat.toFixed(4),
         zoom: map.getZoom().toFixed(2),
       });
     });
+  }
 
-    this.state.data.map((data) => {
-      let el = document.createElement("div");
-      el.className = "marker";
-      return new mapboxgl.Marker(el)
-        .setLngLat([data.longitude, data.latitude])
-        .addTo(map);
-    });
+  componentDidUpdate() {
+    let points = document.getElementsByClassName("marker").length;
+
+    if (this.state.zoom > 12 && points === 0) {
+      this.state.data.map((data) => {
+        let el = document.createElement("div");
+        el.className = "marker";
+        return new mapboxgl.Marker(el)
+          .setLngLat([data.longitude, data.latitude])
+          .addTo(this.state.map);
+      });
+    } else if (this.state.zoom < 12 && points !== 0) {
+      let points = document.getElementsByClassName("marker");
+
+      while (points.length > 0) points[0].remove();
+    }
   }
 
   render() {
