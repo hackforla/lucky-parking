@@ -2,8 +2,12 @@ dbHelpers = require("../database/index.js");
 
 module.exports = {
   getAll: (req, res) => {
+    let longitude = JSON.parse(req.query.longitude);
+    let latitude = JSON.parse(req.query.latitude);
     dbHelpers
-      .query("SELECT * FROM citations;")
+      .query(
+        `SELECT * FROM sc WHERE long BETWEEN ${longitude} - 0.01 AND ${longitude} + 0.01 AND lat BETWEEN ${latitude} - 0.005 AND ${latitude} + 0.005;`
+      )
       .then((data) => {
         res.status(200).send(data.rows);
       })
