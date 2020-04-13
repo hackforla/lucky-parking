@@ -1,6 +1,9 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
 import "./mainMap.css";
+
+const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
+
 const axios = require("axios");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
@@ -9,25 +12,15 @@ class MainMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lng: -21.92,
-      lat: 64.1436456,
-      zoom: 2,
+      lng: -118.2,
+      lat: 34.05,
+      zoom: 14,
       data: [],
+      map: null,
     };
   }
 
   async componentDidMount() {
-    await axios
-      .get("/api/citation")
-      .then((data) => {
-        for (let i = 0; i < 1000; i++) {
-          this.state.data.push(data.data[i]);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
     const map = await new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -35,7 +28,11 @@ class MainMap extends React.Component {
       zoom: this.state.zoom,
     });
 
-    map.on("move", () => {
+    this.setState({
+      map: map,
+    });
+
+    this.state.map.on("move", () => {
       this.setState({
         lng: map.getCenter().lng.toFixed(4),
         lat: map.getCenter().lat.toFixed(4),
@@ -43,13 +40,54 @@ class MainMap extends React.Component {
       });
     });
 
-    this.state.data.map((data) => {
-      let el = document.createElement("div");
-      el.className = "marker";
-      return new mapboxgl.Marker(el)
-        .setLngLat([data.longitude, data.latitude])
-        .addTo(map);
-    });
+    this.state.map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+      })
+    );
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    let points = document.getElementsByClassName("marker").length;
+
+    if (this.state.zoom >= 16) {
+      if (
+        this.state.lat !== prevState.lat ||
+        this.state.lng !== prevState.lng
+      ) {
+        await axios
+          .get("/api/citation", {
+            params: {
+              longitude: this.state.lng,
+              latitude: this.state.lat,
+            },
+          })
+          .then((data) => {
+            this.setState({
+              data: data.data,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
+      this.state.data.map((data) => {
+        let el = document.createElement("div");
+        el.className = "marker";
+
+        let longitude = JSON.parse(data.long);
+        let latitude = JSON.parse(data.lat);
+        return new mapboxgl.Marker(el)
+          .setLngLat([longitude, latitude])
+          .addTo(this.state.map);
+      });
+    } else if (this.state.zoom <= 16 && points !== 0) {
+      let points = document.getElementsByClassName("marker");
+
+      while (points.length > 0) points[0].remove();
+    }
   }
 
   render() {
