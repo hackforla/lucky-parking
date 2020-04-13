@@ -1,6 +1,9 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
 import "./mainMap.css";
+
+let MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
+
 const axios = require("axios");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
@@ -9,26 +12,15 @@ class MainMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lng: -117.9,
-      lat: 34,
-      zoom: 10,
+      lng: -77.038659,
+      lat: 39,
+      zoom: 8,
       data: [],
       map: null,
     };
   }
 
   async componentDidMount() {
-    await axios
-      .get("/api/citation")
-      .then((data) => {
-        for (let i = 0; i < 1000; i++) {
-          this.state.data.push(data.data[i]);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
     const map = await new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -47,20 +39,40 @@ class MainMap extends React.Component {
         zoom: map.getZoom().toFixed(2),
       });
     });
+
+    this.state.map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+      })
+    );
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate(prevProps, prevState) {
     let points = document.getElementsByClassName("marker").length;
 
-    if (this.state.zoom > 12 && points === 0) {
-      this.state.data.map((data) => {
-        let el = document.createElement("div");
-        el.className = "marker";
-        return new mapboxgl.Marker(el)
-          .setLngLat([data.longitude, data.latitude])
-          .addTo(this.state.map);
-      });
-    } else if (this.state.zoom < 12 && points !== 0) {
+    if (this.state.zoom > 16) {
+      if (
+        this.state.lat !== prevState.lat ||
+        this.state.lng !== prevState.lng
+      ) {
+        await axios
+          .get("/api/citation", {
+            params: {
+              longitude: this.state.lng,
+              latitude: this.state.lat,
+            },
+          })
+          .then((data) => {
+            this.setState({
+              data: data.data,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } else if (this.state.zoom < 16 && points !== 0) {
       let points = document.getElementsByClassName("marker");
 
       while (points.length > 0) points[0].remove();
