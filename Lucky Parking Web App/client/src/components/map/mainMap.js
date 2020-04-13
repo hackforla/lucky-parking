@@ -2,7 +2,7 @@ import React from "react";
 import mapboxgl from "mapbox-gl";
 import "./mainMap.css";
 
-let MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
+const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
 const axios = require("axios");
 
@@ -51,12 +51,11 @@ class MainMap extends React.Component {
   async componentDidUpdate(prevProps, prevState) {
     let points = document.getElementsByClassName("marker").length;
 
-    if (this.state.zoom > 16) {
+    if (this.state.zoom >= 16) {
       if (
         this.state.lat !== prevState.lat ||
         this.state.lng !== prevState.lng
       ) {
-        console.log("whynot?");
         await axios
           .get("/api/citation", {
             params: {
@@ -65,7 +64,6 @@ class MainMap extends React.Component {
             },
           })
           .then((data) => {
-            console.log(data);
             this.setState({
               data: data.data,
             });
@@ -78,11 +76,14 @@ class MainMap extends React.Component {
       this.state.data.map((data) => {
         let el = document.createElement("div");
         el.className = "marker";
+
+        let longitude = JSON.parse(data.long);
+        let latitude = JSON.parse(data.lat);
         return new mapboxgl.Marker(el)
-          .setLngLat([data.longitude, data.latitude])
+          .setLngLat([longitude, latitude])
           .addTo(this.state.map);
       });
-    } else if (this.state.zoom < 16 && points !== 0) {
+    } else if (this.state.zoom <= 16 && points !== 0) {
       let points = document.getElementsByClassName("marker");
 
       while (points.length > 0) points[0].remove();
