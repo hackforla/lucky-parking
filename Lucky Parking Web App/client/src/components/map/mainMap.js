@@ -12,9 +12,9 @@ class MainMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lng: -77.038659,
-      lat: 39,
-      zoom: 8,
+      lng: -118.2,
+      lat: 34.05,
+      zoom: 14,
       data: [],
       map: null,
     };
@@ -56,6 +56,7 @@ class MainMap extends React.Component {
         this.state.lat !== prevState.lat ||
         this.state.lng !== prevState.lng
       ) {
+        console.log("whynot?");
         await axios
           .get("/api/citation", {
             params: {
@@ -64,6 +65,7 @@ class MainMap extends React.Component {
             },
           })
           .then((data) => {
+            console.log(data);
             this.setState({
               data: data.data,
             });
@@ -72,6 +74,14 @@ class MainMap extends React.Component {
             console.log(error);
           });
       }
+
+      this.state.data.map((data) => {
+        let el = document.createElement("div");
+        el.className = "marker";
+        return new mapboxgl.Marker(el)
+          .setLngLat([data.longitude, data.latitude])
+          .addTo(this.state.map);
+      });
     } else if (this.state.zoom < 16 && points !== 0) {
       let points = document.getElementsByClassName("marker");
 
