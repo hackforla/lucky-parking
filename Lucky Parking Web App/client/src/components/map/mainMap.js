@@ -30,8 +30,8 @@ class MainMap extends React.Component {
       }),
     });
 
-    this.state.map.on("move", () => {
-      this.setState({
+    this.state.map.on("move", async () => {
+      await this.setState({
         lng: this.state.map.getCenter().lng.toFixed(4),
         lat: this.state.map.getCenter().lat.toFixed(4),
         zoom: this.state.map.getZoom().toFixed(2),
@@ -65,6 +65,8 @@ class MainMap extends React.Component {
             await this.setState({
               data: data.data,
             });
+
+            console.log(this.state.data);
           })
           .catch((error) => {
             console.log(error);
@@ -85,8 +87,10 @@ class MainMap extends React.Component {
         dataFeatures.push({
           type: "Feature",
           properties: {
-            description: `<strong>Citation: ${data.violation}</strong><p>IssueDate: ${data.issuedate}</p>"`,
-            icon: "theatre",
+            description: `<strong>Citation: ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
+            Time: ${data.time}  
+            Location: ${data.location}</p>`,
+            icon: "bicycle",
           },
           geometry: {
             type: "Point",
@@ -99,7 +103,7 @@ class MainMap extends React.Component {
       dataSources.data.features = dataFeatures;
 
       this.state.map.once("render", () => {
-        if (!this.state.map.getSource("places") && this.state.zoom > 16) {
+        if (!this.state.map.getSource("places")) {
           this.state.map.addSource("places", dataSources);
 
           // Add a layer showing the places.
@@ -113,7 +117,32 @@ class MainMap extends React.Component {
             },
           });
         }
+        if (
+          (this.state.map.getSource("places") &&
+            prevState.lng !== this.state.lng) ||
+          prevState.lat !== this.state.lat ||
+          prevState.zoom !== this.state.zoom
+        ) {
+          this.state.map.removeLayer("places");
+          this.state.map.removeSource("places");
 
+          this.setState({
+            data: [],
+          });
+
+          this.state.map.addSource("places", dataSources);
+
+          // Add a layer showing the places.
+          this.state.map.addLayer({
+            id: "places",
+            type: "symbol",
+            source: "places",
+            layout: {
+              "icon-image": "{icon}-15",
+              "icon-allow-overlap": true,
+            },
+          });
+        }
         // Create a popup, but don't add it to the map yet.
         var popup = new mapboxgl.Popup({
           closeButton: false,
@@ -165,7 +194,7 @@ class MainMap extends React.Component {
       <div>
         <div className="sidebarStyle">
           <div>
-            Longitude: {this.state.lng} | Latitude: {this.state.lat} | Zoom:{" "}
+            Latitude: {this.state.lat} | Longitude: {this.state.lng} | Zoom:{" "}
             {this.state.zoom}
           </div>
         </div>
