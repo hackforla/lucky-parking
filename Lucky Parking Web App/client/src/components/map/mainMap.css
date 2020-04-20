@@ -4,6 +4,7 @@
   right: 0;
   left: 0;
   bottom: 0;
+  margin-top: 6rem;
 }
 
 .sidebarStyle {
@@ -11,12 +12,14 @@
   position: absolute;
   top: 0;
   left: 0;
-  margin: 12px;
+  margin-top: 8rem;
+  margin-left: 2rem;
   background-color: #404040;
   color: #ffffff;
   z-index: 1 !important;
   padding: 6px;
   font-weight: bold;
+  font-size: 2rem;
 }
 
 .marker {
