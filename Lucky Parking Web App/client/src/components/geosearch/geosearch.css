@@ -1,0 +1,32 @@
+.geosearch {
+  display: flex;
+  justify-content: center;
+  border-width: 2px;
+  border-color: gray;
+}
+
+.geosearch__main {
+  font-size: 2rem;
+  color: grey;
+}
+
+.geosearch__main-time-select {
+  border-width: 2px;
+  border-color: lightgray;
+  border-left: none;
+  -webkit-appearance: none;
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 0;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: grey;
+}
+
+input {
+  padding: 0.5rem;
+  margin-left: 1rem;
+  border-width: 2px;
+  font-size: 1.5rem;
+  color: grey;
+}

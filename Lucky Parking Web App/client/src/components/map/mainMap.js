@@ -65,8 +65,6 @@ class MainMap extends React.Component {
             await this.setState({
               data: data.data,
             });
-
-            console.log(this.state.data);
           })
           .catch((error) => {
             console.log(error);
@@ -82,7 +80,7 @@ class MainMap extends React.Component {
       };
 
       let dataFeatures = [];
-      console.log(this.state.data);
+
       this.state.data.map((data) =>
         dataFeatures.push({
           type: "Feature",
@@ -99,7 +97,6 @@ class MainMap extends React.Component {
         })
       );
 
-      console.log(dataFeatures);
       dataSources.data.features = dataFeatures;
 
       this.state.map.once("render", () => {
