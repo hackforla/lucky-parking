@@ -9,34 +9,32 @@ const axios = require("axios");
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
 class MainMap extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       lng: -118.2,
       lat: 34.05,
-      zoom: 14,
+      zoom: 15,
       data: [],
       map: null,
     };
   }
 
   async componentDidMount() {
-    const map = await new mapboxgl.Map({
-      container: this.mapContainer,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [this.state.lng, this.state.lat],
-      zoom: this.state.zoom,
+    await this.setState({
+      map: new mapboxgl.Map({
+        container: this.mapContainer,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [this.state.lng, this.state.lat],
+        zoom: this.state.zoom,
+      }),
     });
 
-    this.setState({
-      map: map,
-    });
-
-    this.state.map.on("move", () => {
-      this.setState({
-        lng: map.getCenter().lng.toFixed(4),
-        lat: map.getCenter().lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2),
+    this.state.map.on("move", async () => {
+      await this.setState({
+        lng: this.state.map.getCenter().lng.toFixed(4),
+        lat: this.state.map.getCenter().lat.toFixed(4),
+        zoom: this.state.map.getZoom().toFixed(2),
       });
     });
 
@@ -44,17 +42,17 @@ class MainMap extends React.Component {
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
+        autocomplete: false,
       })
     );
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    let points = document.getElementsByClassName("marker").length;
-
     if (this.state.zoom >= 16) {
       if (
-        this.state.lat !== prevState.lat ||
-        this.state.lng !== prevState.lng
+        prevState.lng !== this.state.lng ||
+        prevState.lat !== this.state.lat ||
+        prevState.zoom !== this.state.zoom
       ) {
         await axios
           .get("/api/citation", {
@@ -63,8 +61,8 @@ class MainMap extends React.Component {
               latitude: this.state.lat,
             },
           })
-          .then((data) => {
-            this.setState({
+          .then(async (data) => {
+            await this.setState({
               data: data.data,
             });
           })
@@ -73,20 +71,110 @@ class MainMap extends React.Component {
           });
       }
 
-      this.state.data.map((data) => {
-        let el = document.createElement("div");
-        el.className = "marker";
+      let dataSources = {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      };
 
-        let longitude = JSON.parse(data.long);
-        let latitude = JSON.parse(data.lat);
-        return new mapboxgl.Marker(el)
-          .setLngLat([longitude, latitude])
-          .addTo(this.state.map);
+      let dataFeatures = [];
+
+      this.state.data.map((data) =>
+        dataFeatures.push({
+          type: "Feature",
+          properties: {
+            description: `<strong>Citation: ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
+            Time: ${data.time}  
+            Location: ${data.location}</p>`,
+            icon: "bicycle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [JSON.parse(data.long), JSON.parse(data.lat)],
+          },
+        })
+      );
+
+      dataSources.data.features = dataFeatures;
+
+      this.state.map.once("render", () => {
+        if (!this.state.map.getSource("places")) {
+          this.state.map.addSource("places", dataSources);
+
+          this.state.map.addLayer({
+            id: "places",
+            type: "symbol",
+            source: "places",
+            layout: {
+              "icon-image": "{icon}-15",
+              "icon-allow-overlap": true,
+            },
+          });
+        }
+        if (
+          (this.state.map.getSource("places") &&
+            prevState.lng !== this.state.lng) ||
+          prevState.lat !== this.state.lat ||
+          prevState.zoom !== this.state.zoom
+        ) {
+          this.state.map.removeLayer("places");
+          this.state.map.removeSource("places");
+
+          this.setState({
+            data: [],
+          });
+
+          this.state.map.addSource("places", dataSources);
+
+          this.state.map.addLayer({
+            id: "places",
+            type: "symbol",
+            source: "places",
+            layout: {
+              "icon-image": "{icon}-15",
+              "icon-allow-overlap": true,
+            },
+          });
+        }
+
+        var popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+        });
+
+        this.state.map.on("mouseenter", "places", (e) => {
+          this.state.map.getCanvas().style.cursor = "pointer";
+
+          var coordinates = e.features[0].geometry.coordinates.slice();
+          var description = e.features[0].properties.description;
+
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          popup
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(this.state.map);
+        });
+
+        this.state.map.on("mouseleave", "places", () => {
+          this.state.map.getCanvas().style.cursor = "";
+          popup.remove();
+        });
       });
-    } else if (this.state.zoom <= 16 && points !== 0) {
-      let points = document.getElementsByClassName("marker");
+    }
 
-      while (points.length > 0) points[0].remove();
+    if (this.state.map.getSource("places") && this.state.zoom < 16) {
+      console.log("triggered");
+      this.state.map.removeLayer("places");
+      this.state.map.removeSource("places");
+
+      this.setState({
+        data: [],
+      });
     }
   }
 
@@ -95,7 +183,7 @@ class MainMap extends React.Component {
       <div>
         <div className="sidebarStyle">
           <div>
-            Longitude: {this.state.lng} | Latitude: {this.state.lat} | Zoom:{" "}
+            Latitude: {this.state.lat} | Longitude: {this.state.lng} | Zoom:{" "}
             {this.state.zoom}
           </div>
         </div>
