@@ -33,7 +33,7 @@ class Geosearch extends React.Component {
           />
           <select
             className="geosearch__main-time-select"
-            style={{ "margin-right": "5rem" }}
+            style={{ marginRight: "5rem" }}
           >
             <option>12:00 AM</option>
             <option>12:30 AM</option>
