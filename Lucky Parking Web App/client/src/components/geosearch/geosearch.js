@@ -26,12 +26,15 @@ class Geosearch extends React.Component {
     return (
       <div className="geosearch">
         <div className="geosearch__main">
-          From
+          From :
           <DatePicker
             selected={this.state.startDate}
-            onChange={this.handleChange}
+            onChange={this.handleStartDateChange}
           />
-          <select className="geosearch__main-time-select">
+          <select
+            className="geosearch__main-time-select"
+            style={{ "margin-right": "5rem" }}
+          >
             <option>12:00 AM</option>
             <option>12:30 AM</option>
             <option>1:00 AM</option>
@@ -81,7 +84,7 @@ class Geosearch extends React.Component {
             <option>11:00 PM</option>
             <option>11:30 PM</option>
           </select>
-          To
+          To :
           <DatePicker
             selected={this.state.endDate}
             onChange={this.handleEndDateChange}
