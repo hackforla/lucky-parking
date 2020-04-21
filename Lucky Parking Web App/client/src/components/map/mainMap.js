@@ -103,7 +103,6 @@ class MainMap extends React.Component {
         if (!this.state.map.getSource("places")) {
           this.state.map.addSource("places", dataSources);
 
-          // Add a layer showing the places.
           this.state.map.addLayer({
             id: "places",
             type: "symbol",
@@ -129,7 +128,6 @@ class MainMap extends React.Component {
 
           this.state.map.addSource("places", dataSources);
 
-          // Add a layer showing the places.
           this.state.map.addLayer({
             id: "places",
             type: "symbol",
@@ -140,28 +138,22 @@ class MainMap extends React.Component {
             },
           });
         }
-        // Create a popup, but don't add it to the map yet.
+
         var popup = new mapboxgl.Popup({
           closeButton: false,
           closeOnClick: false,
         });
 
         this.state.map.on("mouseenter", "places", (e) => {
-          // Change the cursor style as a UI indicator.
           this.state.map.getCanvas().style.cursor = "pointer";
 
           var coordinates = e.features[0].geometry.coordinates.slice();
           var description = e.features[0].properties.description;
 
-          // Ensure that if the map is zoomed out such that multiple
-          // copies of the feature are visible, the popup appears
-          // over the copy being pointed to.
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
           }
 
-          // Populate the popup and set its coordinates
-          // based on the feature found.
           popup
             .setLngLat(coordinates)
             .setHTML(description)
