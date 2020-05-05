@@ -80,21 +80,31 @@ class MainMap extends React.Component {
       };
 
       let dataFeatures = [];
+        // var colors = {
+        //   Monday: '#DC143C',
+        //   Tuesday: '#0000FF',
+        //   Wednesday: '#7FFF00', 
+        //   Thursday: '#00FFFF',
+        //   Friday: '#8B008B',
+        //   Saturday: '#FF1493',
+        //   Sunday: '#4B0082'
+        // }
 
-      this.state.data.map((data) =>
+      this.state.data.map((data) => {
         dataFeatures.push({
           type: "Feature",
           properties: {
-            description: `<strong>Citation: ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
+            description: `<strong>Citation : ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
             Time: ${data.time}  
             Location: ${data.location}</p>`,
-            icon: "bicycle",
+            icon: "bicycle"
           },
           geometry: {
             type: "Point",
             coordinates: [JSON.parse(data.long), JSON.parse(data.lat)],
           },
         })
+      }
       );
 
       dataSources.data.features = dataFeatures;
@@ -111,6 +121,9 @@ class MainMap extends React.Component {
               "icon-image": "{icon}-15",
               "icon-allow-overlap": true,
             },
+            paint: {
+              "fill-color": "#00ffff"
+            }
           });
         }
         if (
@@ -136,6 +149,9 @@ class MainMap extends React.Component {
               "icon-image": "{icon}-15",
               "icon-allow-overlap": true,
             },
+            paint: {
+              "fill-color": "#00ffff"
+            }
           });
         }
 
