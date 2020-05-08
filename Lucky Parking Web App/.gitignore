@@ -1,2 +1,4 @@
 # Credentials
 .env
+
+node_modules
