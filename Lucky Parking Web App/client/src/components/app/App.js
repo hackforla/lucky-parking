@@ -1,10 +1,16 @@
 import React from "react";
-import MainMap from "../map";
-import Geosearch from "../geosearch";
+import MainMap from "./Map";
+import Geosearch from "./Geosearch";
+import Header from "./Header"
+import Sidebar from "./Sidebar"
+
+import '../../sass/main.scss';
 
 function App() {
   return (
     <div className="App">
+      <Header />
+      <Sidebar />
       <Geosearch />
       <MainMap />
     </div>
