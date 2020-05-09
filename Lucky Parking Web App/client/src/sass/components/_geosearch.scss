@@ -1,0 +1,38 @@
+.geosearch {
+  display: flex;
+  justify-content: center;
+  grid-row: 2/3;
+  grid-column: 2/ 3;
+}
+
+.geosearch__main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  color: grey;
+  border: 1px solid gray;
+  padding: 0.5rem;
+  border-radius: 2rem;
+  width: 80%;
+}
+
+.geosearch__main-time-select {
+  border: none;
+  -webkit-appearance: none;
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 0;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: grey;
+  position: relative;
+}
+
+input {
+  padding: 0.5rem;
+  margin-left: 1rem;
+  border: none;
+  font-size: 1.5rem;
+  color: grey;
+}
