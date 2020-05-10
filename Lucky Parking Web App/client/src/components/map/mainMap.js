@@ -48,7 +48,9 @@ class MainMap extends React.Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
+    // The map triggers the http requests when the zoom level is bigger than or equal to 16
     if (this.state.zoom >= 16) {
+      // The map updates the data points rendering on the map as the user changes location
       if (
         prevState.lng !== this.state.lng ||
         prevState.lat !== this.state.lat ||
@@ -167,8 +169,9 @@ class MainMap extends React.Component {
       });
     }
 
+    // The map removes the points on the map when the zoom level is less than 16
     if (this.state.map.getSource("places") && this.state.zoom < 16) {
-      console.log("triggered");
+      // console.log("triggered");
       this.state.map.removeLayer("places");
       this.state.map.removeSource("places");
 
