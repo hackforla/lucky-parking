@@ -1,6 +1,5 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
-import "./mainMap.css";
 
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
@@ -16,7 +15,7 @@ class MainMap extends React.Component {
       lat: 34.05,
       zoom: 15,
       data: [],
-      map: null,
+      map: null
     };
   }
 
@@ -46,7 +45,7 @@ class MainMap extends React.Component {
       })
     );
   }
-
+  
   async componentDidUpdate(prevProps, prevState) {
     // The map triggers the http requests when the zoom level is bigger than or equal to 16
     if (this.state.zoom >= 16) {
@@ -82,15 +81,14 @@ class MainMap extends React.Component {
       };
 
       let dataFeatures = [];
-
-      this.state.data.map((data) =>
+      this.state.data.map((data) => 
         dataFeatures.push({
           type: "Feature",
           properties: {
-            description: `<strong>Citation: ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
+            description: `<strong>Citation : ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
             Time: ${data.time}  
             Location: ${data.location}</p>`,
-            icon: "bicycle",
+            icon: "bicycle"
           },
           geometry: {
             type: "Point",
@@ -112,7 +110,7 @@ class MainMap extends React.Component {
             layout: {
               "icon-image": "{icon}-15",
               "icon-allow-overlap": true,
-            },
+            }
           });
         }
         if (
@@ -137,7 +135,7 @@ class MainMap extends React.Component {
             layout: {
               "icon-image": "{icon}-15",
               "icon-allow-overlap": true,
-            },
+            }
           });
         }
 
@@ -146,16 +144,14 @@ class MainMap extends React.Component {
           closeOnClick: false,
         });
 
-        this.state.map.on("mouseenter", "places", (e) => {
+        this.state.map.on("click", "places", (e) => {
           this.state.map.getCanvas().style.cursor = "pointer";
-
           var coordinates = e.features[0].geometry.coordinates.slice();
           var description = e.features[0].properties.description;
 
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
           }
-
           popup
             .setLngLat(coordinates)
             .setHTML(description)
@@ -183,13 +179,13 @@ class MainMap extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="sidebarStyle">
+      <div className="map-container">
+        {/* <div className="sidebarStyle">
           <div>
             Latitude: {this.state.lat} | Longitude: {this.state.lng} | Zoom:{" "}
             {this.state.zoom}
           </div>
-        </div>
+        </div> */}
         <div ref={(el) => (this.mapContainer = el)} className="mapContainer" />
       </div>
     );
