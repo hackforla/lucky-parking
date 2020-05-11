@@ -1,21 +1,15 @@
-import { ADD_ARTICLE, TEST_REDUX } from "../constants/action-types";
+import { CITATION_DATA } from "../constants/action-types";
 
 const INITIAL_STATE = {
-  articles: [],
-  testRedux: "Not changed yet!",
+  citation: "",
 };
 
 function rootReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case ADD_ARTICLE:
+    case CITATION_DATA:
       return {
         ...state,
-        articles: action.payload,
-      };
-    case TEST_REDUX:
-      return {
-        ...state,
-        testRedux: action.payload,
+        citation: action.payload,
       };
     default:
       return state;

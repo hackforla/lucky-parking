@@ -1,2 +1,1 @@
-export const ADD_ARTICLE = "ADD_ARTICLE";
-export const TEST_REDUX = "TEST_REDUX";
+export const CITATION_DATA = "CITATION_DATA";
