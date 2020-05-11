@@ -26,34 +26,38 @@ const ConnectedMap = ({ getCitationData }) => {
   const mapContainer = useRef();
 
   useEffect(() => {
-    (async () => {
-      await setMap(
-        new mapboxgl.Map({
-          container: mapContainer.current,
-          style: "mapbox://styles/mapbox/streets-v11",
-          center: [lng, lat],
-          zoom: zoom,
-        })
-      );
-      await map.on("move", () => {
+    setMap(
+      new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [lng, lat],
+        zoom: zoom,
+      })
+    );
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      map.on("move", () => {
         setLng(map.getCenter().lng.toFixed(4));
         setLat(map.getCenter().lat.toFixed(4));
         setZoom(map.getZoom().toFixed(2));
       });
-      await map.addControl(
+      map.addControl(
         new MapboxGeocoder({
           accessToken: mapboxgl.accessToken,
           mapboxgl: mapboxgl,
           autocomplete: false,
         })
       );
-    })();
-  }, []);
+    }
+  }, [mounted]);
 
   useEffect(() => {
     // The map triggers the http requests when the zoom level is bigger than or equal to 16
     if (zoom >= 16) {
-      // The map updates the data points rendering on the map as the user changes locatio
+      // The map updates the data points rendering on the map as the user changes location
       axios
         .get("/api/citation", {
           params: {
@@ -100,36 +104,24 @@ const ConnectedMap = ({ getCitationData }) => {
       dataSources.data.features = dataFeatures;
 
       map.once("render", () => {
+        const places = {
+          id: "places",
+          type: "symbol",
+          source: "places",
+          layout: {
+            "icon-image": "{icon}-15",
+            "icon-allow-overlap": true,
+          },
+        };
         if (!map.getSource("places")) {
           map.addSource("places", dataSources);
-
-          map.addLayer({
-            id: "places",
-            type: "symbol",
-            source: "places",
-            layout: {
-              "icon-image": "{icon}-15",
-              "icon-allow-overlap": true,
-            },
-          });
-        }
-        if (map.getSource("places")) {
+          map.addLayer(places);
+        } else {
           map.removeLayer("places");
           map.removeSource("places");
 
-          setData([]);
-
           map.addSource("places", dataSources);
-
-          map.addLayer({
-            id: "places",
-            type: "symbol",
-            source: "places",
-            layout: {
-              "icon-image": "{icon}-15",
-              "icon-allow-overlap": true,
-            },
-          });
+          map.addLayer(places);
         }
 
         map.on("click", "places", (e) => {
@@ -139,7 +131,7 @@ const ConnectedMap = ({ getCitationData }) => {
         });
       });
     }
-    if (map !== null) {
+    if (mounted) {
       // The map removes the points on the map when the zoom level is less than 16
       if (map.getSource("places") && zoom < 16) {
         map.removeLayer("places");
