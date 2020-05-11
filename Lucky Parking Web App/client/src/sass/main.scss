@@ -1,9 +1,9 @@
-@import './components/geosearch';
-@import './components/mainMap';
+@import "./components/geosearch";
+@import "./components/mainMap";
 
-@import './components/header';
-@import './components/map';
-@import './components/sidebar';
+@import "./components/header";
+@import "./components/map";
+@import "./components/sidebar";
 
 .App {
   display: grid;
@@ -15,12 +15,12 @@
   position: relative;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 *,
 *::after,
-*::before{
+*::before {
   margin: 0;
   padding: 0;
   box-sizing: inherit;
@@ -31,4 +31,3 @@
   width: 100vw;
   overflow: hidden;
 }
-

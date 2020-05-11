@@ -1,5 +1,7 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
+import { connect } from "react-redux";
+import { testRedux } from "../../redux/actions/index";
 
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
@@ -7,15 +9,21 @@ const axios = require("axios");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
-class MainMap extends React.Component {
-  constructor() {
-    super();
+function mapDispatchToProps(dispatch) {
+  return {
+    testRedux: (test) => dispatch(testRedux(test)),
+  };
+}
+
+class ConnectedMap extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
       lng: -118.2,
       lat: 34.05,
       zoom: 15,
       data: [],
-      map: null
+      map: null,
     };
   }
 
@@ -45,9 +53,11 @@ class MainMap extends React.Component {
       })
     );
   }
-  
+
   async componentDidUpdate(prevProps, prevState) {
+    // The map triggers the http requests when the zoom level is bigger than or equal to 16
     if (this.state.zoom >= 16) {
+      // The map updates the data points rendering on the map as the user changes location
       if (
         prevState.lng !== this.state.lng ||
         prevState.lat !== this.state.lat ||
@@ -79,14 +89,14 @@ class MainMap extends React.Component {
       };
 
       let dataFeatures = [];
-      this.state.data.map((data) => 
+      this.state.data.map((data) =>
         dataFeatures.push({
           type: "Feature",
           properties: {
             description: `<strong>Citation : ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
             Time: ${data.time}  
             Location: ${data.location}</p>`,
-            icon: "bicycle"
+            icon: "bicycle",
           },
           geometry: {
             type: "Point",
@@ -108,7 +118,7 @@ class MainMap extends React.Component {
             layout: {
               "icon-image": "{icon}-15",
               "icon-allow-overlap": true,
-            }
+            },
           });
         }
         if (
@@ -133,7 +143,7 @@ class MainMap extends React.Component {
             layout: {
               "icon-image": "{icon}-15",
               "icon-allow-overlap": true,
-            }
+            },
           });
         }
 
@@ -146,6 +156,9 @@ class MainMap extends React.Component {
           this.state.map.getCanvas().style.cursor = "pointer";
           var coordinates = e.features[0].geometry.coordinates.slice();
           var description = e.features[0].properties.description;
+
+          console.log(description);
+          this.props.testRedux(description);
 
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -163,8 +176,9 @@ class MainMap extends React.Component {
       });
     }
 
+    // The map removes the points on the map when the zoom level is less than 16
     if (this.state.map.getSource("places") && this.state.zoom < 16) {
-      console.log("triggered");
+      // console.log("triggered");
       this.state.map.removeLayer("places");
       this.state.map.removeSource("places");
 
@@ -177,16 +191,12 @@ class MainMap extends React.Component {
   render() {
     return (
       <div className="map-container">
-        {/* <div className="sidebarStyle">
-          <div>
-            Latitude: {this.state.lat} | Longitude: {this.state.lng} | Zoom:{" "}
-            {this.state.zoom}
-          </div>
-        </div> */}
         <div ref={(el) => (this.mapContainer = el)} className="mapContainer" />
       </div>
     );
   }
 }
 
-export default MainMap;
+const Map = connect(null, mapDispatchToProps)(ConnectedMap);
+
+export default Map;
