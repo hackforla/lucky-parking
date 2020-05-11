@@ -147,37 +147,16 @@ class ConnectedMap extends React.Component {
           });
         }
 
-        var popup = new mapboxgl.Popup({
-          closeButton: false,
-          closeOnClick: false,
-        });
-
         this.state.map.on("click", "places", (e) => {
-          this.state.map.getCanvas().style.cursor = "pointer";
-          var coordinates = e.features[0].geometry.coordinates.slice();
           var description = e.features[0].properties.description;
 
           this.props.getCitationData(description);
-
-          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-          }
-          popup
-            .setLngLat(coordinates)
-            .setHTML(description)
-            .addTo(this.state.map);
-        });
-
-        this.state.map.on("mouseleave", "places", () => {
-          this.state.map.getCanvas().style.cursor = "";
-          popup.remove();
         });
       });
     }
 
     // The map removes the points on the map when the zoom level is less than 16
     if (this.state.map.getSource("places") && this.state.zoom < 16) {
-      // console.log("triggered");
       this.state.map.removeLayer("places");
       this.state.map.removeSource("places");
 
