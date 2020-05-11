@@ -1,7 +1,7 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
 import { connect } from "react-redux";
-import { testRedux } from "../../redux/actions/index";
+import { getCitationData } from "../../redux/actions/index";
 
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
@@ -11,7 +11,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
 function mapDispatchToProps(dispatch) {
   return {
-    testRedux: (test) => dispatch(testRedux(test)),
+    getCitationData: (test) => dispatch(getCitationData(test)),
   };
 }
 
@@ -157,8 +157,7 @@ class ConnectedMap extends React.Component {
           var coordinates = e.features[0].geometry.coordinates.slice();
           var description = e.features[0].properties.description;
 
-          console.log(description);
-          this.props.testRedux(description);
+          this.props.getCitationData(description);
 
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;

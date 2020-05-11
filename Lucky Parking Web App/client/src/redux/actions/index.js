@@ -1,9 +1,5 @@
-import { ADD_ARTICLE, TEST_REDUX } from "../constants/action-types";
+import { CITATION_DATA } from "../constants/action-types";
 
-export function addArticle(payload) {
-  return { type: ADD_ARTICLE, payload };
-}
-
-export function testRedux(payload) {
-  return { type: TEST_REDUX, payload };
+export function getCitationData(payload) {
+  return { type: CITATION_DATA, payload };
 }
