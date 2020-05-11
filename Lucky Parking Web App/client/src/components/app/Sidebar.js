@@ -2,13 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => {
-  return { testRedux: state.testRedux };
+  return { citation: state.citation };
 };
 
-function ConnectedSideBar({ testRedux }) {
+function ConnectedSideBar({ citation }) {
   return (
     <div className="sidebar-container">
-      <div>{testRedux}</div>
+      <div>{citation}</div>
     </div>
   );
 }
