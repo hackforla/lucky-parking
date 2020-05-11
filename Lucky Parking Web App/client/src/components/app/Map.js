@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { connect } from "react-redux";
 import { getCitationData } from "../../redux/actions/index";
@@ -15,70 +15,58 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-class ConnectedMap extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      lng: -118.2,
-      lat: 34.05,
-      zoom: 15,
-      data: [],
-      map: null,
-    };
-  }
+const ConnectedMap = ({ getCitationData }) => {
+  const [lng, setLng] = useState(-118.2);
+  const [lat, setLat] = useState(34.05);
+  const [zoom, setZoom] = useState(15);
+  const [data, setData] = useState([]);
+  const [map, setMap] = useState(null);
+  const [mounted, setMounted] = useState(false);
 
-  async componentDidMount() {
-    await this.setState({
-      map: new mapboxgl.Map({
-        container: this.mapContainer,
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: [this.state.lng, this.state.lat],
-        zoom: this.state.zoom,
-      }),
-    });
+  const mapContainer = useRef();
 
-    this.state.map.on("move", async () => {
-      await this.setState({
-        lng: this.state.map.getCenter().lng.toFixed(4),
-        lat: this.state.map.getCenter().lat.toFixed(4),
-        zoom: this.state.map.getZoom().toFixed(2),
+  useEffect(() => {
+    (async () => {
+      await setMap(
+        new mapboxgl.Map({
+          container: mapContainer.current,
+          style: "mapbox://styles/mapbox/streets-v11",
+          center: [lng, lat],
+          zoom: zoom,
+        })
+      );
+      await map.on("move", () => {
+        setLng(map.getCenter().lng.toFixed(4));
+        setLat(map.getCenter().lat.toFixed(4));
+        setZoom(map.getZoom().toFixed(2));
       });
-    });
+      await map.addControl(
+        new MapboxGeocoder({
+          accessToken: mapboxgl.accessToken,
+          mapboxgl: mapboxgl,
+          autocomplete: false,
+        })
+      );
+    })();
+  }, []);
 
-    this.state.map.addControl(
-      new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-        autocomplete: false,
-      })
-    );
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
+  useEffect(() => {
     // The map triggers the http requests when the zoom level is bigger than or equal to 16
-    if (this.state.zoom >= 16) {
-      // The map updates the data points rendering on the map as the user changes location
-      if (
-        prevState.lng !== this.state.lng ||
-        prevState.lat !== this.state.lat ||
-        prevState.zoom !== this.state.zoom
-      ) {
-        await axios
-          .get("/api/citation", {
-            params: {
-              longitude: this.state.lng,
-              latitude: this.state.lat,
-            },
-          })
-          .then(async (data) => {
-            await this.setState({
-              data: data.data,
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+    if (zoom >= 16) {
+      // The map updates the data points rendering on the map as the user changes locatio
+      axios
+        .get("/api/citation", {
+          params: {
+            longitude: lng,
+            latitude: lat,
+          },
+        })
+        .then((data) => {
+          setData(data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
       let dataSources = {
         type: "geojson",
@@ -89,13 +77,17 @@ class ConnectedMap extends React.Component {
       };
 
       let dataFeatures = [];
-      this.state.data.map((data) =>
+      data.map((data) =>
         dataFeatures.push({
           type: "Feature",
           properties: {
-            description: `<strong>Citation : ${data.violation}</strong><p>IssueDate: ${data.day}, ${data.issuedate}
-            Time: ${data.time}  
-            Location: ${data.location}</p>`,
+            description: {
+              violation: data.violation,
+              day: data.day,
+              issueDate: data.issuedate,
+              time: data.time,
+              location: data.location,
+            },
             icon: "bicycle",
           },
           geometry: {
@@ -107,11 +99,11 @@ class ConnectedMap extends React.Component {
 
       dataSources.data.features = dataFeatures;
 
-      this.state.map.once("render", () => {
-        if (!this.state.map.getSource("places")) {
-          this.state.map.addSource("places", dataSources);
+      map.once("render", () => {
+        if (!map.getSource("places")) {
+          map.addSource("places", dataSources);
 
-          this.state.map.addLayer({
+          map.addLayer({
             id: "places",
             type: "symbol",
             source: "places",
@@ -121,22 +113,15 @@ class ConnectedMap extends React.Component {
             },
           });
         }
-        if (
-          (this.state.map.getSource("places") &&
-            prevState.lng !== this.state.lng) ||
-          prevState.lat !== this.state.lat ||
-          prevState.zoom !== this.state.zoom
-        ) {
-          this.state.map.removeLayer("places");
-          this.state.map.removeSource("places");
+        if (map.getSource("places")) {
+          map.removeLayer("places");
+          map.removeSource("places");
 
-          this.setState({
-            data: [],
-          });
+          setData([]);
 
-          this.state.map.addSource("places", dataSources);
+          map.addSource("places", dataSources);
 
-          this.state.map.addLayer({
+          map.addLayer({
             id: "places",
             type: "symbol",
             source: "places",
@@ -147,33 +132,30 @@ class ConnectedMap extends React.Component {
           });
         }
 
-        this.state.map.on("click", "places", (e) => {
-          var description = e.features[0].properties.description;
+        map.on("click", "places", (e) => {
+          let description = e.features[0].properties.description;
 
-          this.props.getCitationData(description);
+          getCitationData(description);
         });
       });
     }
+    if (map !== null) {
+      // The map removes the points on the map when the zoom level is less than 16
+      if (map.getSource("places") && zoom < 16) {
+        map.removeLayer("places");
+        map.removeSource("places");
 
-    // The map removes the points on the map when the zoom level is less than 16
-    if (this.state.map.getSource("places") && this.state.zoom < 16) {
-      this.state.map.removeLayer("places");
-      this.state.map.removeSource("places");
-
-      this.setState({
-        data: [],
-      });
+        setData([]);
+      }
     }
-  }
+  }, [lat, lng, zoom]);
 
-  render() {
-    return (
-      <div className="map-container">
-        <div ref={(el) => (this.mapContainer = el)} className="mapContainer" />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="map-container">
+      <div ref={mapContainer} className="mapContainer" />
+    </div>
+  );
+};
 
 const Map = connect(null, mapDispatchToProps)(ConnectedMap);
 
