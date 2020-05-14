@@ -1,32 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { connect } from "react-redux";
-import { getCitationData } from "../../redux/actions/index";
-
-const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
+import { getCitationData, getMap } from "../../redux/actions/index";
 
 const axios = require("axios");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
-
+// setState
 function mapDispatchToProps(dispatch) {
   return {
     getCitationData: (test) => dispatch(getCitationData(test)),
+    getMap: (map) => dispatch(getMap(map)),
   };
 }
+// state
+const mapStateToProps = (state) => {
+  return { citation: state.citation, map: state.map };
+};
 
-const ConnectedMap = ({ getCitationData }) => {
+const ConnectedMap = ({ getCitationData, getMap, map }) => {
   const [lng, setLng] = useState(-118.2);
   const [lat, setLat] = useState(34.05);
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
-  const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
 
   const mapContainer = useRef();
 
   useEffect(() => {
-    setMap(
+    getMap(
       new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/streets-v11",
@@ -44,13 +46,6 @@ const ConnectedMap = ({ getCitationData }) => {
         setLat(map.getCenter().lat.toFixed(4));
         setZoom(map.getZoom().toFixed(2));
       });
-      map.addControl(
-        new MapboxGeocoder({
-          accessToken: mapboxgl.accessToken,
-          mapboxgl: mapboxgl,
-          autocomplete: false,
-        })
-      );
     }
   }, [mounted]);
 
@@ -149,6 +144,6 @@ const ConnectedMap = ({ getCitationData }) => {
   );
 };
 
-const Map = connect(null, mapDispatchToProps)(ConnectedMap);
+const Map = connect(mapStateToProps, mapDispatchToProps)(ConnectedMap);
 
 export default Map;
