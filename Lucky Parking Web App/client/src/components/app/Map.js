@@ -24,12 +24,13 @@ const ConnectedMap = ({ getCitationData, mapRef }) => {
   const [lat, setLat] = useState(34.05);
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
+  const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
 
   const mapContainer = useRef();
 
   useEffect(() => {
-    getMap(
+    setMap(
       new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/streets-v11",
