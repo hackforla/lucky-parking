@@ -1,12 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import mapboxgl from "mapbox-gl";
-
+import { getMap } from "../../redux/actions/index";
 import { connect } from "react-redux";
 
 import "react-datepicker/dist/react-datepicker.css";
-
-const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
@@ -14,22 +12,20 @@ const mapStateToProps = (state) => {
   return { map: state.map };
 };
 
-const ConnectGeosearch = ({ map }) => {
+// setState
+function mapDispatchToProps(dispatch) {
+  return {
+    getMap: (map) => dispatch(getMap(map)),
+  };
+}
+
+const ConnectGeosearch = ({ map, getMap }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [geocoder, setGeocoder] = useState(
-    new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      mapboxgl: map,
-      autocomplete: false,
-    })
-  );
 
   const searchContainer = useRef();
 
-  useEffect(() => {
-    searchContainer.current.appendChild(geocoder.onAdd(map));
-  }, [geocoder]);
+  getMap(searchContainer);
 
   return (
     <div className="geosearch">
@@ -157,6 +153,9 @@ const ConnectGeosearch = ({ map }) => {
   );
 };
 
-const Geosearch = connect(mapStateToProps)(ConnectGeosearch);
+const Geosearch = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConnectGeosearch);
 
 export default Geosearch;
