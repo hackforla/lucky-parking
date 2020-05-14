@@ -4,31 +4,33 @@ import { connect } from "react-redux";
 import { getCitationData, getMap } from "../../redux/actions/index";
 
 const axios = require("axios");
+const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 // setState
 function mapDispatchToProps(dispatch) {
   return {
     getCitationData: (test) => dispatch(getCitationData(test)),
-    getMap: (map) => dispatch(getMap(map)),
+    getMap: (mapRef) => dispatch(getMap(mapRef)),
   };
 }
 // state
 const mapStateToProps = (state) => {
-  return { citation: state.citation, map: state.map };
+  return { citation: state.citation, mapRef: state.mapRef };
 };
 
-const ConnectedMap = ({ getCitationData, getMap, map }) => {
+const ConnectedMap = ({ getCitationData, mapRef }) => {
   const [lng, setLng] = useState(-118.2);
   const [lat, setLat] = useState(34.05);
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
+  const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
 
   const mapContainer = useRef();
 
   useEffect(() => {
-    getMap(
+    setMap(
       new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/streets-v11",
@@ -36,6 +38,7 @@ const ConnectedMap = ({ getCitationData, getMap, map }) => {
         zoom: zoom,
       })
     );
+
     setMounted(true);
   }, []);
 
@@ -46,6 +49,13 @@ const ConnectedMap = ({ getCitationData, getMap, map }) => {
         setLat(map.getCenter().lat.toFixed(4));
         setZoom(map.getZoom().toFixed(2));
       });
+
+      const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+      });
+
+      mapRef.current.appendChild(geocoder.onAdd(map));
     }
   }, [mounted]);
 
