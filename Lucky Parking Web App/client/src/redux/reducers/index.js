@@ -2,7 +2,7 @@ import { CITATION_DATA, MAP } from "../constants/action-types";
 
 const INITIAL_STATE = {
   citation: "",
-  map: null,
+  mapRef: null,
 };
 
 function rootReducer(state = INITIAL_STATE, action) {
@@ -15,7 +15,7 @@ function rootReducer(state = INITIAL_STATE, action) {
     case MAP:
       return {
         ...state,
-        map: action.payload,
+        mapRef: action.payload,
       };
     default:
       return state;

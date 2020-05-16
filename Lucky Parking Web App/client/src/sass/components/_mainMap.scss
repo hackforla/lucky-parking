@@ -51,11 +51,11 @@
   line-height: 24px;
   font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
   position: relative;
-  background-color: #fff;
+  background-color:#ffffff;
   width: 100%;
-  min-width: 240px;
+  min-width: 310px;
   z-index: 1;
-  border-radius: 4px;
+  border-radius: 50px;
   transition: width 0.25s, min-width 0.25s;
 }
 
@@ -72,6 +72,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  
+  
 }
 
 .mapboxgl-ctrl-geocoder--input::-ms-clear {
@@ -82,8 +84,7 @@
   color: #404040; /* fallback */
   color: rgba(0, 0, 0, 0.75);
   outline: 0;
-  box-shadow: none;
-  outline: thin dotted;
+  outline: none;
 }
 
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--pin-right > * {
@@ -96,7 +97,7 @@
 
 .mapboxgl-ctrl-geocoder,
 .mapboxgl-ctrl-geocoder .suggestions {
-  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 /* Collapsed */

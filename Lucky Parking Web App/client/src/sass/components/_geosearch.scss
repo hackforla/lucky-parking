@@ -13,8 +13,9 @@
   color: grey;
   border: 1px solid gray;
   padding: 0.5rem;
-  border-radius: 2rem;
-  width: 80%;
+  border-radius: 4rem;
+  width: 100%;
+  font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
 .geosearch__main-time-select {
@@ -35,4 +36,14 @@ input {
   border: none;
   font-size: 1.5rem;
   color: grey;
+}
+
+.testGeoSearch {
+  width: 32%;
+    padding-left: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+
 }
