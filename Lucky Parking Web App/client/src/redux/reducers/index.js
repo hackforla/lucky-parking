@@ -1,7 +1,7 @@
 import { CITATION_DATA, MAP } from "../constants/action-types";
 
 const INITIAL_STATE = {
-  citation: "",
+  citation: null,
   mapRef: null,
 };
 
