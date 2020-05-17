@@ -7,14 +7,14 @@ const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
-// setState
+
 function mapDispatchToProps(dispatch) {
   return {
     getCitationData: (test) => dispatch(getCitationData(test)),
     getMap: (mapRef) => dispatch(getMap(mapRef)),
   };
 }
-// state
+
 const mapStateToProps = (state) => {
   return { citation: state.citation, mapRef: state.mapRef };
 };
@@ -90,13 +90,7 @@ const ConnectedMap = ({ getCitationData, mapRef }) => {
         dataFeatures.push({
           type: "Feature",
           properties: {
-            description: {
-              violation: data.violation,
-              day: data.day,
-              issueDate: data.issuedate,
-              time: data.time,
-              location: data.location,
-            },
+            description: data,
             icon: "bicycle",
           },
           geometry: {
