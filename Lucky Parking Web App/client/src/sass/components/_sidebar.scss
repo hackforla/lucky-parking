@@ -1,4 +1,7 @@
 .sidebar-container {
-  grid-row: 3 / 4;
   display: grid;
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
+  background-color: white;
+  z-index: 1;
 }
