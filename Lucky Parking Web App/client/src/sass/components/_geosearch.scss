@@ -1,7 +1,7 @@
 .geosearch {
   display: flex;
   justify-content: center;
-  grid-row: 2/3;
+  grid-row: 1 /2;
   grid-column: 2/ 3;
 }
 
@@ -40,10 +40,9 @@ input {
 
 .testGeoSearch {
   width: 32%;
-    padding-left: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
-
+  padding-left: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-top-left-radius: 24px;
+  border-bottom-left-radius: 24px;
 }
