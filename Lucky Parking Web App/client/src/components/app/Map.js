@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { connect } from "react-redux";
-import { getCitationData, getMap } from "../../redux/actions/index";
+import {
+  getCitationData,
+  getMap,
+  handleSidebar,
+} from "../../redux/actions/index";
 
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
@@ -12,14 +16,24 @@ function mapDispatchToProps(dispatch) {
   return {
     getCitationData: (test) => dispatch(getCitationData(test)),
     getMap: (mapRef) => dispatch(getMap(mapRef)),
+    handleSidebar: (isSidebarOpen) => dispatch(handleSidebar(isSidebarOpen)),
   };
 }
 
 const mapStateToProps = (state) => {
-  return { citation: state.citation, mapRef: state.mapRef };
+  return {
+    citation: state.citation,
+    mapRef: state.mapRef,
+    isSidebarOpen: state.isSidebarOpen,
+  };
 };
 
-const ConnectedMap = ({ getCitationData, mapRef }) => {
+const ConnectedMap = ({
+  getCitationData,
+  mapRef,
+  isSidebarOpen,
+  handleSidebar,
+}) => {
   const [lng, setLng] = useState(-118.2);
   const [lat, setLat] = useState(34.05);
   const [zoom, setZoom] = useState(15);
@@ -28,6 +42,13 @@ const ConnectedMap = ({ getCitationData, mapRef }) => {
   const [mounted, setMounted] = useState(false);
 
   const mapContainer = useRef();
+  const sideBar = document.getElementsByClassName("sidebar-container");
+  const closeButton = document.getElementsByClassName(
+    "sidebar__closeButton--close"
+  );
+  const closeButtonHandle = document.getElementsByClassName(
+    "sidebar__closeButton"
+  );
 
   useEffect(() => {
     setMap(
@@ -125,7 +146,10 @@ const ConnectedMap = ({ getCitationData, mapRef }) => {
 
         map.on("click", "places", (e) => {
           let description = e.features[0].properties.description;
-
+          handleSidebar(false);
+          closeButtonHandle[0].classList.add("--show");
+          sideBar[0].classList.add("--container-open");
+          closeButton[0].classList.remove("--closeButton-close");
           getCitationData(description);
         });
       });
@@ -135,12 +159,13 @@ const ConnectedMap = ({ getCitationData, mapRef }) => {
       if (map.getSource("places") && zoom < 16) {
         map.removeLayer("places");
         map.removeSource("places");
-
+        handleSidebar(true);
+        sideBar[0].classList.remove("--container-open");
+        closeButton[0].classList.add("--closeButton-close");
         setData([]);
       }
     }
   }, [lat, lng, zoom]);
-
   return (
     <div className="map-container">
       <div ref={mapContainer} className="mapContainer" />
