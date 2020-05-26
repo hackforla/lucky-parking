@@ -1,8 +1,9 @@
-import { CITATION_DATA, MAP } from "../constants/action-types";
+import { CITATION_DATA, MAP, HANDLE_SIDEBAR } from "../constants/action-types";
 
 const INITIAL_STATE = {
-  citation: "",
+  citation: null,
   mapRef: null,
+  isSidebarOpen: false,
 };
 
 function rootReducer(state = INITIAL_STATE, action) {
@@ -16,6 +17,11 @@ function rootReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         mapRef: action.payload,
+      };
+    case HANDLE_SIDEBAR:
+      return {
+        ...state,
+        isSidebarOpen: action.payload,
       };
     default:
       return state;
