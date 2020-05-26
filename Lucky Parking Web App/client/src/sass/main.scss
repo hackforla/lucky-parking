@@ -7,15 +7,16 @@
 
 .App {
   display: grid;
-  grid-template-columns: minmax(20rem, 1fr) 4fr;
-  grid-template-rows: minmax(20rem, 1fr) 0.1fr minmax(10rem, 3fr);
+  grid-template-columns: 30rem 3.5fr;
+  grid-template-rows: 5rem 1fr;
   grid-gap: 1rem;
-  height: 90%;
-  width: 90%;
+  height: 100%;
+  width: 100%;
   position: relative;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  margin: 30px 0;
 }
 
 *,

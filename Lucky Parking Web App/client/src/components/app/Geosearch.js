@@ -30,7 +30,7 @@ const ConnectGeosearch = ({ map, getMap }) => {
   return (
     <div className="geosearch">
       <div className="geosearch__main">
-      <div className="testGeoSearch" ref={searchContainer} />
+        <div className="testGeoSearch" ref={searchContainer} />
         From :
         <DatePicker
           selected={startDate}
