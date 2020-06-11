@@ -133,8 +133,23 @@ const ConnectedMap = ({
             "icon-allow-overlap": true,
           },
         };
-        if (!map.getSource("places")) {
+        const meters = {
+          'id': 'meter',
+            'source': 'meter',
+            'type': 'line',
+            'source-layer': 'meter_lines-1l60am',
+            'paint': {
+              'line-color': '#e50cff',
+              'line-width': 2
+            }
+        };
+        if (!map.getSource("places") && !map.getSource('meter')) {
           map.addSource("places", dataSources);
+          map.addSource('meter', {
+            type: 'vector',
+            url: 'mapbox://breeze094.bqlt7yn4'
+            });
+          map.addLayer(meters)
           map.addLayer(places);
         } else {
           map.removeLayer("places");
@@ -159,6 +174,8 @@ const ConnectedMap = ({
       if (map.getSource("places") && zoom < 16) {
         map.removeLayer("places");
         map.removeSource("places");
+        map.removeLayer('meter');
+        map.removeSource('meter')
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
