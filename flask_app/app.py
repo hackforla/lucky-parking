@@ -13,12 +13,8 @@ app = Flask(
 )
 
 @app.route('/')
-def hello_world():
-    return 'Hello world!'
-
-@app.route('/test')
-def test():
-    return 'test'
+def home():
+    return ''
 
 @app.route('/get_tileset/<tileset_id>/<lat>,<lon>/<radius>.json')
 def get_tileset(tileset_id,lat,lon,radius):
