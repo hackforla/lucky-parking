@@ -36,7 +36,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3007/",
+  "proxy": "http://localhost:3007",
   "devDependencies": {
     "react-redux": "^7.2.0",
     "redux": "^4.0.5"
