@@ -1,8 +1,6 @@
 # Lucky-parking Project
 
-- Is a project of Hack for LA. 
-
-- Helps people look for nearby street parking with the least probability of getting citations.
+- A Hack for LA project helping the city planners and the community make informed decisions about the effects of parking policies in the City of Los Angeles.
 
 ## Project Context
 
