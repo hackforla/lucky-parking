@@ -61,7 +61,6 @@ const ConnectedMap = ({
         zoom: zoom,
       })
     );
-    fetchData();
     setMounted(true);
   }, []);
 
@@ -123,7 +122,6 @@ const ConnectedMap = ({
       .catch((error) => {
         console.log(error);
       });
-    console.log("i fetched data");
   }
 
   function updateMap() {
