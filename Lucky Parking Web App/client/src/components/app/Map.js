@@ -73,6 +73,10 @@ const ConnectedMap = ({
   }, [mounted, data]);
 
   useEffect(() => {
+    fetchData();
+  }, [lat, lng]);
+
+  useEffect(() => {
     if (mounted) {
       map.on("move", () => {
         setLng(map.getCenter().lng.toFixed(4));
@@ -103,7 +107,7 @@ const ConnectedMap = ({
         setData([]);
       }
     }
-  }, [lat, lng, zoom]);
+  }, [zoom]);
 
   function fetchData() {
     axios
