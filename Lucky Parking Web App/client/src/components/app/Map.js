@@ -49,7 +49,7 @@ const ConnectedMap = ({
   const closeButtonHandle = document.getElementsByClassName(
     "sidebar__closeButton"
   );
-
+  
   //first mounted
 
   useEffect(() => {
@@ -61,7 +61,6 @@ const ConnectedMap = ({
         zoom: zoom,
       })
     );
-    fetchData();
     setMounted(true);
   }, []);
 
@@ -75,9 +74,37 @@ const ConnectedMap = ({
   useEffect(() => {
     if (mounted) {
       map.on("move", () => {
-        setLng(map.getCenter().lng.toFixed(4));
-        setLat(map.getCenter().lat.toFixed(4));
-        setZoom(map.getZoom().toFixed(2));
+        setLng((preLng) => {
+          if (
+            Math.abs(
+              Math.abs(preLng) - Math.abs(map.getCenter().lng.toFixed(4))
+            ) >= 0.0001
+          ) {
+            return map.getCenter().lng.toFixed(4);
+          } else {
+            return preLng;
+          }
+        });
+
+        setLat((preLat) => {
+          if (
+            Math.abs(
+              Math.abs(preLat) - Math.abs(map.getCenter().lat.toFixed(4))
+            ) >= 0.0001
+          ) {
+            return map.getCenter().lat.toFixed(4);
+          } else {
+            return preLat;
+          }
+        });
+
+        setZoom((preZoom) => {
+          if(Math.abs(Math.abs(preZoom) - Math.abs(map.getZoom().toFixed(2))) >=.50){
+            return map.getZoom().toFixed(2);
+          } else{
+            return preZoom;
+          }
+        })
       });
 
       const geocoder = new MapboxGeocoder({
@@ -90,9 +117,10 @@ const ConnectedMap = ({
   }, [mounted]);
 
   useEffect(() => {
+    if (zoom >= 13) fetchData();
     if (mounted) {
-      // The map removes the points on the map when the zoom level is less than 10
-      if (map.getSource("places") && zoom < 10) {
+      // The map removes the points on the map when the zoom level is less than 13
+      if (map.getSource("places") && zoom < 13) {
         map.removeLayer("places");
         map.removeSource("places");
         map.removeLayer("meter");
@@ -119,7 +147,6 @@ const ConnectedMap = ({
       .catch((error) => {
         console.log(error);
       });
-    console.log("i fetched data");
   }
 
   function updateMap() {
