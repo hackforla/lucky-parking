@@ -5,7 +5,8 @@ import {
   getCitationData,
   getMap,
   handleSidebar,
-} from "../../redux/actions/index";
+} from "../../../redux/actions/index";
+import { heatMap, places, meters } from "./MapLayers";
 
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
@@ -49,18 +50,60 @@ const ConnectedMap = ({
   const closeButtonHandle = document.getElementsByClassName(
     "sidebar__closeButton"
   );
-  
+
   //first mounted
 
   useEffect(() => {
-    setMap(
-      new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: [lng, lat],
-        zoom: zoom,
-      })
-    );
+    const map = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: zoom,
+    });
+
+    map.once("load", () => {
+      const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+      });
+      mapRef.current.appendChild(geocoder.onAdd(map));
+
+      let dataSources = {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
+      };
+
+      map.addSource("places", dataSources);
+      map.addLayer(places);
+
+      map.addSource("meters", {
+        type: "vector",
+        url: "mapbox://breeze094.bqlt7yn4",
+      });
+      map.addLayer(meters);
+    });
+
+    map.on("click", "places", (e) => {
+      let description = e.features[0].properties.description;
+      handleSidebar(false);
+      closeButtonHandle[0].classList.add("--show");
+      sideBar[0].classList.add("--container-open");
+      closeButton[0].classList.remove("--closeButton-close");
+      getCitationData(description);
+    });
+
+    map.on("moveend", () => {
+      setLng(map.getCenter().lng.toFixed(4));
+
+      setLat(map.getCenter().lat.toFixed(4));
+
+      setZoom(map.getZoom().toFixed(2));
+    });
+    
+    setMap(map);
     setMounted(true);
   }, []);
 
@@ -71,64 +114,20 @@ const ConnectedMap = ({
     }
   }, [mounted, data]);
 
-  useEffect(() => {
-    if (mounted) {
-      map.on("move", () => {
-        setLng((preLng) => {
-          if (
-            Math.abs(
-              Math.abs(preLng) - Math.abs(map.getCenter().lng.toFixed(4))
-            ) >= 0.0001
-          ) {
-            return map.getCenter().lng.toFixed(4);
-          } else {
-            return preLng;
-          }
-        });
+  // useEffect(() => {
+  //   if (mounted) {
 
-        setLat((preLat) => {
-          if (
-            Math.abs(
-              Math.abs(preLat) - Math.abs(map.getCenter().lat.toFixed(4))
-            ) >= 0.0001
-          ) {
-            return map.getCenter().lat.toFixed(4);
-          } else {
-            return preLat;
-          }
-        });
-
-        setZoom((preZoom) => {
-          if(Math.abs(Math.abs(preZoom) - Math.abs(map.getZoom().toFixed(2))) >=.50){
-            return map.getZoom().toFixed(2);
-          } else{
-            return preZoom;
-          }
-        })
-      });
-
-      const geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-      });
-
-      mapRef.current.appendChild(geocoder.onAdd(map));
-    }
-  }, [mounted]);
+  //   }
+  // }, [mounted]);
 
   useEffect(() => {
     if (zoom >= 13) fetchData();
     if (mounted) {
       // The map removes the points on the map when the zoom level is less than 13
       if (map.getSource("places") && zoom < 13) {
-        map.removeLayer("places");
-        map.removeSource("places");
-        map.removeLayer("meter");
-        map.removeSource("meter");
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
-        setData([]);
       }
     }
   }, [lat, lng, zoom]);
@@ -174,52 +173,10 @@ const ConnectedMap = ({
     );
 
     dataSources.data.features = dataFeatures;
+ 
 
-    map.once("render", () => {
-      const places = {
-        id: "places",
-        type: "symbol",
-        source: "places",
-        layout: {
-          "icon-image": "{icon}-15",
-          "icon-allow-overlap": true,
-        },
-      };
-      const meters = {
-        id: "meter",
-        source: "meter",
-        type: "line",
-        "source-layer": "meter_lines-1l60am",
-        paint: {
-          "line-color": "#e50cff",
-          "line-width": 2,
-        },
-      };
-      if (!map.getSource("places") && !map.getSource("meter")) {
-        map.addSource("places", dataSources);
-        map.addSource("meter", {
-          type: "vector",
-          url: "mapbox://breeze094.bqlt7yn4",
-        });
-        map.addLayer(meters);
-        map.addLayer(places);
-      } else {
-        map.removeLayer("places");
-        map.removeSource("places");
-
-        map.addSource("places", dataSources);
-        map.addLayer(places);
-      }
-
-      map.on("click", "places", (e) => {
-        let description = e.features[0].properties.description;
-        handleSidebar(false);
-        closeButtonHandle[0].classList.add("--show");
-        sideBar[0].classList.add("--container-open");
-        closeButton[0].classList.remove("--closeButton-close");
-        getCitationData(description);
-      });
-    });
+    map.getSource("places").setData(dataSources);
+    
   }
 
   return (

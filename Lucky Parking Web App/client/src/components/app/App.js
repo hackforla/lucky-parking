@@ -1,5 +1,5 @@
 import React from "react";
-import MainMap from "./Map";
+import MainMap from "./map/Map";
 import Geosearch from "./Geosearch";
 import Header from "./Header"
 import Sidebar from "./Sidebar"
