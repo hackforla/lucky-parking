@@ -35,8 +35,8 @@ const ConnectedMap = ({
   isSidebarOpen,
   handleSidebar,
 }) => {
-  const [lng, setLng] = useState(-118.2);
-  const [lat, setLat] = useState(34.05);
+  const [coordinates, setCoordinates] = useState({ lng: -118.2, lat: 34.05 });
+
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
@@ -52,38 +52,36 @@ const ConnectedMap = ({
   );
 
   //first mounted
-
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
+      center: [coordinates.lng, coordinates.lat],
       zoom: zoom,
     });
 
-    map.once("load", () => {
-      const geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-      });
-      mapRef.current.appendChild(geocoder.onAdd(map));
-
+    map.once("style.load", () => {
       let dataSources = {
         type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [],
-        },
+        data: null,
       };
 
       map.addSource("places", dataSources);
       map.addLayer(places);
+
+      console.log("beginning " + dataSources);
 
       map.addSource("meters", {
         type: "vector",
         url: "mapbox://breeze094.bqlt7yn4",
       });
       map.addLayer(meters);
+
+      const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+      });
+      mapRef.current.appendChild(geocoder.onAdd(map));
     });
 
     map.on("click", "places", (e) => {
@@ -96,13 +94,14 @@ const ConnectedMap = ({
     });
 
     map.on("moveend", () => {
-      setLng(map.getCenter().lng.toFixed(4));
-
-      setLat(map.getCenter().lat.toFixed(4));
-
+      setCoordinates({
+        lng: map.getCenter().lng.toFixed(4),
+        lat: map.getCenter().lat.toFixed(4),
+      });
       setZoom(map.getZoom().toFixed(2));
     });
-    
+
+    fetchData();
     setMap(map);
     setMounted(true);
   }, []);
@@ -112,32 +111,25 @@ const ConnectedMap = ({
     if (mounted) {
       updateMap();
     }
-  }, [mounted, data]);
-
-  // useEffect(() => {
-  //   if (mounted) {
-
-  //   }
-  // }, [mounted]);
+  }, [data]);
 
   useEffect(() => {
-    if (zoom >= 13) fetchData();
     if (mounted) {
-      // The map removes the points on the map when the zoom level is less than 13
+      fetchData();
       if (map.getSource("places") && zoom < 13) {
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
       }
     }
-  }, [lat, lng, zoom]);
+  }, [coordinates, zoom]);
 
   function fetchData() {
     axios
       .get("/api/citation", {
         params: {
-          longitude: lng,
-          latitude: lat,
+          longitude: coordinates.lng,
+          latitude: coordinates.lat,
         },
       })
       .then((data) => {
@@ -150,16 +142,12 @@ const ConnectedMap = ({
 
   function updateMap() {
     let dataSources = {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: [],
-      },
+      type: "FeatureCollection",
+      features: [],
     };
 
-    let dataFeatures = [];
-    data.map((data) =>
-      dataFeatures.push({
+    let dataFeatures = data.map((data) => {
+      return {
         type: "Feature",
         properties: {
           description: data,
@@ -169,14 +157,11 @@ const ConnectedMap = ({
           type: "Point",
           coordinates: [JSON.parse(data.longitude), JSON.parse(data.latitude)],
         },
-      })
-    );
+      };
+    });
 
-    dataSources.data.features = dataFeatures;
- 
-
+    dataSources.features = dataFeatures;
     map.getSource("places").setData(dataSources);
-    
   }
 
   return (
