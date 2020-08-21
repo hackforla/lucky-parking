@@ -1,9 +1,14 @@
 dbHelpers = require("../database/index.js");
 
+var counter = 0;
+
 module.exports = {
   getAll: (req, res) => {
     let longitude = JSON.parse(req.query.longitude);
     let latitude = JSON.parse(req.query.latitude);
+
+    counter++;
+    console.log(counter);
 
     dbHelpers
       .query(
