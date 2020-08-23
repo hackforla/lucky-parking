@@ -1,6 +1,6 @@
 # Lucky-parking Project
 
-- A Hack for LA project helping the city planners and the community make informed decisions about the effects of parking policies in the City of Los Angeles.
+- A Hack for LA project helping the city planners and the community make informed decisions about parking policies in the City of Los Angeles.
 
 ![logo](logo/Lucky_parking7.png)
 ## Project Context
