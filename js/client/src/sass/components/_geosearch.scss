@@ -6,7 +6,6 @@
 
 .geosearch__main {
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
   font-size: 1.5rem;
   color: grey;
@@ -19,7 +18,7 @@
 
 .geoSearchBarComponents{
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 
@@ -51,3 +50,4 @@ input {
   border-top-left-radius: 24px;
   border-bottom-left-radius: 24px;
 }
+
