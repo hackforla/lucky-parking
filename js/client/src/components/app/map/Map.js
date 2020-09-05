@@ -8,6 +8,7 @@ import {
 } from "../../../redux/actions/index";
 import { heatMap, places, meters } from "./MapLayers";
 
+
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
@@ -42,6 +43,10 @@ const ConnectedMap = ({
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
 
+  const [mapboxStyle, setMapBoxStyle] = useState(
+    "mapbox://styles/mapbox/dark-v10"
+  );
+
   const mapContainer = useRef();
   const sideBar = document.getElementsByClassName("sidebar-container");
   const closeButton = document.getElementsByClassName(
@@ -55,7 +60,7 @@ const ConnectedMap = ({
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: mapboxStyle,
       center: [coordinates.lng, coordinates.lat],
       zoom: zoom,
     });
@@ -151,7 +156,6 @@ const ConnectedMap = ({
         type: "Feature",
         properties: {
           description: data,
-          icon: "bicycle",
         },
         geometry: {
           type: "Point",
