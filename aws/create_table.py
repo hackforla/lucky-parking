@@ -22,9 +22,7 @@ try:
     df['geometry'] = df['geometry'].apply(lambda x: WKTElement(x.wkt, srid=4326))
     # Drop ticket number (for privacy)
     df.drop('ticket_number', axis=1, inplace=True)
-
-    # Use 'dtype' to specify column's type
-    # For the geom column, we will use GeoAlchemy's type 'Geometry'
+    # For the geometry column, we will use GeoAlchemy's type 'Geometry'
     df.to_sql('citations', engine, if_exists='replace', index=False, 
                          dtype={'issue_date': Date,
                             'fine_amount':Integer, 
