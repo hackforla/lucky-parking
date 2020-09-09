@@ -15,18 +15,20 @@ port = os.getenv('DB_PORT')
 database = os.getenv('DB_NAME')
 
 try:
-    df = pd.read_csv('sample_data.csv', index_col=0)
     engine = create_engine(f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}')
+    # Read GeoJson into GeoPandas
+    df = gpd.read_file('sample_data.geojson')
+    # Convert geometry into WKTElements
+    df['geometry'] = df['geometry'].apply(lambda x: WKTElement(x.wkt, srid=4326))
+    # Drop ticket number (for privacy)
+    df.drop('ticket_number', axis=1, inplace=True)
 
-    df.head(0).to_sql('citations', engine, if_exists='replace', index=False)
-    conn = engine.raw_connection()
-    cur = conn.cursor()
-    output = io.StringIO()
-    df.to_csv(output, sep='\t', header=False, index=False)
-    output.seek(0)
-    cur.copy_from(output, 'citations', null='')
-    conn.commit()
-    conn.close()
+    # Use 'dtype' to specify column's type
+    # For the geom column, we will use GeoAlchemy's type 'Geometry'
+    df.to_sql('citations', engine, if_exists='replace', index=False, 
+                         dtype={'issue_date': Date,
+                            'fine_amount':Integer, 
+                            'geometry': Geometry('POINT', srid=4326)})
 
 except SQLAlchemyError as error:
     print('Error while creating table', error)
