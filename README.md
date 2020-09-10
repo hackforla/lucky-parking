@@ -5,7 +5,7 @@
 ![logo](assets/Lucky_parking7.png)
 ## Project Context
 
-- Read our project one-sheet summary: https://github.com/hackforla/lucky-parking/blob/master/Lucky%20Parking%20One-Sheet.pdf
+- Read our project one-sheet summary: https://github.com/hackforla/lucky-parking/blob/master/Lucky_Parking_One-Sheet.pdf
 
 ## Onboarding Procedure
 
