@@ -15,7 +15,7 @@
 
 - If you decide to join, ask for the Google Sheet to add yourself to our roster with all your contact info.
 
-- Slack an admin to be added to our Git repository: https://hackforla.slack.com/team/UE1UG1YFP. Be sure to enable 2-factor authentication!
+- Ask the project lead for Git access. Be sure to enable 2-factor authentication!
 
 
 #### Data
