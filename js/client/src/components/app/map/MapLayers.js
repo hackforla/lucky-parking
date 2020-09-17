@@ -1,5 +1,3 @@
-import circle from "../../../assets/images/icons/circle-15.svg";
-
 export const places = {
   id: "places",
   type: "circle",
