@@ -12,6 +12,7 @@ import { heatMap, places, meters } from "./MapLayers";
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
+const API_URL = process.env.REACT_APP_API_URL;
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
 function mapDispatchToProps(dispatch) {
@@ -58,6 +59,9 @@ const ConnectedMap = ({
 
   //first mounted
   useEffect(() => {
+    // just to see if we're hitting the API
+    axios.get(API_URL).then(data => console.log(data));
+
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
@@ -131,7 +135,7 @@ const ConnectedMap = ({
 
   function fetchData() {
     axios
-      .get("/api/citation", {
+      .get(`${API_URL}/api/citation`, {
         params: {
           longitude: coordinates.lng,
           latitude: coordinates.lat,
