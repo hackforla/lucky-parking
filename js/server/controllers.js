@@ -6,7 +6,7 @@ module.exports = {
 
     dbHelpers
       .query(
-        `SELECT * FROM citations WHERE Longitude BETWEEN ${longitude} - 0.02 AND ${longitude} + 0.02 AND Latitude BETWEEN ${latitude} - 0.005 AND ${latitude} + 0.005`
+        `SELECT * FROM citations WHERE longitude BETWEEN ${longitude} - 0.02 AND ${longitude} + 0.02 AND latitude BETWEEN ${latitude} - 0.005 AND ${latitude} + 0.005`
       )
       .then((data) => {
         res.status(200).send(data.rows);
