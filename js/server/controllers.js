@@ -1,12 +1,12 @@
 dbHelpers = require("../database/index.js");
 module.exports = {
   getAll: (req, res) => {
-    let longitude = JSON.parse(req.query.longitude);
-    let latitude = JSON.parse(req.query.latitude);
+    let longitude = JSON.parse(req.query.Longitude);
+    let latitude = JSON.parse(req.query.Latitude);
 
     dbHelpers
       .query(
-        `SELECT * FROM test2`
+        `SELECT * FROM citations`
       )
       .then((data) => {
         res.status(200).send(data.rows);
