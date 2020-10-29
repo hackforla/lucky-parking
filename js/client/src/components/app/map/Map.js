@@ -37,7 +37,7 @@ const ConnectedMap = ({
   isSidebarOpen,
   handleSidebar,
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: -118.2, lat: 34.05 });
+  const [coordinates, setCoordinates] = useState({ lng: [-118.21064300537162, 34.043039338159375], lat: [-118.18931407928518, 34.05671120815498] });
 
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
@@ -65,7 +65,7 @@ const ConnectedMap = ({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
-      center: [coordinates.lng, coordinates.lat],
+      center: [-118.2, 34.05],
       zoom: zoom,
     });
 
@@ -103,9 +103,10 @@ const ConnectedMap = ({
     });
 
     map.on("moveend", () => {
+      var bounds = map.getBounds().toArray();
       setCoordinates({
-        lng: map.getCenter().lng.toFixed(4),
-        lat: map.getCenter().lat.toFixed(4),
+        lng: bounds[0],
+        lat: bounds[1],
       });
       setZoom(map.getZoom().toFixed(2));
     });
