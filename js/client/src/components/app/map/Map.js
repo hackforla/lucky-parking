@@ -80,10 +80,7 @@ const ConnectedMap = ({
 
       console.log("beginning " + dataSources);
 
-      map.addSource("meters", {
-        type: "vector",
-        url: "mapbox://breeze094.bqlt7yn4",
-      });
+      
       map.addLayer(meters);
 
       const geocoder = new MapboxGeocoder({
