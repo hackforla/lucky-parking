@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { handleSidebar } from "../../redux/actions/index";
+import CountUp from 'react-countup';
 
 const mapStateToProps = (state) => {
   return { citation: state.citation, isSidebarOpen: state.isSidebarOpen };
@@ -40,14 +41,49 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar }) {
 
   return (
     <div className="sidebar-container">
-      <div>{data.index}</div>
-      <div>{data.issuedate}</div>
-      <div>{data.location}</div>
-      <div>{data.violation}</div>
-      <div>{data.day}</div>
-      <div>{data.lat}</div>
-      <div>{data.long}</div>
-      <div>{data.time}</div>
+      <h2 className="title">Date</h2>
+      <div className="desc">{
+        new Date(data.datetime).toLocaleDateString(
+          'en-gb',
+          {
+            year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true
+          }
+        )}</div>
+      <h2 className="title">Location</h2>
+      <div className="desc">{data.location}</div>
+      <h2 className="title">Violation</h2>
+      <div className="desc">{data.violation_description}</div>
+      <h2 className="title">Violation Code</h2>
+      <div className="desc">{data.violation_code}</div>
+      <h2 className="vehicle">Vehicle</h2>
+      <div className="left">
+        Make
+        <div className="leftData">{data.make}</div>
+      </div>
+      <div className="left">
+        State
+        <div className="leftData">{data.rp_state_plate}</div>
+      </div>
+      <div className="left">
+        Type
+        <div className="leftData">{data.body_style}</div>
+      </div>
+      <div className="bottomLeft">
+        Color
+        <div className="leftData">{data.color}</div>
+      </div>
+      <h2 className="fine">Fine Amount</h2>
+      <div className="dollar">
+        $
+        <span className="dollarAmt">
+          <CountUp end={data.fine_amount || null} duration={1.5} decimal="." decimals={2}/>
+        </span>
+      </div>
       <div className="sidebar__closeButton" onClick={sideBarCloseHandler}>
         <div className="sidebar__closeButton--close"></div>
       </div>
