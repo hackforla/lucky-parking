@@ -39,4 +39,4 @@ jobs:
       run: |
         aws cloudfront create-invalidation --distribution-id ${{ secrets.CDN_DISTRIBUTION_ID_PROD }} --paths "/*"
     - name: Start server
-      run: npm run server
+      run: npm run server:dev
