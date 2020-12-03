@@ -6,13 +6,10 @@ import {
   getMap,
   handleSidebar,
 } from "../../../redux/actions/index";
-import { heatMap, places, meters } from "./MapLayers";
+import { places } from "./MapLayers";
 
-
-const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
-const API_URL = process.env.REACT_APP_API_URL;
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
 function mapDispatchToProps(dispatch) {
@@ -59,29 +56,25 @@ const ConnectedMap = ({
 
   //first mounted
   useEffect(() => {
-    // just to see if we're hitting the API
-    axios.get(API_URL).then(data => console.log(data));
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
       center: [-118.2, 34.05],
       zoom: zoom,
+      minZoom: 13
     });
 
     map.once("style.load", () => {
       let dataSources = {
-        type: "geojson",
-        data: null,
+        type: "vector",
+        url: "mapbox://mg78856.bfzhzya3",
       };
 
       map.addSource("places", dataSources);
       map.addLayer(places);
 
       console.log("beginning " + dataSources);
-
-      
-      map.addLayer(meters);
 
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -91,7 +84,8 @@ const ConnectedMap = ({
     });
 
     map.on("click", "places", (e) => {
-      let description = e.features[0].properties.description;
+      let description = JSON.stringify(e.features[0].properties);
+      setData(description)
       handleSidebar(false);
       closeButtonHandle[0].classList.add("--show");
       sideBar[0].classList.add("--container-open");
@@ -99,30 +93,13 @@ const ConnectedMap = ({
       getCitationData(description);
     });
 
-    map.on("moveend", () => {
-      var bounds = map.getBounds().toArray();
-      setCoordinates({
-        lng: bounds[0],
-        lat: bounds[1],
-      });
-      setZoom(map.getZoom().toFixed(2));
-    });
 
-    fetchData();
     setMap(map);
     setMounted(true);
   }, []);
 
-  //updates the map only when mounted or data is updated
   useEffect(() => {
     if (mounted) {
-      updateMap();
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (mounted) {
-      fetchData();
       if (map.getSource("places") && zoom < 13) {
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
@@ -131,44 +108,8 @@ const ConnectedMap = ({
     }
   }, [coordinates, zoom]);
 
-  function fetchData() {
-    axios
-      .get(`${API_URL}/api/citation`, {
-        params: {
-          longitude: coordinates.lng,
-          latitude: coordinates.lat,
-        },
-      })
-      .then((data) => {
-        setData(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
-  function updateMap() {
-    let dataSources = {
-      type: "FeatureCollection",
-      features: [],
-    };
 
-    let dataFeatures = data.map((data) => {
-      return {
-        type: "Feature",
-        properties: {
-          description: data,
-        },
-        geometry: {
-          type: "Point",
-          coordinates: [JSON.parse(data.longitude), JSON.parse(data.latitude)],
-        },
-      };
-    });
-
-    dataSources.features = dataFeatures;
-    map.getSource("places").setData(dataSources);
-  }
 
   return (
     <div className="map-container">
