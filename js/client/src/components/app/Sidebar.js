@@ -81,7 +81,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar }) {
       <div className="dollar">
         $
         <span className="dollarAmt">
-          <CountUp end={data.fine_amount || null} duration={1.5} decimal="." decimals={2}/>
+          <CountUp end={data.fine_amount || 0} duration={1.5} decimal="." decimals={2}/>
         </span>
       </div>
       <div className="sidebar__closeButton" onClick={sideBarCloseHandler}>
