@@ -1,7 +1,7 @@
-lucky-parking-analysis
+lucky-parking-reddit-analysis
 ==============================
 
-Hack for LA analysis of parking citation data
+Hack for LA analysis of the Los Angeles Sub-Reddit community for market analysis
 
 Project Organization
 ------------
