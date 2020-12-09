@@ -2,7 +2,7 @@
 
 - A Hack for LA project helping the city planners and the community make informed decisions about parking policies in the City of Los Angeles.
 
-[http://www.luckyparking.info](http://www.luckyparking.info)
+- [http://www.luckyparking.info](http://www.luckyparking.info)
 
 ![logo](assets/Lucky_parking7.png)
 ## Project Context
