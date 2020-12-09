@@ -1,31 +1,57 @@
-# Lucky-parking Project
+lucky-parking-analysis
+==============================
 
-- A Hack for LA project helping the city planners and the community make informed decisions about parking policies in the City of Los Angeles.
+Hack for LA analysis of parking related data
 
-- [http://www.luckyparking.info](http://www.luckyparking.info)
+Project Organization
+------------
 
-![logo](assets/Lucky_parking7.png)
-## Project Context
+    ├── LICENSE
+    ├── Makefile           <- Makefile with commands like `make data` or `make train`
+    ├── README.md          <- The top-level README for developers using this project.
+    ├── data
+    │   ├── external       <- Data from third party sources.
+    │   ├── interim        <- Intermediate data that has been transformed.
+    │   ├── processed      <- The final, canonical data sets for modeling.
+    │   └── raw            <- The original, immutable data dump.
+    │
+    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
+    │
+    ├── models             <- Trained and serialized models, model predictions, or model summaries
+    │
+    ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
+    │                         the creator's initials, and a short `-` delimited description, e.g.
+    │                         `1.0-jqp-initial-data-exploration`.
+    │
+    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
+    │
+    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
+    │   └── figures        <- Generated graphics and figures to be used in reporting
+    │
+    ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
+    │                         generated with `pip freeze > requirements.txt`
+    │
+    ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
+    ├── src                <- Source code for use in this project.
+    │   ├── __init__.py    <- Makes src a Python module
+    │   │
+    │   ├── data           <- Scripts to download or generate data
+    │   │   └── make_dataset.py
+    │   │
+    │   ├── features       <- Scripts to turn raw data into features for modeling
+    │   │   └── build_features.py
+    │   │
+    │   ├── models         <- Scripts to train models and then use trained models to make
+    │   │   │                 predictions
+    │   │   ├── predict_model.py
+    │   │   └── train_model.py
+    │   │
+    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
+    │       └── visualize.py
+    │
+    └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
-- [Read our project one-sheet summary](https://docs.google.com/document/d/1wKe_zq1El-fWpn6kYA_9X0ej3Pic0HxLeX-e-S9Mz0Y/)
 
-## Onboarding Procedure
+--------
 
-- Join our Lucky Parking Slack channel on the Hack for LA Slack: https://www.hackforla.org/getting-started
-
-- Come to our meetings on Monday nights at 7pm. Video conference links are sent out on the Slack channel a few minutes before the meeting.
-
-- If you decide to join, ask for the Google Sheet to add yourself to our roster with all your contact info.
-
-- Ask the project lead for Git access. Be sure to enable 2-factor authentication!
-
-
-#### Data
-
-- The dataset that our project is built around is the City of Los Angeles parking citation open dataset: https://data.lacity.org/A-Well-Run-City/Parking-Citations/wjz9-h9np
-
-- Our repository contains two main branches: master--our webapp code and analysis--our data analysis code
-
-- For fetching data directly from city API, please go to https://dev.socrata.com/foundry/data.lacity.org/wjz9-h9np
-
-- Otherwise, use the make command to download the full dataset to the data folder
+<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
