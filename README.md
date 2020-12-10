@@ -24,8 +24,7 @@
 
 - The dataset that our project is built around is the City of Los Angeles parking citation open dataset: https://data.lacity.org/A-Well-Run-City/Parking-Citations/wjz9-h9np
 
-- Our repository contains two main branches: master--our webapp code and analysis--our data analysis code
+- Our repository contains several branches with the master branch containing our webapp code and other branches containing various analysis projects or backend code
 
 - For fetching data directly from city API, please go to https://dev.socrata.com/foundry/data.lacity.org/wjz9-h9np
 
-- Otherwise, use the make command to download the full dataset to the data folder
