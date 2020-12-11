@@ -3,7 +3,7 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-import urllib3, shutil
+import urllib3, shutil, os
 from datetime import date
 
 @click.command()
