@@ -3,8 +3,11 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-import urllib3, shutil, os
+import urllib3
+import shutil
+import os
 from datetime import date
+
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
@@ -30,20 +33,23 @@ if __name__ == '__main__':
 
     # Create data folders and download raw citation data
     date_string = date.today().strftime("%Y-%m-%d")
-    data_folders= ['raw', 'interm', 'external', 'processed']
+    data_folders = ['raw', 'interm', 'external', 'processed']
     if not os.path.exists(project_dir / 'data'):
-            os.makedirs(project_dir / 'data')
+        os.makedirs(project_dir / 'data')
     for _ in data_folders:
         if not os.path.exists(project_dir / 'data' / _):
             os.makedirs(project_dir / 'data' / _)
     http = urllib3.PoolManager()
-    url = 'https://data.lacity.org/api/views/wjz9-h9np/rows.csv?accessType=DOWNLOAD'
-    with http.request('GET', url, preload_content=False) as res, open(date_string +'_raw.csv', 'wb') as out_file:
-	    shutil.copyfileobj(res, out_file)
+    url = 'https://data.lacity.org/api/views/' +\
+        'wjz9-h9np/rows.csv?accessType=DOWNLOAD'
+    RAW_DATA_FILEPATH = project_dir.__str__() + '/data/raw/' +\
+        date_string + '_raw.csv'
+    with http.request('GET', url, preload_content=False) as res,\
+            open(RAW_DATA_FILEPATH, 'wb') as out_file:
+        shutil.copyfileobj(res, out_file)
 
     # Save raw file path as RAW_DATA_FILEPATH
     with open(project_dir / ".env", "a") as f:
-        f.write(f"RAW_DATA_FILEPATH='{project_dir.__str__() + '/data/raw/' + date_string + '_raw.csv'}'")
-
+        f.write(f"RAW_DATA_FILEPATH='{RAW_DATA_FILEPATH}'")
 
     main()
