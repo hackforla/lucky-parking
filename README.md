@@ -3,7 +3,8 @@ lucky-parking-analysis
 
 Hack for LA analysis of parking citation data
 
-- Use make data to download raw citation data
+- Run make create_environment
+- Run make data to download raw citation data
 
 Project Organization
 ------------
