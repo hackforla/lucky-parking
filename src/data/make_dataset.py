@@ -13,19 +13,22 @@ from datetime import date
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
 def main(input_filepath, output_filepath):
-    """ Downloads full dataset from lacity.org, and runs data processing \
-        scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed). Also \
-        updates environmental variable RAW_DATA_FILEPATH.
+    """ Downloads full dataset from lacity.org, and runs data processing
+        scripts to turn raw data from (../raw) into cleaned data ready
+        to be analyzed (saved in ../processed). Also updates environmental
+        variable RAW_DATA_FILEPATH.
     """
     logger = logging.getLogger(__name__)
-    logger.info('Starting download of raw dataset--\
-        this will take a few minutes')
+
+    # Download raw dataset and save as {date}_raw.csv
+    logger.info(
+        'Starting download of raw dataset: this will take a few minutes'
+    )
     http = urllib3.PoolManager()
     url = 'https://data.lacity.org/api/views/' + \
         'wjz9-h9np/rows.csv?accessType=DOWNLOAD'
-    RAW_DATA_FILEPATH = project_dir.__str__() + '/data/raw/' + \
-        date_string + '_raw.csv'
+    RAW_DATA_FILEPATH = project_dir / input_filepath / \
+        (date_string + '_raw.csv')
     with http.request('GET', url, preload_content=False) as res,\
             open(RAW_DATA_FILEPATH, 'wb') as out_file:
         shutil.copyfileobj(res, out_file)
@@ -46,7 +49,7 @@ if __name__ == '__main__':
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    # Create data folders and download raw citation data
+    # # Create data folders and download raw citation data
     date_string = date.today().strftime("%Y-%m-%d")
     data_folders = ['raw', 'interim', 'external', 'processed']
     if not os.path.exists(project_dir / 'data'):
