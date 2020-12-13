@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import click
-import logging
+# import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv, set_key
 import urllib3
 import shutil
 import os
 from datetime import date
+import geopandas as gpd
 
 
 @click.command()
@@ -18,44 +19,51 @@ def main(input_filepath, output_filepath):
         to be analyzed (saved in ../processed). Also updates environmental
         variable RAW_DATA_FILEPATH.
     """
-    logger = logging.getLogger(__name__)
+    download_raw(input_filepath)
 
-    # Download raw dataset and save as {date}_raw.csv
-    logger.info(
-        'Starting download of raw dataset: this will take a few minutes'
-    )
+
+def download_raw(input_filepath):
+    """ Downloads raw dataset from lacity.org to input_filepath as {date}
+    raw.csv. Also updates environmental variable RAW_DATA_FILEPATH.
+    """
+    date_string = date.today().strftime("%Y-%m-%d")
     http = urllib3.PoolManager()
     url = 'https://data.lacity.org/api/views/' + \
         'wjz9-h9np/rows.csv?accessType=DOWNLOAD'
-    RAW_DATA_FILEPATH = project_dir / input_filepath / \
+    RAW_DATA_FILEPATH = PROJECT_DIR / input_filepath / \
         (date_string + '_raw.csv')
     with http.request('GET', url, preload_content=False) as res,\
             open(RAW_DATA_FILEPATH, 'wb') as out_file:
         shutil.copyfileobj(res, out_file)
-    logger.info('Finished downloading!')
 
     # Save raw file path as RAW_DATA_FILEPATH into .env
     set_key(find_dotenv(), 'RAW_DATA_FILEPATH', RAW_DATA_FILEPATH)
 
 
 if __name__ == '__main__':
-    log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    # logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-    # not used in this stub but often useful for finding various files
-    project_dir = Path(__file__).resolve().parents[2]
+    # Finding project directory and saving to .env
+    PROJECT_DIR = Path(__file__).resolve().parents[2]
+    set_key(find_dotenv(), 'PROJECT_DIR', PROJECT_DIR)
 
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    # # Create data folders and download raw citation data
-    date_string = date.today().strftime("%Y-%m-%d")
+    # Create data folders
     data_folders = ['raw', 'interim', 'external', 'processed']
-    if not os.path.exists(project_dir / 'data'):
-        os.makedirs(project_dir / 'data')
+    if not os.path.exists(PROJECT_DIR / 'data'):
+        os.makedirs(PROJECT_DIR / 'data')
     for _ in data_folders:
-        if not os.path.exists(project_dir / 'data' / _):
-            os.makedirs(project_dir / 'data' / _)
+        if not os.path.exists(PROJECT_DIR / 'data' / _):
+            os.makedirs(PROJECT_DIR / 'data' / _)
 
+    # Run main function
+    # logger = logging.getLogger(__name__)
+    # logger.info(
+    #     'Starting download of raw dataset: this will take a few minutes'
+    # )
     main()
+    # logger.info('Finished downloading!')
