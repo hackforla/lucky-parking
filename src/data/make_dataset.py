@@ -70,30 +70,56 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     changes geometry projection from epsg:2229 to epsg:4326, and converts
     time to datetime type.
     '''
+    # Change str filepath into Path
     if isinstance(target_file, str):
         target_file = Path(target_file)
+
+    # Read file into dataframe
     df = pd.read_csv(target_file, low_memory=False, index_col=0)
+
+    # Select columns of interest
     df = df[['Issue Date', 'Issue time', 'RP State Plate', 'Make',
              'Body Style', 'Color', 'Location', 'Violation code',
              'Violation Description', 'Fine amount', 'Latitude', 'Longitude']]
+    # Filter out data points with bad coordinates
     df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
+
+    # Filter out data points with no time/date stamps
     df = df[(df['Issue Date'].notna()) & (df['Issue time'].notna())]
+
+    # Convert Issue time and Issue Date strings into a combined datetime type 
     df['Issue time'] = df['Issue time'].apply(lambda x: '0'*(4-len(str(int(x)))) + str(int(x)))
     df['Datetime'] = pd.to_datetime(df['Issue Date'] + ' ' + df['Issue time'],
         format='%m/%d/%Y %H%M')
+
+    # Drop original date/time columns
     df = df.drop(['Issue Date', 'Issue time'], axis=1)
+
+    # Make column names more coding friendly except for Lat/Lon
     df.columns = ['state_plate', 'make', 'body_style', 'color', 'location', 'violation_code',
     'violation_description', 'fine_amount', 'Latitude', 'Longitude', 'datetime']
+
+    # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / 'references/make.csv', delimiter='\t')
     make_df['alias'] = make_df.alias.apply(lambda x: x.split(','))
+
+    # Iterate over makes and replace aliases
     for _, data in make_df.iterrows():
         df = df.replace(data['alias'], data['make'])
+
+    # Instantiate projection converter and change projection
     transformer = Transformer.from_crs('epsg:2229', 'epsg:4326')
     df['latitude'], df['longitude'] = transformer.transform(df['Latitude'].values, df['Longitude'].values)
+    
+    # Drop original coordinate columns
     df = df.drop(['Latitude', 'Longitude'], axis=1)
+
+    # Extract weekday and add as column
     df['weekday'] = df.datetime.dt.weekday.astype(str).replace({'0': 'Monday',
         '1': 'Tuesday', '2': 'Wednesday', '3': 'Thursday', '4': 'Friday', '5': 'Saturday',
         '6': 'Sunday'})
+
+    # Save as csv to output_filedir annotated as processed
     df.to_csv(PROJECT_DIR / output_filedir / (target_file.stem.replace('_raw', '_processed') + '.csv'))
 
 
