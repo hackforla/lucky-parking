@@ -22,6 +22,8 @@ def main(input_filedir: str, output_filedir: str):
         to be analyzed. Also updates environmental
         variable RAW_DATA_FILEPATH.
     """
+    # If run as main, data is downloaded,  10% sampled, and cleaned
+    # automatically
     clean(create_sample(download_raw(input_filedir), 'data/interim', 0.1),
           output_filedir)
 
@@ -30,7 +32,12 @@ def download_raw(input_filedir: str) -> Path:
     """ Downloads raw dataset from lacity.org to input_filedir as {date}
     raw.csv. Also updates environmental variable RAW_DATA_FILEPATH.
     """
+    # Create name string using download date
     date_string = date.today().strftime("%Y-%m-%d")
+
+    print('This will take a few minutes')
+
+    # Setup connection and download into raw data folder
     http = urllib3.PoolManager()
     url = 'https://data.lacity.org/api/views/' + \
         'wjz9-h9np/rows.csv?accessType=DOWNLOAD'
@@ -39,6 +46,8 @@ def download_raw(input_filedir: str) -> Path:
     with http.request('GET', url, preload_content=False) as res,\
             open(RAW_DATA_FILEPATH, 'wb') as out_file:
         shutil.copyfileobj(res, out_file)
+
+    print('Finished downloading raw dataset')
 
     # Save raw file path as RAW_DATA_FILEPATH into .env
     set_key(find_dotenv(), 'RAW_DATA_FILEPATH', str(RAW_DATA_FILEPATH))
@@ -50,11 +59,19 @@ def create_sample(target_file: Union[Path, str], output_filedir: str,
     ''' Samples the raw dataset to create a smaller dataset via random
     sampling according to sample_frac.
     '''
+    # Change str filepath into Path
     if isinstance(target_file, str):
         target_file = Path(target_file)
+
+    # Check if sample_frac is between 0 and 1
     assert (sample_frac <= 1) and (sample_frac > 0)
+
+    # Create filename with sample fraction appended to the name
+    # 0.1 turns into 01, 0.25 turns into 025, etc
     SAMPLE_FILEPATH = PROJECT_DIR / output_filedir / (target_file.stem +
         '_' + str(sample_frac).replace('.', '') + 'samp.csv')
+
+    # Read raw data and skiprows using random.random()
     pd.read_csv(
             target_file,
             header=0,
@@ -62,6 +79,7 @@ def create_sample(target_file: Union[Path, str], output_filedir: str,
             skiprows=lambda i: i > 0 and random.random() > sample_frac,
             low_memory=False
         ).to_csv(SAMPLE_FILEPATH)
+
     return SAMPLE_FILEPATH
 
 
