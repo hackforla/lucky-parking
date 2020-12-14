@@ -4,7 +4,7 @@ setup(
     name='src',
     packages=find_packages(),
     version='0.1.0',
-    description='Hack for LA analysis of parking citation data',
+    description='Hack for LA analysis of reddit data',
     author='Hack for LA Lucky Parking Project',
     license='MIT',
 )
