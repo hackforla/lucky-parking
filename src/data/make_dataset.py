@@ -13,6 +13,9 @@ from pyproj import Transformer
 from typing import Union
 
 
+#Load project directory
+PROJECT_DIR = Path(__file__).resolve().parents[2]
+
 @click.command()
 @click.argument('input_filedir', type=click.Path(exists=True))
 @click.argument('output_filedir', type=click.Path())
@@ -71,6 +74,8 @@ def create_sample(target_file: Union[Path, str], output_filedir: str,
     SAMPLE_FILEPATH = PROJECT_DIR / output_filedir / (target_file.stem +
         '_' + str(sample_frac).replace('.', '') + 'samp.csv')
 
+    print('Creating sample')
+
     # Read raw data and skiprows using random.random()
     pd.read_csv(
             target_file,
@@ -79,6 +84,8 @@ def create_sample(target_file: Union[Path, str], output_filedir: str,
             skiprows=lambda i: i > 0 and random.random() > sample_frac,
             low_memory=False
         ).to_csv(SAMPLE_FILEPATH)
+
+    print('Sample complete')
 
     return SAMPLE_FILEPATH
 
@@ -91,6 +98,8 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     # Change str filepath into Path
     if isinstance(target_file, str):
         target_file = Path(target_file)
+
+    print('Cleaning dataset')
 
     # Read file into dataframe
     df = pd.read_csv(target_file, low_memory=False, index_col=0)
@@ -140,12 +149,13 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     # Save as csv to output_filedir annotated as processed
     df.to_csv(PROJECT_DIR / output_filedir / (target_file.stem.replace('_raw', '_processed') + '.csv'))
 
+    print('Dataset clean!')
+
 
 if __name__ == '__main__':
     # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     # logging.basicConfig(level=logging.INFO, format=log_fmt)
-    # Finding project directory and saving to .env
-    PROJECT_DIR = Path(__file__).resolve().parents[2]
+    
 
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables

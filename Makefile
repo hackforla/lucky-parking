@@ -38,6 +38,9 @@ clean:
 lint:
 	flake8 src
 
+sample:
+	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned)
+
 ## Upload Data to S3
 sync_data_to_s3:
 ifeq (default,$(PROFILE))
