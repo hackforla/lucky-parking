@@ -120,9 +120,3 @@ const ConnectedMap = ({
 const Map = connect(mapStateToProps, mapDispatchToProps)(ConnectedMap);
 
 export default Map;
-  );
-};
-
-const Map = connect(mapStateToProps, mapDispatchToProps)(ConnectedMap);
-
-export default Map;
