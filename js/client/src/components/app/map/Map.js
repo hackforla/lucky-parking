@@ -6,7 +6,7 @@ import {
   getMap,
   handleSidebar,
 } from "../../../redux/actions/index";
-import { places } from "./MapLayers";
+import { places, heatmap } from "./MapLayers";
 
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
@@ -34,7 +34,10 @@ const ConnectedMap = ({
   isSidebarOpen,
   handleSidebar,
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: [-118.21064300537162, 34.043039338159375], lat: [-118.18931407928518, 34.05671120815498] });
+  const [coordinates, setCoordinates] = useState({
+    lng: [-118.21064300537162, 34.043039338159375],
+    lat: [-118.18931407928518, 34.05671120815498],
+  });
 
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
@@ -56,13 +59,12 @@ const ConnectedMap = ({
 
   //first mounted
   useEffect(() => {
-
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
       center: [-118.2, 34.05],
       zoom: zoom,
-      minZoom: 13
+      minZoom: 13,
     });
 
     map.once("style.load", () => {
@@ -73,6 +75,7 @@ const ConnectedMap = ({
 
       map.addSource("places", dataSources);
       map.addLayer(places);
+      map.addLayer(heatmap);
 
       console.log("beginning " + dataSources);
 
@@ -85,14 +88,13 @@ const ConnectedMap = ({
 
     map.on("click", "places", (e) => {
       let description = JSON.stringify(e.features[0].properties);
-      setData(description)
+      setData(description);
       handleSidebar(false);
       closeButtonHandle[0].classList.add("--show");
       sideBar[0].classList.add("--container-open");
       closeButton[0].classList.remove("--closeButton-close");
       getCitationData(description);
     });
-
 
     setMap(map);
     setMounted(true);
@@ -108,13 +110,16 @@ const ConnectedMap = ({
     }
   }, [coordinates, zoom]);
 
-
-
-
   return (
     <div className="map-container">
       <div ref={mapContainer} className="mapContainer" />
     </div>
+  );
+};
+
+const Map = connect(mapStateToProps, mapDispatchToProps)(ConnectedMap);
+
+export default Map;
   );
 };
 
