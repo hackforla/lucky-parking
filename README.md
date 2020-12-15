@@ -6,8 +6,9 @@ lucky-parking-reddit-analysis
 - Run "make create_environment"
 - Create "praw.ini" file in src/data folder
     - See link for screenshots: https://www.storybench.org/how-to-scrape-reddit-with-python/
+    - Added sample praw.ini file in src/data
 - Run "make data"
-- Find data in data/raw folder
+    - Find data in data/raw folder
 
 
 Project Organization
