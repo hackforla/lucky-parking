@@ -70,7 +70,7 @@ const ConnectedMap = ({
     map.once("style.load", () => {
       let dataSources = {
         type: "vector",
-        url: "mapbox://mg78856.bfzhzya3",
+        url: "mapbox://gregpawin.cl775u6c",
       };
 
       map.addSource("places", dataSources);
