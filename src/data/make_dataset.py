@@ -139,7 +139,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     df['latitude'], df['longitude'] = transformer.transform(df['Latitude'].values, df['Longitude'].values)
     
     # Drop original coordinate columns
-    df = df.drop(['Latitude', 'Longitude'], axis=1)
+    df = df.drop(['Latitude', 'Longitude', 'Ticket number'], axis=1)
 
     # Extract weekday and add as column
     df['weekday'] = df.datetime.dt.weekday.astype(str).replace({'0': 'Monday',

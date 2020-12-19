@@ -2,7 +2,6 @@
 import click
 # import logging
 from pathlib import Path
-from make_dataset import create_sample
 from dotenv import find_dotenv, load_dotenv
 import os
 from make_dataset import clean, create_sample
