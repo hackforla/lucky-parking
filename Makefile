@@ -34,6 +34,10 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
+## Delete data files
+clean_data:
+	find . -name "*.csv" -delete
+
 ## Lint using flake8
 lint:
 	flake8 src
