@@ -102,7 +102,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     print('Cleaning dataset')
 
     # Read file into dataframe
-    df = pd.read_csv(target_file, low_memory=False, index_col=0)
+    df = pd.read_csv(target_file, low_memory=False)
 
     # Select columns of interest
     df = df[['Issue Date', 'Issue time', 'RP State Plate', 'Make',
@@ -139,7 +139,9 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     df['latitude'], df['longitude'] = transformer.transform(df['Latitude'].values, df['Longitude'].values)
     
     # Drop original coordinate columns
-    df = df.drop(['Latitude', 'Longitude', 'Ticket number'], axis=1)
+    df = df.drop(['Latitude', 'Longitude'], axis=1)
+    # df.reset_index(drop=True,inplace=True)
+    # df.drop('Ticket number', axis=1)
 
     # Extract weekday and add as column
     df['weekday'] = df.datetime.dt.weekday.astype(str).replace({'0': 'Monday',
@@ -148,8 +150,6 @@ def clean(target_file: Union[Path, str], output_filedir: str):
 
     # Save as csv to output_filedir annotated as processed
     df.to_csv(PROJECT_DIR / output_filedir / (target_file.stem.replace('_raw', '_processed') + '.csv'))
-
-    print('Dataset clean!')
 
 
 if __name__ == '__main__':
