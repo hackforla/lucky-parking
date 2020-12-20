@@ -168,6 +168,8 @@ if __name__ == '__main__':
     for _ in data_folders:
         if not os.path.exists(PROJECT_DIR / 'data' / _):
             os.makedirs(PROJECT_DIR / 'data' / _)
+            with open(PROJECT_DIR / 'data' / _ / ".gitkeep", 'w'):
+                pass
 
     # Run main function
     # logger = logging.getLogger(__name__)
