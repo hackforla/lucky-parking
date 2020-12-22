@@ -25,7 +25,7 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
-## Make Dataset
+## Make dataset
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
 
@@ -42,6 +42,7 @@ clean_data:
 lint:
 	flake8 src
 
+## Create sample from raw data: frac={fraction of raw} cleaned={True or False}
 sample:
 	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned)
 

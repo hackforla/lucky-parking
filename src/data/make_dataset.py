@@ -108,6 +108,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     df = df[['Issue Date', 'Issue time', 'RP State Plate', 'Make',
              'Body Style', 'Color', 'Location', 'Violation code',
              'Violation Description', 'Fine amount', 'Latitude', 'Longitude']]
+
     # Filter out data points with bad coordinates
     df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
 
@@ -147,6 +148,9 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     df['weekday'] = df.datetime.dt.weekday.astype(str).replace({'0': 'Monday',
         '1': 'Tuesday', '2': 'Wednesday', '3': 'Thursday', '4': 'Friday', '5': 'Saturday',
         '6': 'Sunday'})
+
+    # Reset index
+    df.reset_index(drop=True, inplace=True)
 
     # Save as csv to output_filedir annotated as processed
     df.to_csv(PROJECT_DIR / output_filedir / (target_file.stem.replace('_raw', '_processed') + '.csv'))
