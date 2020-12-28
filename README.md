@@ -3,11 +3,11 @@ lucky-parking-reddit-analysis
 
 - Hack for LA analysis of the Los Angeles Sub-Reddit community for market analysis
 
-- Run "make create_environment"
+- Run `make create_environment`
 - Create "praw.ini" file in src/data folder
     - See link for screenshots: https://www.storybench.org/how-to-scrape-reddit-with-python/
     - Added sample praw.ini file in src/data
-- Run "make data"
+- Run `make data`
     - Find data in data/raw folder
 
 
