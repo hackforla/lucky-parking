@@ -7,6 +7,7 @@ from dotenv import find_dotenv, load_dotenv, set_key
 import urllib3
 import shutil
 import os
+import csv
 from datetime import date
 import pandas as pd
 import random
@@ -167,7 +168,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     ]
 
     # Read in make aliases
-    make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter="\t")
+    make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
     make_df["alias"] = make_df.alias.apply(lambda x: x.split(","))
 
     # Iterate over makes and replace aliases
@@ -211,8 +212,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
         / output_filedir
         / (target_file.stem.replace("_raw", "_processed") + ".csv"),
         index=False,
-        na_rep="",
-        sep="|",
+        quoting=csv.QUOTE_ALL,
     )
     print("Finished!")
 
