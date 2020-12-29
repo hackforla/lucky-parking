@@ -4,6 +4,8 @@ lucky-parking-analysis
 Hack for LA analysis of parking citation data
 
 - Run `make create_environment`
+- Make sure that your new lucky-parking-analysis environment is activated
+- If you're using a Mac, you might have to install some certificates first: https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
 - Run `make data` to download raw citation data
 	- Raw data will be in data/raw
 	- Sampled data will be in data/interim (default 10% sampling from full dataset)
