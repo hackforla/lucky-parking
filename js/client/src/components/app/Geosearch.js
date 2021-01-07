@@ -1,51 +1,73 @@
 import React, { useRef, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import mapboxgl from "mapbox-gl";
-import { getMap } from "../../redux/actions/index";
+import {
+   getMap,
+   getRangeActive,
+   getStartDate,
+   getEndDate,
+} from "../../redux/actions/index";
 import { connect } from "react-redux";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const axios = require("axios");
 const API_URL = process.env.REACT_APP_API_URL;
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
 const mapStateToProps = (state) => {
-  return { map: state.map };
+  return {
+     map: state.map,
+     startDate: state.startDate,
+     endDate: state.endDate,
+     activateDateRange: state.activateDateRange,
+    };
 };
 
 // setState
 function mapDispatchToProps(dispatch) {
   return {
     getMap: (map) => dispatch(getMap(map)),
+    getRangeActive: (activateDateRange) => dispatch(getRangeActive(activateDateRange)),
+    getStartDate: (startDate) => dispatch(getStartDate(startDate)),
+    getEndDate: (endDate) => dispatch(getEndDate(endDate)),
   };
 }
 
-const ConnectGeosearch = ({ map, getMap }) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+const ConnectGeosearch = ({
+  map,
+  getMap,
+  startDate,
+  endDate,
+  getEndDate,
+  getStartDate,
+  getRangeActive,
+}) => {
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
+  const [dateRangeActive, setDateRangeActive] = useState(false);
 
   const searchContainer = useRef();
 
-  function fetchTimeData() {
-    axios
-      .get(`${API_URL}/api/timestamp`, {
-        params: {
-          startDate: startDate,
-          endDate: endDate,
-        },
-      })
-      .then((data) => {
-        console.log('Time: ' + data.data)
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  // function fetchTimeData() {
+  //   axios
+  //     .get(`${API_URL}/api/timestamp`, {
+  //       params: {
+  //         startDate: new Date(startDate).toLocaleDateString(),
+  //         endDate: new Date(endDate).toLocaleDateString(),
+  //       },
+  //     })
+  //     .then((data) => {
+  //       console.log('Time: ' + data.data)
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }
 
   useEffect(() => {
-    fetchTimeData();
+    setDateRangeActive(true);
+    getRangeActive(dateRangeActive)
   }, [startDate, endDate])
 
   getMap(searchContainer);
@@ -59,9 +81,8 @@ const ConnectGeosearch = ({ map, getMap }) => {
           <DatePicker
             selected={startDate}
             showTimeSelect
-            timeFormat="HH:mm"
-            dateFormat="yyyy/MM/dd HH:mm:ss"
-            onChange={date => setStartDate(date)}
+            dateFormat="MM/dd/yyyy"
+            onChange={date => getStartDate(date)}
           />
         </div>
         <div className="geoSearchBarComponents">
@@ -69,9 +90,8 @@ const ConnectGeosearch = ({ map, getMap }) => {
           <DatePicker
             selected={endDate}
             showTimeSelect
-            timeFormat="HH:mm"
-            dateFormat="yyyy/MM/dd HH:mm:ss"
-            onChange={date => setEndDate(date)}
+            dateFormat="MM/dd/yyyy"
+            onChange={date => getEndDate(date)}
           />
         </div>
       </div>

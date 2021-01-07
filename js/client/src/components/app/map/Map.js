@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import {
   getCitationData,
   getMap,
+  getRangeActive,
   handleSidebar,
 } from "../../../redux/actions/index";
 import { heatMap, places, meters } from "./MapLayers";
@@ -28,6 +29,9 @@ const mapStateToProps = (state) => {
     citation: state.citation,
     mapRef: state.mapRef,
     isSidebarOpen: state.isSidebarOpen,
+    activateDateRange: state.activateDateRange,
+    startDate: state.startDate,
+    endDate: state.endDate
   };
 };
 
@@ -36,6 +40,9 @@ const ConnectedMap = ({
   mapRef,
   isSidebarOpen,
   handleSidebar,
+  activateDateRange,
+  startDate,
+  endDate
 }) => {
   const [coordinates, setCoordinates] = useState({ lng: [-118.21064300537162, 34.043039338159375], lat: [-118.18931407928518, 34.05671120815498] });
 
@@ -132,19 +139,36 @@ const ConnectedMap = ({
   }, [coordinates, zoom]);
 
   function fetchData() {
-    axios
-      .get(`${API_URL}/api/citation`, {
-        params: {
-          longitude: coordinates.lng,
-          latitude: coordinates.lat,
-        },
-      })
-      .then((data) => {
-        setData(data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    activateDateRange ?
+      axios
+        .get(`${API_URL}/api/timestamp`, {
+          params: {
+            longitude: coordinates.lng,
+            latitude: coordinates.lat,
+            startDate: new Date(startDate).toLocaleDateString(),
+            endDate: new Date(endDate).toLocaleDateString(),
+          },
+        })
+        .then((data) => {
+          setData(data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    :
+      axios
+        .get(`${API_URL}/api/citation`, {
+          params: {
+            longitude: coordinates.lng,
+            latitude: coordinates.lat,
+          },
+        })
+        .then((data) => {
+          setData(data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
   }
 
   function updateMap() {
