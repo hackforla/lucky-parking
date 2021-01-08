@@ -4,10 +4,9 @@ import { connect } from "react-redux";
 import {
   getCitationData,
   getMap,
-  getRangeActive,
   handleSidebar,
 } from "../../../redux/actions/index";
-import { heatMap, places, meters } from "./MapLayers";
+import { heatMap, places } from "./MapLayers";
 
 
 const axios = require("axios");
@@ -74,6 +73,7 @@ const ConnectedMap = ({
       style: mapboxStyle,
       center: [-118.2, 34.05],
       zoom: zoom,
+      
     });
 
     map.once("style.load", () => {
@@ -84,11 +84,10 @@ const ConnectedMap = ({
 
       map.addSource("places", dataSources);
       map.addLayer(places);
+      map.addLayer(heatMap);
 
       console.log("beginning " + dataSources);
 
-      
-      map.addLayer(meters);
 
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,

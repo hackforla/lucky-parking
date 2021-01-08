@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const API_URL = process.env.REACT_APP_API_URL;
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
