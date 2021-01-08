@@ -42,28 +42,13 @@ const ConnectGeosearch = ({
   getEndDate,
   getStartDate,
   getRangeActive,
+  activateDateRange
 }) => {
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(new Date());
   const [dateRangeActive, setDateRangeActive] = useState(false);
+  const [disableHover, setDisableHover] = useState(false);
 
   const searchContainer = useRef();
 
-  // function fetchTimeData() {
-  //   axios
-  //     .get(`${API_URL}/api/timestamp`, {
-  //       params: {
-  //         startDate: new Date(startDate).toLocaleDateString(),
-  //         endDate: new Date(endDate).toLocaleDateString(),
-  //       },
-  //     })
-  //     .then((data) => {
-  //       console.log('Time: ' + data.data)
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }
 
   useEffect(() => {
     setDateRangeActive(true);
@@ -74,7 +59,8 @@ const ConnectGeosearch = ({
 
   return (
     <div className="geosearch">
-      <div className="geosearch__main">
+      <div className={`geosearch__main ${!disableHover ?
+        activateDateRange ? "geosearch__main--active" : "geosearch__main--inactive" : "geosearch__main--disable"}`}>
         <div className="testGeoSearch" ref={searchContainer} />
         <div className="geoSearchBarComponents">
           <label>From :</label>
@@ -90,9 +76,18 @@ const ConnectGeosearch = ({
           <DatePicker
             selected={endDate}
             showTimeSelect
+            minDate={startDate}
             dateFormat="MM/dd/yyyy"
             onChange={date => getEndDate(date)}
           />
+        </div>
+        <div 
+          className={`geoSearchBarDateToggle ${activateDateRange ? "geoSearchBarDateToggle--visible" : "geoSearchBarDateToggle--invis"}`}
+          onClick={() => getRangeActive(false)}
+          onMouseEnter={() => setDisableHover(true)}
+          onMouseLeave={() => setDisableHover(false)}
+        >
+          Deactivate
         </div>
       </div>
     </div>
