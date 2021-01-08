@@ -18,11 +18,10 @@ export const places = {
   },
 };
 
-export const heatmap = {
+export const heatMap = {
   id: "heatmap",
   type: "heatmap",
   source: "places",
-  "source-layer": "Lucky_Citations-d050ms",
   paint: {
     "heatmap-radius": {
       stops: [

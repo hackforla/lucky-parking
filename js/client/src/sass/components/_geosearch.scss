@@ -9,17 +9,70 @@
   align-items: center;
   font-size: 1.5rem;
   color: grey;
-  border: 1px solid lightgray;
+  &--active {
+    border: 1px solid lightgray;
+    animation: pulse 2s infinite;
+    border-color: #47be22;
+    transition: border-color 2s;
+  }
+  &--inactive {
+    border: 1px solid lightgray;
+  }
+  &--disable {
+    border: 1px solid #47be22;
+    animation: inversePulse 2s infinite;
+    border-color: #DD0000;
+    transition: border-color 2s;
+  }
   padding: 0.5rem;
   border-radius: 4rem;
   width: 100%;
   font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
+@keyframes pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(71, 190, 34, .4);
+  }
+  70% {
+      -webkit-box-shadow: 0 0 0 10px rgba(71, 190, 34, 0);
+  }
+  100% {
+      -webkit-box-shadow: 0 0 0 0 rgba(71, 190, 34, 0);
+  }
+}
+
+@keyframes inversePulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(221, 0, 0, 0);
+  }
+  70% {
+      -webkit-box-shadow: 0 0 0 10px rgba(221, 0, 0, 0);
+  }
+  100% {
+      -webkit-box-shadow: 0 0 0 0 rgba(221, 0, 0, .4);
+  }
+}
+
 .geoSearchBarComponents{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.geoSearchBarDateToggle {
+  &--visible {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #47be22;
+    transition: color 1s;
+    &:hover {
+      color:#DD0000;
+    }
+  }
+  &--invis {
+    display: none;
+  }
 }
 
 .geosearch__main-time-select {

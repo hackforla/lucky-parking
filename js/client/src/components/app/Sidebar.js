@@ -67,7 +67,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar }) {
       </div>
       <div className="left">
         State
-        <div className="leftData">{data.rp_state_plate}</div>
+        <div className="leftData">{data.state_plate}</div>
       </div>
       <div className="left">
         Type
