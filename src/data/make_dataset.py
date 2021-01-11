@@ -223,8 +223,11 @@ if __name__ == "__main__":
 
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables
-    load_dotenv(find_dotenv())
-
+    if bool(find_dotenv()):
+        load_dotenv(find_dotenv())
+    else:
+        with open(PROJECT_DIR / '.env', 'w'):
+            pass
     # Create data folders
     data_folders = ["raw", "interim", "external", "processed"]
     if not os.path.exists(PROJECT_DIR / "data"):
