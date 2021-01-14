@@ -144,8 +144,8 @@ const ConnectedMap = ({
           params: {
             longitude: coordinates.lng,
             latitude: coordinates.lat,
-            startDate: new Date(startDate).toLocaleDateString(),
-            endDate: new Date(endDate).toLocaleDateString(),
+            startDate: new Date(startDate).toLocaleString(),
+            endDate: new Date(endDate).toLocaleString(),
           },
         })
         .then((data) => {
