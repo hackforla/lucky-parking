@@ -36,7 +36,7 @@ clean:
 
 ## Delete data files
 clean_data:
-	find ./data ! -type d ! -name *.gitkeep
+	find ./data ! -type d ! -name *.gitkeep -delete
 
 ## Lint using flake8
 lint:

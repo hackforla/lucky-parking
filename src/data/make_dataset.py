@@ -223,7 +223,7 @@ if __name__ == "__main__":
 
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables
-    if bool(find_dotenv()):
+    if find_dotenv():
         load_dotenv(find_dotenv())
     else:
         with open(PROJECT_DIR / '.env', 'w'):
