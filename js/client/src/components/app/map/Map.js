@@ -43,7 +43,10 @@ const ConnectedMap = ({
   startDate,
   endDate
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: [-118.21064300537162, 34.043039338159375], lat: [-118.18931407928518, 34.05671120815498] });
+  const [coordinates, setCoordinates] = useState({
+    lng: [-118.21064300537162, 34.043039338159375],
+    lat: [-118.18931407928518, 34.05671120815498],
+  });
 
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
