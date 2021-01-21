@@ -13,7 +13,8 @@ import pandas as pd
 import random
 from pyproj import Transformer
 from typing import Union
-
+import geopandas as gpd
+from shapely.geometry import Point
 
 # Load project directory
 PROJECT_DIR = Path(__file__).resolve().parents[2]
@@ -30,8 +31,11 @@ def main(input_filedir: str, output_filedir: str):
     """
     # If run as main, data is downloaded,  10% sampled, and cleaned
     # automatically
-    clean(
-        create_sample(download_raw(input_filedir), "data/interim", 0.1), output_filedir
+    save_csv(*
+        clean(
+            create_sample(download_raw(input_filedir), "data/interim", 0.1),
+            output_filedir,
+        )
     )
 
 
@@ -176,7 +180,7 @@ def clean(target_file: Union[Path, str], output_filedir: str):
         df = df.replace(data["alias"], data["make"])
 
     # Instantiate projection converter and change projection
-    transformer = Transformer.from_crs("epsg:2229", "epsg:4326")
+    transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
     df["latitude"], df["longitude"] = transformer.transform(
         df["Latitude"].values, df["Longitude"].values
     )
@@ -206,6 +210,10 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     df.reset_index(drop=True, inplace=True)
     df.reset_index(inplace=True)
 
+    return df, output_filedir, target_file
+
+
+def save_csv(df, output_filedir, target_file: Path):
     # Save as csv to output_filedir annotated as processed
     df.to_csv(
         PROJECT_DIR
@@ -214,7 +222,21 @@ def clean(target_file: Union[Path, str], output_filedir: str):
         index=False,
         quoting=csv.QUOTE_ALL,
     )
-    print("Finished!")
+    return print("Saved as csv!")
+
+
+def save_geojson(df, output_filedir, target_file: Path):
+    gpd.GeoDataFrame(
+        df,
+        crs="EPSG:4326",
+        geometry=[Point(xy) for xy in zip(df.longitude, df.latitude)],
+    ).to_file(
+        PROJECT_DIR
+        / output_filedir
+        / (target_file.stem.replace("_raw", "_processed") + ".geojson"),
+        driver="GeoJSON",
+    )
+    return print("Saved as geojson!")
 
 
 if __name__ == "__main__":
@@ -226,7 +248,7 @@ if __name__ == "__main__":
     if find_dotenv():
         load_dotenv(find_dotenv())
     else:
-        with open(PROJECT_DIR / '.env', 'w'):
+        with open(PROJECT_DIR / ".env", "w"):
             pass
     # Create data folders
     data_folders = ["raw", "interim", "external", "processed"]

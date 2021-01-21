@@ -4,7 +4,7 @@ import click
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import os
-from make_dataset import clean, create_sample, save_csv
+from make_dataset import clean, create_sample, save_geojson
 
 
 @click.command()
@@ -17,7 +17,7 @@ def main(frac: float, cleaned: bool):
         variable RAW_DATA_FILEPATH.
     """
     if cleaned:
-        save_csv(*clean(create_sample(RAW_DATA_FILEPATH, 'data/interim', frac), 'data/processed'))
+        save_geojson(*clean(create_sample(RAW_DATA_FILEPATH, 'data/interim', frac), 'data/processed'))
         
     else:
         create_sample(RAW_DATA_FILEPATH, 'data/interim', frac)

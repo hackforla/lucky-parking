@@ -15,3 +15,5 @@ plotly
 ipywidgets
 plotly-geo
 chart-studio
+sqlalchemy
+geoalchemy2

@@ -38,9 +38,17 @@ clean:
 clean_data:
 	find ./data ! -type d ! -name *.gitkeep -delete
 
+## Create geojson
+geojson:
+	$(PYTHON_INTERPRETER) src/data/geojson.py
+
 ## Lint using flake8
 lint:
 	flake8 src
+
+## Upload latest geojson
+upload_geojson:
+	$(PYTHON_INTERPRETER) src/data/upload.py
 
 ## Create sample from raw data: frac={fraction of raw} cleaned={True or False}
 sample:
