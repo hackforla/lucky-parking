@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env python3
 from dotenv import find_dotenv, load_dotenv
 import os
 import glob
@@ -8,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pickle
 from pathlib import Path
-from geoalchemy2 import Geometry, WKTElement
+from geoalchemy2 import Geometry
 import geopandas as gpd
 
 load_dotenv(find_dotenv(), override=True)

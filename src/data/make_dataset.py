@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import click
-
-# import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv, set_key
 import urllib3
@@ -31,8 +29,8 @@ def main(input_filedir: str, output_filedir: str):
     """
     # If run as main, data is downloaded,  10% sampled, and cleaned
     # automatically
-    save_csv(*
-        clean(
+    save_csv(
+        *clean(
             create_sample(download_raw(input_filedir), "data/interim", 0.1),
             output_filedir,
         )
