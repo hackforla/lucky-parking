@@ -6,7 +6,7 @@ module.exports = {
 
     dbHelpers
       .query(
-        `SELECT * FROM citations WHERE longitude BETWEEN ${longitude[0]} AND ${latitude[0]} AND latitude BETWEEN ${longitude[1]} AND ${latitude[1]} LIMIT 10000`
+        `SELECT * FROM citations WHERE longitude BETWEEN ${longitude[0]} AND ${latitude[0]} AND latitude BETWEEN ${longitude[1]} AND ${latitude[1]} LIMIT 15000`
       )
       .then((data) => {
         res.status(200).send(data.rows);
@@ -33,5 +33,25 @@ module.exports = {
       .catch((err) => {
         res.status(404).send(err);
       });
-  }
+  },
+  drawSelect: (req, res) => {
+    let polygon = req.query.polygon
+    console.log(polygon)
+    
+
+    dbHelpers
+      .query(
+        `SELECT * FROM citations WHERE ST_Contains(ST_GeomFromGeoJSON('{
+          "type":"Polygon",
+          "coordinates": [${polygon}],
+          "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
+        }'), citations.geometry);`
+      )
+      .then((data) => {
+        res.status(200).send(data.rows);
+      })
+      .catch((err) => {
+        res.status(404).send(err);
+      });
+  },
 };
