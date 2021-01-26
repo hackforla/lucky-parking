@@ -180,7 +180,7 @@ const ConnectedMap = ({
         closeButton[0].classList.add("--closeButton-close");
       }
     }
-  }, [coordinates, zoom]);
+  }, [coordinates, zoom, drawingPresent]);
 
   function fetchData() {
     activateDateRange ?
