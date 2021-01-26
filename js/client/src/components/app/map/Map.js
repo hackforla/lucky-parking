@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { connect } from "react-redux";
 import {
   getCitationData,
@@ -7,6 +8,7 @@ import {
   handleSidebar,
 } from "../../../redux/actions/index";
 import { heatMap, places } from "./MapLayers";
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
 
 const axios = require("axios");
@@ -43,12 +45,13 @@ const ConnectedMap = ({
   startDate,
   endDate
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: [-118.21064300537162, 34.043039338159375], lat: [-118.18931407928518, 34.05671120815498] });
+  const [coordinates, setCoordinates] = useState({ lng: [-118.26792852392579, 34.03895446013246], lat: [-118.24221150389093, 34.052626988739206] });
 
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const [drawingPresent, setDrawingPresent] = useState(false);
 
   const [mapboxStyle, setMapBoxStyle] = useState(
     "mapbox://styles/mapbox/dark-v10"
@@ -71,10 +74,50 @@ const ConnectedMap = ({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
-      center: [-118.2, 34.05],
+      center: [-118.252479, 34.045791],
       zoom: zoom,
       
     });
+
+
+    var draw = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+      polygon: true,
+      trash: true
+      }
+      });
+
+    map.addControl(draw, 'top-right');
+    map.addControl(new mapboxgl.NavigationControl({showCompass: false}), "bottom-right");
+
+    function drawnData () {
+      var drawData = draw.getAll();
+      
+      axios
+        .get(`${API_URL}/api/citation/draw`, {
+          params: {
+            polygon: drawData.features[0].geometry.coordinates,
+          },
+        })
+        .then((data) => {
+         setData(data.data);
+         setDrawingPresent(true)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
+
+    map.on('draw.create', drawnData);
+    map.on('draw.delete', () => {setDrawingPresent(false); fetchData()})
+
+    map.on('mouseenter', 'places', () => {
+      map.getCanvas().style.cursor = 'pointer'
+    })
+    map.on('mouseleave', 'places', () => {
+      map.getCanvas().style.cursor = ''
+    })
 
     map.once("style.load", () => {
       let dataSources = {
@@ -127,7 +170,7 @@ const ConnectedMap = ({
   }, [data]);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && drawingPresent === false) {
       fetchData();
       if (map.getSource("places") && zoom < 13) {
         handleSidebar(true);
