@@ -45,7 +45,7 @@ const ConnectedMap = ({
   startDate,
   endDate
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: [-118.26792852392579, 34.03895446013246], lat: [-118.24221150389093, 34.052626988739206] });
+  const [coordinates, setCoordinates] = useState({ lng: [-118.26792852392579, 34.03895446013246], lat: [-118.23702947607404, 34.052626988739206] });
 
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
@@ -65,6 +65,8 @@ const ConnectedMap = ({
   const closeButtonHandle = document.getElementsByClassName(
     "sidebar__closeButton"
   );
+
+  
 
   //first mounted
   useEffect(() => {
