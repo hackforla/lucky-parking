@@ -36,7 +36,6 @@ module.exports = {
   },
   drawSelect: (req, res) => {
     let polygon = req.query.polygon
-    console.log(polygon)
     
 
     dbHelpers
