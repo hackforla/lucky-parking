@@ -1,4 +1,4 @@
-import { CITATION_DATA, MAP, HANDLE_SIDEBAR, START_DATE, END_DATE, ACTIVE_RANGE } from "../constants/action-types";
+import { CITATION_DATA, MAP, HANDLE_SIDEBAR, START_DATE, END_DATE, ACTIVE_RANGE, DRAWING_PRESENT, POLYGON_DATA } from "../constants/action-types";
 
 export function getCitationData(payload) {
   return { type: CITATION_DATA, payload };
@@ -22,4 +22,12 @@ export function getEndDate(payload) {
 
 export function getRangeActive(payload) {
   return { type: ACTIVE_RANGE, payload };
+}
+
+export function handleDrawing(payload) {
+  return { type: DRAWING_PRESENT, payload }
+}
+
+export function getPolygonData(payload) {
+  return { type: POLYGON_DATA, payload }
 }
