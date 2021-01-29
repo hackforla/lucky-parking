@@ -6,6 +6,8 @@ import {
   getCitationData,
   getMap,
   handleSidebar,
+  handleDrawing,
+  getPolygonData,
 } from "../../../redux/actions/index";
 import { heatMap, places } from "./MapLayers";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
@@ -22,6 +24,8 @@ function mapDispatchToProps(dispatch) {
     getCitationData: (test) => dispatch(getCitationData(test)),
     getMap: (mapRef) => dispatch(getMap(mapRef)),
     handleSidebar: (isSidebarOpen) => dispatch(handleSidebar(isSidebarOpen)),
+    handleDrawing: (drawingPresent) => dispatch(handleDrawing(drawingPresent)),
+    getPolygonData: (polygonData) => dispatch(getPolygonData(polygonData)),
   };
 }
 
@@ -32,7 +36,8 @@ const mapStateToProps = (state) => {
     isSidebarOpen: state.isSidebarOpen,
     activateDateRange: state.activateDateRange,
     startDate: state.startDate,
-    endDate: state.endDate
+    endDate: state.endDate,
+    drawingPresent: state.drawingPresent,
   };
 };
 
@@ -43,7 +48,10 @@ const ConnectedMap = ({
   handleSidebar,
   activateDateRange,
   startDate,
-  endDate
+  endDate,
+  drawingPresent,
+  handleDrawing,
+  getPolygonData,
 }) => {
   const [coordinates, setCoordinates] = useState({ lng: [-118.26792852392579, 34.03895446013246], lat: [-118.23702947607404, 34.052626988739206] });
 
@@ -51,7 +59,6 @@ const ConnectedMap = ({
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
-  const [drawingPresent, setDrawingPresent] = useState(false);
 
   const [mapboxStyle, setMapBoxStyle] = useState(
     "mapbox://styles/mapbox/dark-v10"
@@ -104,7 +111,10 @@ const ConnectedMap = ({
         })
         .then((data) => {
          setData(data.data);
-         setDrawingPresent(true)
+         getPolygonData(data.data);
+         handleDrawing(true);
+         sideBar[0].classList.add("--container-open");
+         map.off("click", "places", layerClick)
         })
         .catch((error) => {
           console.log(error);
@@ -112,7 +122,12 @@ const ConnectedMap = ({
     }
 
     map.on('draw.create', drawnData);
-    map.on('draw.delete', () => {setDrawingPresent(false); fetchData()})
+    map.on('draw.delete', 
+      () => {
+        handleDrawing(false); 
+        sideBar[0].classList.remove("--container-open");
+        map.on("click", "places", layerClick);
+    })
 
     map.on('mouseenter', 'places', () => {
       map.getCanvas().style.cursor = 'pointer'
@@ -141,14 +156,16 @@ const ConnectedMap = ({
       mapRef.current.appendChild(geocoder.onAdd(map));
     });
 
-    map.on("click", "places", (e) => {
+    const layerClick = (e) => {
       let description = e.features[0].properties.description;
-      handleSidebar(false);
-      closeButtonHandle[0].classList.add("--show");
-      sideBar[0].classList.add("--container-open");
-      closeButton[0].classList.remove("--closeButton-close");
-      getCitationData(description);
-    });
+        handleSidebar(false);
+        closeButtonHandle[0].classList.add("--show");
+        sideBar[0].classList.add("--container-open");
+        closeButton[0].classList.remove("--closeButton-close");
+        getCitationData(description);
+    }
+
+    map.on("click", "places", layerClick);
 
     map.on("moveend", () => {
       var bounds = map.getBounds().toArray();
