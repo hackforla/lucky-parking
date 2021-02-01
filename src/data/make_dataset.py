@@ -48,9 +48,7 @@ def download_raw(input_filedir: str) -> Path:
 
     # Setup connection and download into raw data folder
     http = urllib3.PoolManager()
-    url = (
-        "https://data.lacity.org/api/views/" + "wjz9-h9np/rows.csv?accessType=DOWNLOAD"
-    )
+    url = "https://data.lacity.org/api/views/wjz9-h9np/rows.csv?accessType=DOWNLOAD"
     RAW_DATA_FILEPATH = PROJECT_DIR / input_filedir / (date_string + "_raw.csv")
     with http.request("GET", url, preload_content=False) as res, open(
         RAW_DATA_FILEPATH, "wb"
@@ -101,7 +99,7 @@ def create_sample(
     return SAMPLE_FILEPATH
 
 
-def clean(target_file: Union[Path, str], output_filedir: str):
+def clean(target_file: Union[Path, str], output_filedir: str, geojson: bool):
     """Removes unnecessary columns, erroneous data points and aliases,
     changes geometry projection from epsg:2229 to epsg:4326, and converts
     time to datetime type.
@@ -208,33 +206,28 @@ def clean(target_file: Union[Path, str], output_filedir: str):
     df.reset_index(drop=True, inplace=True)
     df.reset_index(inplace=True)
 
-    return df, output_filedir, target_file
+    if geojson:
+        gpd.GeoDataFrame(
+            df,
+            crs="EPSG:4326",
+            geometry=[Point(xy) for xy in zip(df.longitude, df.latitude)],
+        ).to_file(
+            PROJECT_DIR
+            / output_filedir
+            / (target_file.stem.replace("_raw", "_processed") + ".geojson"),
+            driver="GeoJSON",
+        )
+        return print("Saved as geojson!")
 
-
-def save_csv(df, output_filedir, target_file: Path):
-    # Save as csv to output_filedir annotated as processed
-    df.to_csv(
-        PROJECT_DIR
-        / output_filedir
-        / (target_file.stem.replace("_raw", "_processed") + ".csv"),
-        index=False,
-        quoting=csv.QUOTE_ALL,
-    )
-    return print("Saved as csv!")
-
-
-def save_geojson(df, output_filedir, target_file: Path):
-    gpd.GeoDataFrame(
-        df,
-        crs="EPSG:4326",
-        geometry=[Point(xy) for xy in zip(df.longitude, df.latitude)],
-    ).to_file(
-        PROJECT_DIR
-        / output_filedir
-        / (target_file.stem.replace("_raw", "_processed") + ".geojson"),
-        driver="GeoJSON",
-    )
-    return print("Saved as geojson!")
+    else:
+        df.to_csv(
+            PROJECT_DIR
+            / output_filedir
+            / (target_file.stem.replace("_raw", "_processed") + ".csv"),
+            index=False,
+            quoting=csv.QUOTE_ALL,
+        )
+        return print("Saved as csv!")
 
 
 if __name__ == "__main__":

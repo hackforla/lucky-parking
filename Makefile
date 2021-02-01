@@ -1,11 +1,10 @@
-.PHONY: clean data lint requirements sync_data_to_s3 sync_data_from_s3
+.PHONY: clean data lint requirements clean_data, upload_geojson, sample, create_environment test_environment
 
 #################################################################################
 # GLOBALS                                                                       #
 #################################################################################
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUCKET = lucky-parking-storage
 PROFILE = default
 PROJECT_NAME = lucky-parking-analysis
 PYTHON_INTERPRETER = python3
@@ -38,10 +37,6 @@ clean:
 clean_data:
 	find ./data ! -type d ! -name *.gitkeep -delete
 
-## Create geojson
-geojson:
-	$(PYTHON_INTERPRETER) src/data/geojson.py
-
 ## Lint using flake8
 lint:
 	flake8 src
@@ -50,25 +45,9 @@ lint:
 upload_geojson:
 	$(PYTHON_INTERPRETER) src/data/upload.py
 
-## Create sample from raw data: frac={fraction of raw} cleaned={True or False}
+## Create sample from raw data
 sample:
-	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned)
-
-## Upload Data to S3
-sync_data_to_s3:
-ifeq (default,$(PROFILE))
-	aws s3 sync data/ s3://$(BUCKET)/data/
-else
-	aws s3 sync data/ s3://$(BUCKET)/data/ --profile $(PROFILE)
-endif
-
-## Download Data from S3
-sync_data_from_s3:
-ifeq (default,$(PROFILE))
-	aws s3 sync s3://$(BUCKET)/data/ data/
-else
-	aws s3 sync s3://$(BUCKET)/data/ data/ --profile $(PROFILE)
-endif
+	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned) $(geojson)
 
 ## Set up python interpreter environment
 create_environment:

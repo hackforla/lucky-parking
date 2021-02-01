@@ -11,8 +11,8 @@ Hack for LA analysis of parking citation data
 	- Sampled data will be in data/interim (default 10% sampling from full dataset)
 	- Cleaned data will be in data/processed
 - To create a smaller or larger sample from full dataset use: `make sample frac={your fraction here} clean=False`
-    - Use `make sample frac={your fraction here} clean=True`, for cleaned dataset that ends up in processed
-    - For 15% sample that is cleaned: `make sample frac=0.15 clean=True`
+    - Use `make sample frac={your fraction here} clean=True geojson=False`, for cleaned csv dataset that ends up in processed
+    - For 15% sample that is cleaned: `make sample frac=0.15 clean=True geojson=False`
 
 Project Organization
 ------------

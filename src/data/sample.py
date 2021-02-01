@@ -3,25 +3,25 @@ import click
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import os
-from make_dataset import clean, create_sample, save_csv
+from make_dataset import clean, create_sample
 
 
 @click.command()
 @click.argument("frac", type=click.FLOAT)
 @click.argument("cleaned", type=click.BOOL)
-def main(frac: float, cleaned: bool):
+@click.argument("geojson", type=click.BOOL)
+def main(frac: float, cleaned: bool, geojson: bool):
     """Downloads full dataset from lacity.org, and runs data processing
     scripts to turn raw data into cleaned data ready
     to be analyzed. Also updates environmental
     variable RAW_DATA_FILEPATH.
     """
     if cleaned:
-        save_csv(
-            *clean(
-                create_sample(RAW_DATA_FILEPATH, "data/interim", frac), "data/processed"
-            )
+        clean(
+            create_sample(RAW_DATA_FILEPATH, "data/interim", frac),
+            "data/processed",
+            geojson
         )
-
     else:
         create_sample(RAW_DATA_FILEPATH, "data/interim", frac)
 
