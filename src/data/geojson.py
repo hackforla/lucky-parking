@@ -8,19 +8,18 @@ from make_dataset import clean, create_sample
 
 @click.command()
 @click.argument("frac", type=click.FLOAT)
-@click.argument("cleaned", type=click.BOOL)
-def main(frac: float, cleaned: bool):
+def main(frac: float):
     """Downloads full dataset from lacity.org, and runs data processing
     scripts to turn raw data into cleaned data ready
     to be analyzed. Also updates environmental
     variable RAW_DATA_FILEPATH.
     """
-    if cleaned:
-        clean(
-            create_sample(RAW_DATA_FILEPATH, "data/interim", frac),
-            "data/processed")
-    else:
-        create_sample(RAW_DATA_FILEPATH, "data/interim", frac)
+
+    clean(
+        create_sample(RAW_DATA_FILEPATH, "data/interim", frac),
+        "data/processed",
+        geojson=True,
+    )
 
 
 if __name__ == "__main__":

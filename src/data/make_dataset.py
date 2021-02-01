@@ -99,7 +99,7 @@ def create_sample(
     return SAMPLE_FILEPATH
 
 
-def clean(target_file: Union[Path, str], output_filedir: str, geojson: bool):
+def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     """Removes unnecessary columns, erroneous data points and aliases,
     changes geometry projection from epsg:2229 to epsg:4326, and converts
     time to datetime type.

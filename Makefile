@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements clean_data, upload_geojson, sample, create_environment test_environment
+.PHONY: clean data lint requirements clean_data, upload_geojson, sample, geojson, create_environment test_environment
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -28,6 +28,10 @@ requirements: test_environment
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
 
+## Make geojson
+geojson: requirements
+	$(PYTHON_INTERPRETER) src/data/geojson.py $(frac)
+
 ## Delete all compiled Python files
 clean:
 	find . -type f -name "*.py[co]" -delete
@@ -47,7 +51,7 @@ upload_geojson:
 
 ## Create sample from raw data
 sample:
-	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned) $(geojson)
+	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned)
 
 ## Set up python interpreter environment
 create_environment:
