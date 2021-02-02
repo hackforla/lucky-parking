@@ -29,12 +29,11 @@ def main(input_filedir: str, output_filedir: str):
     """
     # If run as main, data is downloaded,  10% sampled, and cleaned
     # automatically
-    save_csv(
-        *clean(
+    clean(
             create_sample(download_raw(input_filedir), "data/interim", 0.1),
             output_filedir,
         )
-    )
+    
 
 
 def download_raw(input_filedir: str) -> Path:
