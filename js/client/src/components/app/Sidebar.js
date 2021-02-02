@@ -30,8 +30,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
 
   useEffect(() => {
     if (citation !== null) {
-      const citations = JSON.parse(citation);
-      setData(citations);
+      setData(citation);
     }
   }, [citation]);
 

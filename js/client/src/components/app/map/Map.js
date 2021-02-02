@@ -157,12 +157,24 @@ const ConnectedMap = ({
     });
 
     const layerClick = (e) => {
-      let description = e.features[0].properties.description;
+      axios
+        .get(`${API_URL}/api/citation/point`, {
+          params: {
+            index: e.features[0].properties.description,
+          },
+        })
+        .then((data) => {
+          console.log(data.data)
+          getCitationData(data.data[0]);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  
         handleSidebar(false);
         closeButtonHandle[0].classList.add("--show");
         sideBar[0].classList.add("--container-open");
         closeButton[0].classList.remove("--closeButton-close");
-        getCitationData(description);
     }
 
     map.on("click", "places", layerClick);
@@ -238,16 +250,14 @@ const ConnectedMap = ({
       features: [],
     };
 
+    console.log(data)
     let dataFeatures = data.map((data) => {
       return {
         type: "Feature",
         properties: {
-          description: data,
+          description: data.index,
         },
-        geometry: {
-          type: "Point",
-          coordinates: [JSON.parse(data.longitude), JSON.parse(data.latitude)],
-        },
+        geometry: JSON.parse(data.st_asgeojson),
       };
     });
 
