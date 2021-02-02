@@ -28,8 +28,12 @@ requirements: test_environment
 data: requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
 
+## Make dataset with date threshold
+date_threshold: 
+	$(PYTHON_INTERPRETER) src/data/date_threshold.py $(date)
+
 ## Make geojson
-geojson: requirements
+geojson: 
 	$(PYTHON_INTERPRETER) src/data/geojson.py $(frac)
 
 ## Delete all compiled Python files
