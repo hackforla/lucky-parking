@@ -164,7 +164,6 @@ const ConnectedMap = ({
           },
         })
         .then((data) => {
-          console.log(data.data)
           getCitationData(data.data[0]);
         })
         .catch((error) => {
@@ -250,7 +249,6 @@ const ConnectedMap = ({
       features: [],
     };
 
-    console.log(data)
     let dataFeatures = data.map((data) => {
       return {
         type: "Feature",
