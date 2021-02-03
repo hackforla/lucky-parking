@@ -53,7 +53,7 @@ const ConnectedMap = ({
   handleDrawing,
   getPolygonData,
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: [-118.26792852392579, 34.03895446013246], lat: [-118.23702947607404, 34.052626988739206] });
+  const [coordinates, setCoordinates] = useState({ lng: [], lat: [] });
 
   const [zoom, setZoom] = useState(15);
   const [data, setData] = useState([]);
@@ -87,6 +87,14 @@ const ConnectedMap = ({
       zoom: zoom,
       
     });
+
+    map.on('load', () => {
+      var bounds = map.getBounds().toArray();
+      setCoordinates({
+        lng: bounds[0],
+        lat: bounds[1],
+      });
+    })
 
 
     var draw = new MapboxDraw({
