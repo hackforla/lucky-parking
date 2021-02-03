@@ -11,9 +11,5 @@ python-dotenv>=0.5.1
 pylint
 geopandas
 matplotlib
-plotly
-ipywidgets
-plotly-geo
-chart-studio
 sqlalchemy
 geoalchemy2
