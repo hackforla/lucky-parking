@@ -53,9 +53,9 @@ const ConnectedMap = ({
   handleDrawing,
   getPolygonData,
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: [-118.26792852392579, 34.03895446013246], lat: [-118.23702947607404, 34.052626988739206] });
+  const [coordinates, setCoordinates] = useState({ lng: [], lat: [] });
 
-  const [zoom, setZoom] = useState(16);
+  const [zoom, setZoom] = useState(13);
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
@@ -83,11 +83,18 @@ const ConnectedMap = ({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
-      center: [-118.252479, 34.045791],
+      center: [-118.338738, 34.069037],
       zoom: zoom,
       
     });
 
+    map.on('load', () => {
+      var bounds = map.getBounds().toArray();
+      setCoordinates({
+        lng: bounds[0],
+        lat: bounds[1],
+      });
+    })
 
     var draw = new MapboxDraw({
       displayControlsDefault: false,
