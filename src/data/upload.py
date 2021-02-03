@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from dotenv import find_dotenv, load_dotenv
 import os
-import glob
 from sqlalchemy import *
 import numpy as np
 import pandas as pd
@@ -9,6 +8,7 @@ import pickle
 from pathlib import Path
 from geoalchemy2 import Geometry
 import geopandas as gpd
+import psycopg2
 
 load_dotenv(find_dotenv(), override=True)
 user = os.getenv("DB_USER")
@@ -19,20 +19,27 @@ database = os.getenv("DB_NAME")
 
 
 # Load project directory
-PROJECT_DIR = Path(os.getenv("PROJECT_DIR"))
-latest_file = max(glob.glob(PROJECT_DIR / 'data' / 'processed' / '*.geojson'), key=os.path.getctime)
+PROJECT_DIR = Path(__file__).resolve().parents[2]
+latest_file = max(
+    (PROJECT_DIR / "data" / "processed").glob('*.geojson'), key=os.path.getctime
+)
 
-def main()
+
+def main():
     engine = create_engine(
         f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
     )
 
-    df = gpd.read_file(latest_file,
-    crs="EPSG:4326").set_index("index").dropna(subset=['geometry']).reset_index(drop=True)
-
+    df = (
+        gpd.read_file(latest_file, crs="EPSG:4326")
+        .set_index("index")
+        .dropna(subset=["geometry"])
+        .reset_index(drop=True)
+    )
+    print(df.head())
     try:
         df.to_postgis(
-            "test",
+            "test1",
             engine,
             if_exists="replace",
             index=True,
@@ -52,15 +59,14 @@ def main()
                 "geometry": Geometry(geometry_type="POINT", srid=4326),
             },
         )
-        print('done!')
+        print("done!")
     except Exception as e:
         print(e)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     # logging.basicConfig(level=logging.INFO, format=log_fmt)
-    
 
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables

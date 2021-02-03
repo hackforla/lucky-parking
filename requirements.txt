@@ -17,3 +17,4 @@ plotly-geo
 chart-studio
 sqlalchemy
 geoalchemy2
+psycopg2
