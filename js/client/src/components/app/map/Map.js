@@ -55,7 +55,7 @@ const ConnectedMap = ({
 }) => {
   const [coordinates, setCoordinates] = useState({ lng: [-118.26792852392579, 34.03895446013246], lat: [-118.23702947607404, 34.052626988739206] });
 
-  const [zoom, setZoom] = useState(15);
+  const [zoom, setZoom] = useState(16);
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
