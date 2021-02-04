@@ -55,7 +55,7 @@ const ConnectedMap = ({
 }) => {
   const [coordinates, setCoordinates] = useState({ lng: [], lat: [] });
 
-  const [zoom, setZoom] = useState(13);
+  const [zoom, setZoom] = useState(12.5);
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
@@ -83,7 +83,7 @@ const ConnectedMap = ({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
-      center: [-118.338738, 34.069037],
+      center: [-118.373330, 34.060959],
       zoom: zoom,
       
     });
