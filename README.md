@@ -60,6 +60,9 @@ conda activate lucky-parking-analysis
 make data
 
 ```
+If using VSCode, use Remote-SSH extension as your development environment:
+[Remote-SSH Tutorial](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
+
 
 Project Organization
 ------------
