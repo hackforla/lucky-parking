@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'DIN1451Alt';
+  src: url('../../assets/fonts/alte-din-1451-mittelschrift/din1451alt.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'VT323';
+  src: url('../../assets/fonts/VT323/VT323-Regular.ttf') format('truetype');
+}
+
+.select {
+  margin-top: 20px;
+  max-width: 90%;
+  margin-left: 15px;
+  
+}
+
+.chart {
+  margin-top: 80px;
+  height: 90%;
+}

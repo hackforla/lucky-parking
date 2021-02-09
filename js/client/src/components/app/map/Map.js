@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { connect } from "react-redux";
 import {
   getCitationData,
   getMap,
   handleSidebar,
+  handleDrawing,
+  getPolygonData,
 } from "../../../redux/actions/index";
 import { heatMap, places } from "./MapLayers";
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
 
 const axios = require("axios");
@@ -20,6 +24,8 @@ function mapDispatchToProps(dispatch) {
     getCitationData: (test) => dispatch(getCitationData(test)),
     getMap: (mapRef) => dispatch(getMap(mapRef)),
     handleSidebar: (isSidebarOpen) => dispatch(handleSidebar(isSidebarOpen)),
+    handleDrawing: (drawingPresent) => dispatch(handleDrawing(drawingPresent)),
+    getPolygonData: (polygonData) => dispatch(getPolygonData(polygonData)),
   };
 }
 
@@ -30,7 +36,8 @@ const mapStateToProps = (state) => {
     isSidebarOpen: state.isSidebarOpen,
     activateDateRange: state.activateDateRange,
     startDate: state.startDate,
-    endDate: state.endDate
+    endDate: state.endDate,
+    drawingPresent: state.drawingPresent,
   };
 };
 
@@ -41,11 +48,14 @@ const ConnectedMap = ({
   handleSidebar,
   activateDateRange,
   startDate,
-  endDate
+  endDate,
+  drawingPresent,
+  handleDrawing,
+  getPolygonData,
 }) => {
-  const [coordinates, setCoordinates] = useState({ lng: [-118.21064300537162, 34.043039338159375], lat: [-118.18931407928518, 34.05671120815498] });
+  const [coordinates, setCoordinates] = useState({ lng: [], lat: [] });
 
-  const [zoom, setZoom] = useState(15);
+  const [zoom, setZoom] = useState(12.5);
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
@@ -63,6 +73,8 @@ const ConnectedMap = ({
     "sidebar__closeButton"
   );
 
+  
+
   //first mounted
   useEffect(() => {
     // just to see if we're hitting the API
@@ -71,10 +83,65 @@ const ConnectedMap = ({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
-      center: [-118.2, 34.05],
+      center: [-118.373330, 34.060959],
       zoom: zoom,
       
     });
+
+    map.on('load', () => {
+      var bounds = map.getBounds().toArray();
+      setCoordinates({
+        lng: bounds[0],
+        lat: bounds[1],
+      });
+    })
+
+    var draw = new MapboxDraw({
+      displayControlsDefault: false,
+      controls: {
+      polygon: true,
+      trash: true
+      }
+      });
+
+    map.addControl(draw, 'top-right');
+    map.addControl(new mapboxgl.NavigationControl({showCompass: false}), "bottom-right");
+
+    function drawnData () {
+      var drawData = draw.getAll();
+      
+      axios
+        .get(`${API_URL}/api/citation/draw`, {
+          params: {
+            polygon: drawData.features[0].geometry.coordinates,
+          },
+        })
+        .then((data) => {
+         setData(data.data);
+         getPolygonData(data.data);
+         handleDrawing(true);
+         sideBar[0].classList.add("--container-open");
+         map.off("click", "places", layerClick)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
+
+    map.on('draw.create', drawnData);
+    map.on('draw.delete', 
+      () => {
+        handleDrawing(false); 
+        sideBar[0].classList.remove("--container-open");
+        map.on("click", "places", layerClick);
+    })
+
+    map.on('mouseenter', 'places', () => {
+      map.getCanvas().style.cursor = 'pointer'
+    })
+    map.on('mouseleave', 'places', () => {
+      map.getCanvas().style.cursor = ''
+    })
 
     map.once("style.load", () => {
       let dataSources = {
@@ -96,14 +163,27 @@ const ConnectedMap = ({
       mapRef.current.appendChild(geocoder.onAdd(map));
     });
 
-    map.on("click", "places", (e) => {
-      let description = e.features[0].properties.description;
-      handleSidebar(false);
-      closeButtonHandle[0].classList.add("--show");
-      sideBar[0].classList.add("--container-open");
-      closeButton[0].classList.remove("--closeButton-close");
-      getCitationData(description);
-    });
+    const layerClick = (e) => {
+      axios
+        .get(`${API_URL}/api/citation/point`, {
+          params: {
+            index: e.features[0].properties.description,
+          },
+        })
+        .then((data) => {
+          getCitationData(data.data[0]);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  
+        handleSidebar(false);
+        closeButtonHandle[0].classList.add("--show");
+        sideBar[0].classList.add("--container-open");
+        closeButton[0].classList.remove("--closeButton-close");
+    }
+
+    map.on("click", "places", layerClick);
 
     map.on("moveend", () => {
       var bounds = map.getBounds().toArray();
@@ -127,7 +207,7 @@ const ConnectedMap = ({
   }, [data]);
 
   useEffect(() => {
-    if (mounted) {
+    if (mounted && drawingPresent === false) {
       fetchData();
       if (map.getSource("places") && zoom < 13) {
         handleSidebar(true);
@@ -135,7 +215,7 @@ const ConnectedMap = ({
         closeButton[0].classList.add("--closeButton-close");
       }
     }
-  }, [coordinates, zoom]);
+  }, [coordinates, zoom, drawingPresent]);
 
   function fetchData() {
     activateDateRange ?
@@ -144,8 +224,8 @@ const ConnectedMap = ({
           params: {
             longitude: coordinates.lng,
             latitude: coordinates.lat,
-            startDate: new Date(startDate).toLocaleDateString(),
-            endDate: new Date(endDate).toLocaleDateString(),
+            startDate: new Date(startDate).toLocaleString(),
+            endDate: new Date(endDate).toLocaleString(),
           },
         })
         .then((data) => {
@@ -180,12 +260,9 @@ const ConnectedMap = ({
       return {
         type: "Feature",
         properties: {
-          description: data,
+          description: data.index,
         },
-        geometry: {
-          type: "Point",
-          coordinates: [JSON.parse(data.longitude), JSON.parse(data.latitude)],
-        },
+        geometry: JSON.parse(data.st_asgeojson),
       };
     });
 

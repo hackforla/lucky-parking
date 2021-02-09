@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/hackforla/lucky-parking#readme",
   "dependencies": {
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
