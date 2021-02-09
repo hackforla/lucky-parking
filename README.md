@@ -4,7 +4,7 @@ lucky-parking-analysis
 Hack for LA analysis of parking citation data
 
 - Run `make create_environment`
-- Make sure that your new lucky-parking-analysis environment is activated
+- Make sure that your new lucky-parking-analysis environment is activated: `conda activate lucky-parking-analysis`
 - If you're using a Mac, you might have to install some certificates first: https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
 - Run `make data` to download raw citation data
 	- Raw data will be in data/raw
@@ -13,6 +13,53 @@ Hack for LA analysis of parking citation data
 - To create a smaller or larger sample from full dataset use: `make sample frac={your fraction here} clean=False`
     - Use `make sample frac={your fraction here} clean=True`, for cleaned csv dataset that ends up in processed
     - For 15% csv sample that is cleaned: `make sample frac=0.15 clean=True`
+
+#### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder: 
+[Link to screenshots](references/awsEC2.pdf)
+
+```
+# Once you have setup your AWS instance, make sure you run 
+chmod 400 your_pem_file.pem
+
+# Move your pem file to your .ssh folder
+mv your_pem_file.pem ~/.ssh
+
+# Open a terminal and SSH into your instance
+ssh -i ~/.ssh/your_pem_file.pem ubuntu@your_aws_host_name_here
+
+# Update
+sudo apt upgrade
+
+# Git clone this repo
+git clone https://github.com/hackforla/lucky-parking.git
+cd lucky-parking
+
+# Change branch
+git checkout citation-analysis
+
+# Install make and conda
+sudo apt install make
+cd ..
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+
+# Type yes to initialize conda
+# Restart shell
+exec bash
+
+# Conda should now be available
+# Remove installer (optional)
+rm Miniconda3-latest-Linux-x86_64.sh
+
+# Create environment and activate
+cd lucky-parking
+make create_environment
+conda activate lucky-parking-analysis
+
+# Make data!
+make data
+
+```
 
 Project Organization
 ------------
