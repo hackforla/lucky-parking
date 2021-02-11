@@ -3,26 +3,42 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import Select from 'react-select';
 
-const Graph = ({ data }) => {
 
+const axios = require("axios");
+const API_URL = process.env.REACT_APP_API_URL;
+
+const Graph = ({ polygonData }) => {
+  const [data, setData] = useState(null)
   const [selectedKey, setSelectedKey] = useState("make");
   const [title, setTitle] = useState({ value: 'make', label: 'Make' });
 
-  const dataProcess = (data, sKey) => {
-    var res = data.reduce((obj, v) => {
-      obj[v[`${sKey}`]] = (obj[v[`${sKey}`]] || 0) + 1;
-      return obj;
-    }, {})
-  
-    let final = Object.keys(res).map((key, i) => {
-      return {
-        name: Object.keys(res)[i],
-        y: res[key] / data.length * 100,
-      }
+  const dataProcess = (data) => {
+    var newKeys = data.map((obj) => {
+      obj["count"] = (parseInt(obj.count) / data.length * 100)
+      obj["name"] = obj[selectedKey]
+      obj["y"] = obj["count"]
+      delete obj[selectedKey]
+      delete obj["count"]
+      return obj
     })
-  
-    return final;
+    return newKeys;
   }
+
+  const fetchGraph = async () => {
+    const response = await axios
+      .get(`${API_URL}/api/citation/graph`, {
+        params: {
+          polygon: polygonData,
+          filterBy: selectedKey,
+        },
+      })
+    
+    setData(dataProcess(response.data))
+  }
+
+  useEffect(() => {
+    fetchGraph();
+  }, [selectedKey])
 
   const options = {
     title: {
@@ -41,7 +57,7 @@ const Graph = ({ data }) => {
       type: "pie",
       name: "violations",
       colorByPoint: true,
-      data: dataProcess(data, selectedKey),
+      data: data,
       dataLabels: {
         style: {
           fontFamily: 'DIN1451Alt',

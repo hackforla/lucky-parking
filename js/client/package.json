@@ -12,6 +12,7 @@
     "highcharts": "^8.2.2",
     "highcharts-react-official": "^3.0.0",
     "mapbox-gl": "^1.13.0",
+    "mapbox-gl-draw-freehand-mode": "^2.0.0",
     "node-sass": "^4.14.1",
     "react": "^16.14.0",
     "react-countup": "^4.3.3",
