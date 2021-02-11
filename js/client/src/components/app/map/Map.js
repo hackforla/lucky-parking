@@ -175,9 +175,6 @@ const ConnectedMap = ({
       map.addLayer(places);
       map.addLayer(heatMap);
 
-      //console.log("beginning " + dataSources);
-
-
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
@@ -215,16 +212,14 @@ const ConnectedMap = ({
       });
       setZoom(map.getZoom().toFixed(2));
     });
-
-    fetchData();
     setMap(map);
     setMounted(true);
+    fetchData();
   }, []);
 
-  //updates the map only when mounted or data is updated
   useEffect(() => {
     if (mounted) {
-      updateMap();
+      map.getSource("places").setData(data);
     }
   }, [data]);
 
@@ -252,6 +247,7 @@ const ConnectedMap = ({
         })
         .then((data) => {
           setData(data.data);
+    
         })
         .catch((error) => {
           console.log(error);
@@ -266,30 +262,11 @@ const ConnectedMap = ({
         })
         .then((data) => {
           setData(data.data);
+          map.getSource("places").setData(data.data);
         })
         .catch((error) => {
           console.log(error);
         })
-  }
-
-  function updateMap() {
-    let dataSources = {
-      type: "FeatureCollection",
-      features: [],
-    };
-
-    let dataFeatures = data.map((data) => {
-      return {
-        type: "Feature",
-        properties: {
-          description: data.index,
-        },
-        geometry: JSON.parse(data.st_asgeojson),
-      };
-    });
-
-    dataSources.features = dataFeatures;
-    map.getSource("places").setData(dataSources);
   }
 
   return (

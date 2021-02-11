@@ -11,6 +11,7 @@ const router = require("./router.js");
 app.use(cors());
 app.use(compression());
 
+
 app.get('/', (req, res) => {
   res.json('OK at ' + new Date());
 })
