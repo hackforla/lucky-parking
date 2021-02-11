@@ -1,16 +1,39 @@
 dbHelpers = require("../database/index.js");
+
+function generateGeoData(data){
+  let dataSources = {
+    type: "FeatureCollection",
+    features: [],
+  };
+
+  let dataFeatures = data.map((data) => {
+    return {
+      type: "Feature",
+      properties: {
+        description: data.index,
+      },
+      geometry: JSON.parse(data.st_asgeojson),
+    };
+  });
+
+  dataSources.features = dataFeatures;
+
+  return dataSources;
+}
+
+
+
 module.exports = {
   getAll: (req, res) => {
 
     let longitude = req.query.longitude;
     let latitude = req.query.latitude;
 
-      dbHelpers
+    dbHelpers
       .query(
         `SELECT index, ST_AsGeoJSON(geometry) FROM citations WHERE ST_X(geometry) BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) BETWEEN ${longitude[1]} AND ${latitude[1]} LIMIT 15000`
       )
       .then((data) => {
-       
         res.status(200).send(generateGeoData(data.rows));
       })
       .catch((err) => {
@@ -26,7 +49,7 @@ module.exports = {
         `SELECT * FROM citations WHERE INDEX = '${index}'`
       )
       .then((data) => {
-        res.status(200).send(generateGeoData(data.rows));
+        res.status(200).send(data.rows);
       })
       .catch((err) => {
         res.status(404).send(err)
@@ -43,7 +66,7 @@ module.exports = {
         `SELECT index, ST_AsGeoJSON(geometry) FROM citations WHERE ST_X(geometry) BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) BETWEEN ${longitude[1]} AND ${latitude[1]} AND datetime BETWEEN '${startDate}' AND '${endDate}'`
       )
       .then((data) => {
-        res.status(200).send(genereateGeoData(data.rows));
+        res.status(200).send(generateGeoData(data.rows));
       })
       .catch((err) => {
         res.status(404).send(err);
@@ -62,7 +85,7 @@ module.exports = {
         }'), citations.geometry) LIMIT 30000;`
       )
       .then((data) => {
-        res.status(200).send(data.rows);
+        res.status(200).send(generateGeoData(data.rows));
       })
       .catch((err) => {
         res.status(404).send(err);
@@ -82,34 +105,10 @@ module.exports = {
         }'), citations.geometry) GROUP BY ${filterBy};`
       )
       .then((data) => {
-        res.status(200).send(genereateGeoData(data.rows));
+        res.status(200).send(data.rows);
       })
       .catch((err) => {
         res.status(404).send(err);
       });
   },
 };
-
-function generateGeoData(data){
-  let dataSources = {
-    type: "FeatureCollection",
-    features: [],
-  };
-
-  let dataFeatures = data.map((data) => {
-    return {
-      type: "Feature",
-      properties: {
-        description: data,
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [JSON.parse(data.longitude), JSON.parse(data.latitude)],
-      },
-    };
-  });
-
-  dataSources.features = dataFeatures;
-
-  return dataSources;
-}
