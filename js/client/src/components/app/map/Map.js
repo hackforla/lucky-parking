@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import FreehandMode from 'mapbox-gl-draw-freehand-mode';
 import { connect } from "react-redux";
 import {
   getCitationData,
@@ -78,7 +79,7 @@ const ConnectedMap = ({
   //first mounted
   useEffect(() => {
     // just to see if we're hitting the API
-    axios.get(API_URL).then(data => console.log(data));
+    //axios.get(API_URL).then(data => console.log(data));
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
@@ -97,35 +98,41 @@ const ConnectedMap = ({
     })
 
     var draw = new MapboxDraw({
+      modes: Object.assign(MapboxDraw.modes, {
+        draw_polygon: FreehandMode
+      }),
       displayControlsDefault: false,
       controls: {
       polygon: true,
       trash: true
-      }
-      });
-
+    }
+    });
+    
     map.addControl(draw, 'top-right');
     map.addControl(new mapboxgl.NavigationControl({showCompass: false}), "bottom-right");
 
-    function drawnData () {
+    const drawnData = async () => {
       var drawData = draw.getAll();
-      
-      axios
+
+      try {
+        const response = await axios
         .get(`${API_URL}/api/citation/draw`, {
           params: {
             polygon: drawData.features[0].geometry.coordinates,
           },
         })
-        .then((data) => {
-         setData(data.data);
-         getPolygonData(data.data);
-         handleDrawing(true);
-         sideBar[0].classList.add("--container-open");
-         map.off("click", "places", layerClick)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+      
+        setData(response.data);
+        getPolygonData(drawData.features[0].geometry.coordinates);
+        handleDrawing(true);
+        sideBar[0].classList.add("--container-open");
+        map.off("click", "places", layerClick)
+        var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
+        drawPolygon[0].disabled = true;
+        drawPolygon[0].classList.add('disabled-button');
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     map.on('draw.create', drawnData);
@@ -134,6 +141,21 @@ const ConnectedMap = ({
         handleDrawing(false); 
         sideBar[0].classList.remove("--container-open");
         map.on("click", "places", layerClick);
+        var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
+        drawPolygon[0].disabled = false;
+        drawPolygon[0].classList.remove('disabled-button');
+    })
+
+    map.on('zoomend', () => {
+      var zoomLevel = map.getZoom()
+      var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
+      if (zoomLevel < 12) {
+        drawPolygon[0].disabled = true;
+        drawPolygon[0].classList.add('disabled-button');
+      } else if (zoomLevel > 12) {
+        drawPolygon[0].disabled = false;
+        drawPolygon[0].classList.remove('disabled-button');
+      }
     })
 
     map.on('mouseenter', 'places', () => {
@@ -153,7 +175,7 @@ const ConnectedMap = ({
       map.addLayer(places);
       map.addLayer(heatMap);
 
-      console.log("beginning " + dataSources);
+      //console.log("beginning " + dataSources);
 
 
       const geocoder = new MapboxGeocoder({
