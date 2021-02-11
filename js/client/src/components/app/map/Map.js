@@ -152,7 +152,7 @@ const ConnectedMap = ({
       if (zoomLevel < 12) {
         drawPolygon[0].disabled = true;
         drawPolygon[0].classList.add('disabled-button');
-      } else if (zoomLevel > 12) {
+      } else if (zoomLevel > 12 && !handleDrawing) {
         drawPolygon[0].disabled = false;
         drawPolygon[0].classList.remove('disabled-button');
       }
