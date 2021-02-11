@@ -12,18 +12,6 @@ const Graph = ({ polygonData }) => {
   const [selectedKey, setSelectedKey] = useState("make");
   const [title, setTitle] = useState({ value: 'make', label: 'Make' });
 
-  const dataProcess = (data) => {
-    var newKeys = data.map((obj) => {
-      obj["count"] = (parseInt(obj.count) / data.length * 100)
-      obj["name"] = obj[selectedKey]
-      obj["y"] = obj["count"]
-      delete obj[selectedKey]
-      delete obj["count"]
-      return obj
-    })
-    return newKeys;
-  }
-
   const fetchGraph = async () => {
     const response = await axios
       .get(`${API_URL}/api/citation/graph`, {
@@ -32,8 +20,13 @@ const Graph = ({ polygonData }) => {
           filterBy: selectedKey,
         },
       })
-    
-    setData(dataProcess(response.data))
+      
+    var parsed = response.data.map((obj) => {
+      obj["y"] = (parseInt(obj.y))
+      return obj
+    })
+
+    setData(parsed)
   }
 
   useEffect(() => {

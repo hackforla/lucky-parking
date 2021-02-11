@@ -72,7 +72,7 @@ module.exports = {
 
     dbHelpers
       .query(
-        `SELECT ${filterBy}, COUNT(*) FROM citations WHERE ST_Contains(ST_GeomFromGeoJSON('{
+        `SELECT ${filterBy} AS "name", (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y" FROM citations WHERE ST_Contains(ST_GeomFromGeoJSON('{
           "type":"Polygon",
           "coordinates": [${polygon}],
           "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
