@@ -47,16 +47,36 @@ module.exports = {
       });
   },
   drawSelect: (req, res) => {
-    let polygon = req.query.polygon
+    let polygon = req.query.polygon;
     
 
     dbHelpers
       .query(
-        `SELECT *, ST_AsGeoJSON(geometry) FROM citations WHERE ST_Contains(ST_GeomFromGeoJSON('{
+        `SELECT ST_AsGeoJSON(geometry) FROM citations WHERE ST_Contains(ST_GeomFromGeoJSON('{
           "type":"Polygon",
           "coordinates": [${polygon}],
           "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
-        }'), citations.geometry);`
+        }'), citations.geometry) LIMIT 30000;`
+      )
+      .then((data) => {
+        res.status(200).send(data.rows);
+      })
+      .catch((err) => {
+        res.status(404).send(err);
+      });
+  },
+  graph: (req, res) => {
+    let polygon = req.query.polygon;
+    let filterBy = req.query.filterBy;
+    
+
+    dbHelpers
+      .query(
+        `SELECT ${filterBy} AS "name", (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y" FROM citations WHERE ST_Contains(ST_GeomFromGeoJSON('{
+          "type":"Polygon",
+          "coordinates": [${polygon}],
+          "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
+        }'), citations.geometry) GROUP BY ${filterBy};`
       )
       .then((data) => {
         res.status(200).send(data.rows);

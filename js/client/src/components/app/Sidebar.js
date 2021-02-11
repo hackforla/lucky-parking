@@ -49,7 +49,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
   return (
     drawingPresent ?
       <div className="sidebar-container">
-        <Graph data={polygonData} />
+        <Graph polygonData={polygonData} />
       </div>
     :
       <div className="sidebar-container">

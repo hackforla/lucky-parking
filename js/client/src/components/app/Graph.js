@@ -3,26 +3,35 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import Select from 'react-select';
 
-const Graph = ({ data }) => {
 
+const axios = require("axios");
+const API_URL = process.env.REACT_APP_API_URL;
+
+const Graph = ({ polygonData }) => {
+  const [data, setData] = useState(null)
   const [selectedKey, setSelectedKey] = useState("make");
   const [title, setTitle] = useState({ value: 'make', label: 'Make' });
 
-  const dataProcess = (data, sKey) => {
-    var res = data.reduce((obj, v) => {
-      obj[v[`${sKey}`]] = (obj[v[`${sKey}`]] || 0) + 1;
-      return obj;
-    }, {})
-  
-    let final = Object.keys(res).map((key, i) => {
-      return {
-        name: Object.keys(res)[i],
-        y: res[key] / data.length * 100,
-      }
+  const fetchGraph = async () => {
+    const response = await axios
+      .get(`${API_URL}/api/citation/graph`, {
+        params: {
+          polygon: polygonData,
+          filterBy: selectedKey,
+        },
+      })
+      
+    var parsed = response.data.map((obj) => {
+      obj["y"] = (parseInt(obj.y))
+      return obj
     })
-  
-    return final;
+
+    setData(parsed)
   }
+
+  useEffect(() => {
+    fetchGraph();
+  }, [selectedKey])
 
   const options = {
     title: {
@@ -41,7 +50,7 @@ const Graph = ({ data }) => {
       type: "pie",
       name: "violations",
       colorByPoint: true,
-      data: dataProcess(data, selectedKey),
+      data: data,
       dataLabels: {
         style: {
           fontFamily: 'DIN1451Alt',

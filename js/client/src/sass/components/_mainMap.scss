@@ -202,6 +202,12 @@
   animation: rotate 0.8s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
 
+.disabled-button {
+  -webkit-filter: opacity(.3) drop-shadow(0 0 0 #FFF);
+  filter: opacity(.3) drop-shadow(0 0 0 #FFF);
+  cursor: default !important;
+}
+
 /* Animation */
 @-webkit-keyframes rotate {
   from {
