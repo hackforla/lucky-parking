@@ -1,20 +1,22 @@
 dbHelpers = require("../database/index.js");
 module.exports = {
   getAll: (req, res) => {
-    let longitude = req.query.longitude
-    let latitude = req.query.latitude
 
-    dbHelpers
+    let longitude = req.query.longitude;
+    let latitude = req.query.latitude;
+
+      dbHelpers
       .query(
         `SELECT index, ST_AsGeoJSON(geometry) FROM citations WHERE ST_X(geometry) BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) BETWEEN ${longitude[1]} AND ${latitude[1]} LIMIT 15000`
       )
       .then((data) => {
-
+       
         res.status(200).send(generateGeoData(data.rows));
       })
       .catch((err) => {
         res.status(404).send(err);
       });
+    
   },
   getPointData: (req, res) => {
     let index = req.query.index;
@@ -24,7 +26,7 @@ module.exports = {
         `SELECT * FROM citations WHERE INDEX = '${index}'`
       )
       .then((data) => {
-        res.status(200).send(data.rows);
+        res.status(200).send(generateGeoData(data.rows));
       })
       .catch((err) => {
         res.status(404).send(err)
@@ -41,7 +43,7 @@ module.exports = {
         `SELECT index, ST_AsGeoJSON(geometry) FROM citations WHERE ST_X(geometry) BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) BETWEEN ${longitude[1]} AND ${latitude[1]} AND datetime BETWEEN '${startDate}' AND '${endDate}'`
       )
       .then((data) => {
-        res.status(200).send(data.rows);
+        res.status(200).send(genereateGeoData(data.rows));
       })
       .catch((err) => {
         res.status(404).send(err);
