@@ -9,6 +9,7 @@ import {
   handleSidebar,
   handleDrawing,
   getPolygonData,
+  getRangeActive,
 } from "../../../redux/actions/index";
 import { heatMap, places } from "./MapLayers";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
@@ -27,6 +28,7 @@ function mapDispatchToProps(dispatch) {
     handleSidebar: (isSidebarOpen) => dispatch(handleSidebar(isSidebarOpen)),
     handleDrawing: (drawingPresent) => dispatch(handleDrawing(drawingPresent)),
     getPolygonData: (polygonData) => dispatch(getPolygonData(polygonData)),
+    getRangeActive: (activateDateRange) => dispatch(getRangeActive(activateDateRange)),
   };
 }
 
@@ -113,7 +115,7 @@ const ConnectedMap = ({
 
     const drawnData = async () => {
       var drawData = draw.getAll();
-
+      
       try {
         const response = await axios
         .get(`${API_URL}/api/citation/draw`, {
@@ -121,7 +123,6 @@ const ConnectedMap = ({
             polygon: drawData.features[0].geometry.coordinates,
           },
         })
-      
         setData(response.data);
         getPolygonData(drawData.features[0].geometry.coordinates);
         handleDrawing(true);
@@ -135,7 +136,7 @@ const ConnectedMap = ({
       }
     }
 
-    map.on('draw.create', drawnData);
+    map.on('draw.create', () => {drawnData(); map.scrollZoom.disable();});
     map.on('draw.delete', 
       () => {
         handleDrawing(false); 
@@ -144,6 +145,7 @@ const ConnectedMap = ({
         var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
         drawPolygon[0].disabled = false;
         drawPolygon[0].classList.remove('disabled-button');
+        map.scrollZoom.enable();
     })
 
     map.on('zoomend', () => {
@@ -152,7 +154,7 @@ const ConnectedMap = ({
       if (zoomLevel < 12) {
         drawPolygon[0].disabled = true;
         drawPolygon[0].classList.add('disabled-button');
-      } else if (zoomLevel > 12 && !handleDrawing) {
+      } else if (zoomLevel > 12) {
         drawPolygon[0].disabled = false;
         drawPolygon[0].classList.remove('disabled-button');
       }
@@ -232,7 +234,7 @@ const ConnectedMap = ({
         closeButton[0].classList.add("--closeButton-close");
       }
     }
-  }, [coordinates, zoom, drawingPresent]);
+  }, [coordinates, zoom, drawingPresent, startDate, endDate, activateDateRange]);
 
   function fetchData() {
     activateDateRange ?
