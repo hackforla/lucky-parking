@@ -63,7 +63,7 @@ module.exports = {
 
     dbHelpers
       .query(
-        `SELECT index, ST_AsGeoJSON(geometry) FROM citations WHERE ST_X(geometry) BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) BETWEEN ${longitude[1]} AND ${latitude[1]} AND datetime BETWEEN '${startDate}' AND '${endDate}'`
+        `SELECT index, ST_AsGeoJSON(geometry) FROM citations WHERE ST_X(geometry) BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) BETWEEN ${longitude[1]} AND ${latitude[1]} AND datetime BETWEEN '${startDate}' AND '${endDate}' LIMIT 15000`
       )
       .then((data) => {
         res.status(200).send(generateGeoData(data.rows));
