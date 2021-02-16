@@ -3,9 +3,7 @@ FROM ubuntu:latest
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
 
-RUN mkdir /root/home/lucky-parking
-
-ADD . /root/home/lucky-parking
+ADD . ~/lucky-parking
 
 RUN ls
 
