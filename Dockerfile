@@ -13,7 +13,7 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && sh Miniconda3-latest-Linux-x86_64.sh -b \
     && rm -f Miniconda3-latest-Linux-x86_64.sh
 
-RUN /bin/bash -c "cd home \
+RUN /bin/bash -c "cd home/lucky-parking/ \
     && make create_environment \ 
     && conda init bash \
     && exec bash"
