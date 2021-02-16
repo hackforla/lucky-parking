@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
-ENV PATH="root/miniconda3/bin:${PATH}"
-ARG PATH="root/miniconda3/bin:${PATH}"
+ENV PATH="/root/miniconda3/bin:${PATH}"
+ARG PATH="/root/miniconda3/bin:${PATH}"
 
 RUN mkdir -p /root/home/lucky-parking
 
