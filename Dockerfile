@@ -8,7 +8,11 @@ RUN mkdir /home/lucky-parking
 ADD . /home/lucky-parking
 
 RUN apt update \
-    && apt install -y make wget
+    && apt install -y make wget python3
+    
+RUN apt-get -y update
+
+RUN apt-get -y install git
 
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && mkdir /.conda \
