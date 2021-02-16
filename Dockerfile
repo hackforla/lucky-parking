@@ -8,7 +8,7 @@ RUN mkdir /home/lucky-parking
 ADD . /home/lucky-parking
 
 RUN apt update \
-    && apt install -y make wget python3
+    && apt install -y make wget python3-pip
     
 RUN apt-get -y update
 
