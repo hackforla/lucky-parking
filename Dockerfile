@@ -3,7 +3,11 @@ FROM ubuntu:latest
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
 
-ADD . /root/home/
+RUN mkdir /root/home/lucky-parking
+
+ADD . /root/home/lucky-parking
+
+RUN ls
 
 RUN apt update \
     && apt install -y make wget
