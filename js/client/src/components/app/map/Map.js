@@ -137,6 +137,7 @@ const ConnectedMap = ({
     }
 
     map.on('draw.create', () => {drawnData(); map.scrollZoom.disable();});
+    map.on('draw.update', () => drawnData())
     map.on('draw.delete', 
       () => {
         handleDrawing(false); 
