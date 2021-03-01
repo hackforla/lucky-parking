@@ -31,7 +31,7 @@ const Graph = ({ polygonData }) => {
 
   useEffect(() => {
     fetchGraph();
-  }, [selectedKey])
+  }, [selectedKey, polygonData])
 
   const options = {
     title: {
