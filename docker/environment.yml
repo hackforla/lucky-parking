@@ -13,5 +13,7 @@ dependencies:
   - geopandas
   - pygeos
   - descartes
+  - dask
+  - pyarrow
   - seaborn
   - matplotlib

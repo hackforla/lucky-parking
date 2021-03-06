@@ -24,4 +24,4 @@ RUN conda env create -f /tmp/environment.yml && \
     rm -rf /tmp/environment.yml
 
 # start jupyter
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "luckyparkingenv", "jupyter", "lab", "--allow-root", "--ip=0.0.0.0"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "luckyparkingenv", "jupyter", "lab", "--allow-root", "--ip=0.0.0.0", "--port=8888", "--no-browser"]
