@@ -206,6 +206,7 @@ const ConnectedMap = ({
     }
 
     map.on("click", "places", layerClick);
+    map.on("touchend", "places", layerClick);
 
     map.on("moveend", () => {
       var bounds = map.getBounds().toArray();

@@ -8,8 +8,17 @@
   src: url('../../assets/fonts/VT323/VT323-Regular.ttf') format('truetype');
 }
 
+$phone: 812px;
+$desktop: 900px;
+
 .sidebar-container {
-  grid-row: 2 / 3;
+  @media  screen and (max-width: $phone) {
+    grid-row: 3 / 4;
+  }
+  @media  screen and (min-width: $desktop) {
+    grid-row: 2 / 3;
+  }
+  
   grid-column: 1 / 2;
   border: 1px lightgray solid;
 
