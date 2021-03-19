@@ -8,14 +8,29 @@
   src: url('../../assets/fonts/VT323/VT323-Regular.ttf') format('truetype');
 }
 
+$phone: 812px;
+$desktop: 900px;
+
 .select {
-  margin-top: 20px;
-  max-width: 90%;
-  margin-left: 15px;
-  
+  @media  screen and (max-width: $phone) {
+    margin-top: 5px;
+    max-width: 90%;
+    margin-left: 15px;
+  }
+  @media  screen and (min-width: $desktop) {
+    margin-top: 20px;
+    max-width: 90%;
+    margin-left: 15px;
+  }
 }
 
 .chart {
-  margin-top: 80px;
-  height: 90%;
+  @media  screen and (max-width: $phone) {
+    margin-top: 10px;
+    height: 90%;
+  }
+  @media  screen and (min-width: $desktop) {
+    margin-top: 80px;
+    height: 90%;
+  }
 }

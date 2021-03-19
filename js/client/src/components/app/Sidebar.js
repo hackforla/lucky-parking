@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { handleSidebar } from "../../redux/actions/index";
 import CountUp from 'react-countup';
 import Graph from './Graph';
+import { IconContext } from 'react-icons';
+import { BsChevronDoubleDown } from 'react-icons/bs';
 
 const mapStateToProps = (state) => {
   return { 
@@ -49,10 +51,19 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
   return (
     drawingPresent ?
       <div className="sidebar-container">
+        <div className="content-wrapper">
         <Graph polygonData={polygonData} />
+        </div>
       </div>
     :
       <div className="sidebar-container">
+      <div className="content-wrapper">
+        <IconContext.Provider value={{ size: "2.5em", className: "close-btn" }}>
+        <span className="mobile-close" onClick={sideBarCloseHandler}>
+          <BsChevronDoubleDown />
+        </span>
+
+        </IconContext.Provider>
         <h2 className="title">Date</h2>
         <div className="desc">{
           new Date(data.datetime).toLocaleDateString(
@@ -99,6 +110,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
         <div className="sidebar__closeButton" onClick={sideBarCloseHandler}>
           <div className="sidebar__closeButton--close"></div>
         </div>
+      </div>
       </div>
   );
 }
