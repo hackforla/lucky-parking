@@ -1,3 +1,6 @@
+$phone: 812px;
+$desktop: 900px;
+
 .mapContainer {
   position: relative;
   top: 0;
@@ -92,6 +95,12 @@
   right: 8px;
   top: 7px;
   display: none;
+}
+
+.mapboxgl-ctrl-bottom-right {
+  @media  screen and (max-width: $phone) {
+    display: none;
+  }
 }
 
 .mapboxgl-ctrl-geocoder,
