@@ -30,10 +30,9 @@ def main(input_filedir: str, output_filedir: str):
     # If run as main, data is downloaded,  10% sampled, and cleaned
     # automatically
     clean(
-            create_sample(download_raw(input_filedir), "data/interim", 0.1),
-            output_filedir,
-        )
-    
+        create_sample(download_raw(input_filedir), "data/interim", 0.1),
+        output_filedir,
+    )
 
 
 def download_raw(input_filedir: str) -> Path:
@@ -171,8 +170,90 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     make_df["alias"] = make_df.alias.apply(lambda x: x.split(","))
 
     # Iterate over makes and replace aliases
-    for _, data in make_df.iterrows():
-        df = df.replace(data["alias"], data["make"])
+    for row in make_df.itertuples():
+        df = df.replace(row[2], row[1])
+
+    # Car makes to keep (Top 70 by count)
+    make_list = [
+        "Toyota",
+        "Honda",
+        "Ford",
+        "Nissan",
+        "Chevrolet",
+        "BMW",
+        "Mercedes Benz",
+        "Volkswagen",
+        "Hyundai",
+        "Dodge",
+        "Lexus",
+        "Kia",
+        "Jeep",
+        "Audi",
+        "Mazda",
+        "Other",
+        "GMC",
+        "Infinity",
+        "Chrysler",
+        "Subaru",
+        "Acura",
+        "Volvo",
+        "Land Rover",
+        "Mitsubishi",
+        "Cadillac",
+        "Mini",
+        "Porsche",
+        "Unknown",
+        "Buick",
+        "Freightliner",
+        "Tesla",
+        "Lincoln",
+        "Saturn",
+        "Pontiac",
+        "Grumman",
+        "Fiat",
+        "Jaguar",
+        "Mercury",
+        "Isuzu",
+        "International",
+        "Suzuki",
+        "Saab",
+        "Oldsmobile",
+        "Maserati",
+        "Peterbuilt",
+        "Kenworth",
+        "Smart",
+        "Plymouth",
+        "Hino",
+        "Harley-Davidson",
+        "Alfa Romero",
+        "Hummer",
+        "Bentley",
+        "Yamaha",
+        "Kawasaki",
+        "Geo Metro",
+        "Winnebago",
+        "Rolls-Royce",
+        "Scion",
+        "Triumph",
+        "Checker",
+        "Datsun",
+        "Ferrari",
+        "Sterling",
+        "Lamborghini",
+        "Aston Martin",
+        "Daewoo",
+        "Merkur",
+        "Mack",
+        "CIMC",
+    ]
+
+    # Turn all other makes into "MISC."
+    df.loc[~df.make.isin(make_list), 'make'] = 'MISC.'
+    make_list.append('MISC.')
+
+    # Enumerate list of car makes and replace with keys
+    make_dict = {make:ind for ind,make in enumerate(make_list)}
+    df['make_ind'] = df.make.replace(make_dict)
 
     # Instantiate projection converter and change projection
     transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
