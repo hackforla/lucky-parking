@@ -39,7 +39,7 @@ def main():
     print(df.head())
     try:
         df.to_postgis(
-            "test1",
+            "keyed",
             engine,
             if_exists="replace",
             index=True,
@@ -49,6 +49,7 @@ def main():
                 "latitude": Float,
                 "longitude": Float,
                 "state_plate": String,
+                "make_ind": Integer,
                 "make": String,
                 "body_style": String,
                 "color": String,

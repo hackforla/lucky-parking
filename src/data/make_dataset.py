@@ -28,11 +28,16 @@ def main(input_filedir: str, output_filedir: str):
     variable RAW_DATA_FILEPATH.
     """
     # If run as main, data is downloaded,  10% sampled, and cleaned
-    # automatically
-    clean(
-        create_sample(download_raw(input_filedir), "data/interim", 0.1),
-        output_filedir,
-    )
+    # If fails, it samples already downloaded data and samples at 1%, then cleans
+
+    try:
+        clean(
+            create_sample(download_raw(input_filedir), "data/interim", 0.1),
+            output_filedir,
+        )
+    except:
+        print("Failed at 10% sampling, trying again")
+        clean(create_sample(RAW_DATA_FILEPATH, output_filedir, 0.01), output_filedir)
 
 
 def download_raw(input_filedir: str) -> Path:
@@ -81,7 +86,7 @@ def create_sample(
         / (target_file.stem + "_" + str(sample_frac).replace(".", "") + "samp.csv")
     )
 
-    print("Creating sample")
+    print(f"Creating {sample_frac * 100}% sample")
 
     # Read raw data and skiprows using random.random()
     pd.read_csv(
@@ -248,12 +253,12 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     ]
 
     # Turn all other makes into "MISC."
-    df.loc[~df.make.isin(make_list), 'make'] = 'MISC.'
-    make_list.append('MISC.')
+    df.loc[~df.make.isin(make_list), "make"] = "MISC."
+    make_list.append("MISC.")
 
     # Enumerate list of car makes and replace with keys
-    make_dict = {make:ind for ind,make in enumerate(make_list)}
-    df['make_ind'] = df.make.replace(make_dict)
+    make_dict = {make: ind for ind, make in enumerate(make_list)}
+    df["make_ind"] = df.make.replace(make_dict)
 
     # Instantiate projection converter and change projection
     transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
