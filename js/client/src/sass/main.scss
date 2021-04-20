@@ -25,7 +25,7 @@ $desktop: 900px;
   }
   @media screen and (min-width: $desktop) {
     display: grid;
-    grid-template-columns: 30rem 3.5fr;
+    grid-template-columns: 30rem 30rem 3.5fr;
     grid-template-rows: 5rem 1fr;
     grid-gap: 1rem;
     height: 100%;
