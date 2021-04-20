@@ -13,6 +13,7 @@ import {
 } from "../../../redux/actions/index";
 import { heatMap, places } from "./MapLayers";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import polylabel from 'polylabel';
 
 
 const axios = require("axios");
@@ -131,6 +132,8 @@ const ConnectedMap = ({
         var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
         drawPolygon[0].disabled = true;
         drawPolygon[0].classList.add('disabled-button');
+        var polygonCenter = polylabel(drawData.features[0].geometry.coordinates, 1.0)
+        map.easeTo({center: polygonCenter})
       } catch (err) {
         console.log(err);
       }

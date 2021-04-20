@@ -24,6 +24,7 @@ function mapDispatchToProps(dispatch) {
 function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPresent, polygonData }) {
   const [data, setData] = useState("");
   const sideBar = document.getElementsByClassName("sidebar-container");
+  const mapGrid = document.getElementsByClassName("map-container")
   const closeButton = document.getElementsByClassName(
     "sidebar__closeButton--close"
   );
@@ -50,7 +51,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
 
   return (
     drawingPresent ?
-      <div className="sidebar-container">
+      <div className="sidebar-container extra">
         <div className="content-wrapper">
         <Graph polygonData={polygonData} />
         </div>
