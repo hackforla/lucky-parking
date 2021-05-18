@@ -5,6 +5,7 @@ import CountUp from 'react-countup';
 import Graph from './Graph';
 import { IconContext } from 'react-icons';
 import { BsChevronDoubleDown } from 'react-icons/bs';
+import * as T from '../indexTables'
 
 const mapStateToProps = (state) => {
   return { 
@@ -87,7 +88,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
         <h2 className="vehicle">Vehicle</h2>
         <div className="left">
           Make
-          <div className="leftData">{data.make}</div>
+          <div className="leftData">{T.makeTable[data.make_ind]}</div>
         </div>
         <div className="left">
           State
