@@ -3,16 +3,7 @@ lucky-parking-analysis
 
 Hack for LA analysis of parking citation data
 
-- Run `make create_environment`
-- Make sure that your new lucky-parking-analysis environment is activated: `conda activate lucky-parking-analysis`
-- If you're using a Mac, you might have to install some certificates first: https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
-- Run `make data` to download raw citation data
-	- Raw data will be in data/raw
-	- Sampled data will be in data/interim (default 10% sampling from full dataset)
-	- Cleaned data will be in data/processed
-- To create a smaller or larger sample from full dataset use: `make sample frac={your fraction here} clean=False`
-    - Use `make sample frac={your fraction here} clean=True`, for cleaned csv dataset that ends up in processed
-    - For 15% csv sample that is cleaned: `make sample frac=0.15 clean=True`
+
 
 #### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder: 
 [Link to screenshots](references/awsEC2.pdf)
@@ -26,7 +17,10 @@ mv your_pem_file.pem ~/.ssh
 
 # Open a terminal and SSH into your instance
 ssh -i ~/.ssh/your_pem_file.pem ubuntu@your_aws_host_name_here
+```
 
+#### Running it locally:
+``` 
 # Update
 sudo apt upgrade
 
@@ -62,6 +56,18 @@ make data
 ```
 If using VSCode, use Remote-SSH extension as your development environment:
 [Remote-SSH Tutorial](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
+
+#### Using the Makefile to create data:
+- Run `make create_environment`
+- Make sure that your new lucky-parking-analysis environment is activated: `conda activate lucky-parking-analysis`
+- If you're using a Mac, you might have to install some certificates first: https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
+- Run `make data` to download raw citation data
+	- Raw data will be in data/raw
+	- Sampled data will be in data/interim (default 10% sampling from full dataset)
+	- Cleaned data will be in data/processed
+- To create a smaller or larger sample from full dataset use: `make sample frac={your fraction here} clean=False`
+    - Use `make sample frac={your fraction here} clean=True`, for cleaned csv dataset that ends up in processed
+    - For 15% csv sample that is cleaned: `make sample frac=0.15 clean=True`
 
 
 Project Organization
