@@ -84,28 +84,7 @@ Make sure that you have 2-factor authentication activated.
 Create a personal token by clicking on your avatar the top right corner and then going to -> Settings -> Developer settings -> Personal access tokens and create a new token with the appropriate permissions. Copy this resulting token.
 Use the credential store to locally store your password `git config credential.helper cache`
 Make changes to your code, add them `git add .`, commit it `git commit -m 'your comment here'`, and push your changes to your fork `git push origin citation-analysis`. 
-Enter your username and the token string as your password. 
-Initiate a pull request.
-
-# Create your conda environment
-make create_environment
-
-# Activate the lucky-parking-analysis environment
-# If you're using a Mac, you might have to install some certificates first
-# https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
-conda activate lucky-parking-analysis
-
-
-# Download to data/raw
-# Raw data is sampled and saved to data/interim (10% default)
-# Sample data is cleaned to data/processed
-make data
-
-
-# To create a smaller or larger sample from full dataset use: make sample frac={your fraction here} clean=False
-# Use make sample frac={your fraction here} clean=True, for cleaned csv dataset that ends up in processed
-# For 15% csv sample that is cleaned: make sample frac=0.15 clean=True
-```
+Enter your username and the token string as your password. Now you can upload changes to your repo using the command line.
 
 Project Organization
 ------------
