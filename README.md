@@ -20,12 +20,13 @@ ssh -i ~/.ssh/your_pem_file.pem ubuntu@your_aws_host_name_here
 ```
 
 #### Running it locally:
+It is suggested that you work on a fork of the code. Use the fork button on the repo page to create your own copy.
 ``` 
 # Update
 sudo apt upgrade
 
-# Git clone this repo
-git clone https://github.com/hackforla/lucky-parking.git
+# Git clone your fork
+git clone https://github.com/(your Git username here)/lucky-parking.git
 cd lucky-parking
 
 # Change branch
@@ -78,12 +79,13 @@ Use make sample frac={your fraction here} clean=True, for cleaned csv dataset th
 For 15% csv sample that is cleaned: make sample frac=0.15 clean=True
 
 #### Uploading your changes to your fork
-Create a fork of the repo--this is your version of our code from which you will do pull requests from. 
+If you haven't already, create a fork of the repo--this is your version of our code from which you will do pull requests from. 
 Make sure that you have 2-factor authentication activated. 
-Create a personal token by clicking on your avatar the top right corner -> Settings -> Developer settings -> Personal access tokens and create a new token with the appropriate permissions. Copy this resulting token.
-Use the credential store to locally store your password `git config credential.helper cache'
-Make changes to your code and push your changes to your fork 'git push origin citation-analysis'. 
+Create a personal token by clicking on your avatar the top right corner and then going to -> Settings -> Developer settings -> Personal access tokens and create a new token with the appropriate permissions. Copy this resulting token.
+Use the credential store to locally store your password `git config credential.helper cache`
+Make changes to your code, add them `git add .`, commit it `git commit -m 'your comment here'`, and push your changes to your fork `git push origin citation-analysis`. 
 Enter your username and the token string as your password. 
+Initiate a pull request.
 
 # Create your conda environment
 make create_environment
