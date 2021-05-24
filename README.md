@@ -58,18 +58,26 @@ If using VSCode, use Remote-SSH extension as your development environment:
 [Remote-SSH Tutorial](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 #### Using the Makefile to create data:
-- Run `make create_environment`
-- Make sure that your new lucky-parking-analysis environment is activated: `conda activate lucky-parking-analysis`
-- If you're using a Mac, you might have to install some certificates first: https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
-- Run `make data` to download raw citation data
-	- Raw data will be in data/raw
-	- Sampled data will be in data/interim (default 10% sampling from full dataset)
-	- Cleaned data will be in data/processed
-- To create a smaller or larger sample from full dataset use: `make sample frac={your fraction here} clean=False`
-    - Use `make sample frac={your fraction here} clean=True`, for cleaned csv dataset that ends up in processed
-    - For 15% csv sample that is cleaned: `make sample frac=0.15 clean=True`
+```
+# Create your conda environment
+make create_environment
+
+# Activate the lucky-parking-analysis environment
+# If you're using a Mac, you might have to install some certificates first
+# https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
+conda activate lucky-parking-analysis
 
 
+# Download to data/raw
+# Raw data is sampled and saved to data/interim (10% default)
+# Sample data is cleaned to data/processed
+make data
+
+
+# To create a smaller or larger sample from full dataset use: make sample frac={your fraction here} clean=False
+# Use make sample frac={your fraction here} clean=True, for cleaned csv dataset that ends up in processed
+# For 15% csv sample that is cleaned: make sample frac=0.15 clean=True
+```
 Project Organization
 ------------
 
