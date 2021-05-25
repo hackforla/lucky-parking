@@ -46,14 +46,6 @@ exec bash
 # Remove installer (optional)
 rm Miniconda3-latest-Linux-x86_64.sh
 
-# Create environment and activate
-cd lucky-parking
-make create_environment
-conda activate lucky-parking-analysis
-
-# Make data!
-make data
-
 ```
 If using VSCode, use Remote-SSH extension as your development environment:
 [Remote-SSH Tutorial](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
@@ -63,6 +55,7 @@ If you're using a Mac, you might have to install some certificates first
 https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
 ```
 # Create your conda environment
+cd lucky-parking
 make create_environment
 
 # Activate the lucky-parking-analysis environment
@@ -73,10 +66,16 @@ conda activate lucky-parking-analysis
 # Sample data is cleaned to data/processed
 make data
 
+
+# To create a smaller or larger sample from full dataset
+# Where 0 < frac < 1 and clean is True/False
+# If the sample is cleaned, it ends up in data/processed
+# If the sample is not cleaned, it ends up in data/interim
+
+# Example of 20% sampling of dataset and is cleaned
+make sample frac=0.2 clean=True
 ```
-To create a smaller or larger sample from full dataset use: make sample frac={your fraction here} clean=False
-Use make sample frac={your fraction here} clean=True, for cleaned csv dataset that ends up in processed
-For 15% csv sample that is cleaned: make sample frac=0.15 clean=True
+
 
 #### Uploading your changes to your fork
 If you haven't already, create a fork of the repo--this is your version of our code from which you will do pull requests from. 
