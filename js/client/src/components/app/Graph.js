@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import Select from 'react-select';
+import PropTypes from 'prop-types';
 
 
 const axios = require("axios");
@@ -129,3 +130,7 @@ const Graph = ({ polygonData }) => {
 }
 
 export default Graph;
+
+Graph.propTypes = {
+  polygonData: PropTypes.array.isRequired,
+};

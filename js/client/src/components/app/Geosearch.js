@@ -8,6 +8,7 @@ import {
    getEndDate,
 } from "../../redux/actions/index";
 import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -34,7 +35,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 const ConnectGeosearch = ({
-  map,
   getMap,
   startDate,
   endDate,
@@ -99,3 +99,13 @@ const Geosearch = connect(
 )(ConnectGeosearch);
 
 export default Geosearch;
+
+Geosearch.propTypes = {
+  getMap: PropTypes.func,
+  startDate: PropTypes.object,
+  endDate: PropTypes.object,
+  getEndDate: PropTypes.func,
+  getStartDate: PropTypes.func,
+  getRangeActive: PropTypes.func,
+  activateDateRange: PropTypes.bool,
+};

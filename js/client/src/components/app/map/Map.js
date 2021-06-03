@@ -14,6 +14,7 @@ import {
 import { heatMap, places } from "./MapLayers";
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import polylabel from 'polylabel';
+import PropTypes from 'prop-types';
 
 
 const axios = require("axios");
@@ -48,7 +49,6 @@ const mapStateToProps = (state) => {
 const ConnectedMap = ({
   getCitationData,
   mapRef,
-  isSidebarOpen,
   handleSidebar,
   activateDateRange,
   startDate,
@@ -286,3 +286,15 @@ const ConnectedMap = ({
 const Map = connect(mapStateToProps, mapDispatchToProps)(ConnectedMap);
 
 export default Map;
+
+Map.propTypes = {
+  getCitationData: PropTypes.func,
+  mapRef: PropTypes.object,
+  handleSidebar: PropTypes.func,
+  activateDateRange: PropTypes.bool,
+  startDate: PropTypes.object,
+  endDate: PropTypes.object,
+  drawingPresent: PropTypes.bool,
+  handleDrawing: PropTypes.func,
+  getPolygonData: PropTypes.func,
+};

@@ -5,6 +5,7 @@ import CountUp from 'react-countup';
 import Graph from './Graph';
 import { IconContext } from 'react-icons';
 import { BsChevronDoubleDown } from 'react-icons/bs';
+import PropTypes from 'prop-types';
 import * as T from '../indexTables'
 
 const mapStateToProps = (state) => {
@@ -120,3 +121,27 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
 const Sidebar = connect(mapStateToProps, mapDispatchToProps)(ConnectedSideBar);
 
 export default Sidebar;
+
+Sidebar.propTypes = {
+  citation: PropTypes.shape({
+    body_style: PropTypes.string,
+    color: PropTypes.string,
+    datetime: PropTypes.string,
+    fine_amount: PropTypes.number,
+    geometry: PropTypes.string,
+    index: PropTypes.string,
+    latitude: PropTypes.number,
+    location: PropTypes.string,
+    longitude: PropTypes.number,
+    make: PropTypes.string,
+    make_ind: PropTypes.string,
+    state_plate: PropTypes.string,
+    violation_code: PropTypes.string,
+    violation_description: PropTypes.string,
+    weekday: PropTypes.string,
+  }),
+  isSidebarOpen: PropTypes.bool,
+  handleSidebar: PropTypes.func,
+  drawingPresent: PropTypes.bool,
+  polygonData: PropTypes.array,
+};
