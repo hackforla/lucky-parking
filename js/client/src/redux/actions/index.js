@@ -1,4 +1,4 @@
-import { CITATION_DATA, MAP, HANDLE_SIDEBAR, START_DATE, END_DATE, ACTIVE_RANGE, DRAWING_PRESENT, POLYGON_DATA } from "../constants/action-types";
+import { CITATION_DATA, MAP, HANDLE_SIDEBAR, START_DATE, END_DATE, ACTIVE_RANGE, DRAWING_PRESENT, POLYGON_DATA, ACTIVE_DARK } from "../constants/action-types";
 
 export function getCitationData(payload) {
   return { type: CITATION_DATA, payload };
@@ -30,4 +30,8 @@ export function handleDrawing(payload) {
 
 export function getPolygonData(payload) {
   return { type: POLYGON_DATA, payload }
+}
+
+export function activateDarkMode(payload) {
+  return { type: ACTIVE_DARK, payload }
 }
