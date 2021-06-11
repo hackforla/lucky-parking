@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
     isSidebarOpen: state.isSidebarOpen,
     drawingPresent: state.drawingPresent,
     polygonData: state.polygonData,
+    darkMode: state.darkMode,
   };
 };
 
@@ -23,7 +24,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPresent, polygonData }) {
+function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPresent, polygonData, darkMode }) {
   const [data, setData] = useState("");
   const sideBar = document.getElementsByClassName("sidebar-container");
   const mapGrid = document.getElementsByClassName("map-container")
@@ -55,7 +56,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
     drawingPresent ?
       <div className="sidebar-container extra">
         <div className="content-wrapper">
-        <Graph polygonData={polygonData} />
+        <Graph polygonData={polygonData} darkMode={darkMode}/>
         </div>
       </div>
     :

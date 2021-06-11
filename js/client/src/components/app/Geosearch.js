@@ -6,6 +6,7 @@ import {
    getRangeActive,
    getStartDate,
    getEndDate,
+   activateDarkMode,
 } from "../../redux/actions/index";
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
@@ -21,6 +22,7 @@ const mapStateToProps = (state) => {
      startDate: state.startDate,
      endDate: state.endDate,
      activateDateRange: state.activateDateRange,
+     darkMode: state.darkMode,
     };
 };
 
@@ -31,6 +33,7 @@ function mapDispatchToProps(dispatch) {
     getRangeActive: (activateDateRange) => dispatch(getRangeActive(activateDateRange)),
     getStartDate: (startDate) => dispatch(getStartDate(startDate)),
     getEndDate: (endDate) => dispatch(getEndDate(endDate)),
+    activateDarkMode: (darkMode) => dispatch(activateDarkMode(darkMode)),
   };
 }
 
@@ -41,7 +44,9 @@ const ConnectGeosearch = ({
   getEndDate,
   getStartDate,
   getRangeActive,
-  activateDateRange
+  activateDateRange,
+  activateDarkMode,
+  darkMode,
 }) => {
   const [dateRangeActive, setDateRangeActive] = useState(false);
   const [disableHover, setDisableHover] = useState(false);
@@ -88,6 +93,9 @@ const ConnectGeosearch = ({
         >
           Deactivate
         </div>
+        {/* <div className="toggleDarkMode" onClick={() => activateDarkMode(!darkMode)}>
+       <CgDarkMode size="25px" className="darkModeIcon"/>
+        </div> */}
       </div>
     </div>
   );
@@ -108,4 +116,6 @@ Geosearch.propTypes = {
   getStartDate: PropTypes.func,
   getRangeActive: PropTypes.func,
   activateDateRange: PropTypes.bool,
+  activateDarkMode: PropTypes.func,
+  darkMode: PropTypes.bool
 };

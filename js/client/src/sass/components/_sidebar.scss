@@ -11,6 +11,46 @@
 $phone: 812px;
 $desktop: 900px;
 
+@mixin dark-mode {
+  .sidebar-container {
+    background-color: #121212;
+    border: solid hsl(0, 0%, 38%) 1px;
+  }
+  .sidebar__closeButton {
+    background-color: #121212;
+    border: solid hsl(0, 0%, 38%) 1px;
+  }
+  .title {
+    color: #b3e89d;
+  }
+  .desc {
+    color: hsl(0, 0%, 87%);
+  }
+  .left {
+    color: hsl(0, 0%, 60%);
+    border: solid hsl(0, 0%, 38%) 1px;
+  }
+  .leftData {
+    color: hsl(0, 0%, 87%);
+  }
+  .bottomLeft {
+    color: hsl(0, 0%, 60%);
+    border: solid hsl(0, 0%, 38%) 1px;
+  }
+  .vehicle {
+    color: #ffffff;
+  }
+  .fine {
+    color: #ffffff;
+  }
+  .dollarAmt {
+    color: hsl(0, 0%, 87%);
+  }
+  .dollar{
+    color: #35b228;
+  }
+}
+
 .sidebar-container {
   @media  screen and (max-width: $phone) {
     grid-column: 1 / 3;
@@ -168,7 +208,7 @@ $desktop: 900px;
   font-family: VT323;
   font-size: 60px;
   margin-left: 80px;
-  color: green;
+  color: #008000;
   margin-top: 30px;
   margin-right: 30px;
 }
