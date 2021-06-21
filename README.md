@@ -13,7 +13,7 @@
 
 - Join our Lucky Parking Slack channel on the Hack for LA Slack: https://www.hackforla.org/getting-started
 
-- Come to our meetings on Monday nights at 7pm. Video conference links are sent out on the Slack channel a few minutes before the meeting.
+- Come to our meetings on Monday nights at 6pm PST. The video conference link is pinned to the top on the lucky-parking slack channel.
 
 - If you decide to join, ask for the Google Sheet to add yourself to our roster with all your contact info.
 
