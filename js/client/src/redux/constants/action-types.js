@@ -6,3 +6,4 @@ export const END_DATE = "END_DATE";
 export const ACTIVE_RANGE = "ACTIVE_RANGE";
 export const DRAWING_PRESENT = "DRAWING_PRESENT";
 export const POLYGON_DATA = "POLYGON_DATA";
+export const ACTIVE_DARK = "ACTIVE_DARK";

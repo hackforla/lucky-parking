@@ -1,6 +1,38 @@
 $phone: 812px;
 $desktop: 900px;
 
+@mixin dark-mode {
+  .mapboxgl-ctrl-geocoder,
+  .mapboxgl-ctrl-geocoder--input {
+    background-color: #121212;
+    color: hsl(0, 0%, 87%) !important;
+    //border radius creates white line *fix this*
+    border-radius: 25px 0 0 25px;
+  }
+  ::placeholder {
+    color: hsl(0, 0%, 87%) !important;
+  }
+  .mapboxgl-ctrl-geocoder--icon-search,
+  .mapboxgl-ctrl-geocoder--icon-close,
+  .mapboxgl-ctrl-geocoder--icon-loading,
+  .mapboxgl-ctrl-geocoder--button {
+    fill: hsl(0, 0%, 87%);
+    background-color: transparent;
+  }
+  .mapboxgl-ctrl-geocoder--suggestion,
+  ul.suggestions, 
+  .mapboxgl-ctrl-geocoder .suggestions > .active > li {
+    background-color: #121212;
+    color: #121212;
+  }
+  .mapboxgl-ctrl-geocoder--suggestion-title {
+    color: hsl(0, 0%, 87%);
+  }
+  .mapboxgl-ctrl-geocoder--suggestion-address {
+    color: hsl(0, 0%, 60%);
+  }
+}
+
 .mapContainer {
   position: relative;
   top: 0;
@@ -11,6 +43,9 @@ $desktop: 900px;
   border-bottom: 1px lightgray solid;
   width: 100%;
   height: 100%;
+  @media (prefers-color-scheme: dark) {
+    border-top: solid hsl(0, 0%, 38%) 1px !important;
+  }
 }
 
 .sidebarStyle {
@@ -61,6 +96,9 @@ $desktop: 900px;
   z-index: 1;
   border-radius: 50px;
   transition: width 0.25s, min-width 0.25s;
+  @media (prefers-color-scheme: dark) {
+    @include dark-mode;
+  }
 }
 
 .mapboxgl-ctrl-geocoder--input {
@@ -151,6 +189,9 @@ $desktop: 900px;
   background-color: #f3f3f3;
   text-decoration: none;
   cursor: pointer;
+  @media (prefers-color-scheme: dark) {
+    background-color: hsl(0, 0%, 8%);
+  }
 }
 
 .mapboxgl-ctrl-geocoder--suggestion-title {

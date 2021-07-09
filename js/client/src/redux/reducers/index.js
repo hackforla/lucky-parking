@@ -1,4 +1,4 @@
-import { CITATION_DATA, MAP, HANDLE_SIDEBAR, START_DATE, END_DATE, ACTIVE_RANGE, DRAWING_PRESENT, POLYGON_DATA } from "../constants/action-types";
+import { CITATION_DATA, MAP, HANDLE_SIDEBAR, START_DATE, END_DATE, ACTIVE_RANGE, DRAWING_PRESENT, POLYGON_DATA, ACTIVE_DARK } from "../constants/action-types";
 
 const INITIAL_STATE = {
   citation: null,
@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   activateDateRange: false,
   drawingPresent: false,
   polygonData: null,
+  darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
 };
 
 function rootReducer(state = INITIAL_STATE, action) {
@@ -52,6 +53,11 @@ function rootReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         polygonData: action.payload,
+      };
+    case ACTIVE_DARK:
+      return {
+        ...state,
+        darkMode: action.payload,
       };
     default:
       return state;

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import Select from 'react-select';
+import PropTypes from 'prop-types';
 
 
 const axios = require("axios");
 const API_URL = process.env.REACT_APP_API_URL;
 
-const Graph = ({ polygonData }) => {
+const Graph = ({ polygonData, darkMode }) => {
   const [data, setData] = useState(null)
   const [selectedKey, setSelectedKey] = useState("make");
   const [title, setTitle] = useState({ value: 'make', label: 'Make' });
@@ -43,6 +44,9 @@ const Graph = ({ polygonData }) => {
         color: "#47be22",
       }
     },
+    chart: {
+      backgroundColor: darkMode ? '' : '#ffffff'
+    },
     tooltip: {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
   },
@@ -54,7 +58,7 @@ const Graph = ({ polygonData }) => {
       dataLabels: {
         style: {
           fontFamily: 'DIN1451Alt',
-          color: "black"
+          color: darkMode ? "white" : "black"
         }
       }
     }]
@@ -75,25 +79,26 @@ const Graph = ({ polygonData }) => {
       ...base,
       transition: 'all .3s ease',
       transform: state.selectProps.menuIsOpen ? 'rotate(90deg)' : null,
-      color: 'black'
+      color: darkMode ? 'white' : 'black'
     }),
+    singleValue: styles => ({...styles, color: darkMode ? 'white' : "black"}),
     control: styles => ({
        ...styles,
-       backgroundColor: 'white',
+       backgroundColor: darkMode ? '#272727' : 'white',
        fontFamily: 'VT323',
-       borderColor: "black",
+       borderColor: darkMode ? 'white' : "black",
        fontSize: "15px",
        boxShadow: 'none',
        border: 0,
-       borderBottom: "1px solid black",
+       borderBottom: darkMode ? '1px solid #616161' : "1px solid black",
        borderRadius: 0,
       }),
       indicatorSeparator: (base, state) => ({...base, backgroundColor: state.selectProps.menuIsOpen ? "#47be22" : "black" }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     return {
       ...styles,
-      backgroundColor: isFocused ? '#adeba1' : "white",
-      color: 'black',
+      backgroundColor: darkMode ? isFocused ? '#35b228' : "#272727" : isFocused ? '#adeba1' : "white",
+      color: darkMode ? '#dedede': 'black',
       cursor: isDisabled ? 'not-allowed' : 'default',
       fontFamily: 'VT323',
       fontSize: '15px',
@@ -129,3 +134,8 @@ const Graph = ({ polygonData }) => {
 }
 
 export default Graph;
+
+Graph.propTypes = {
+  polygonData: PropTypes.array.isRequired,
+  darkMode: PropTypes.bool
+};

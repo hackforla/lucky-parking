@@ -5,6 +5,8 @@ import CountUp from 'react-countup';
 import Graph from './Graph';
 import { IconContext } from 'react-icons';
 import { BsChevronDoubleDown } from 'react-icons/bs';
+import PropTypes from 'prop-types';
+import * as T from '../indexTables'
 
 const mapStateToProps = (state) => {
   return { 
@@ -12,6 +14,7 @@ const mapStateToProps = (state) => {
     isSidebarOpen: state.isSidebarOpen,
     drawingPresent: state.drawingPresent,
     polygonData: state.polygonData,
+    darkMode: state.darkMode,
   };
 };
 
@@ -21,7 +24,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPresent, polygonData }) {
+function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPresent, polygonData, darkMode }) {
   const [data, setData] = useState("");
   const sideBar = document.getElementsByClassName("sidebar-container");
   const mapGrid = document.getElementsByClassName("map-container")
@@ -53,7 +56,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
     drawingPresent ?
       <div className="sidebar-container extra">
         <div className="content-wrapper">
-        <Graph polygonData={polygonData} />
+        <Graph polygonData={polygonData} darkMode={darkMode}/>
         </div>
       </div>
     :
@@ -87,7 +90,7 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
         <h2 className="vehicle">Vehicle</h2>
         <div className="left">
           Make
-          <div className="leftData">{data.make}</div>
+          <div className="leftData">{T.makeTable[data.make_ind]}</div>
         </div>
         <div className="left">
           State
@@ -119,3 +122,27 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
 const Sidebar = connect(mapStateToProps, mapDispatchToProps)(ConnectedSideBar);
 
 export default Sidebar;
+
+Sidebar.propTypes = {
+  citation: PropTypes.shape({
+    body_style: PropTypes.string,
+    color: PropTypes.string,
+    datetime: PropTypes.string,
+    fine_amount: PropTypes.number,
+    geometry: PropTypes.string,
+    index: PropTypes.string,
+    latitude: PropTypes.number,
+    location: PropTypes.string,
+    longitude: PropTypes.number,
+    make: PropTypes.string,
+    make_ind: PropTypes.string,
+    state_plate: PropTypes.string,
+    violation_code: PropTypes.string,
+    violation_description: PropTypes.string,
+    weekday: PropTypes.string,
+  }),
+  isSidebarOpen: PropTypes.bool,
+  handleSidebar: PropTypes.func,
+  drawingPresent: PropTypes.bool,
+  polygonData: PropTypes.array,
+};
