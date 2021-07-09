@@ -1,5 +1,50 @@
+@import 'node_modules/react-datepicker/src/stylesheets/datepicker.scss';
+
 $phone: 812px;
 $desktop: 900px;
+
+@mixin dark-mode {
+  .geosearch__main {
+    color: hsl(0, 0%, 87%);
+    background-color: #121212;
+    border: solid hsl(0, 0%, 38%) 1px;
+  }
+  input {
+    color: hsl(0, 0%, 87%);
+  }
+  .react-datepicker {
+    background-color: #121212;
+    color: hsl(0, 0%, 87%);
+    border: solid hsl(0, 0%, 38%) 1px;
+  }
+  .react-datepicker__day, 
+  .react-datepicker__time-list-item {
+    color: hsl(0, 0%, 87%);
+    background-color: #121212;
+    &:hover {
+      color: #b3e89d;
+      background-color: black;
+    }
+    &--selected {
+      color: #35b228;
+    }
+  }
+  .react-datepicker__day-name,  
+  .react-datepicker-time__header, 
+  .react-datepicker__current-month {
+    color: hsl(0, 0%, 87%);
+  }
+  .react-datepicker__header {
+    background-color: #121212;
+  }
+  .react-datepicker-wrapper,
+  .react-datepicker__input-container,
+  .react-datepicker__input-container input {
+    background-color: #121212;
+    color: hsl(0, 0%, 87%);
+  }
+  
+}
 
 .geosearch {
   @media screen and (max-width: $phone) {
@@ -14,6 +59,9 @@ $desktop: 900px;
     justify-content: center;
     margin: 0 20px;
   }
+  @media (prefers-color-scheme: dark) {
+    @include dark-mode;
+  }
 }
 
 .geosearch__main {
@@ -23,7 +71,7 @@ $desktop: 900px;
   color: grey;
   &--active {
     border: 1px solid lightgray;
-    animation: pulse 2s infinite;
+    animation: outwardPulse 2s infinite;
     border-color: #47be22;
     transition: border-color 2s;
   }
@@ -47,7 +95,7 @@ $desktop: 900px;
   font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-@keyframes pulse {
+@keyframes outwardPulse {
   0% {
     -webkit-box-shadow: 0 0 0 0 rgba(71, 190, 34, .4);
   }
@@ -115,6 +163,18 @@ input {
   border: none;
   font-size: 1.5rem;
   color: grey;
+}
+
+.toggleDarkMode {
+  margin-left: 30rem;
+}
+
+.darkModeIcon {
+  color: grey;
+
+  &:hover {
+    color: black;
+  }
 }
 
 .testGeoSearch {
