@@ -2,6 +2,9 @@ export const places = {
   id: "places",
   type: "circle",
   source: "places",
+  layout: {
+    'visibility': 'visible',
+  },
   paint: {
     "circle-radius": 4,
     "circle-color": "#fddb3a",
@@ -17,10 +20,40 @@ export const places = {
   },
 };
 
+export const zipcodes = {
+  id: "zipcodes",
+  type: "fill",
+  source: "zipcodes",
+  //"source-layer": "ZIP_Codes-7ssji7",
+  paint: {
+    "fill-color": "#088",
+    "fill-opacity": .1,
+  } ,
+  layout: {
+    'visibility': 'none',
+  }
+};
+
+export const zipCodeLines = {
+  id: "zipcodeLines",
+  type: "line",
+  source: "zipcodes",
+  //"source-layer": "ZIP_Codes-7ssji7",
+  paint: {
+    "line-color": "white",
+  } ,
+  layout: {
+    'visibility': 'visible',
+  }
+};
+
 export const heatMap = {
   id: "heatmap",
   type: "heatmap",
   source: "places",
+  layout: {
+    'visibility': 'visible',
+  },
   paint: {
     "heatmap-radius": {
       stops: [

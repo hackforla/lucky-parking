@@ -21,6 +21,28 @@ function generateGeoData(data) {
   return dataSources;
 }
 
+function generateZipData(data) {
+  let dataSources = {
+    type: "FeatureCollection",
+    features: [],
+  };
+
+  let dataFeatures = data.map((data) => {
+    //console.log("From server: " + data.st_asgeojson)
+    return {
+      type: "Feature",
+      properties: {
+        zipcode: data.zip,
+      },
+      geometry: JSON.parse(data.st_asgeojson),
+    };
+  });
+
+  dataSources.features = dataFeatures;
+
+  return dataSources;
+}
+
 /*
 Dictionary for keyed values "make_ind"
 {'Mercury': 37, 'Alfa Romero': 50, 'Lamborghini': 64, 'Maserati': 43, 'Oldsmobile': 42, 'Yamaha': 53,
@@ -55,6 +77,18 @@ module.exports = {
       });
 
   },
+  getZipLayer: (req, res) => {
+    dbHelpers
+      .query(
+        'SELECT zip, ST_AsGeoJSON(the_geom) FROM zipcodes'
+      )
+      .then((data) => {
+        res.status(200).send(generateZipData(data.rows))
+      })
+      .catch((err) => {
+        res.status(404).send(err)
+      })
+  },
   getPointData: (req, res) => {
     let index = req.query.index;
 
@@ -88,6 +122,26 @@ module.exports = {
   },
   drawSelect: (req, res) => {
     let polygon = req.query.polygon;
+
+
+    dbHelpers
+      .query(
+        `SELECT ST_AsGeoJSON(geometry) FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
+          "type":"Polygon",
+          "coordinates": [${polygon}],
+          "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
+        }'), test1.geometry) LIMIT 30000;`
+      )
+      .then((data) => {
+        res.status(200).send(generateGeoData(data.rows));
+      })
+      .catch((err) => {
+        res.status(404).send(err);
+      });
+  },
+  zipSelect: (req, res) => {
+    let polygon = req.body.data.polygon;
+    console.log(req.body.data.polygon)
 
 
     dbHelpers
