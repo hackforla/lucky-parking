@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-import FreehandMode from 'mapbox-gl-draw-freehand-mode';
+import FreehandMode from "mapbox-gl-draw-freehand-mode";
 import { connect } from "react-redux";
 import {
   getCitationData,
@@ -12,10 +12,9 @@ import {
   getRangeActive,
 } from "../../../redux/actions/index";
 import { heatMap, places } from "./MapLayers";
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import polylabel from 'polylabel';
-import PropTypes from 'prop-types';
-
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import polylabel from "polylabel";
+import PropTypes from "prop-types";
 
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
@@ -30,7 +29,8 @@ function mapDispatchToProps(dispatch) {
     handleSidebar: (isSidebarOpen) => dispatch(handleSidebar(isSidebarOpen)),
     handleDrawing: (drawingPresent) => dispatch(handleDrawing(drawingPresent)),
     getPolygonData: (polygonData) => dispatch(getPolygonData(polygonData)),
-    getRangeActive: (activateDateRange) => dispatch(getRangeActive(activateDateRange)),
+    getRangeActive: (activateDateRange) =>
+      dispatch(getRangeActive(activateDateRange)),
   };
 }
 
@@ -77,8 +77,6 @@ const ConnectedMap = ({
     "sidebar__closeButton"
   );
 
-  
-
   //first mounted
   useEffect(() => {
     // just to see if we're hitting the API
@@ -87,89 +85,101 @@ const ConnectedMap = ({
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
-      center: [-118.373330, 34.060959],
+      center: [-118.37333, 34.060959],
       zoom: zoom,
-      
     });
 
-    map.on('load', () => {
+    map.on("load", () => {
       var bounds = map.getBounds().toArray();
       setCoordinates({
         lng: bounds[0],
         lat: bounds[1],
       });
-    })
+    });
 
     var draw = new MapboxDraw({
       modes: Object.assign(MapboxDraw.modes, {
-        draw_polygon: FreehandMode
+        draw_polygon: FreehandMode,
       }),
       displayControlsDefault: false,
       controls: {
-      polygon: true,
-      trash: true
-    }
+        polygon: true,
+        trash: true,
+      },
     });
-    
-    map.addControl(draw, 'top-right');
-    map.addControl(new mapboxgl.NavigationControl({showCompass: false}), "bottom-right");
+
+    map.addControl(draw, "top-right");
+    map.addControl(
+      new mapboxgl.NavigationControl({ showCompass: false }),
+      "bottom-right"
+    );
 
     const drawnData = async () => {
       var drawData = draw.getAll();
-      
+
       try {
-        const response = await axios
-        .get(`${API_URL}/api/citation/draw`, {
+        const response = await axios.get(`${API_URL}/api/citation/draw`, {
           params: {
             polygon: drawData.features[0].geometry.coordinates,
           },
-        })
+        });
         setData(response.data);
         getPolygonData(drawData.features[0].geometry.coordinates);
         handleDrawing(true);
         sideBar[0].classList.add("--container-open");
-        map.off("click", "places", layerClick)
-        var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
+        map.off("click", "places", layerClick);
+        var drawPolygon = document.getElementsByClassName(
+          "mapbox-gl-draw_polygon"
+        );
         drawPolygon[0].disabled = true;
-        drawPolygon[0].classList.add('disabled-button');
-        var polygonCenter = polylabel(drawData.features[0].geometry.coordinates, 1.0)
-        map.easeTo({center: polygonCenter})
+        drawPolygon[0].classList.add("disabled-button");
+        var polygonCenter = polylabel(
+          drawData.features[0].geometry.coordinates,
+          1.0
+        );
+        map.easeTo({ center: polygonCenter });
       } catch (err) {
         console.log(err);
       }
-    }
+    };
 
-    map.on('draw.create', () => {drawnData(); map.scrollZoom.disable();});
-    map.on('draw.update', () => drawnData())
-    map.on('draw.delete', 
-      () => {
-        handleDrawing(false); 
-        sideBar[0].classList.remove("--container-open");
-        map.on("click", "places", layerClick);
-        var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
-        drawPolygon[0].disabled = false;
-        drawPolygon[0].classList.remove('disabled-button');
-        map.scrollZoom.enable();
-    })
+    map.on("draw.create", () => {
+      drawnData();
+      map.scrollZoom.disable();
+    });
+    map.on("draw.update", () => drawnData());
+    map.on("draw.delete", () => {
+      handleDrawing(false);
+      sideBar[0].classList.remove("--container-open");
+      map.on("click", "places", layerClick);
+      var drawPolygon = document.getElementsByClassName(
+        "mapbox-gl-draw_polygon"
+      );
+      drawPolygon[0].disabled = false;
+      drawPolygon[0].classList.remove("disabled-button");
+      map.scrollZoom.enable();
+    });
 
-    map.on('zoomend', () => {
-      var zoomLevel = map.getZoom()
-      var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
+    map.on("zoomend", () => {
+      var zoomLevel = map.getZoom();
+      var drawPolygon = document.getElementsByClassName(
+        "mapbox-gl-draw_polygon"
+      );
       if (zoomLevel < 12) {
         drawPolygon[0].disabled = true;
-        drawPolygon[0].classList.add('disabled-button');
+        drawPolygon[0].classList.add("disabled-button");
       } else if (zoomLevel > 12) {
         drawPolygon[0].disabled = false;
-        drawPolygon[0].classList.remove('disabled-button');
+        drawPolygon[0].classList.remove("disabled-button");
       }
-    })
+    });
 
-    map.on('mouseenter', 'places', () => {
-      map.getCanvas().style.cursor = 'pointer'
-    })
-    map.on('mouseleave', 'places', () => {
-      map.getCanvas().style.cursor = ''
-    })
+    map.on("mouseenter", "places", () => {
+      map.getCanvas().style.cursor = "pointer";
+    });
+    map.on("mouseleave", "places", () => {
+      map.getCanvas().style.cursor = "";
+    });
 
     map.once("style.load", () => {
       let dataSources = {
@@ -184,6 +194,7 @@ const ConnectedMap = ({
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
+        placeholder: "Search within the Los Angeles County",
       });
       mapRef.current.appendChild(geocoder.onAdd(map));
     });
@@ -200,13 +211,13 @@ const ConnectedMap = ({
         })
         .catch((error) => {
           console.log(error);
-        })
-  
-        handleSidebar(false);
-        closeButtonHandle[0].classList.add("--show");
-        sideBar[0].classList.add("--container-open");
-        closeButton[0].classList.remove("--closeButton-close");
-    }
+        });
+
+      handleSidebar(false);
+      closeButtonHandle[0].classList.add("--show");
+      sideBar[0].classList.add("--container-open");
+      closeButton[0].classList.remove("--closeButton-close");
+    };
 
     map.on("click", "places", layerClick);
     map.on("touchend", "places", layerClick);
@@ -239,41 +250,46 @@ const ConnectedMap = ({
         closeButton[0].classList.add("--closeButton-close");
       }
     }
-  }, [coordinates, zoom, drawingPresent, startDate, endDate, activateDateRange]);
+  }, [
+    coordinates,
+    zoom,
+    drawingPresent,
+    startDate,
+    endDate,
+    activateDateRange,
+  ]);
 
   function fetchData() {
-    activateDateRange ?
-      axios
-        .get(`${API_URL}/api/timestamp`, {
-          params: {
-            longitude: coordinates.lng,
-            latitude: coordinates.lat,
-            startDate: new Date(startDate).toLocaleString(),
-            endDate: new Date(endDate).toLocaleString(),
-          },
-        })
-        .then((data) => {
-          setData(data.data);
-    
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    :
-      axios
-        .get(`${API_URL}/api/citation`, {
-          params: {
-            longitude: coordinates.lng,
-            latitude: coordinates.lat,
-          },
-        })
-        .then((data) => {
-          setData(data.data);
-          map.getSource("places").setData(data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+    activateDateRange
+      ? axios
+          .get(`${API_URL}/api/timestamp`, {
+            params: {
+              longitude: coordinates.lng,
+              latitude: coordinates.lat,
+              startDate: new Date(startDate).toLocaleString(),
+              endDate: new Date(endDate).toLocaleString(),
+            },
+          })
+          .then((data) => {
+            setData(data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      : axios
+          .get(`${API_URL}/api/citation`, {
+            params: {
+              longitude: coordinates.lng,
+              latitude: coordinates.lat,
+            },
+          })
+          .then((data) => {
+            setData(data.data);
+            map.getSource("places").setData(data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
   }
 
   return (
