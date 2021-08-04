@@ -1,3 +1,4 @@
 .env
 js/client/.eslintcache
-.github
+.git
+.DS_Store
