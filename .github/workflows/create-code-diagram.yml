@@ -1,0 +1,15 @@
+name: Create Code Visualization
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+      - name: Update diagram
+        uses: githubocto/repo-visualizer@main
+        with:
+          output_file: 'code-visualization.svg'

@@ -28,3 +28,6 @@
 
 - For fetching data directly from city API, please go to https://dev.socrata.com/foundry/data.lacity.org/wjz9-h9np
 
+#### Code Visualization
+
+![Code Visualization](./assets/code-visualization.svg)
