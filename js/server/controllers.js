@@ -141,11 +141,8 @@ module.exports = {
   },
   zipSelect: (req, res) => {
     let zip = parseInt(req.query.zip);
-    console.log("Hello " + zip)
-    console.log(typeof zip)
    
-
-
+    
     dbHelpers
       .query(
         `SELECT ST_AsGeoJSON(geometry)
