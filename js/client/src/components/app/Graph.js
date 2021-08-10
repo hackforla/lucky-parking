@@ -14,20 +14,42 @@ const Graph = ({ polygonData, darkMode }) => {
   const [title, setTitle] = useState({ value: 'make', label: 'Make' });
 
   const fetchGraph = async () => {
-    const response = await axios
-      .get(`${API_URL}/api/citation/graph`, {
-        params: {
-          polygon: polygonData,
-          filterBy: selectedKey,
-        },
-      })
-      
-    var parsed = response.data.map((obj) => {
-      obj["y"] = (parseInt(obj.y))
-      return obj
-    })
+    try {
+      if (Array.isArray(polygonData)) {
+        const response = await axios
+          .get(`${API_URL}/api/citation/graph`, {
+            params: {
+              polygon: polygonData,
+              filterBy: selectedKey,
+            },
+          })
+          
+        var parsed = response.data.map((obj) => {
+          obj["y"] = (parseInt(obj.y))
+          return obj
+        })
 
-    setData(parsed)
+      } else {
+        const response = await axios
+        .get(`${API_URL}/api/citation/graph/zip`, {
+          params: {
+            zip: polygonData,
+            filterBy: selectedKey,
+          },
+        })
+        
+      var parsed = response.data.map((obj) => {
+        obj["y"] = (parseInt(obj.y))
+        return obj
+      })
+
+      }
+  
+      setData(parsed)
+
+    } catch (err){
+      console.log(err)
+    }
   }
 
   useEffect(() => {
@@ -136,6 +158,6 @@ const Graph = ({ polygonData, darkMode }) => {
 export default Graph;
 
 Graph.propTypes = {
-  polygonData: PropTypes.array.isRequired,
+  polygonData: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   darkMode: PropTypes.bool
 };

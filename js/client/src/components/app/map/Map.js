@@ -103,23 +103,26 @@ const ConnectedMap = ({
           "zipcodes",
           'visibility'
           );
-          console.log("current vis: " + visibility)
           
         
         if (visibility === 'visible') {
           map.setLayoutProperty("zipcodes", 'visibility', 'none')
+          map.setLayoutProperty("zipcodeLines", 'visibility', 'none')
           map.setLayoutProperty("heatmap", 'visibility', 'visible')
           map.setLayoutProperty("places", 'visibility', 'visible')
-          console.log('remove')
+          map.on("click", "places", layerClick);
+          handleDrawing(false); 
+          sideBar[0].classList.remove("--container-open");
           
           
           
           
         } else {
           map.setLayoutProperty("zipcodes", 'visibility', 'visible')
+          map.setLayoutProperty("zipcodeLines", 'visibility', 'visible')
           map.setLayoutProperty("heatmap", 'visibility', 'none')
           map.setLayoutProperty("places", 'visibility', 'none')
-          console.log('add')
+          map.off("click", "places", layerClick)
 
 
         }
@@ -192,16 +195,16 @@ const ConnectedMap = ({
       }
     }
 
-    const zipStatics = async (coordinates) => {
+    const zipStatics = async (zip) => {
       try {
         const response = await axios
-        .get(`${API_URL}/api/citation/draw`, {
+        .get(`${API_URL}/api/citation/draw/zip`, {
           params: {
-            polygon: coordinates,
+            zip: zip,
           },
         })
         setData(response.data)
-        getPolygonData(coordinates);
+        getPolygonData(zip);
         handleDrawing(true)
         sideBar[0].classList.add("--container-open");
         map.setLayoutProperty("heatmap", 'visibility', 'visible')
@@ -244,10 +247,9 @@ const ConnectedMap = ({
     })
 
     map.on('click', 'zipcodes', (e) => {
-      console.log(e.features[0].properties.zipcode)
-     zipStatics(e.features[0].geometry.coordinates)
-     //zipStatics(e.features[0].properties.zipcode)
-      console.log("properties: " + e.features[0].properties.zipcode)
+      const zip = e.features[0].properties.zipcode;
+      //const coord = e.features[0].geometry.coordinates
+     zipStatics(zip)
     })
 
     map.once("style.load", () => {
@@ -375,7 +377,6 @@ const ConnectedMap = ({
     axios
       .get(`${API_URL}/api/zipcodes`, {})
       .then((data) => {
-        console.log(data.data)
         setZipLayer(data.data)
         map.getSource("zipcodes").setData(data.data)
       })

@@ -43,7 +43,7 @@ export const zipCodeLines = {
     "line-color": "white",
   } ,
   layout: {
-    'visibility': 'visible',
+    'visibility': 'none',
   }
 };
 

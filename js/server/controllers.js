@@ -140,17 +140,20 @@ module.exports = {
       });
   },
   zipSelect: (req, res) => {
-    let polygon = req.body.data.polygon;
-    console.log(req.body.data.polygon)
+    let zip = parseInt(req.query.zip);
+    console.log("Hello " + zip)
+    console.log(typeof zip)
+   
 
 
     dbHelpers
       .query(
-        `SELECT ST_AsGeoJSON(geometry) FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
-          "type":"Polygon",
-          "coordinates": [${polygon}],
-          "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
-        }'), test1.geometry) LIMIT 30000;`
+        `SELECT ST_AsGeoJSON(geometry)
+        FROM test1 AS citations
+        JOIN zip_4326
+        ON ST_WITHIN(citations.geometry, (SELECT ST_SetSRID(the_geom, 4326)
+        FROM zipcodes
+        WHERE zip=${zip}))`
       )
       .then((data) => {
         res.status(200).send(generateGeoData(data.rows));
@@ -171,6 +174,24 @@ module.exports = {
           "coordinates": [${polygon}],
           "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
         }'), test1.geometry) GROUP BY ${filterBy};`
+      )
+      .then((data) => {
+        res.status(200).send(data.rows);
+      })
+      .catch((err) => {
+        res.status(404).send(err);
+      });
+  },
+  zipGraph: (req, res) => {
+    let zip = req.query.zip;
+    let filterBy = req.query.filterBy;
+
+
+    dbHelpers
+      .query(
+        `SELECT ${filterBy} AS "name", (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y" FROM test1 WHERE ST_Contains((SELECT ST_SetSRID(the_geom, 4326)
+        FROM zipcodes
+        WHERE zip=${zip}), test1.geometry) GROUP BY ${filterBy};`
       )
       .then((data) => {
         res.status(200).send(data.rows);
