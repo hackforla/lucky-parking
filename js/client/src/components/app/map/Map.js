@@ -81,12 +81,20 @@ const ConnectedMap = ({
   useEffect(() => {
     // just to see if we're hitting the API
     //axios.get(API_URL).then(data => console.log(data));
+    
+    // why the bounds are [lon,lat] I don't understand
+    // but that's what mapbox expects
+    const bounds = [
+      [-118.67962814689666, 33.63116512843463], // Southwest Lon, Lat
+      [-117.8593163974756, 34.352283062977925]  // Northeast Lon, Lat
+    ];
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
       center: [-118.37333, 34.060959],
       zoom: zoom,
+      maxBounds: bounds
     });
 
     map.on("load", () => {
@@ -190,10 +198,11 @@ const ConnectedMap = ({
       map.addSource("places", dataSources);
       map.addLayer(places);
       map.addLayer(heatMap);
-
+  
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
+        bbox: [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]],
         placeholder: "Search within the Los Angeles County",
       });
       mapRef.current.appendChild(geocoder.onAdd(map));
