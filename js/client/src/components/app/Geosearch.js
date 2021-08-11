@@ -2,35 +2,35 @@ import React, { useRef, useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import mapboxgl from "mapbox-gl";
 import {
-   getMap,
-   getRangeActive,
-   getStartDate,
-   getEndDate,
-   activateDarkMode,
+  getMap,
+  getRangeActive,
+  getStartDate,
+  getEndDate,
+  activateDarkMode,
 } from "../../redux/actions/index";
 import { connect } from "react-redux";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import "react-datepicker/dist/react-datepicker.css";
-
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
 
 const mapStateToProps = (state) => {
   return {
-     map: state.map,
-     startDate: state.startDate,
-     endDate: state.endDate,
-     activateDateRange: state.activateDateRange,
-     darkMode: state.darkMode,
-    };
+    map: state.map,
+    startDate: state.startDate,
+    endDate: state.endDate,
+    activateDateRange: state.activateDateRange,
+    darkMode: state.darkMode,
+  };
 };
 
 // setState
 function mapDispatchToProps(dispatch) {
   return {
     getMap: (map) => dispatch(getMap(map)),
-    getRangeActive: (activateDateRange) => dispatch(getRangeActive(activateDateRange)),
+    getRangeActive: (activateDateRange) =>
+      dispatch(getRangeActive(activateDateRange)),
     getStartDate: (startDate) => dispatch(getStartDate(startDate)),
     getEndDate: (endDate) => dispatch(getEndDate(endDate)),
     activateDarkMode: (darkMode) => dispatch(activateDarkMode(darkMode)),
@@ -53,18 +53,24 @@ const ConnectGeosearch = ({
 
   const searchContainer = useRef();
 
-
   useEffect(() => {
     setDateRangeActive(true);
-    getRangeActive(dateRangeActive)
-  }, [startDate, endDate])
+    getRangeActive(dateRangeActive);
+  }, [startDate, endDate]);
 
   getMap(searchContainer);
 
   return (
     <div className="geosearch">
-      <div className={`geosearch__main ${!disableHover ?
-        activateDateRange ? "geosearch__main--active" : "geosearch__main--inactive" : "geosearch__main--disable"}`}>
+      <div
+        className={`geosearch__main ${
+          !disableHover
+            ? activateDateRange
+              ? "geosearch__main--active"
+              : "geosearch__main--inactive"
+            : "geosearch__main--disable"
+        }`}
+      >
         <div className="testGeoSearch" ref={searchContainer} />
         <div className="geoSearchBarComponents">
           <label>From :</label>
@@ -72,7 +78,7 @@ const ConnectGeosearch = ({
             selected={startDate}
             showTimeSelect
             dateFormat="MM/dd/yyyy"
-            onChange={date => getStartDate(date)}
+            onChange={(date) => getStartDate(date)}
           />
         </div>
         <div className="geoSearchBarComponents">
@@ -82,16 +88,20 @@ const ConnectGeosearch = ({
             showTimeSelect
             minDate={startDate}
             dateFormat="MM/dd/yyyy"
-            onChange={date => getEndDate(date)}
+            onChange={(date) => getEndDate(date)}
           />
         </div>
-        <div 
-          className={`geoSearchBarDateToggle ${activateDateRange ? "geoSearchBarDateToggle--visible" : "geoSearchBarDateToggle--invis"}`}
+        <div
+          className={`geoSearchBarDateToggle ${
+            activateDateRange
+              ? "geoSearchBarDateToggle--visible"
+              : "geoSearchBarDateToggle--invis"
+          }`}
           onClick={() => getRangeActive(false)}
           onMouseEnter={() => setDisableHover(true)}
           onMouseLeave={() => setDisableHover(false)}
         >
-          Deactivate
+          RESET DATE
         </div>
         {/* <div className="toggleDarkMode" onClick={() => activateDarkMode(!darkMode)}>
        <CgDarkMode size="25px" className="darkModeIcon"/>
@@ -117,5 +127,5 @@ Geosearch.propTypes = {
   getRangeActive: PropTypes.func,
   activateDateRange: PropTypes.bool,
   activateDarkMode: PropTypes.func,
-  darkMode: PropTypes.bool
+  darkMode: PropTypes.bool,
 };
