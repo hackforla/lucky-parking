@@ -11,7 +11,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 const Graph = ({ polygonData, darkMode }) => {
   const [data, setData] = useState(null)
   const [selectedKey, setSelectedKey] = useState("make");
-  const [title, setTitle] = useState({ value: 'make', label: 'Make' });
+  const [title, setTitle] = useState({ value: 'make', label: 'Make of Vehicle' });
 
   const fetchGraph = async () => {
     const response = await axios
@@ -66,12 +66,12 @@ const Graph = ({ polygonData, darkMode }) => {
 
   const selectOptions = [
     { value: 'color', label: 'Color' },
-    { value: 'body_style', label: 'Body Style' },
+    { value: 'body_style', label: 'Car Body Type' },
     { value: 'fine_amount', label: 'Fine Amount' },
-    { value: 'make', label: 'Make' },
-    { value: 'state_plate', label: 'State' },
+    { value: 'make', label: 'Make of Vehicle' },
+    { value: 'state_plate', label: 'State of License Plate' },
     { value: 'violation_description', label: 'Violation' },
-    { value: 'weekday', label: 'Weekday' },
+    { value: 'weekday', label: 'Day of the Week' },
   ]
 
   const customStyles = {
@@ -113,6 +113,9 @@ const Graph = ({ polygonData, darkMode }) => {
 
   return(
     <div>
+      <div>
+        <h2 className="header-text">Citation Summary in Selected Area</h2>
+      </div>
       <div className="select">
         <Select
         value={title}

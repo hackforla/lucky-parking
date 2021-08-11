@@ -68,7 +68,8 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
         </span>
 
         </IconContext.Provider>
-        <h2 className="title">Date</h2>
+        <h2 className="header-text">Ticket Details</h2>
+        <h2 className="title">Ticket Date</h2>
         <div className="desc">{
           new Date(data.datetime).toLocaleDateString(
             'en-gb',
