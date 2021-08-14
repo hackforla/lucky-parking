@@ -286,7 +286,6 @@ const ConnectedMap = ({
       map.addLayer(zipCodeLines)
       map.addLayer(places);
       map.addLayer(heatMap);
-  
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
