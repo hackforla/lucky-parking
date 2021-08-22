@@ -161,6 +161,13 @@ const ConnectedMap = ({
         lng: bounds[0],
         lat: bounds[1],
       });
+      const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        bbox: [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]],
+        placeholder: "Search within the Los Angeles County",
+      });
+      mapRef.current.appendChild(geocoder.onAdd(map));
     });
 
     var draw = new MapboxDraw({
@@ -268,26 +275,30 @@ const ConnectedMap = ({
      zipStatics(zip)
     });
 
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });      
+
     map.on("mousemove", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
-      // console.log("move " + zip);
-      console.log(e.features);
-
       if (hoverZip !== null) {
         map.setFeatureState(
           { source: 'zipcodes', id: hoverZip.current },
           { hover: false }
         );
       }
-      console.log("zip " + zip);
       hoverZip.current = zip;
-      console.log("hoverZip " + hoverZip.current)
+      popup.setLngLat(e.lngLat).setText(hoverZip.current).addTo(map);
       map.setFeatureState(
         { source: 'zipcodes', id: hoverZip.current },
         { hover: true }
       );
     });
 
+    map.on("mouseleave", "zipcodes", () => {
+      popup.remove();
+    })
     map.once("style.load", () => {
       let dataSources = {
         type: "geojson",
@@ -299,8 +310,6 @@ const ConnectedMap = ({
         data: null,
       }
 
-      
-      
       map.addSource("places", dataSources);
       map.addSource("zipcodes", zipSource)
       map.addSource("zipCodeLines", zipSource)
@@ -308,13 +317,6 @@ const ConnectedMap = ({
       map.addLayer(zipCodeLines)
       map.addLayer(places);
       map.addLayer(heatMap);
-      const geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-        bbox: [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]],
-        placeholder: "Search within the Los Angeles County",
-      });
-      mapRef.current.appendChild(geocoder.onAdd(map));
     });
 
     const layerClick = (e) => {
