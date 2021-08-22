@@ -59,12 +59,13 @@ const ConnectedMap = ({
   getPolygonData,
 }) => {
   const [coordinates, setCoordinates] = useState({ lng: [], lat: [] });
-
   const [zoom, setZoom] = useState(12.5);
   const [data, setData] = useState([]);
   const [map, setMap] = useState(null);
   const [mounted, setMounted] = useState(false);
-  const [zipLayer, setZipLayer] = useState(null)
+  const [zipLayer, setZipLayer] = useState(null);
+  const hoverZip = useRef(null);
+
 
   const [mapboxStyle, setMapBoxStyle] = useState(
     "mapbox://styles/mapbox/dark-v10"
@@ -78,6 +79,7 @@ const ConnectedMap = ({
   const closeButtonHandle = document.getElementsByClassName(
     "sidebar__closeButton"
   );
+
 
   //first mounted
   useEffect(() => {
@@ -264,7 +266,27 @@ const ConnectedMap = ({
       const zip = e.features[0].properties.zipcode;
       //const coord = e.features[0].geometry.coordinates
      zipStatics(zip)
-    })
+    });
+
+    map.on("mousemove", "zipcodes", (e) => {
+      const zip = e.features[0].properties.zipcode;
+      // console.log("move " + zip);
+      console.log(e.features);
+
+      if (hoverZip !== null) {
+        map.setFeatureState(
+          { source: 'zipcodes', id: hoverZip.current },
+          { hover: false }
+        );
+      }
+      console.log("zip " + zip);
+      hoverZip.current = zip;
+      console.log("hoverZip " + hoverZip.current)
+      map.setFeatureState(
+        { source: 'zipcodes', id: hoverZip.current },
+        { hover: true }
+      );
+    });
 
     map.once("style.load", () => {
       let dataSources = {

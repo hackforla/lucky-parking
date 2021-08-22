@@ -27,7 +27,11 @@ export const zipcodes = {
   //"source-layer": "ZIP_Codes-7ssji7",
   paint: {
     "fill-color": "#088",
-    "fill-opacity": .1,
+    "fill-opacity": [
+      'case', 
+        ['boolean', 
+          ['feature-state', 'hover'], false], .6, 0.1
+    ],
   } ,
   layout: {
     'visibility': 'none',
