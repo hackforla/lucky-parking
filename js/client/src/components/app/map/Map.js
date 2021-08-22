@@ -12,10 +12,9 @@ import {
   getRangeActive,
 } from "../../../redux/actions/index";
 import { heatMap, places, zipcodes, zipCodeLines } from "./MapLayers";
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import polylabel from 'polylabel';
-import PropTypes from 'prop-types';
-
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+import polylabel from "polylabel";
+import PropTypes from "prop-types";
 
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
@@ -66,7 +65,6 @@ const ConnectedMap = ({
   const [zipLayer, setZipLayer] = useState(null);
   const hoverZip = useRef(null);
 
-
   const [mapboxStyle, setMapBoxStyle] = useState(
     "mapbox://styles/mapbox/dark-v10"
   );
@@ -80,79 +78,68 @@ const ConnectedMap = ({
     "sidebar__closeButton"
   );
 
-
   //first mounted
   useEffect(() => {
     // just to see if we're hitting the API
     //axios.get(API_URL).then(data => console.log(data));
-    
+
     // why the bounds are [lon,lat] I don't understand
     // but that's what mapbox expects
     const bounds = [
       [-118.67962814689666, 33.63116512843463], // Southwest Lon, Lat
-      [-117.8593163974756, 34.352283062977925]  // Northeast Lon, Lat
+      [-117.8593163974756, 34.352283062977925], // Northeast Lon, Lat
     ];
 
     class ZipToggle {
       onAdd(map) {
-      this._map = map;
-      this._container = document.createElement('button');
-      this._container.className = 'mapboxgl-ctrl-group mapboxgl-ctrl';
-      var icon = document.createElement('img');
-      icon.src = 'https://img.icons8.com/material-outlined/24/000000/zip-code.png';
-      this._container.appendChild(icon)
-      this._container.onclick = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        // const zipSource = {
-        //   type: "vector",
-        //   url: "mapbox://mg78856.3vymwflo",
-        // }
-        
-        var visibility = map.getLayoutProperty(
-          "zipcodes",
-          'visibility'
-          );
-          
-        
-        if (visibility === 'visible') {
-          map.setLayoutProperty("zipcodes", 'visibility', 'none')
-          map.setLayoutProperty("zipcodeLines", 'visibility', 'none')
-          map.setLayoutProperty("heatmap", 'visibility', 'visible')
-          map.setLayoutProperty("places", 'visibility', 'visible')
-          map.on("click", "places", layerClick);
-          handleDrawing(false); 
-          sideBar[0].classList.remove("--container-open");
-          
-          
-          
-          
-        } else {
-          map.setLayoutProperty("zipcodes", 'visibility', 'visible')
-          map.setLayoutProperty("zipcodeLines", 'visibility', 'visible')
-          map.setLayoutProperty("heatmap", 'visibility', 'none')
-          map.setLayoutProperty("places", 'visibility', 'none')
-          map.off("click", "places", layerClick)
+        this._map = map;
+        this._container = document.createElement("button");
+        this._container.className = "mapboxgl-ctrl-group mapboxgl-ctrl";
+        var icon = document.createElement("img");
+        icon.src =
+          "https://img.icons8.com/material-outlined/24/000000/zip-code.png";
+        this._container.appendChild(icon);
+        this._container.onclick = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          // const zipSource = {
+          //   type: "vector",
+          //   url: "mapbox://mg78856.3vymwflo",
+          // }
 
+          var visibility = map.getLayoutProperty("zipcodes", "visibility");
 
-        }
-      }
-      return this._container;
+          if (visibility === "visible") {
+            map.setLayoutProperty("zipcodes", "visibility", "none");
+            map.setLayoutProperty("zipcodeLines", "visibility", "none");
+            map.setLayoutProperty("heatmap", "visibility", "visible");
+            map.setLayoutProperty("places", "visibility", "visible");
+            map.on("click", "places", layerClick);
+            handleDrawing(false);
+            sideBar[0].classList.remove("--container-open");
+          } else {
+            map.setLayoutProperty("zipcodes", "visibility", "visible");
+            map.setLayoutProperty("zipcodeLines", "visibility", "visible");
+            map.setLayoutProperty("heatmap", "visibility", "none");
+            map.setLayoutProperty("places", "visibility", "none");
+            map.off("click", "places", layerClick);
+          }
+        };
+        return this._container;
       }
 
-       
       onRemove() {
-      this._container.parentNode.removeChild(this._container);
-      this._map = undefined;
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
       }
-      }
+    }
 
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: mapboxStyle,
       center: [-118.37333, 34.060959],
       zoom: zoom,
-      maxBounds: bounds
+      maxBounds: bounds,
     });
 
     map.on("load", () => {
@@ -182,10 +169,13 @@ const ConnectedMap = ({
     });
 
     const zipToggle = new ZipToggle();
-    
-    map.addControl(draw, 'top-right');
-    map.addControl(new mapboxgl.NavigationControl({showCompass: false}), "bottom-right");
-    map.addControl(zipToggle)
+
+    map.addControl(draw, "top-right");
+    map.addControl(
+      new mapboxgl.NavigationControl({ showCompass: false }),
+      "bottom-right"
+    );
+    map.addControl(zipToggle);
 
     const drawnData = async () => {
       var drawData = draw.getAll();
@@ -218,35 +208,38 @@ const ConnectedMap = ({
 
     const zipStatics = async (zip) => {
       try {
-        const response = await axios
-        .get(`${API_URL}/api/citation/draw/zip`, {
+        const response = await axios.get(`${API_URL}/api/citation/draw/zip`, {
           params: {
             zip: zip,
           },
-        })
-        setData(response.data)
+        });
+        setData(response.data);
         getPolygonData(zip);
-        handleDrawing(true)
+        handleDrawing(true);
         sideBar[0].classList.add("--container-open");
-        map.setLayoutProperty("heatmap", 'visibility', 'visible')
-        map.setLayoutProperty("places", 'visibility', 'visible')
+        map.setLayoutProperty("heatmap", "visibility", "visible");
+        map.setLayoutProperty("places", "visibility", "visible");
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-    }
+    };
 
-    map.on('draw.create', () => {drawnData(); map.scrollZoom.disable();});
-    map.on('draw.update', () => drawnData())
-    map.on('draw.delete', 
-      () => {
-        handleDrawing(false); 
-        sideBar[0].classList.remove("--container-open");
-        map.on("click", "places", layerClick);
-        var drawPolygon = document.getElementsByClassName('mapbox-gl-draw_polygon');
-        drawPolygon[0].disabled = false;
-        drawPolygon[0].classList.remove('disabled-button');
-        map.scrollZoom.enable();
-    })
+    map.on("draw.create", () => {
+      drawnData();
+      map.scrollZoom.disable();
+    });
+    map.on("draw.update", () => drawnData());
+    map.on("draw.delete", () => {
+      handleDrawing(false);
+      sideBar[0].classList.remove("--container-open");
+      map.on("click", "places", layerClick);
+      var drawPolygon = document.getElementsByClassName(
+        "mapbox-gl-draw_polygon"
+      );
+      drawPolygon[0].disabled = false;
+      drawPolygon[0].classList.remove("disabled-button");
+      map.scrollZoom.enable();
+    });
 
     map.on("zoomend", () => {
       var zoomLevel = map.getZoom();
@@ -269,36 +262,36 @@ const ConnectedMap = ({
       map.getCanvas().style.cursor = "";
     });
 
-    map.on('click', 'zipcodes', (e) => {
+    map.on("click", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
       //const coord = e.features[0].geometry.coordinates
-     zipStatics(zip)
+      zipStatics(zip);
     });
 
     const popup = new mapboxgl.Popup({
       closeButton: false,
-      closeOnClick: false
-    });      
+      closeOnClick: false,
+    });
 
     map.on("mousemove", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
       if (hoverZip !== null) {
         map.setFeatureState(
-          { source: 'zipcodes', id: hoverZip.current },
+          { source: "zipcodes", id: hoverZip.current },
           { hover: false }
         );
       }
       hoverZip.current = zip;
       popup.setLngLat(e.lngLat).setText(hoverZip.current).addTo(map);
       map.setFeatureState(
-        { source: 'zipcodes', id: hoverZip.current },
+        { source: "zipcodes", id: hoverZip.current },
         { hover: true }
       );
     });
 
     map.on("mouseleave", "zipcodes", () => {
       popup.remove();
-    })
+    });
     map.once("style.load", () => {
       let dataSources = {
         type: "geojson",
@@ -308,13 +301,13 @@ const ConnectedMap = ({
         type: "geojson",
         //url: "mapbox://mg78856.3vymwflo",
         data: null,
-      }
+      };
 
       map.addSource("places", dataSources);
-      map.addSource("zipcodes", zipSource)
-      map.addSource("zipCodeLines", zipSource)
+      map.addSource("zipcodes", zipSource);
+      map.addSource("zipCodeLines", zipSource);
       map.addLayer(zipcodes);
-      map.addLayer(zipCodeLines)
+      map.addLayer(zipCodeLines);
       map.addLayer(places);
       map.addLayer(heatMap);
     });
@@ -360,8 +353,6 @@ const ConnectedMap = ({
       map.getSource("places").setData(data);
     }
   }, [data]);
-
-
 
   useEffect(() => {
     if (mounted && drawingPresent === false) {
@@ -421,12 +412,12 @@ const ConnectedMap = ({
     axios
       .get(`${API_URL}/api/zipcodes`, {})
       .then((data) => {
-        setZipLayer(data.data)
-        map.getSource("zipcodes").setData(data.data)
+        setZipLayer(data.data);
+        map.getSource("zipcodes").setData(data.data);
       })
       .catch((error) => {
-        console.log(error)
-      })
+        console.log(error);
+      });
   }
 
   return (
