@@ -78,6 +78,7 @@ const ConnectedMap = ({
     "sidebar__closeButton"
   );
 
+
   //first mounted
   useEffect(() => {
     // just to see if we're hitting the API
@@ -273,6 +274,7 @@ const ConnectedMap = ({
       closeOnClick: false,
     });
 
+
     map.on("mousemove", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
       if (hoverZip !== null) {
@@ -292,6 +294,7 @@ const ConnectedMap = ({
     map.on("mouseleave", "zipcodes", () => {
       popup.remove();
     });
+
     map.once("style.load", () => {
       let dataSources = {
         type: "geojson",
