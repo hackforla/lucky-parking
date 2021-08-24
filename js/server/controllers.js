@@ -30,6 +30,7 @@ function generateZipData(data) {
   let dataFeatures = data.map((data) => {
     //console.log("From server: " + data.st_asgeojson)
     return {
+      id: data.zip,
       type: "Feature",
       properties: {
         zipcode: data.zip,
