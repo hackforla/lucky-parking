@@ -21,6 +21,29 @@ function generateGeoData(data) {
   return dataSources;
 }
 
+function generateZipData(data) {
+  let dataSources = {
+    type: "FeatureCollection",
+    features: [],
+  };
+
+  let dataFeatures = data.map((data) => {
+    //console.log("From server: " + data.st_asgeojson)
+    return {
+      id: data.zip,
+      type: "Feature",
+      properties: {
+        zipcode: data.zip,
+      },
+      geometry: JSON.parse(data.st_asgeojson),
+    };
+  });
+
+  dataSources.features = dataFeatures;
+
+  return dataSources;
+}
+
 /*
 Dictionary for keyed values "make_ind"
 {'Mercury': 37, 'Alfa Romero': 50, 'Lamborghini': 64, 'Maserati': 43, 'Oldsmobile': 42, 'Yamaha': 53,
@@ -54,6 +77,18 @@ module.exports = {
         res.status(404).send(err);
       });
 
+  },
+  getZipLayer: (req, res) => {
+    dbHelpers
+      .query(
+        'SELECT zip, ST_AsGeoJSON(the_geom) FROM zipcodes'
+      )
+      .then((data) => {
+        res.status(200).send(generateZipData(data.rows))
+      })
+      .catch((err) => {
+        res.status(404).send(err)
+      })
   },
   getPointData: (req, res) => {
     let index = req.query.index;
@@ -105,6 +140,26 @@ module.exports = {
         res.status(404).send(err);
       });
   },
+  zipSelect: (req, res) => {
+    let zip = parseInt(req.query.zip);
+   
+    
+    dbHelpers
+      .query(
+        `SELECT ST_AsGeoJSON(geometry)
+        FROM test1 AS citations
+        JOIN zip_4326
+        ON ST_WITHIN(citations.geometry, (SELECT ST_SetSRID(the_geom, 4326)
+        FROM zipcodes
+        WHERE zip=${zip}))`
+      )
+      .then((data) => {
+        res.status(200).send(generateGeoData(data.rows));
+      })
+      .catch((err) => {
+        res.status(404).send(err);
+      });
+  },
   graph: (req, res) => {
     let polygon = req.query.polygon;
     let filterBy = req.query.filterBy;
@@ -117,6 +172,24 @@ module.exports = {
           "coordinates": [${polygon}],
           "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
         }'), test1.geometry) GROUP BY ${filterBy};`
+      )
+      .then((data) => {
+        res.status(200).send(data.rows);
+      })
+      .catch((err) => {
+        res.status(404).send(err);
+      });
+  },
+  zipGraph: (req, res) => {
+    let zip = req.query.zip;
+    let filterBy = req.query.filterBy;
+
+
+    dbHelpers
+      .query(
+        `SELECT ${filterBy} AS "name", (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y" FROM test1 WHERE ST_Contains((SELECT ST_SetSRID(the_geom, 4326)
+        FROM zipcodes
+        WHERE zip=${zip}), test1.geometry) GROUP BY ${filterBy};`
       )
       .then((data) => {
         res.status(200).send(data.rows);

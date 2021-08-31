@@ -46,8 +46,11 @@ $desktop: 900px;
   .dollarAmt {
     color: hsl(0, 0%, 87%);
   }
-  .dollar{
+  .dollar {
     color: #35b228;
+  }
+  .header-text {
+    color: #ffffff;
   }
 }
 
@@ -151,6 +154,15 @@ $desktop: 900px;
   border-left: none;
   cursor: pointer;
   display: none;
+}
+
+.header-text {
+  font-size: 30px;
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 .title {

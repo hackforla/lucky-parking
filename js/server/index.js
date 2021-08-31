@@ -8,8 +8,11 @@ const app = express();
 const port = process.env.PORT || 3007;
 const router = require("./router.js");
 
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(compression());
+app.use(express.json());
 
 
 app.get('/', (req, res) => {
