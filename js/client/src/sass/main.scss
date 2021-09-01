@@ -38,7 +38,7 @@ $desktop: 900px;
     margin: 30px 0;
 
     // try something new with flex
-    display: flex;
+    // display: flex;
     // width: 100%;
     // position: relative;
     font-family: "Roboto", sans-serif;
@@ -64,18 +64,4 @@ $desktop: 900px;
   @media (prefers-color-scheme: dark) {
     background-color: #121212;
   }
-}
-
-h1 {
-  font-size: 1.8em;
-  font-weight: 500;
-  line-height: 1.2em;
-  letter-spacing: 0;
-}
-
-h2 {
-  font-size: 1.2em;
-  font-weight: 700;
-  white-space: nowrap;
-  letter-spacing: 0;
 }

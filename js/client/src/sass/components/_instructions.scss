@@ -7,13 +7,35 @@
   align-items: stretch;
   display: flex;
   margin: 1em;
+
+  h2 {
+    font-size: 1.2em;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0;
+    margin: 50px;
+  }
 }
 
 .instructions {
   flex-direction: column;
   padding: 0.5em 1.5em;
   align-content: center;
-  line-height: 29px;
-  padding: 1em;
+  line-height: 30px;
+  padding: 1em 3em 1em 1em;
   margin: 1em;
+
+  ul {
+    margin: 0.5em 1em 0 1em;
+  }
+
+  button {
+    font-family: Roboto;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 8px 46px;
+    border: 1px solid white;
+    background-color: white;
+    margin: 1.5em 0;
+  }
 }
