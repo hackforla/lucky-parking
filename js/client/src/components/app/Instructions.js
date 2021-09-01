@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Instructions() {
-  return (
+  const [show, setShow] = useState(true);
+
+  const handleShow = (e) => {
+    setShow(!show);
+  };
+
+  return show ? (
     <div className="instructions-container">
       <h2>HOW IT WORKS:</h2>
       <div className="instructions">
@@ -36,9 +42,11 @@ function Instructions() {
             </li>
           </ul>
         </p>
-        <button>Got It!</button>
+        <button onClick={handleShow}>Got It!</button>
       </div>
     </div>
+  ) : (
+    <></>
   );
 }
 
