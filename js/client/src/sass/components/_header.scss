@@ -1,21 +1,42 @@
+// .header-container {
+//   width: 100vw;
+//   height: 100vh;
+//   display: grid;
+//   grid-row: 1/2;
+//   background-color: white;
+//   color: black;
+//   font-size: 1.5em;
 
-.header-container {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-row: 1/2;
-}
+// }
 .picture {
   @media (prefers-color-scheme: dark) {
     border-radius: 50px;
-}
-  height: 100%;
-  width: 100%;
-  margin: auto 20px;
+  }
 
-  position: relative;
+  height: 100%;
+  width: 30%;
+  // margin: auto 20px;
+
+  // position: relative;
   background-image: url("../../assets/images/logo.png");
   background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  // background-size: cover;
+  // background-position: center;
+}
+
+// try somthing new with flex layout
+.header-container {
+  width: 100vw;
+  height: 10vh;
+  background-color: white;
+  color: black;
+  font-size: 2.5em;
+  align-items: stretch;
+  flex-direction: row;
+  display: flex;
+  padding: 1em 1.5em;
+  margin: 0.5em 0.5em;
+  align-content: center;
+  line-height: 29px;
+  letter-spacing: 0.055em;
 }

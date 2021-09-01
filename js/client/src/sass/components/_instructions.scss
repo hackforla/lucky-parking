@@ -1,0 +1,19 @@
+.instructions-container {
+  width: 100vw;
+  height: 40vh;
+  background-color: #e5e5e5;
+  color: black;
+  font-size: 2.5em;
+  align-items: stretch;
+  display: flex;
+  margin: 1em;
+}
+
+.instructions {
+  flex-direction: column;
+  padding: 0.5em 1.5em;
+  align-content: center;
+  line-height: 29px;
+  padding: 1em;
+  margin: 1em;
+}
