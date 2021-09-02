@@ -1,11 +1,12 @@
 @font-face {
-  font-family: 'DIN1451Alt';
-  src: url('../../assets/fonts/alte-din-1451-mittelschrift/din1451alt.ttf') format('truetype');
+  font-family: "DIN1451Alt";
+  src: url("../../assets/fonts/alte-din-1451-mittelschrift/din1451alt.ttf")
+    format("truetype");
 }
 
 @font-face {
-  font-family: 'VT323';
-  src: url('../../assets/fonts/VT323/VT323-Regular.ttf') format('truetype');
+  font-family: "VT323";
+  src: url("../../assets/fonts/VT323/VT323-Regular.ttf") format("truetype");
 }
 
 $phone: 812px;
@@ -55,18 +56,20 @@ $desktop: 900px;
 }
 
 .sidebar-container {
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     grid-column: 1 / 3;
     grid-row: 3 / 4;
     transform: translateY(90rem);
     border-radius: 25px;
   }
-  @media  screen and (min-width: $desktop) {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-    transform: translateX(-30rem);
+  @media screen and (min-width: $desktop) {
+    // grid-column: 1 / 2;
+    // grid-row: 2 / 3;
+    transform: translateY(5rem);
+    position: absolute;
+    padding: 0 2em 4em 2em;
   }
-  
+
   border: 1px lightgray solid;
 
   background-color: white;
@@ -75,25 +78,25 @@ $desktop: 900px;
 }
 
 .extra {
-  @media  screen and (min-width: $desktop) {
-    grid-column: 1 / 3;
+  @media screen and (min-width: $desktop) {
+    // grid-column: 1 / 3;
     transform: translateX(-70rem);
   }
 }
 
 .mobile-close {
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     margin-left: 90%;
     margin-top: 5%;
     display: flex;
   }
-  @media  screen and (min-width: $desktop) {
+  @media screen and (min-width: $desktop) {
     display: none;
   }
 }
 
 .close-btn {
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     color: green;
     display: inline-block;
     -moz-animation: pulse 4s infinite linear;
@@ -101,25 +104,29 @@ $desktop: 900px;
     -webkit-animation: pulse 4s infinite linear;
     animation: pulse 4s infinite linear;
   }
-  @media  screen and (min-width: $desktop) {
+  @media screen and (min-width: $desktop) {
     display: none;
   }
 }
 
-
 @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: .1; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .content-wrapper {
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     overflow: scroll !important;
     max-height: 53%;
   }
-  @media  screen and (min-width: $desktop) {
-  
+  @media screen and (min-width: $desktop) {
   }
 }
 
@@ -128,11 +135,11 @@ $desktop: 900px;
 }
 
 .--container-open {
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     //10% max
-   transform: translateY(40%);
+    transform: translateY(40%);
   }
-  @media  screen and (min-width: $desktop) {
+  @media screen and (min-width: $desktop) {
     transform: translateX(0px);
   }
 }
@@ -185,9 +192,10 @@ $desktop: 900px;
   font-family: VT323;
   text-decoration: underline;
   font-size: 40px;
-  margin-left: 90px;
-  margin-top: 90px;
-  margin-bottom: 10px;
+  margin: 1em 1.5em 0.5em 1.5em;
+  // margin-left: 90px;
+  // margin-top: 90px;
+  // margin-bottom: 10px;
 }
 
 .left {
@@ -213,7 +221,8 @@ $desktop: 900px;
   font-family: VT323;
   text-decoration: underline;
   font-size: 40px;
-  margin-left: 60px;
+  margin: 1em 0.75em 0.5em 0.75em;
+  // margin-left: 60px;
 }
 
 .dollar {

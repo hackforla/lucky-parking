@@ -78,7 +78,6 @@ const ConnectedMap = ({
     "sidebar__closeButton"
   );
 
-
   //first mounted
   useEffect(() => {
     // just to see if we're hitting the API
@@ -273,7 +272,6 @@ const ConnectedMap = ({
       closeButton: false,
       closeOnClick: false,
     });
-
 
     map.on("mousemove", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
