@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import polygonToolIconButton from "../../assets/images/polygon.png";
 function Instructions() {
   const [show, setShow] = useState(true);
 
@@ -34,10 +34,11 @@ function Instructions() {
             </li>
             <li>
               <small>
-                To select a custom region, click the !!!INSERT POLYGON BUTTON!!!
-                button to use a polygon selection tool. Click and then move the
-                mouse to draw a custom shape, which will bring up data about
-                citations in the region.
+                To select a custom region, click the &nbsp;
+                <img src={polygonToolIconButton} alt="polygon tool icon" />
+                &nbsp; button to use a polygon selection tool. Click and then
+                move the mouse to draw a custom shape, which will bring up data
+                about citations in the region.
               </small>
             </li>
           </ul>

@@ -13,8 +13,9 @@
     border-radius: 50px;
   }
 
-  height: 100%;
-  width: 30%;
+  height: 3em;
+  width: 20%;
+  flex: 0.5;
   // margin: auto 20px;
 
   // position: relative;
@@ -26,24 +27,26 @@
 
 // try somthing new with flex layout
 .header-container {
-  width: 100vw;
-  height: 10vh;
-  background-color: white;
-  color: black;
-  font-size: 2.5em;
-  align-items: stretch;
-  flex-direction: row;
-  display: flex;
-  padding: 1em 1.5em;
-  margin: 0.5em 0.5em;
-  align-content: center;
-  line-height: 29px;
-  letter-spacing: 0.055em;
+  @media (min-width: 900px) {
+    width: 100vw;
+    height: auto;
+    background-color: white;
+    color: black;
+    font-size: 2.5em;
+    align-items: stretch;
+    flex-direction: row;
+    display: flex;
+    padding: 1em 1.5em;
+    margin: 0.5em 0.5em;
+    align-content: center;
+    line-height: 29px;
+    letter-spacing: 0.055em;
 
-  h1 {
-    font-size: 1.8em;
-    font-weight: 500;
-    line-height: 1.2em;
-    letter-spacing: 0;
+    h1 {
+      font-size: 1.8em;
+      font-weight: 500;
+      line-height: 1.2em;
+      letter-spacing: 0;
+    }
   }
 }

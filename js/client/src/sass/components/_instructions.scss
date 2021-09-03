@@ -1,6 +1,7 @@
 .instructions-container {
   width: 100vw;
-  height: 40vh;
+
+  height: auto;
   background-color: #e5e5e5;
   color: black;
   font-size: 2.5em;
@@ -22,7 +23,7 @@
   padding: 0.5em 1.5em;
   align-content: center;
   line-height: 30px;
-  padding: 1em 3em 1em 1em;
+  padding: 1em 3em 0em 1em;
   margin: 1em;
 
   ul {
@@ -36,6 +37,6 @@
     padding: 8px 46px;
     border: 1px solid white;
     background-color: white;
-    margin: 1.5em 0;
+    margin: 1.5em 0 0 0;
   }
 }
