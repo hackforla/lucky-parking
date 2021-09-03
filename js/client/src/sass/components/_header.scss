@@ -1,44 +1,15 @@
-// .header-container {
-//   width: 100vw;
-//   height: 100vh;
-//   display: grid;
-//   grid-row: 1/2;
-//   background-color: white;
-//   color: black;
-//   font-size: 1.5em;
-
-// }
-.picture {
-  @media (prefers-color-scheme: dark) {
-    border-radius: 50px;
-  }
-
-  height: 3em;
-  width: 20%;
-  flex: 0.5;
-  // margin: auto 20px;
-
-  // position: relative;
-  background-image: url("../../assets/images/logo.png");
-  background-repeat: no-repeat;
-  // background-size: cover;
-  // background-position: center;
-}
-
-// try somthing new with flex layout
 .header-container {
   @media (min-width: 900px) {
-    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    align-content: center;
     height: auto;
+    width: 100vw;
+    padding: 1em 1.5em;
     background-color: white;
     color: black;
     font-size: 2.5em;
-    align-items: stretch;
-    flex-direction: row;
-    display: flex;
-    padding: 1em 1.5em;
-    margin: 0.5em 0.5em;
-    align-content: center;
     line-height: 29px;
     letter-spacing: 0.055em;
 
@@ -47,6 +18,17 @@
       font-weight: 500;
       line-height: 1.2em;
       letter-spacing: 0;
+    }
+
+    .picture {
+      @media (prefers-color-scheme: dark) {
+        border-radius: 50px;
+      }
+
+      flex: 0.65 0 auto;
+      min-width: 230px;
+      background-image: url("../../assets/images/logo.png");
+      background-repeat: no-repeat;
     }
   }
 }
