@@ -50,7 +50,8 @@ const ConnectGeosearch = ({
 }) => {
   const [dateRangeActive, setDateRangeActive] = useState(false);
   const [disableHover, setDisableHover] = useState(false);
-
+  const minDate = new Date("06/10/2010");
+  const maxDate = new Date("04/01/2021");
   const searchContainer = useRef();
 
   useEffect(() => {
@@ -73,13 +74,19 @@ const ConnectGeosearch = ({
       >
         <div className="testGeoSearch" ref={searchContainer} />
         <div className="geoSearchBarComponents">
-          <label>From :</label>
+          <label>Citation Date Range From :</label>
           <DatePicker
             selected={startDate}
             showTimeSelect
+            minDate={minDate}
+            maxDate={endDate}
             dateFormat="MM/dd/yyyy"
             onChange={(date) => getStartDate(date)}
-          />
+          >
+            <div style={{ color: "orangered", fontSize: "14px" }}>
+              Please select a date after <b>June 10th, 2010</b>.
+            </div>
+          </DatePicker>
         </div>
         <div className="geoSearchBarComponents">
           <label>To :</label>
@@ -87,9 +94,14 @@ const ConnectGeosearch = ({
             selected={endDate}
             showTimeSelect
             minDate={startDate}
+            maxDate={maxDate}
             dateFormat="MM/dd/yyyy"
             onChange={(date) => getEndDate(date)}
-          />
+          >
+            <div style={{ color: "orangered", fontSize: "14px" }}>
+              Please select a date prior <b>April 1st, 2021</b>.
+            </div>
+          </DatePicker>
         </div>
         <div
           className={`geoSearchBarDateToggle ${
