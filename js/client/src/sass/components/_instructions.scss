@@ -1,0 +1,39 @@
+.instructions-container {
+  display: flex;
+  align-items: stretch;
+  height: auto;
+  width: 100vw;
+  background-color: #e5e5e5;
+  color: black;
+  font-size: 2.5em;
+
+  h2 {
+    margin: 2em 2em 0 3em;
+    font-size: 1.2em;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0;
+  }
+}
+
+.instructions {
+  flex-direction: column;
+  align-content: center;
+  margin: 1em;
+  padding: 1em 3em 0 0;
+  line-height: 30px;
+
+  ul {
+    margin: 0.5em 1em 0 1em;
+  }
+
+  button {
+    font-family: Roboto;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 1.5em 0 0 0;
+    padding: 8px 46px;
+    border: 1px solid white;
+    background-color: white;
+  }
+}

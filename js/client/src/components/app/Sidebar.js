@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { handleSidebar } from "../../redux/actions/index";
-import CountUp from 'react-countup';
-import Graph from './Graph';
-import { IconContext } from 'react-icons';
-import { BsChevronDoubleDown } from 'react-icons/bs';
-import PropTypes from 'prop-types';
-import * as T from '../indexTables'
+import CountUp from "react-countup";
+import Graph from "./Graph";
+import { IconContext } from "react-icons";
+import { BsChevronDoubleDown } from "react-icons/bs";
+import PropTypes from "prop-types";
+import * as T from "../indexTables";
 
 const mapStateToProps = (state) => {
-  return { 
-    citation: state.citation, 
+  return {
+    citation: state.citation,
     isSidebarOpen: state.isSidebarOpen,
     drawingPresent: state.drawingPresent,
     polygonData: state.polygonData,
@@ -24,15 +24,20 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPresent, polygonData, darkMode }) {
+function ConnectedSideBar({
+  citation,
+  isSidebarOpen,
+  handleSidebar,
+  drawingPresent,
+  polygonData,
+  darkMode,
+}) {
   const [data, setData] = useState("");
   const sideBar = document.getElementsByClassName("sidebar-container");
-  const mapGrid = document.getElementsByClassName("map-container")
+  const mapGrid = document.getElementsByClassName("map-container");
   const closeButton = document.getElementsByClassName(
     "sidebar__closeButton--close"
   );
-
-  
 
   useEffect(() => {
     if (citation !== null) {
@@ -52,36 +57,32 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
     }
   };
 
-  return (
-    drawingPresent ?
-      <div className="sidebar-container extra">
-        <div className="content-wrapper">
-        <Graph polygonData={polygonData} darkMode={darkMode}/>
-        </div>
+  return drawingPresent ? (
+    <div className="sidebar-container extra">
+      <div className="content-wrapper">
+        <Graph polygonData={polygonData} darkMode={darkMode} />
       </div>
-    :
-      <div className="sidebar-container">
+    </div>
+  ) : (
+    <div className="sidebar-container">
       <div className="content-wrapper">
         <IconContext.Provider value={{ size: "2.5em", className: "close-btn" }}>
-        <span className="mobile-close" onClick={sideBarCloseHandler}>
-          <BsChevronDoubleDown />
-        </span>
-
+          <span className="mobile-close" onClick={sideBarCloseHandler}>
+            <BsChevronDoubleDown />
+          </span>
         </IconContext.Provider>
         <h2 className="header-text">Ticket Details</h2>
         <h2 className="title">Ticket Date</h2>
-        <div className="desc">{
-          new Date(data.datetime).toLocaleDateString(
-            'en-gb',
-            {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: "numeric",
-              minute: "numeric",
-              hour12: true
-            }
-          )}</div>
+        <div className="desc">
+          {new Date(data.datetime).toLocaleDateString("en-gb", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+          })}
+        </div>
         <h2 className="title">Location</h2>
         <div className="desc">{data.location}</div>
         <h2 className="title">Violation</h2>
@@ -109,14 +110,19 @@ function ConnectedSideBar({ citation, isSidebarOpen, handleSidebar, drawingPrese
         <div className="dollar">
           $
           <span className="dollarAmt">
-            <CountUp end={data.fine_amount || 0} duration={1.5} decimal="." decimals={2}/>
+            <CountUp
+              end={data.fine_amount || 0}
+              duration={1.5}
+              decimal="."
+              decimals={2}
+            />
           </span>
         </div>
         <div className="sidebar__closeButton" onClick={sideBarCloseHandler}>
           <div className="sidebar__closeButton--close"></div>
         </div>
       </div>
-      </div>
+    </div>
   );
 }
 

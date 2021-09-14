@@ -62,13 +62,14 @@ Dictionary for keyed values "make_ind"
 
 module.exports = {
   getAll: (req, res) => {
-
     let longitude = req.query.longitude;
     let latitude = req.query.latitude;
 
     dbHelpers
       .query(
-        `SELECT index, ST_AsGeoJSON(geometry) FROM test1 WHERE ST_X(geometry) BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) BETWEEN ${longitude[1]} AND ${latitude[1]} LIMIT 15000`
+        `SELECT index, ST_AsGeoJSON(geometry) FROM test1 WHERE ST_X(geometry) 
+      BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry) 
+      BETWEEN ${longitude[1]} AND ${latitude[1]} LIMIT 15000`
       )
       .then((data) => {
         res.status(200).send(generateGeoData(data.rows));
@@ -76,33 +77,28 @@ module.exports = {
       .catch((err) => {
         res.status(404).send(err);
       });
-
   },
   getZipLayer: (req, res) => {
     dbHelpers
-      .query(
-        'SELECT zip, ST_AsGeoJSON(the_geom) FROM zipcodes'
-      )
+      .query("SELECT zip, ST_AsGeoJSON(the_geom) FROM zipcodes")
       .then((data) => {
-        res.status(200).send(generateZipData(data.rows))
+        res.status(200).send(generateZipData(data.rows));
       })
       .catch((err) => {
-        res.status(404).send(err)
-      })
+        res.status(404).send(err);
+      });
   },
   getPointData: (req, res) => {
     let index = req.query.index;
 
     dbHelpers
-      .query(
-        `SELECT * FROM test1 WHERE INDEX = '${index}'`
-      )
+      .query(`SELECT * FROM test1 WHERE INDEX = '${index}'`)
       .then((data) => {
         res.status(200).send(data.rows);
       })
       .catch((err) => {
-        res.status(404).send(err)
-      })
+        res.status(404).send(err);
+      });
   },
   getTimestamps: (req, res) => {
     let longitude = req.query.longitude;
@@ -124,7 +120,6 @@ module.exports = {
   drawSelect: (req, res) => {
     let polygon = req.query.polygon;
 
-
     dbHelpers
       .query(
         `SELECT ST_AsGeoJSON(geometry) FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
@@ -142,8 +137,7 @@ module.exports = {
   },
   zipSelect: (req, res) => {
     let zip = parseInt(req.query.zip);
-   
-    
+
     dbHelpers
       .query(
         `SELECT ST_AsGeoJSON(geometry)
@@ -164,7 +158,6 @@ module.exports = {
     let polygon = req.query.polygon;
     let filterBy = req.query.filterBy;
 
-
     dbHelpers
       .query(
         `SELECT ${filterBy} AS "name", (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y" FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
@@ -183,7 +176,6 @@ module.exports = {
   zipGraph: (req, res) => {
     let zip = req.query.zip;
     let filterBy = req.query.filterBy;
-
 
     dbHelpers
       .query(
