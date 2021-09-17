@@ -100,11 +100,13 @@ function ConnectedSideBar({
         </div>
         <div className="left">
           Type
-          <div className="leftData">{data.body_style}</div>
+          {/* If abbreviation is not in the table, use 'Other' */}
+          <div className="leftData">{T.typeTable[data.body_style] || "Other"}</div>
         </div>
         <div className="bottomLeft">
           Color
-          <div className="leftData">{data.color}</div>
+          {/* If abbreviation is not in the table, use 'Other' */}
+          <div className="leftData">{T.colorTable[data.color] || "Other"}</div>
         </div>
         <h2 className="fine">Fine Amount</h2>
         <div className="dollar">
