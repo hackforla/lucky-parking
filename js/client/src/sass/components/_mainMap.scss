@@ -20,7 +20,7 @@ $desktop: 900px;
     background-color: transparent;
   }
   .mapboxgl-ctrl-geocoder--suggestion,
-  ul.suggestions, 
+  ul.suggestions,
   .mapboxgl-ctrl-geocoder .suggestions > .active > li {
     background-color: #121212;
     color: #121212;
@@ -136,7 +136,7 @@ $desktop: 900px;
 }
 
 .mapboxgl-ctrl-bottom-right {
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     display: none;
   }
 }
@@ -253,8 +253,8 @@ $desktop: 900px;
 }
 
 .disabled-button {
-  -webkit-filter: opacity(.3) drop-shadow(0 0 0 #FFF);
-  filter: opacity(.3) drop-shadow(0 0 0 #FFF);
+  -webkit-filter: opacity(0.3) drop-shadow(0 0 0 #fff);
+  filter: opacity(0.3) drop-shadow(0 0 0 #fff);
   cursor: default !important;
 }
 

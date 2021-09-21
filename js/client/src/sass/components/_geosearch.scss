@@ -1,4 +1,4 @@
-@import 'node_modules/react-datepicker/src/stylesheets/datepicker.scss';
+@import "node_modules/react-datepicker/src/stylesheets/datepicker.scss";
 
 $phone: 812px;
 $desktop: 900px;
@@ -17,7 +17,7 @@ $desktop: 900px;
     color: hsl(0, 0%, 87%);
     border: solid hsl(0, 0%, 38%) 1px;
   }
-  .react-datepicker__day, 
+  .react-datepicker__day,
   .react-datepicker__time-list-item {
     color: hsl(0, 0%, 87%);
     background-color: #121212;
@@ -29,8 +29,8 @@ $desktop: 900px;
       color: #35b228;
     }
   }
-  .react-datepicker__day-name,  
-  .react-datepicker-time__header, 
+  .react-datepicker__day-name,
+  .react-datepicker-time__header,
   .react-datepicker__current-month {
     color: hsl(0, 0%, 87%);
   }
@@ -43,7 +43,6 @@ $desktop: 900px;
     background-color: #121212;
     color: hsl(0, 0%, 87%);
   }
-  
 }
 
 .geosearch {
@@ -81,13 +80,13 @@ $desktop: 900px;
   &--disable {
     border: 1px solid #47be22;
     animation: inversePulse 2s infinite;
-    border-color: #DD0000;
+    border-color: #dd0000;
     transition: border-color 2s;
   }
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     padding: 2.5rem;
   }
-  @media  screen and (min-width: $desktop) {
+  @media screen and (min-width: $desktop) {
     padding: 0.5rem;
   }
   border-radius: 4rem;
@@ -97,13 +96,13 @@ $desktop: 900px;
 
 @keyframes outwardPulse {
   0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(71, 190, 34, .4);
+    -webkit-box-shadow: 0 0 0 0 rgba(71, 190, 34, 0.4);
   }
   70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(71, 190, 34, 0);
+    -webkit-box-shadow: 0 0 0 10px rgba(71, 190, 34, 0);
   }
   100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(71, 190, 34, 0);
+    -webkit-box-shadow: 0 0 0 0 rgba(71, 190, 34, 0);
   }
 }
 
@@ -112,21 +111,19 @@ $desktop: 900px;
     -webkit-box-shadow: 0 0 0 0 rgba(221, 0, 0, 0);
   }
   70% {
-      -webkit-box-shadow: 0 0 0 10px rgba(221, 0, 0, 0);
+    -webkit-box-shadow: 0 0 0 10px rgba(221, 0, 0, 0);
   }
   100% {
-      -webkit-box-shadow: 0 0 0 0 rgba(221, 0, 0, .4);
+    -webkit-box-shadow: 0 0 0 0 rgba(221, 0, 0, 0.4);
   }
 }
 
-.geoSearchBarComponents{
-  @media  screen and (max-width: $phone) {
+.geoSearchBarComponents {
+  @media screen and (max-width: $phone) {
     display: none;
   }
-  @media  screen and (min-width: $desktop) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  @media screen and (min-width: $desktop) {
+    padding: 0 24px 0 24px;
   }
 }
 
@@ -137,7 +134,7 @@ $desktop: 900px;
     color: #47be22;
     transition: color 1s;
     &:hover {
-      color:#DD0000;
+      color: #dd0000;
     }
   }
   &--invis {
@@ -178,7 +175,7 @@ input {
 }
 
 .testGeoSearch {
-  @media  screen and (max-width: $phone) {
+  @media screen and (max-width: $phone) {
     width: 100%;
     padding-left: 0;
     text-overflow: ellipsis;
@@ -186,8 +183,8 @@ input {
     border-top-left-radius: 24px;
     border-bottom-left-radius: 24px;
   }
-  @media  screen and (min-width: $desktop) {
-    width: 28%;
+  @media screen and (min-width: $desktop) {
+    width: 40%;
     padding-left: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -195,4 +192,3 @@ input {
     border-bottom-left-radius: 24px;
   }
 }
-

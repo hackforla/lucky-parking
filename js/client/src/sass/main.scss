@@ -2,6 +2,7 @@
 @import "./components/mainMap";
 
 @import "./components/header";
+@import "./components/instructions";
 @import "./components/map";
 @import "./components/sidebar";
 @import "./components/graph";
@@ -14,7 +15,7 @@ $desktop: 900px;
     display: grid;
     grid-template-columns: 30rem 3.5fr;
     grid-template-rows: 5rem 5rem 1fr;
-    grid-gap: .5rem;
+    grid-gap: 0.5rem;
     height: 100%;
     width: 100%;
     position: relative;
@@ -24,23 +25,20 @@ $desktop: 900px;
     margin: 30px 0;
   }
   @media screen and (min-width: $desktop) {
-    display: grid;
-    grid-template-columns: 30rem 30rem 3.5fr;
-    grid-template-rows: 5rem 1fr;
-    grid-gap: 1rem;
     height: 100%;
     width: 100%;
     position: relative;
     left: 50%;
-    top: 50%;
+    top: 45%;
     transform: translate(-50%, -50%);
     margin: 30px 0;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
   }
   @media (prefers-color-scheme: dark) {
-      @include dark-mode;
+    @include dark-mode;
   }
 }
-
 
 *,
 *::after,
