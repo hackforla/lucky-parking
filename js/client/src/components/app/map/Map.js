@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import ReactDOM from 'react-dom';
+import ReactTooltip from 'react-tooltip';
 import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import FreehandMode from "mapbox-gl-draw-freehand-mode";
@@ -95,6 +97,7 @@ const ConnectedMap = ({
         this._map = map;
         this._container = document.createElement("button");
         this._container.className = "mapboxgl-ctrl-group mapboxgl-ctrl";
+        this._container.id = "zip-toggle-button";
         var icon = document.createElement("img");
         icon.src =
           "https://img.icons8.com/material-outlined/24/000000/zip-code.png";
@@ -176,6 +179,33 @@ const ConnectedMap = ({
       "bottom-right"
     );
     map.addControl(zipToggle);
+    
+    // Add tooltip instructions to the buttons in upper right
+    // TODO: eventually could put this in a loop of some kind but it's only 3 buttons right now
+
+    const zipButton = document.getElementById("zip-toggle-button");
+    zipButton.setAttribute("data-for", "button-tooltip");
+    zipButton.setAttribute("data-tip", "Click to Toggle Zip Code Layer On or Off")
+    
+    const polygonButton = document
+      .getElementsByClassName("mapbox-gl-draw_polygon")[0];
+
+    polygonButton.setAttribute("data-for", "button-tooltip");
+    polygonButton.setAttribute("data-tip", "Click to Draw a Polygon Selection");
+
+    const trashButton = document
+      .getElementsByClassName("mapbox-gl-draw_trash")[0];
+    trashButton.setAttribute("data-for", "button-tooltip");
+    trashButton.setAttribute("data-tip", "Click to Delete Polygon Selection");
+  
+    let tooltip = <ReactTooltip id='button-tooltip' getContent={(dataTip) => `${dataTip}`}/>
+    let tooltip_div = document.createElement("div");
+
+    // arbitrary location, could go anywhere since the tooltip will 
+    // relocate to float over hovered button
+
+    zipButton.appendChild(tooltip_div);
+    ReactDOM.render(tooltip, tooltip_div);
 
     const drawnData = async () => {
       var drawData = draw.getAll();
@@ -241,6 +271,9 @@ const ConnectedMap = ({
       map.scrollZoom.enable();
     });
 
+    // disable polygon tool when zoomed too far out
+    // degrades performance when someone selects everything
+
     map.on("zoomend", () => {
       var zoomLevel = map.getZoom();
       var drawPolygon = document.getElementsByClassName(
@@ -255,6 +288,8 @@ const ConnectedMap = ({
       }
     });
 
+    // change cursor when on map
+
     map.on("mouseenter", "places", () => {
       map.getCanvas().style.cursor = "pointer";
     });
@@ -267,6 +302,9 @@ const ConnectedMap = ({
       //const coord = e.features[0].geometry.coordinates
       zipStatics(zip);
     });
+
+    // Show zip code tooltip when
+    // hovering over the zip code layer
 
     const popup = new mapboxgl.Popup({
       closeButton: false,
@@ -293,6 +331,8 @@ const ConnectedMap = ({
       popup.remove();
     });
 
+    // add layers and sources
+
     map.once("style.load", () => {
       let dataSources = {
         type: "geojson",
@@ -312,6 +352,8 @@ const ConnectedMap = ({
       map.addLayer(places);
       map.addLayer(heatMap);
     });
+
+    // display individual citation data on click
 
     const layerClick = (e) => {
       axios
