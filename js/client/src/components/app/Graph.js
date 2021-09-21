@@ -57,9 +57,11 @@ const Graph = ({ polygonData, darkMode }) => {
               categoryArray.push("$" + datum.name);
               break;
             case "color":
+              // If abbreviation is not in the table, use 'Other'
               categoryArray.push(tables.colorTable[datum.name] || "Other");
               break;
             case "body_style":
+              // If abbreviation is not in the table, use 'Other'
               categoryArray.push(tables.typeTable[datum.name] || "Other");
               break;
             default:
