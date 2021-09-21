@@ -6,7 +6,7 @@ import Graph from "./Graph";
 import { IconContext } from "react-icons";
 import { BsChevronDoubleDown } from "react-icons/bs";
 import PropTypes from "prop-types";
-import * as T from "../indexTables";
+import * as tables from "../indexTables";
 
 const mapStateToProps = (state) => {
   return {
@@ -92,7 +92,7 @@ function ConnectedSideBar({
         <h2 className="vehicle">Vehicle</h2>
         <div className="left">
           Make
-          <div className="leftData">{T.makeTable[data.make_ind]}</div>
+          <div className="leftData">{tables.makeTable[data.make_ind]}</div>
         </div>
         <div className="left">
           State
@@ -101,12 +101,12 @@ function ConnectedSideBar({
         <div className="left">
           Type
           {/* If abbreviation is not in the table, use 'Other' */}
-          <div className="leftData">{T.typeTable[data.body_style] || "Other"}</div>
+          <div className="leftData">{tables.typeTable[data.body_style] || "Other"}</div>
         </div>
         <div className="bottomLeft">
           Color
           {/* If abbreviation is not in the table, use 'Other' */}
-          <div className="leftData">{T.colorTable[data.color] || "Other"}</div>
+          <div className="leftData">{tables.colorTable[data.color] || "Other"}</div>
         </div>
         <h2 className="fine">Fine Amount</h2>
         <div className="dollar">
