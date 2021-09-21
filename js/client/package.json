@@ -13,7 +13,6 @@
     "highcharts-react-official": "^3.0.0",
     "mapbox-gl": "^1.13.0",
     "mapbox-gl-draw-freehand-mode": "^2.0.0",
-    "node-sass": "^4.14.1",
     "polylabel": "^1.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
@@ -21,8 +20,10 @@
     "react-datepicker": "^2.16.0",
     "react-dom": "^16.14.0",
     "react-icons": "^4.2.0",
-    "react-scripts": "^4.0.1",
-    "react-select": "^4.0.2"
+    "react-scripts": "^4.0.3",
+    "react-select": "^4.0.2",
+    "react-tooltip": "^4.2.21",
+    "sass": "^1.41.1"
   },
   "scripts": {
     "start": "react-scripts start",
