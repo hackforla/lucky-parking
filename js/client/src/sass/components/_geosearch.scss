@@ -129,6 +129,7 @@ $desktop: 900px;
 
 .geoSearchBarDateToggle {
   &--visible {
+    display: block;
     font-weight: bold;
     font-size: 1.5rem;
     color: #47be22;

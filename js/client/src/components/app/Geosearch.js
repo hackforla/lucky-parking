@@ -50,16 +50,16 @@ const ConnectGeosearch = ({
 }) => {
   const [dateRangeActive, setDateRangeActive] = useState(false);
   const [disableHover, setDisableHover] = useState(false);
-  const initDate = new Date("01/01/2020");
   const minDate = new Date("06/10/2010");
   const maxDate = new Date("04/01/2021");
   const searchContainer = useRef();
 
+  //Todo: Datepicker Styling
+
   const handleClearDateRange = (e) => {
     getRangeActive(false);
-    getStartDate(initDate);
+    getStartDate(null);
     getEndDate(maxDate);
-    console.log((e.target.style.display = "none"));
   };
 
   useEffect(() => {
@@ -83,12 +83,14 @@ const ConnectGeosearch = ({
         <div className="testGeoSearch" ref={searchContainer} />
         <div className="geoSearchBarComponents">
           <label>Citation Date Range From :</label>
+
           <DatePicker
             selected={startDate}
             showTimeSelect
             minDate={minDate}
             maxDate={endDate}
             dateFormat="MM/dd/yyyy"
+            placeholderText="MM/DD/YYYY"
             onChange={(date) => getStartDate(date)}
           >
             <div style={{ color: "orangered", fontSize: "14px" }}>
@@ -104,6 +106,7 @@ const ConnectGeosearch = ({
             minDate={startDate}
             maxDate={maxDate}
             dateFormat="MM/dd/yyyy"
+            placeholderText="Present"
             onChange={(date) =>
               dateRangeActive === false ? getEndDate(maxDate) : getEndDate(date)
             }
@@ -114,13 +117,10 @@ const ConnectGeosearch = ({
           </DatePicker>
         </div>
         <div
-          className={`geoSearchBarDateToggle geoSearchBarDateToggle--visible`}
-          onClick={
-            (e) => handleClearDateRange(e)
-            // getRangeActive(false)
-            // getEndDate(maxDate),
-            // getStartDate(minDate))
-          }
+          className={`geoSearchBarDateToggle${
+            activateDateRange ? "--visible" : "--invis"
+          }`}
+          onClick={(e) => handleClearDateRange(e)}
           onMouseEnter={() => setDisableHover(true)}
           onMouseLeave={() => setDisableHover(false)}
         >
