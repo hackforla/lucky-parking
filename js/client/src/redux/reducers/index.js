@@ -1,15 +1,25 @@
-import { CITATION_DATA, MAP, HANDLE_SIDEBAR, START_DATE, END_DATE, ACTIVE_RANGE, DRAWING_PRESENT, POLYGON_DATA, ACTIVE_DARK } from "../constants/action-types";
+import {
+  CITATION_DATA,
+  MAP,
+  HANDLE_SIDEBAR,
+  START_DATE,
+  END_DATE,
+  ACTIVE_RANGE,
+  DRAWING_PRESENT,
+  POLYGON_DATA,
+  ACTIVE_DARK,
+} from "../constants/action-types";
 
 const INITIAL_STATE = {
   citation: null,
   mapRef: null,
   isSidebarOpen: false,
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: new Date("01/1/2020"),
+  endDate: new Date("04/01/2021"),
   activateDateRange: false,
   drawingPresent: false,
   polygonData: null,
-  darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+  darkMode: window.matchMedia("(prefers-color-scheme: dark)").matches,
 };
 
 function rootReducer(state = INITIAL_STATE, action) {

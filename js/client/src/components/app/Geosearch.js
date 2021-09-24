@@ -50,9 +50,17 @@ const ConnectGeosearch = ({
 }) => {
   const [dateRangeActive, setDateRangeActive] = useState(false);
   const [disableHover, setDisableHover] = useState(false);
+  const initDate = new Date("01/01/2020");
   const minDate = new Date("06/10/2010");
   const maxDate = new Date("04/01/2021");
   const searchContainer = useRef();
+
+  const handleClearDateRange = (e) => {
+    getRangeActive(false);
+    getStartDate(initDate);
+    getEndDate(maxDate);
+    console.log((e.target.style.display = "none"));
+  };
 
   useEffect(() => {
     setDateRangeActive(true);
@@ -96,7 +104,9 @@ const ConnectGeosearch = ({
             minDate={startDate}
             maxDate={maxDate}
             dateFormat="MM/dd/yyyy"
-            onChange={(date) => getEndDate(date)}
+            onChange={(date) =>
+              dateRangeActive === false ? getEndDate(maxDate) : getEndDate(date)
+            }
           >
             <div style={{ color: "orangered", fontSize: "14px" }}>
               Please select a date prior <b>April 1st, 2021</b>.
@@ -104,12 +114,13 @@ const ConnectGeosearch = ({
           </DatePicker>
         </div>
         <div
-          className={`geoSearchBarDateToggle ${
-            activateDateRange
-              ? "geoSearchBarDateToggle--visible"
-              : "geoSearchBarDateToggle--invis"
-          }`}
-          onClick={() => getRangeActive(false)}
+          className={`geoSearchBarDateToggle geoSearchBarDateToggle--visible`}
+          onClick={
+            (e) => handleClearDateRange(e)
+            // getRangeActive(false)
+            // getEndDate(maxDate),
+            // getStartDate(minDate))
+          }
           onMouseEnter={() => setDisableHover(true)}
           onMouseLeave={() => setDisableHover(false)}
         >
