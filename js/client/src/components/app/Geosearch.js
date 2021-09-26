@@ -54,7 +54,7 @@ const ConnectGeosearch = ({
   const maxDate = new Date("04/01/2021");
   const searchContainer = useRef();
 
-  //Todo: Datepicker Styling
+  //Todo: Datepicker Styling abstraction
   // helper function, extract needed
   function range(start, end, increment) {
     const output = [];
@@ -202,25 +202,6 @@ const ConnectGeosearch = ({
                 }}
               >
                 <select
-                  value={getYear(date)}
-                  onChange={({ target: { value } }) => changeYear(value)}
-                  style={{
-                    padding: "5px 25px",
-                    margin: "3px 6px",
-                    color: "#fff",
-                    backgroundColor: "#47be22",
-                    borderRadius: "5px",
-                    fontSize: "16px",
-                  }}
-                >
-                  {years.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-
-                <select
                   value={months[getMonth(date)]}
                   onChange={({ target: { value } }) =>
                     changeMonth(months.indexOf(value))
@@ -241,6 +222,24 @@ const ConnectGeosearch = ({
                     </option>
                   ))}
                 </select>
+                <select
+                  value={getYear(date)}
+                  onChange={({ target: { value } }) => changeYear(value)}
+                  style={{
+                    padding: "5px 25px",
+                    margin: "3px 6px",
+                    color: "#fff",
+                    backgroundColor: "#47be22",
+                    borderRadius: "5px",
+                    fontSize: "16px",
+                  }}
+                >
+                  {years.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
             )}
             selected={endDate}
@@ -253,7 +252,13 @@ const ConnectGeosearch = ({
               dateRangeActive === false ? getEndDate(maxDate) : getEndDate(date)
             }
           >
-            <div style={{ color: "orangered", fontSize: "14px" }}>
+            <div
+              style={{
+                padding: "5px 0 5px 5px",
+                color: "orangered",
+                fontSize: "14px",
+              }}
+            >
               Please select a date prior <b>April 1st, 2021</b>.
             </div>
           </DatePicker>
