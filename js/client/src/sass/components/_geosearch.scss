@@ -195,3 +195,24 @@ input {
 }
 
 // Todo: style datepicker
+.react-datepicker__day-name {
+  display: inline-block;
+  width: 3rem;
+  line-height: 1.7rem;
+  text-align: center;
+  margin: 0.35rem;
+  font-size: 13px;
+}
+
+.react-datepicker__day {
+  width: 3rem;
+  margin: 0.35rem;
+  font-size: 13px;
+}
+.react-datepicker-time__header {
+  font-size: 13px;
+}
+
+.react-datepicker__time {
+  font-size: 10px;
+}
