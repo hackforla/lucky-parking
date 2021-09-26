@@ -18,7 +18,7 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import polylabel from "polylabel";
 import PropTypes from "prop-types";
 import axios from "axios";
-// const axios = require("axios");
+
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
 const API_URL = process.env.REACT_APP_API_URL;

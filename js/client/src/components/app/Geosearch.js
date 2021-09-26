@@ -55,6 +55,49 @@ const ConnectGeosearch = ({
   const searchContainer = useRef();
 
   //Todo: Datepicker Styling
+  // helper function, extract needed
+  function range(start, end, increment) {
+    const output = [];
+    for (let i = start; i <= end; i += increment) {
+      output.push(i);
+    }
+    return output;
+  }
+
+  function getYear(date) {
+    return date.getFullYear();
+  }
+
+  const years = range(2010, getYear(new Date()), 1);
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  function getMonth(date) {
+    return months[date.getMonth()];
+  }
+
+  // const MyContainer = ({ children }) => {
+  //   return (
+  //     <div style={{ padding: "16px", background: "#216ba5", color: "#fff" }}>
+  //       {/* <CalendarContainer className={className}> */}
+  //       <div style={{ position: "relative" }}>{children}</div>
+  //       {/* </CalendarContainer> */}
+  //     </div>
+  //   );
+  // };
 
   const handleClearDateRange = (e) => {
     getRangeActive(false);
@@ -85,6 +128,65 @@ const ConnectGeosearch = ({
           <label>Citation Date Range From :</label>
 
           <DatePicker
+            renderCustomHeader={({
+              date,
+              changeYear,
+              changeMonth,
+              decreaseMonth,
+              increaseMonth,
+              prevMonthButtonDisabled,
+              nextMonthButtonDisabled,
+            }) => (
+              <div
+                style={{
+                  margin: 10,
+                  padding: "3px",
+                  display: "flex",
+                  justifyContent: "center",
+                  backgroundColor: "transparent",
+                }}
+              >
+                <select
+                  value={getYear(date)}
+                  onChange={({ target: { value } }) => changeYear(value)}
+                  style={{
+                    padding: "3px",
+                    margin: "3px",
+                    color: "#fff",
+                    backgroundColor: "#47be22",
+                    borderRadius: "5px",
+                    fontSize: "16px",
+                  }}
+                >
+                  {years.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={months[getMonth(date)]}
+                  onChange={({ target: { value } }) =>
+                    changeMonth(months.indexOf(value))
+                  }
+                  style={{
+                    padding: "3px",
+                    margin: "3px",
+                    color: "#fff",
+                    backgroundColor: "#47be22",
+                    borderRadius: "5px",
+                    fontSize: "16px",
+                  }}
+                >
+                  {months.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             selected={startDate}
             showTimeSelect
             minDate={minDate}
@@ -93,7 +195,7 @@ const ConnectGeosearch = ({
             placeholderText="MM/DD/YYYY"
             onChange={(date) => getStartDate(date)}
           >
-            <div style={{ color: "orangered", fontSize: "14px" }}>
+            <div style={{ color: "orangered", fontSize: "13px" }}>
               Please select a date after <b>June 10th, 2010</b>.
             </div>
           </DatePicker>
