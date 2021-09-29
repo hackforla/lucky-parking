@@ -154,7 +154,7 @@ const ConnectGeosearch = ({
                   value={getYear(date)}
                   onChange={({ target: { value } }) => changeYear(value)}
                   style={{
-                    padding: "5 25px",
+                    padding: "5px 25px",
                     margin: "3px 6px",
                     color: "#fff",
                     backgroundColor: "#47be22",

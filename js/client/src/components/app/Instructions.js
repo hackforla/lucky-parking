@@ -43,11 +43,13 @@ function Instructions() {
             </li>
           </ul>
         </p>
-        <button onClick={handleShow}>Got It!</button>
+        <button onClick={handleShow}>Close Instructions</button>
       </div>
     </div>
   ) : (
-    <></>
+    <div className="button-container">
+      <button onClick={handleShow}>Click for Instructions</button>
+    </div>
   );
 }
 
