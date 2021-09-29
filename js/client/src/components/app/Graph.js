@@ -187,8 +187,12 @@ const Graph = ({ polygonData, darkMode }) => {
   return (
     <div>
       <div>
-        <h2 className="header-text">Citation Summary in Selected Area</h2>
-        {/* <h2 className="header-text">Citation Summary in {isPolygon ? "Selected Area" : polygonData }</h2> */}
+        {/* <h2 className="header-text">Citation Summary in Selected Area</h2> */}
+        {
+        isPolygon === false 
+        ? <h2 className="header-text">Citation Summary in { polygonData }</h2>
+        : <h2 className="header-text">Citation Summary in Selected Area</h2>
+        }
       </div>
       <div className="select">
         <Select
