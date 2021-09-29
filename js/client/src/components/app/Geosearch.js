@@ -88,10 +88,11 @@ const ConnectGeosearch = ({
     return months[date.getMonth()];
   }
 
-  const handleClearDateRange = (e) => {
-    getRangeActive(false);
+  const handleClearDateRange = () => {
     getStartDate(null);
-    getEndDate(maxDate);
+    getEndDate(null);
+    setDateRangeActive(false);
+    getRangeActive(dateRangeActive);
   };
 
   useEffect(() => {
@@ -121,7 +122,7 @@ const ConnectGeosearch = ({
               <div
                 style={{
                   margin: 10,
-                  padding: "3px",
+                  padding: 3,
                   display: "flex",
                   justifyContent: "center",
                   backgroundColor: "transparent",
@@ -133,12 +134,12 @@ const ConnectGeosearch = ({
                     changeMonth(months.indexOf(value))
                   }
                   style={{
-                    padding: "5px",
-                    margin: "3px",
+                    padding: 5,
+                    margin: 3,
                     color: "#fff",
                     backgroundColor: "#47be22",
-                    borderRadius: "5px",
-                    fontSize: "16px",
+                    borderRadius: 5,
+                    fontSize: 16,
                     textAlign: "center",
                   }}
                 >
@@ -153,12 +154,12 @@ const ConnectGeosearch = ({
                   value={getYear(date)}
                   onChange={({ target: { value } }) => changeYear(value)}
                   style={{
-                    padding: "5px 25px",
+                    padding: "5 25px",
                     margin: "3px 6px",
                     color: "#fff",
                     backgroundColor: "#47be22",
-                    borderRadius: "5px",
-                    fontSize: "16px",
+                    borderRadius: 5,
+                    fontSize: 16,
                   }}
                 >
                   {years.map((option) => (
@@ -179,7 +180,7 @@ const ConnectGeosearch = ({
           >
             <div
               style={{
-                padding: "5px 0 5px 5px",
+                padding: "10px 0 10px 5px",
                 color: "orangered",
                 fontSize: "14px",
               }}
@@ -195,7 +196,7 @@ const ConnectGeosearch = ({
               <div
                 style={{
                   margin: 10,
-                  padding: "3px",
+                  padding: 3,
                   display: "flex",
                   justifyContent: "center",
                   backgroundColor: "transparent",
@@ -207,12 +208,12 @@ const ConnectGeosearch = ({
                     changeMonth(months.indexOf(value))
                   }
                   style={{
-                    padding: "5px",
-                    margin: "3px",
+                    padding: 5,
+                    margin: 3,
                     color: "#fff",
                     backgroundColor: "#47be22",
-                    borderRadius: "5px",
-                    fontSize: "16px",
+                    borderRadius: 5,
+                    fontSize: 16,
                     textAlign: "center",
                   }}
                 >
@@ -230,8 +231,8 @@ const ConnectGeosearch = ({
                     margin: "3px 6px",
                     color: "#fff",
                     backgroundColor: "#47be22",
-                    borderRadius: "5px",
-                    fontSize: "16px",
+                    borderRadius: 5,
+                    fontSize: 16,
                   }}
                 >
                   {years.map((option) => (
@@ -247,7 +248,7 @@ const ConnectGeosearch = ({
             minDate={startDate}
             maxDate={maxDate}
             dateFormat="MM/dd/yyyy"
-            placeholderText="Present"
+            placeholderText="MM/DD/YYYY"
             onChange={(date) =>
               dateRangeActive === false ? getEndDate(maxDate) : getEndDate(date)
             }
@@ -256,7 +257,7 @@ const ConnectGeosearch = ({
               style={{
                 padding: "5px 0 5px 5px",
                 color: "orangered",
-                fontSize: "14px",
+                fontSize: 14,
               }}
             >
               Please select a date prior <b>April 1st, 2021</b>.
