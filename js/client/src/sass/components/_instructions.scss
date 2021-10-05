@@ -13,6 +13,7 @@
     font-weight: 700;
     white-space: nowrap;
     letter-spacing: 0;
+    letter-spacing: 0;
   }
 }
 
@@ -29,11 +30,32 @@
 
   button {
     font-family: Roboto;
-    font-weight: 700;
-    font-size: 14px;
-    margin: 1.5em 0 0 0;
-    padding: 8px 46px;
-    border: 1px solid white;
-    background-color: white;
+    font-weight: 500;
+    line-height: 2.5em;
+    font-size: 1em;
+    letter-spacing: 1.5px;
+    margin: 1em 25% 0 25%;
+    min-width: 22em;
+    color: white;
+    background-color: black;
+  }
+}
+
+.button-container {
+  display: flex;
+  align-items: stretch;
+  background-color: white;
+  font-size: 2em;
+
+  button {
+    font-family: Roboto;
+    font-weight: 500;
+    line-height: 2.3em;
+    font-size: 1em;
+    letter-spacing: 1.5px;
+    margin: 0 0 1em 37em;
+    min-width: 22em;
+    color: white;
+    background-color: black;
   }
 }

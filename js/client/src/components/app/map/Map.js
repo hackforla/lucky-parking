@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import ReactDOM from 'react-dom';
-import ReactTooltip from 'react-tooltip';
+import { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
+import ReactTooltip from "react-tooltip";
 import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import FreehandMode from "mapbox-gl-draw-freehand-mode";
@@ -17,10 +17,9 @@ import { heatMap, places, zipcodes, zipCodeLines } from "./MapLayers";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import polylabel from "polylabel";
 import PropTypes from "prop-types";
+import axios from "axios";
 import turfArea from "@turf/area";
-
 const turfPolygon = require("@turf/helpers");
-const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -181,29 +180,39 @@ const ConnectedMap = ({
       "bottom-right"
     );
     map.addControl(zipToggle);
-    
+
     // Add tooltip instructions to the buttons in upper right
     // TODO: eventually could put this in a loop of some kind but it's only 3 buttons right now
 
     const zipButton = document.getElementById("zip-toggle-button");
     zipButton.setAttribute("data-for", "button-tooltip");
-    zipButton.setAttribute("data-tip", "Click to Toggle Zip Code Layer On or Off")
-    
-    const polygonButton = document
-      .getElementsByClassName("mapbox-gl-draw_polygon")[0];
+    zipButton.setAttribute(
+      "data-tip",
+      "Click to Toggle Zip Code Layer On or Off"
+    );
+
+    const polygonButton = document.getElementsByClassName(
+      "mapbox-gl-draw_polygon"
+    )[0];
 
     polygonButton.setAttribute("data-for", "button-tooltip");
     polygonButton.setAttribute("data-tip", "Click to Draw a Polygon Selection");
 
-    const trashButton = document
-      .getElementsByClassName("mapbox-gl-draw_trash")[0];
+    const trashButton = document.getElementsByClassName(
+      "mapbox-gl-draw_trash"
+    )[0];
     trashButton.setAttribute("data-for", "button-tooltip");
     trashButton.setAttribute("data-tip", "Click to Delete Polygon Selection");
-  
-    let tooltip = <ReactTooltip id='button-tooltip' getContent={(dataTip) => `${dataTip}`}/>
+
+    let tooltip = (
+      <ReactTooltip
+        id="button-tooltip"
+        getContent={(dataTip) => `${dataTip}`}
+      />
+    );
     let tooltip_div = document.createElement("div");
 
-    // arbitrary location, could go anywhere since the tooltip will 
+    // arbitrary location, could go anywhere since the tooltip will
     // relocate to float over hovered button
 
     zipButton.appendChild(tooltip_div);

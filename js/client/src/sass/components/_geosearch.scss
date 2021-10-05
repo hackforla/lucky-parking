@@ -129,6 +129,7 @@ $desktop: 900px;
 
 .geoSearchBarDateToggle {
   &--visible {
+    display: block;
     font-weight: bold;
     font-size: 1.5rem;
     color: #47be22;
@@ -149,7 +150,7 @@ $desktop: 900px;
   background-color: white;
   border-radius: 0;
   margin-right: 1rem;
-  font-size: 1.5rem;
+  font-size: 30px;
   color: grey;
   position: relative;
 }
@@ -191,4 +192,27 @@ input {
     border-top-left-radius: 24px;
     border-bottom-left-radius: 24px;
   }
+}
+
+// Todo: style datepicker refactor
+.react-datepicker__day-name {
+  display: inline-block;
+  width: 3rem;
+  line-height: 1.7rem;
+  text-align: center;
+  margin: 0.35rem;
+  font-size: 13px;
+}
+
+.react-datepicker__day {
+  width: 3rem;
+  margin: 0.35rem;
+  font-size: 13px;
+}
+.react-datepicker-time__header {
+  font-size: 13px;
+}
+
+.react-datepicker__time {
+  font-size: 10px;
 }
