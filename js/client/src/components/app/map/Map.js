@@ -18,7 +18,8 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import polylabel from "polylabel";
 import PropTypes from "prop-types";
 import axios from "axios";
-
+import turfArea from "@turf/area";
+const turfPolygon = require("@turf/helpers");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -217,6 +218,11 @@ const ConnectedMap = ({
     zipButton.appendChild(tooltip_div);
     ReactDOM.render(tooltip, tooltip_div);
 
+    /*
+      When a polygon is drawn via the polygon tool,
+      data for each citation in the polygon will be 
+      displayed on the map and the side graph.
+    */
     const drawnData = async () => {
       var drawData = draw.getAll();
 
@@ -236,16 +242,18 @@ const ConnectedMap = ({
         );
         drawPolygon[0].disabled = true;
         drawPolygon[0].classList.add("disabled-button");
-        var polygonCenter = polylabel(
-          drawData.features[0].geometry.coordinates,
-          1.0
-        );
-        map.easeTo({ center: polygonCenter });
+
+        cameraMovement(drawData.features[0].geometry.coordinates);
       } catch (err) {
         console.log(err);
       }
     };
 
+    /*
+      When a zip is selected during the zip layer toggle,
+      data for each citation in the zipcode will be 
+      displayed on the map and the side graph.
+    */
     const zipStatics = async (zip) => {
       try {
         const response = await axios.get(`${API_URL}/api/citation/draw/zip`, {
@@ -261,6 +269,44 @@ const ConnectedMap = ({
         map.setLayoutProperty("places", "visibility", "visible");
       } catch (err) {
         console.log(err);
+      }
+    };
+
+    /*
+      Dictates camera movement during 
+      zip layer toggle or polygon tool toggle
+    */
+    const cameraMovement = (polygonCoordinates) => {
+      // Pole of inaccessibility of a region
+      const center = polylabel(polygonCoordinates);
+      // Will be used to find the area of the region
+      const polygon = turfPolygon.polygon(polygonCoordinates);
+      
+      /*
+        Use a slight offset for the x-axis so the selected
+        zip is not covered by the citation summary side window.
+      */ 
+      const offset = 0.02;
+      const adjustedCenter = [center[0] - offset, center[1]];
+      
+      const area = turfArea(polygon);
+      const areaCutoffs = {
+        first: 20000000,
+        second: 100000000,
+      };  
+
+      /*
+        Zoom level is determined by the area cut offs,
+        where the bigger the area gets, the bigger the zoom is.
+      */               
+      if (area < areaCutoffs.first) {
+        map.easeTo({ center: adjustedCenter, zoom: 13});
+      }
+      else if (area < areaCutoffs.second) {
+        map.easeTo({ center: adjustedCenter, zoom: 12});
+      }
+      else {
+        map.easeTo({ center: adjustedCenter, zoom: 11.5});
       }
     };
 
@@ -307,10 +353,22 @@ const ConnectedMap = ({
       map.getCanvas().style.cursor = "";
     });
 
+    /* 
+      On click event when zip layer is toggled.
+    */
     map.on("click", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
-      //const coord = e.features[0].geometry.coordinates
+      const zipSource = map.getSource("zipcodes");
+      const zipGeometry = {};
+      // From all the possible zipcodes, get the specific zip only
+      for (let element of zipSource["_data"].features){
+        if (element.id === zip){
+          zipGeometry.data = element;
+          break;
+        }
+      }
       zipStatics(zip);
+      cameraMovement(zipGeometry.data.geometry.coordinates[0]);
     });
 
     // Show zip code tooltip when
