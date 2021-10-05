@@ -15,7 +15,8 @@ const Graph = ({ polygonData, darkMode }) => {
     value: "make",
     label: "Make of Vehicle",
   });
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([]);
+  const [isPolygon, setIsPolygon] = useState(null);
 
   const fetchGraph = async () => {
     try {
@@ -23,6 +24,7 @@ const Graph = ({ polygonData, darkMode }) => {
       let categoryArray = [];
       let citationSum = 0;
       if (Array.isArray(polygonData)) {
+        setIsPolygon(true);
         const response = await axios.get(`${API_URL}/api/citation/graph`, {
           params: {
             polygon: polygonData,
@@ -35,6 +37,7 @@ const Graph = ({ polygonData, darkMode }) => {
           return obj;
         });
       } else {
+        setIsPolygon(false);
         const response = await axios.get(`${API_URL}/api/citation/graph/zip`, {
           params: {
             zip: polygonData,
@@ -184,7 +187,11 @@ const Graph = ({ polygonData, darkMode }) => {
   return (
     <div>
       <div>
-        <h2 className="header-text">Citation Summary in Selected Area</h2>
+        {
+        isPolygon === false 
+        ? <h2 className="header-text">Citation Summary in { polygonData }</h2>
+        : <h2 className="header-text">Citation Summary in Selected Area</h2>
+        }
       </div>
       <div className="select">
         <Select
