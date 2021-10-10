@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'edited') }}
     steps:
+      - uses: actions/checkout@v2
       # Gets the linked issue from the PR body
       - name: Retrieve Linked Issue From PR
-      - uses: actions/checkout@v2
-      - uses: actions/github-script@v4
+        uses: actions/github-script@v4
         id: linked-issue
         with:
           script: |
