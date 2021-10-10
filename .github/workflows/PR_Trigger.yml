@@ -1,9 +1,9 @@
 name: PR Trigger
 on:
   pull_request:
-  types: [opened, edited]
-  branches:
-    - 'master'
+    types: [opened, edited]
+    branches:
+      - 'master'
 jobs:
   # This particular job was inspired by https://github.com/hackforla/website/blob/gh-pages/.github/workflows/add-issue-labels-to-pr.yml
   Add-Linked-Issue-Labels-To-PR:
