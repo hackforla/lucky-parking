@@ -12,7 +12,7 @@ jobs:
     steps:
       # Gets the linked issue from the PR body
       - name: Retrieve Linked Issue From PR
-        uses: actions/github-script@v4
+        uses: actions/checkout@v2
         uses: actions/github-script@v4
         id: linked-issue
         with:
