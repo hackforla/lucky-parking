@@ -8,7 +8,8 @@ const findLinkedIssue = require('../utils/find-linked-issue.js')
 function main({g, c}) {
   github = g
   context = c
-  console.log('event:', github.event)
+  console.log('issue num:', context.payload.issue.number)
+  console.log('payload:', context.payload)
   // figure out json tree for either github or context go get PR number
   // otherwise pull it from the env outside the js file
 
