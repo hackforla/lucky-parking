@@ -3,6 +3,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Select from "react-select";
 import PropTypes from "prop-types";
+import * as tables from "../indexTables";
 
 const axios = require("axios");
 const API_URL = process.env.REACT_APP_API_URL;
@@ -14,7 +15,8 @@ const Graph = ({ polygonData, darkMode }) => {
     value: "make",
     label: "Make of Vehicle",
   });
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState([]);
+  const [isPolygon, setIsPolygon] = useState(null);
 
   const fetchGraph = async () => {
     try {
@@ -22,6 +24,7 @@ const Graph = ({ polygonData, darkMode }) => {
       let categoryArray = [];
       let citationSum = 0;
       if (Array.isArray(polygonData)) {
+        setIsPolygon(true);
         const response = await axios.get(`${API_URL}/api/citation/graph`, {
           params: {
             polygon: polygonData,
@@ -34,6 +37,7 @@ const Graph = ({ polygonData, darkMode }) => {
           return obj;
         });
       } else {
+        setIsPolygon(false);
         const response = await axios.get(`${API_URL}/api/citation/graph/zip`, {
           params: {
             zip: polygonData,
@@ -51,10 +55,21 @@ const Graph = ({ polygonData, darkMode }) => {
       parsed.sort((first,second) => second.y - first.y);
       parsed.forEach((datum) => {
         if (categoryArray.indexOf(datum.name) === -1) {
-          if (selectedKey === "fine_amount") {
-            categoryArray.push("$" + datum.name);
-          } else {
-            categoryArray.push(datum.name);
+          switch (selectedKey) {
+            case "fine_amount":
+              categoryArray.push("$" + datum.name);
+              break;
+            case "color":
+              // If abbreviation is not in the table, use 'Other'
+              categoryArray.push(tables.colorTable[datum.name] || "Other");
+              break;
+            case "body_style":
+              // If abbreviation is not in the table, use 'Other'
+              categoryArray.push(tables.typeTable[datum.name] || "Other");
+              break;
+            default:
+              categoryArray.push(datum.name);
+              break;
           }
           datum["percentage"] = ((datum.y / citationSum) * 100).toFixed(2) + "%";
         }
@@ -172,7 +187,11 @@ const Graph = ({ polygonData, darkMode }) => {
   return (
     <div>
       <div>
-        <h2 className="header-text">Citation Summary in Selected Area</h2>
+        {
+        isPolygon === false 
+        ? <h2 className="header-text">Citation Summary in { polygonData }</h2>
+        : <h2 className="header-text">Citation Summary in Selected Area</h2>
+        }
       </div>
       <div className="select">
         <Select
