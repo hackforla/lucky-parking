@@ -1,0 +1,57 @@
+name: WR PR Trigger
+on:
+  workflow_run:
+    workflows: ["PR Trigger"]
+    types: [completed]
+
+jobs:
+  Last-Workflow-Success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/github-script@v5
+        id: download-artifact
+        with:
+          script: |
+            const script = require('./.github/js/wr-pr-trigger/add-linked-issue-labels-to-pr/download-artifact.js')
+            script({ g: github, c: context }, "${{ github.workspace }}")
+
+      - run: unzip add-linked-issue-labels-to-pr.zip
+
+      - name: Get Labels From Linked Issue
+        uses: actions/github-script@v5
+        id: get-labels
+        with:
+          script: |
+            const script = require('./.github/js/wr-pr-trigger/add-linked-issue-labels-to-pr/get-labels.js')
+            const result = script({ g: github, c: context }, "${{ github.workspace }}")
+            return result
+        
+      - name: Add Labels To Pull Request
+        uses: actions/github-script@v5
+        id: add-labels
+        with:
+          script: |
+            const script = require('./.github/js/wr-pr-trigger/add-linked-issue-labels-to-pr/add-labels.js')
+            const getLabelsResult = ${{ steps.get-labels.outputs.result }}
+            const result = script({ g: github, c: context }, getLabelsResult)
+            return result
+
+      - name: Return Failure
+        if: steps.add-labels.outputs.result == 'false'
+        run: |
+          echo "Please expand above output for errors."
+          exit 1
+      - name: Return Success
+        run: |
+          echo "${{ steps.final-result.outputs.result }}"
+          echo "Success"
+          
+  Last-Workflow-Failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: Failed Run
+        run: echo "The previous GitHub Action failed. Please check the logs for the previous action."

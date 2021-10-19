@@ -1,0 +1,41 @@
+name: PR Trigger
+on:
+  pull_request:
+    types: [opened, edited]
+    branches:
+      - 'master'
+jobs:
+  # This particular job was inspired by https://github.com/hackforla/website/blob/gh-pages/.github/workflows/add-issue-labels-to-pr.yml
+  Add-Linked-Issue-Labels-To-PR:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'edited') }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Retrieve Linked Issue From PR
+        uses: actions/github-script@v4
+        id: linked-issue
+        with:
+          script: |
+            const script = require('./.github/js/pr-trigger/add-linked-issue-labels-to-pr/retrieve-issue.js')
+            const issueNum = script({ g: github, c: context })
+            return issueNum
+      
+      - name: Return Failure
+        if: ${{ steps.linked-issue.result == 'false' }}
+        run: |
+          echo "Please expand above outputs for errors."
+          exit 1
+      
+      - name: Create Artifacts
+        # Escapes user input for injection attacks
+        env:
+          ARTIFACT: ${{ steps.linked-issue.outputs.result }}
+        run: |
+          mkdir -p addingLabelsAction/artifact
+          echo ${{ env.ARTIFACT }} > addingLabelsAction/artifact/artifact.txt
+            
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: add-linked-issue-labels-to-pr
+          path: addingLabelsAction/artifact/
