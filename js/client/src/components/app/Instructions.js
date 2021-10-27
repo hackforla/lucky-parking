@@ -9,7 +9,7 @@ function Instructions() {
 
   return show ? (
     <div className="instructions-container">
-      <h2>HOW IT WORKS:</h2>
+      <h3>HOW IT WORKS:</h3>
       <div className="instructions">
         <p>
           Navigate by searching any location within Los Angeles County in the
@@ -43,12 +43,12 @@ function Instructions() {
             </li>
           </ul>
         </p>
-        <button onClick={handleShow}>Close Instructions</button>
+        <button className="button-instructions" onClick={handleShow}>Close Instructions</button>
       </div>
     </div>
   ) : (
     <div className="button-container">
-      <button onClick={handleShow}>Click for Instructions</button>
+      <button className="button-instructions" onClick={handleShow}>Click for Instructions</button>
     </div>
   );
 }

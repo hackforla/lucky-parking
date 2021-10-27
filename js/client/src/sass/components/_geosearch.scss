@@ -66,7 +66,7 @@ $desktop: 900px;
 .geosearch__main {
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1em;
   color: grey;
   &--active {
     border: 1px solid lightgray;
@@ -156,10 +156,9 @@ $desktop: 900px;
 }
 
 input {
-  padding: 0.5rem;
-  margin-left: 1rem;
+  margin-left: 1em;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1em;
   color: grey;
 }
 

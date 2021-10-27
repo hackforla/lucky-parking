@@ -1,6 +1,8 @@
+@import "./variables/layout";
+@import "./variables/typography";
+
 @import "./components/geosearch";
 @import "./components/mainMap";
-
 @import "./components/header";
 @import "./components/instructions";
 @import "./components/map";
@@ -9,6 +11,13 @@
 
 $phone: 812px;
 $desktop: 900px;
+
+html,
+body {
+  font-size: #{map-get($font-size-base, mobile)};
+  font-family: #{map-get($font-family, body)};
+  line-height: #{map-get($line-height-base, mobile)};
+}
 
 .App {
   @media screen and (max-width: $phone) {
@@ -24,15 +33,15 @@ $desktop: 900px;
     transform: translate(-50%, -50%);
     margin: 30px 0;
   }
-  @media screen and (min-width: $desktop) {
+  @media screen and #{$bp-desktop-up} {
     height: 100%;
     width: 100%;
     position: relative;
     left: 50%;
     top: 45%;
     transform: translate(-50%, -50%);
-    margin: 30px 0;
-    font-family: "Roboto", sans-serif;
+    margin: 2em 0;
+    // font-family: "Roboto", sans-serif;
     font-weight: 300;
   }
   @media (prefers-color-scheme: dark) {
