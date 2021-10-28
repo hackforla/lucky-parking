@@ -156,7 +156,7 @@ const ConnectedMap = ({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
         bbox: [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]],
-        placeholder: "Search within the Los Angeles County",
+        placeholder: "Search location",
       });
       mapRef.current.appendChild(geocoder.onAdd(map));
     });

@@ -103,7 +103,7 @@ function ConnectedSideBar({
           {/* If abbreviation is not in the table, use 'Other' */}
           <div className="leftData">{tables.typeTable[data.body_style] || "Other"}</div>
         </div>
-        <div className="bottomLeft">
+        <div className="left">
           Color
           {/* If abbreviation is not in the table, use 'Other' */}
           <div className="leftData">{tables.colorTable[data.color] || "Other"}</div>

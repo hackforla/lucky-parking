@@ -40,9 +40,9 @@ body {
     left: 50%;
     top: 45%;
     transform: translate(-50%, -50%);
-    margin: 2em 0;
+    margin: 3em 0 0 0;
     // font-family: "Roboto", sans-serif;
-    font-weight: 300;
+    // font-weight: 300;
   }
   @media (prefers-color-scheme: dark) {
     @include dark-mode;
