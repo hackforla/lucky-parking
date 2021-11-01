@@ -51,15 +51,30 @@ $desktop: 900px;
     grid-row: 2/3;
     display: flex;
     margin: 0 20px;
+    // Disable searching on smaller screens until we fix responsiveness
+    display: none;
   }
   @media screen and (min-width: $desktop) {
-    grid-column: 2/4;
+    position: absolute;
+    z-index: 1;
     display: flex;
-    justify-content: center;
-    margin: 0 20px;
+
+    // To center geosearch bar on the screen
+    margin: 1em 10vw 0 10vw;
+    max-width: 80vw;
+    width: 100%;
+    // End centering
+
+    background-color: #FFFFFF;
+    opacity: 0.75;
+    border-radius: 50px;
   }
   @media (prefers-color-scheme: dark) {
     @include dark-mode;
+  }
+
+  &:hover {
+    opacity: 1;
   }
 }
 
@@ -67,7 +82,6 @@ $desktop: 900px;
   display: flex;
   align-items: center;
   font-size: 1em;
-  color: grey;
   &--active {
     border: 1px solid lightgray;
     animation: outwardPulse 2s infinite;
@@ -131,7 +145,7 @@ $desktop: 900px;
   &--visible {
     display: block;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1em;
     color: #47be22;
     transition: color 1s;
     &:hover {

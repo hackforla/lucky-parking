@@ -67,7 +67,6 @@ $desktop: 900px;
     transform: translateX(-30rem);
     position: absolute;
     padding: 0 2em 1em 2em;
-    margin-top: -1.5em;
   }
 
   border: 1px lightgray solid;
@@ -120,12 +119,130 @@ $desktop: 900px;
   }
 }
 
+/**
+ * Sidebar contents
+ */
 .content-wrapper {
+  height: 100%;
+
+  .header-text {
+    font-size: #{map-get($font-size-title3, desktop)};
+    font-family: Helvetica, sans-serif;
+    font-weight: #{map-get($font-weight, bold)};
+    text-align: center;
+    padding: 1em 0;
+  }
+  
+  .title {
+    text-decoration: underline;
+    font-size: #{map-get($font-size-title4, desktop)};
+    font-family: Helvetica, sans-serif;
+    color: #47be22;
+    margin-bottom: 0.2em;
+  }
+  
+  .desc {
+    font-family: DIN1451Alt;
+    font-size: 0.8em;
+    margin-left: 1em;
+    margin-bottom: 0.2em;
+  }
+  
+  .vehicle {
+    font-family: VT323;
+    text-decoration: underline;
+    font-size: #{map-get($font-size-title2, desktop)};
+    margin: 0.5em 1.5em 0.25em 1.5em;
+  }
+  
+  .left {
+    border: solid black 1px;
+    font-family: Helvetica, sans-serif;
+    font-size: 0.7em;
+    // Ensures double overlapping borders do not appear
+    margin-bottom: -1px;
+    line-height: 1;
+  }
+  
+  .leftData {
+    font-family: VT323;
+    margin-left: 0.5em;
+    font-size: 2em;
+  }
+  
+  .fine {
+    font-family: VT323;
+    text-decoration: underline;
+    font-size: #{map-get($font-size-title2, desktop)};
+    margin: 0.5em 0.75em 0.25em 0.75em;
+  }
+  
+  .dollar {
+    font-family: VT323;
+    font-size: 3em;
+    color: #008000;
+    margin: 0 0 0 1em;
+  }
+  
+  .dollarAmt {
+    font-family: DIN1451Alt;
+    font-size: 0.8em;
+    color: black;
+  }
+
   @media screen and (max-width: $phone) {
     overflow: scroll !important;
     max-height: 53%;
   }
   @media screen and (min-width: $desktop) {
+    display: flex;
+    flex-direction: column;
+  }
+  /**
+   * Special case: When the app is rendered on a laptop with shorter viewport height,
+   * make the sidebar font sizes and spacing smaller
+   */
+  @media screen and (max-height: 800px) and (min-width: $desktop) {
+    .header-text {
+      font-size: #{map-get($font-size-title4, desktop)};
+      font-weight: #{map-get($font-weight, bold)};
+      text-align: center;
+      padding: 0.5em 0;
+    }
+
+    .title {
+      font-size: #{map-get($font-size-title5, desktop)};
+    }
+    
+    .desc {
+      font-size: 0.8em;
+      margin-left: 1em;
+    }
+    
+    .vehicle {
+      font-size: #{map-get($font-size-title3, desktop)};
+      margin: 0.2em 1.5em 0em 1.5em;
+    }
+    
+    .left {
+      border: solid black 1px;
+      font-family: Helvetica, sans-serif;
+      font-size: 0.7em;
+      // Ensures double overlapping borders do not appear
+      margin-bottom: -1px;
+      line-height: 1;
+    }
+    
+    .leftData {
+      font-family: VT323;
+      margin-left: 0.5em;
+      font-size: 2em;
+    }
+    
+    .fine {
+      font-size: #{map-get($font-size-title3, desktop)};
+      margin: 0.2em 0.75em 0em 0.75em;
+    }
   }
 }
 
@@ -163,77 +280,6 @@ $desktop: 900px;
   display: none;
 }
 
-.header-text {
-  font-size: #{map-get($font-size-title3, desktop)};
-  font-family: Helvetica, sans-serif;
-  font-weight: bold;
-  text-align: center;
-  padding-top: 1em;
-  padding-bottom: 1em;
-}
-
-.title {
-  text-decoration: underline;
-  font-size: #{map-get($font-size-title4, desktop)};
-  font-family: Helvetica, sans-serif;
-  color: #47be22;
-  margin-bottom: 0.2em;
-}
-
-.desc {
-  font-family: DIN1451Alt;
-  font-size: 0.8em;
-  margin-left: 1em;
-  margin-bottom: 0.2em;
-}
-
-.vehicle {
-  font-family: VT323;
-  text-decoration: underline;
-  font-size: #{map-get($font-size-title2, desktop)};
-  margin: 0.5em 1.5em 0.25em 1.5em;
-}
-
-.left {
-  border: solid black 1px;
-  font-family: Helvetica, sans-serif;
-  font-size: 0.7em;
-  border-bottom: none;
-  line-height: 1;
-}
-
-.bottomLeft {
-  border: solid black 1px;
-  font-family: Helvetica, sans-serif;
-  font-size: 0.7em;
-}
-
-.leftData {
-  font-family: VT323;
-  margin-left: 0.5em;
-  font-size: 2em;
-  // line-height: 1;
-}
-
-.fine {
-  font-family: VT323;
-  text-decoration: underline;
-  font-size: #{map-get($font-size-title2, desktop)};
-  margin: 0.5em 0.75em 0.25em 0.75em;
-}
-
-.dollar {
-  font-family: VT323;
-  font-size: 4em;
-  color: #008000;
-  margin: 0 0 0 1em;
-}
-
-.dollarAmt {
-  font-family: DIN1451Alt;
-  font-size: 0.8em;
-  color: black;
-}
 
 .sidebar__closeButton--close {
   height: 15px;
