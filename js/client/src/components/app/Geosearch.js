@@ -7,10 +7,11 @@ import {
   getStartDate,
   getEndDate,
   activateDarkMode,
+  toggleSearchDate
 } from "../../redux/actions/index";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-
+import Button from "./Button"
 import "react-datepicker/dist/react-datepicker.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_BOX_TOKEN;
@@ -22,6 +23,7 @@ const mapStateToProps = (state) => {
     endDate: state.endDate,
     activateDateRange: state.activateDateRange,
     darkMode: state.darkMode,
+    isSearchDateClicked: state.isSearchDateClicked,
   };
 };
 
@@ -34,6 +36,7 @@ function mapDispatchToProps(dispatch) {
     getStartDate: (startDate) => dispatch(getStartDate(startDate)),
     getEndDate: (endDate) => dispatch(getEndDate(endDate)),
     activateDarkMode: (darkMode) => dispatch(activateDarkMode(darkMode)),
+    toggleSearchDate: (isSearchDateClicked) => dispatch(toggleSearchDate(isSearchDateClicked)),
   };
 }
 
@@ -47,6 +50,8 @@ const ConnectGeosearch = ({
   activateDateRange,
   activateDarkMode,
   darkMode,
+  isSearchDateClicked,
+  toggleSearchDate,
 }) => {
   const [dateRangeActive, setDateRangeActive] = useState(false);
   const [disableHover, setDisableHover] = useState(false);
@@ -62,10 +67,6 @@ const ConnectGeosearch = ({
       output.push(i);
     }
     return output;
-  }
-
-  function getYear(date) {
-    return date.getFullYear();
   }
 
   const years = range(2010, getYear(new Date()), 1);
@@ -88,17 +89,30 @@ const ConnectGeosearch = ({
     return months[date.getMonth()];
   }
 
+  function getYear(date) {
+    return date.getFullYear();
+  }
+
   const handleClearDateRange = () => {
     getStartDate(null);
-    getEndDate(null);
+    // Ensure that the end date does not exceed the max date of the current citation data
+    getEndDate(maxDate);
     setDateRangeActive(false);
-    getRangeActive(dateRangeActive);
   };
 
-  useEffect(() => {
+  const handleSearchDateRange = (e) => {
+    /*
+      This redux reducer toggles the button state for searching with date range picker,
+      which allows a user to search again without "clearing" the date selection with the reset button
+    */
+    toggleSearchDate(!isSearchDateClicked);
     setDateRangeActive(true);
+  };
+
+  // Whenever the date range gets activated or reset, the citation data on the map updates
+  useEffect(() => {
     getRangeActive(dateRangeActive);
-  }, [startDate, endDate]);
+  }, [dateRangeActive]);
 
   getMap(searchContainer);
 
@@ -115,7 +129,7 @@ const ConnectGeosearch = ({
       >
         <div className="testGeoSearch" ref={searchContainer} />
         <div className="geoSearchBarComponents">
-          <label>Citation Date Range From :</label>
+          <label>From:</label>
 
           <DatePicker
             renderCustomHeader={({ date, changeYear, changeMonth }) => (
@@ -129,7 +143,7 @@ const ConnectGeosearch = ({
                 }}
               >
                 <select
-                  value={months[getMonth(date)]}
+                  value={getMonth(date)}
                   onChange={({ target: { value } }) =>
                     changeMonth(months.indexOf(value))
                   }
@@ -143,11 +157,13 @@ const ConnectGeosearch = ({
                     textAlign: "center",
                   }}
                 >
-                  {months.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
+                  {months.map((option) => {
+                    return (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    )
+                  })}
                 </select>
 
                 <select
@@ -190,7 +206,7 @@ const ConnectGeosearch = ({
           </DatePicker>
         </div>
         <div className="geoSearchBarComponents">
-          <label>To :</label>
+          <label>To:</label>
           <DatePicker
             renderCustomHeader={({ date, changeYear, changeMonth }) => (
               <div
@@ -203,7 +219,7 @@ const ConnectGeosearch = ({
                 }}
               >
                 <select
-                  value={months[getMonth(date)]}
+                  value={getMonth(date)}
                   onChange={({ target: { value } }) =>
                     changeMonth(months.indexOf(value))
                   }
@@ -217,11 +233,13 @@ const ConnectGeosearch = ({
                     textAlign: "center",
                   }}
                 >
-                  {months.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
+                  {months.map((option) => {
+                    return (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    )
+                  })}
                 </select>
                 <select
                   value={getYear(date)}
@@ -249,9 +267,7 @@ const ConnectGeosearch = ({
             maxDate={maxDate}
             dateFormat="MM/dd/yyyy"
             placeholderText="MM/DD/YYYY"
-            onChange={(date) =>
-              dateRangeActive === false ? getEndDate(maxDate) : getEndDate(date)
-            }
+            onChange={(date) => getEndDate(date)}
           >
             <div
               style={{
@@ -264,6 +280,14 @@ const ConnectGeosearch = ({
             </div>
           </DatePicker>
         </div>
+        
+        {/* Search button */}
+        <Button 
+          name={`Go!`}
+          className={`btn btn-default btn-dark btn-sm btn--datepicker`}
+          onClick={handleSearchDateRange}
+        />
+
         <div
           className={`geoSearchBarDateToggle${
             activateDateRange ? "--visible" : "--invis"
@@ -299,4 +323,6 @@ Geosearch.propTypes = {
   activateDateRange: PropTypes.bool,
   activateDarkMode: PropTypes.func,
   darkMode: PropTypes.bool,
+  isSearchDateClicked: PropTypes.bool,
+  toggleSearchDate: PropTypes.func,
 };

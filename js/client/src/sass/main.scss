@@ -1,5 +1,6 @@
 @import "./variables/layout";
 @import "./variables/typography";
+@import "./variables/colors";
 
 @import "./components/geosearch";
 @import "./components/mainMap";
@@ -8,6 +9,7 @@
 @import "./components/map";
 @import "./components/sidebar";
 @import "./components/graph";
+@import "./components/button";
 
 $phone: 812px;
 $desktop: 900px;

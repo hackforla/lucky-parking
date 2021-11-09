@@ -12,6 +12,7 @@ import {
   handleDrawing,
   getPolygonData,
   getRangeActive,
+  toggleSearchDate,
 } from "../../../redux/actions/index";
 import { heatMap, places, zipcodes, zipCodeLines } from "./MapLayers";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
@@ -34,6 +35,7 @@ function mapDispatchToProps(dispatch) {
     getPolygonData: (polygonData) => dispatch(getPolygonData(polygonData)),
     getRangeActive: (activateDateRange) =>
       dispatch(getRangeActive(activateDateRange)),
+    toggleSearchDate: (isSearchDateClicked) => dispatch(toggleSearchDate(isSearchDateClicked)),
   };
 }
 
@@ -46,6 +48,7 @@ const mapStateToProps = (state) => {
     startDate: state.startDate,
     endDate: state.endDate,
     drawingPresent: state.drawingPresent,
+    isSearchDateClicked: state.isSearchDateClicked,
   };
 };
 
@@ -59,6 +62,7 @@ const ConnectedMap = ({
   drawingPresent,
   handleDrawing,
   getPolygonData,
+  isSearchDateClicked,
 }) => {
   const [coordinates, setCoordinates] = useState({ lng: [], lat: [] });
   const [zoom, setZoom] = useState(12.5);
@@ -481,9 +485,8 @@ const ConnectedMap = ({
     coordinates,
     zoom,
     drawingPresent,
-    startDate,
-    endDate,
     activateDateRange,
+    isSearchDateClicked,
   ]);
 
   function fetchData() {
@@ -552,4 +555,6 @@ Map.propTypes = {
   drawingPresent: PropTypes.bool,
   handleDrawing: PropTypes.func,
   getPolygonData: PropTypes.func,
+  isSearchDateClicked: PropTypes.bool,
+  toggleSearchDate: PropTypes.func,
 };

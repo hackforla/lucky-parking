@@ -1,0 +1,214 @@
+/*================================================================
+
+  Buttons
+
+  The following class names style all buttons on the site.
+  To create a button: add the base button class, a color
+  class, a size class, and (when needed) a page-specific class.
+
+
+  Index:
+
+  - Base class
+  - Color classes
+  - Size classes
+  - Specific classes
+
+=================================================================*/
+
+
+/*---------------------------
+
+  Button Base class
+
+  * Use on all buttons
+
+---------------------------*/
+
+.btn {
+  border: 0;
+  box-shadow: 0 0 8px 0 rgba($color-black, 0.2);
+  display: inline-block;
+  font-weight: map-get($font-weight, bold);
+  text-decoration: none;
+  transition: all 100ms ease-in;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-default {
+  align-items: center;
+  display: inline-flex; 
+  justify-content: center;
+  margin: 5px 0;
+}
+
+/*---------------------------
+
+  Button Colors
+
+---------------------------*/
+
+
+/*   Primary Button  ---  Pink   */
+
+.btn-primary {
+  background: $color-red;
+  color: $color-white;
+
+  &:link,
+  &:visited {
+    color: $color-white;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: darken($color-red, 10%);
+    color: $color-white;
+    text-decoration: none;
+  }
+}
+
+
+/*   Primary on Dark Button  ---  Pink & white hover state   */
+
+.btn-primary-on-dark {
+  background: $color-red;
+  color: $color-white;
+
+  &:link,
+  &:visited {
+    color: $color-white;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: $color-white;
+    color: $color-black;
+  }
+}
+
+
+/*   Dark Button  ---  Black   */
+
+.btn-dark {
+  background-color: $color-black;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-forestgreen;
+    color: $color-white;
+    text-decoration: none;
+  }
+
+  &:active {
+    background: darken($color-forestgreen, 20%);
+  }
+}
+
+
+/*---------------------------
+
+  Button Sizes
+
+---------------------------*/
+
+
+/*   X-Large Button   */
+
+.btn-xl {
+  height: 72px;
+  padding: 0 60px;
+  border-radius: 100px;
+  font-size: 1.5rem;
+
+  @media #{$bp-below-tablet} {
+    height: 60px;
+    padding: 0 50px;
+    border-radius: 60px;
+    font-size: 1.25rem;
+  }
+}
+
+/* X-Large Button --- More Padding */
+
+.btn-xl-long {
+height: 72px;
+padding: 0 80px;
+border-radius: 100px;
+font-size: 1.5rem;
+
+@media #{$bp-below-tablet} {
+height: 60px;
+padding: 0 70px;
+border-radius: 60px;
+font-size: 1.25rem; }}
+
+/*   Large Button   */
+
+.btn-lg {
+  height: 60px;
+  padding: 0 50px;
+  border-radius: 60px;
+  font-size: 1.25rem;
+}
+
+
+/*   Medium Button   */
+
+.btn-md {
+  height: 40px;
+  padding: 0 32px;
+  border-radius: 20px;
+  font-size: 1rem;
+}
+
+
+/*   Medium Narrow Button --- less padding   */
+
+.btn-md-narrow {
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 40px; /* Centers the text */
+}
+
+
+/*   Small Button   */
+
+.btn-sm {
+  height: 26px;
+  padding: 0 16px;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 40px; /* Centers the text */
+}
+
+/*----------------------------------------------------
+  Component-specific Button Classes
+
+  * Use when special styling is needed for a button
+-----------------------------------------------------*/
+
+/*
+
+- Component-specific class name formatting should be:
+
+  btn--page-name
+  EXAMPLE: btn on a specific page (usually placement)--wins
+
+- If there is more than one button in the page, formatting for each button should be:
+
+  btn--page-name-button-function
+  EXAMPLE: btn--home-getting-started
+
+- Page-specific class names should live in that specific page's .scss file.
+
+*/
+
+.btn--datepicker {
+
+}

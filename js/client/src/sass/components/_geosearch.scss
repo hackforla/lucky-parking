@@ -80,6 +80,7 @@ $desktop: 900px;
 
 .geosearch__main {
   display: flex;
+  justify-content: space-around;
   align-items: center;
   font-size: 1em;
   &--active {
@@ -138,6 +139,17 @@ $desktop: 900px;
   }
   @media screen and (min-width: $desktop) {
     padding: 0 24px 0 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .react-datepicker-wrapper{      
+      .react-datepicker__input-container {
+        input {
+          width: 100px;
+        }
+      }
+    }
   }
 }
 
@@ -150,6 +162,7 @@ $desktop: 900px;
     transition: color 1s;
     &:hover {
       color: #dd0000;
+      cursor: pointer;
     }
   }
   &--invis {
@@ -194,16 +207,13 @@ input {
     padding-left: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
+    border-radius: 24px;
   }
   @media screen and (min-width: $desktop) {
     width: 40%;
-    padding-left: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
+    border-radius: 24px;
   }
 }
 
