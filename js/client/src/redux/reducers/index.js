@@ -8,6 +8,7 @@ import {
   DRAWING_PRESENT,
   POLYGON_DATA,
   ACTIVE_DARK,
+  IS_SEARCH_DATE_CLICKED,
 } from "../constants/action-types";
 
 const INITIAL_STATE = {
@@ -15,11 +16,13 @@ const INITIAL_STATE = {
   mapRef: null,
   isSidebarOpen: false,
   startDate: null,
-  endDate: null,
+  // Ensure that the end date does not exceed the max date of the current citation data
+  endDate: new Date("04/01/2021"),
   activateDateRange: false,
   drawingPresent: false,
   polygonData: null,
   darkMode: window.matchMedia("(prefers-color-scheme: dark)").matches,
+  isSearchDateClicked: false,
 };
 
 function rootReducer(state = INITIAL_STATE, action) {
@@ -69,6 +72,11 @@ function rootReducer(state = INITIAL_STATE, action) {
         ...state,
         darkMode: action.payload,
       };
+    case IS_SEARCH_DATE_CLICKED:
+        return {
+          ...state,
+          isSearchDateClicked: action.payload,
+        }
     default:
       return state;
   }
