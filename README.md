@@ -73,7 +73,7 @@ make data
 # If the sample is not cleaned, it ends up in data/interim
 
 # Example of 20% sampling of dataset and is cleaned
-make sample frac=0.2 clean=True
+make sample frac=0.2 cleaned=True
 ```
 
 
