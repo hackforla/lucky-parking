@@ -1,24 +1,9 @@
-require("dotenv").config({ path: __dirname + '/.env' });
+const app = require('./app');
+const http = require('http');
+const config = require('./config/config');
+const logger = require('./utils/logger');
 
-
-var compression = require('compression')
-const express = require("express");
-const cors = require("cors");
-const app = express();
-const port = process.env.PORT || 3007;
-const router = require("./router.js");
-
-app.use(cors({
-  origin: '*'
-}));
-app.use(compression());
-app.use(express.json());
-
-
-app.get('/', (req, res) => {
-  res.json('OK at ' + new Date());
-})
-
-app.use("/api", router);
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const server = http.createServer(app);
+server.listen(config.PORT, () => {
+  logger.info(`Listening on port ${config.PORT}`);
+});
