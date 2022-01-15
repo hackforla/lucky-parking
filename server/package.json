@@ -1,0 +1,29 @@
+{
+  "name": "lucky-parking-web-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server:dev": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hackforla/lucky-parking.git"
+  },
+  "author": "Team Lucky Parking",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hackforla/lucky-parking/issues"
+  },
+  "homepage": "https://github.com/hackforla/lucky-parking#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^12.0.3",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "nodemon": "^2.0.15",
+    "pg": "^8.5.1"
+  }
+}
