@@ -90,7 +90,7 @@ const getPointData = async (req, res) => {
       `SELECT * FROM test1 WHERE INDEX = '${index}';`
     );
     res.status(200).send(data.rows);
-    logger.info(data.rows);
+    // logger.info(data.rows);
   }
   catch(err) {
     res.status(404).send(err);
