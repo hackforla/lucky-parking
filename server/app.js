@@ -4,7 +4,9 @@ const app = express();
 const cors = require('cors');
 const compression = require('compression');
 const router = require('./routes/router');
-const middleware = require('./middleware/middleware');
+
+const httpRequestsLogger = require('./middleware/httpRequests.middleware');
+const errorHandler = require('./middleware/errors.middleware');
 const logger = require('./utils/logger');
 
 app.use(cors({
@@ -13,11 +15,12 @@ app.use(cors({
 app.use(express.static('build'));
 app.use(compression());
 app.use(express.json());
-app.use(middleware.requestLogger);
+
+app.use(httpRequestsLogger.requestInfo);
 
 app.use('/api', router);
 
-app.use(middleware.unknownEndpoint);
-app.use(middleware.errorHandler);
+app.use(errorHandler.unknownEndpoint);
+app.use(errorHandler.errorHandler);
 
 module.exports = app;
