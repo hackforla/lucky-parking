@@ -169,10 +169,11 @@ const ConnectedMap = ({
       mapRef.current.appendChild(geocoder.onAdd(map));
     });
 
+    // for the time being, simplify the draw tool
     var draw = new MapboxDraw({
-      modes: Object.assign(MapboxDraw.modes, {
-        draw_polygon: FreehandMode,
-      }),
+      // modes: Object.assign(MapboxDraw.modes, {
+      //   draw_polygon: FreehandMode,
+      // }),
       displayControlsDefault: false,
       controls: {
         polygon: true,
