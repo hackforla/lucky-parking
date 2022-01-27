@@ -1,4 +1,4 @@
-name: Continuous_Deployment_Client
+name: Continuous_Deployment_Prod_Client
 
 on:
   push:
