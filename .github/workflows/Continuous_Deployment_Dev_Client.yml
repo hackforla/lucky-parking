@@ -1,16 +1,16 @@
-name: Continuous_Deployment_Client
+name: Continuous_Deployment_Dev_Client
 
 on:
   push:
     branches:
-      - master
+      - dev
     paths:
-      - 'js/client/**'
+      - 'client/**'
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: js/client
+    working-directory: client
 
 jobs:
   build:
@@ -23,18 +23,18 @@ jobs:
     - name: Setup environment
       run: |
         echo REACT_APP_MAP_BOX_TOKEN=${{ secrets.REACT_APP_MAP_BOX_TOKEN }} > .env
-        echo REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} >> .env
+        echo REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL_DEV }} >> .env
     - name: Build project
       run: npm run build
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
         aws-region: us-east-1
     - name: Sync Build To S3
       run: |
-        aws s3 sync build s3://${{ secrets.S3_BUCKET_PROD }} --follow-symlinks --delete
+        aws s3 sync build s3://${{ secrets.S3_BUCKET_DEV }} --follow-symlinks --delete
     - name: Invalidate Cloudfront Cache
       run: |
-        aws cloudfront create-invalidation --distribution-id ${{ secrets.CDN_DISTRIBUTION_ID_PROD }} --paths "/*"
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CDN_DISTRIBUTION_ID_DEV }} --paths "/*"
