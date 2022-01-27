@@ -1,11 +1,11 @@
 name: Continuous_Deployment_Dev_Client
 
 on:
-  # push:
-  #   branches:
-  #     - dev
-  #   paths:
-  #     - 'client/**'
+  push:
+    branches:
+      - dev
+    paths:
+      - 'client/**'
   workflow_dispatch:
 
 defaults:
