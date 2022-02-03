@@ -6,7 +6,7 @@ const compression = require('compression');
 const router = require('./routes/router');
 
 const httpRequestsLogger = require('./middleware/httpRequests.middleware');
-const errorHandler = require('./middleware/errors.middleware');
+const errors = require('./middleware/errors.middleware');
 const logger = require('./utils/logger');
 
 app.use(cors({
@@ -20,7 +20,7 @@ app.use(httpRequestsLogger.requestInfo);
 
 app.use('/api', router);
 
-app.use(errorHandler.unknownEndpoint);
-app.use(errorHandler.errorHandler);
+app.use(errors.unknownEndpoint);
+app.use(errors.errorHandler);
 
 module.exports = app;
