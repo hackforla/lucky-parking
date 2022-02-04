@@ -20,6 +20,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.AWS_SSH_HOST_DEV }}
+          username: ${{ secrets.AWS_SSH_USER_DEV }}
           key: ${{ secrets.AWS_SSH_PEM_KEY_DEV }}
           script: |
             set -e
