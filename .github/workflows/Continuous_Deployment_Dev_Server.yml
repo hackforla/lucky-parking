@@ -28,7 +28,6 @@ jobs:
             sudo git pull
             sudo pkill -f 'nodemon'
             sudo pkill -f 'node'
-            sudo kill -9 `sudo lsof -t -i:5000`
             sudo systemctl restart postgresql
             sudo npm install
             sudo npm run server:dev &
