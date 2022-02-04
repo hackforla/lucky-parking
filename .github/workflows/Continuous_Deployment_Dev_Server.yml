@@ -24,10 +24,4 @@ jobs:
           key: ${{ secrets.AWS_SSH_PEM_KEY_DEV }}
           script: |
             set -e
-            cd lucky-parking/server
-            sudo git pull
-            sudo pkill -f 'nodemon'
-            sudo pkill -f 'node'
-            sudo systemctl restart postgresql
-            sudo npm install
-            sudo npm run server:dev &
+            ./dev_deploy.sh
