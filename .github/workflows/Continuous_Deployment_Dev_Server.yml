@@ -21,6 +21,7 @@ jobs:
         with:
           host: ${{ secrets.AWS_SSH_HOST_DEV }}
           key: ${{ secrets.AWS_SSH_PEM_KEY_DEV }}
+          port: $ {{ secrets.AWS_SSH_DEV_PORT }}
           script: |
             set -e
             cd lucky-parking/server
