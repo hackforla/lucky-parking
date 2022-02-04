@@ -1,0 +1,33 @@
+name: Continuous_Deployment_Dev_Server
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'server/**'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: server
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: run deploy script on AWS prod
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_SSH_HOST_DEV }}
+          key: ${{ secrets.AWS_SSH_PEM_KEY_DEV }}
+          script: |
+            set -e
+            cd lucky-parking/server
+            sudo git pull
+            sudo pkill -f 'nodemon'
+            sudo pkill -f 'node'
+            sudo kill -9 `sudo lsof -t -i:5000`
+            sudo systemctl restart postgresql
+            npm install
+            npm run server:dev &
