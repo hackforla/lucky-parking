@@ -24,4 +24,5 @@ jobs:
           key: ${{ secrets.AWS_SSH_PEM_KEY_DEV }}
           script: |
             set -e
-            ./dev_deploy.sh
+            cd ~/lucky-parking/server
+            ./deploy.sh
