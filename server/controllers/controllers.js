@@ -71,123 +71,107 @@ const getAll = async (req, res) => {
 }
 
 const getZipLayer = async (req, res) => {
-  try {
-    const data = await db.query(
-      `SELECT zip, ST_AsGeoJSON(the_geom) FROM zipcodes;`
-    );
+  const data = await db.query(
+    `SELECT zip, ST_AsGeoJSON(the_geom) FROM zipcodes;`
+  );
+
+  if (data) {
     res.status(200).send(generateZipData(data.rows));
-  }
-  catch(err) {
-    res.status(404).send(err);
-    logger.error(err);
   }
 }
 
 const getPointData = async (req, res) => {
-  try {
-    const index = req.query.index;
-    const data = await db.query(
-      `SELECT * FROM test1 WHERE INDEX = '${index}';`
-    );
+  const index = req.query.index;
+  const data = await db.query(
+    `SELECT * FROM test1 WHERE INDEX = '${index}';`
+  );
+
+  if (data) {
     res.status(200).send(data.rows);
     // logger.info(data.rows);
-  }
-  catch(err) {
-    res.status(404).send(err);
-    logger.error(err);
   }
 }
 
 const getTimestamps = async (req, res) => {
-  try {
-    const longitude = req.query.longitude;
-    const latitude = req.query.latitude;
-    const startDate = req.query.statDate;
-    const endDate = req.query.endDate;
-    const data = await db.query(
-      `SELECT index, ST_AsGeoJSON(geometry) FROM test1 WHERE ST_X(geometry)
-      BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry)
-      BETWEEN ${longitude[1]} AND ${latitude[1]} AND datetime
-      BETWEEN '${startDate}' AND '${endDate}' LIMIT 15000;`
-    );
+  const longitude = req.query.longitude;
+  const latitude = req.query.latitude;
+  const startDate = req.query.statDate;
+  const endDate = req.query.endDate;
+  const data = await db.query(
+    `SELECT index, ST_AsGeoJSON(geometry) FROM test1 WHERE ST_X(geometry)
+    BETWEEN ${longitude[0]} AND ${latitude[0]} AND ST_Y(geometry)
+    BETWEEN ${longitude[1]} AND ${latitude[1]} AND datetime
+    BETWEEN '${startDate}' AND '${endDate}' LIMIT 15000;`
+  );
+
+  if (data) {
     res.status(200).send(generateGeoData(data.rows));
   }
-  catch(err) {
-    res.status(404).send(err);
-  }
+
 }
 
 const drawSelect = async (req, res) => {
-  try {
-    const polygon = req.query.polygon;
-    const data = await db.query(
-      `SELECT ST_AsGeoJSON(geometry) FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
-        'type': 'Polygon',
-        'coordinates': [${polygon}],
-        'crs': {'type': 'name', 'properties': {'name': 'EPSG:4326'}}										                            
-      }'), test1.geometry) LIMIT 30000;`
-    );
+  const polygon = req.query.polygon;
+  const data = await db.query(
+    `SELECT ST_AsGeoJSON(geometry) FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
+      'type': 'Polygon',
+      'coordinates': [${polygon}],
+      'crs': {'type': 'name', 'properties': {'name': 'EPSG:4326'}}										                            
+    }'), test1.geometry) LIMIT 30000;`
+  );
+
+  if (data) {
     res.status(200).send(generateGeoData(data.rows));
-  }
-  catch(err) {
-    res.status(404).send(err);
   }
 }
 
 const zipSelect = async (req, res) => {
-  try {
-    const zip = parseInt(req.query.zip);
-    const data = await db.query(
-      `SELECT ST_AsGeoJSON(geometry)
-      FROM test1 AS citations
-      JOIN zip_4326
-      ON ST_WITHIN(citations.geometry, (SELECT ST_SetSRID(the_geom, 4326)
-      FROM zipcodes
-      WHERE zip=${zip}));`
-    );
-    res.status(200).send(generateGeoData(data.rows));
-  }
-  catch(err) {
-    res.status(404).send(err);
-    logger.error(err);
+  const zip = parseInt(req.query.zip);
+  const data = await db.query(
+    `SELECT ST_AsGeoJSON(geometry)
+    FROM test1 AS citations
+    JOIN zip_4326
+    ON ST_WITHIN(citations.geometry, (SELECT ST_SetSRID(the_geom, 4326)
+    FROM zipcodes
+    WHERE zip=${zip}));`
+  );
+
+  if (data) {
+    res.status(200).send(generateGeoData(data.rows));  
   }
 }
 
 const graph = async (req, res) => {
-  try{
-    const polygon = req.query.polygon;
-    const filterBy = req.query.filterBy;
-    const data = await db.query(
-      `SELECT ${filterBy} AS "name",
-      (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y"
-      FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
-        "type":"Polygon",
-        "coordinates": [${polygon}],
-        "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
-      }'), test1.geometry) GROUP BY ${filterBy};`
-    );
+  const polygon = req.query.polygon;
+  const filterBy = req.query.filterBy;
+  const data = await db.query(
+    `SELECT ${filterBy} AS "name",
+    (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y"
+    FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
+      "type":"Polygon",
+      "coordinates": [${polygon}],
+      "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
+    }'), test1.geometry) GROUP BY ${filterBy};`
+  );
+
+  if (data) {
     res.status(200).send(data.rows);
-  }
-  catch(err) {
-    res.status(404).send(err);
   }
 }
 
 const zipGraph = async (req, res) => {
-  try {
-    const zip = req.query.zip;
-    const filterBy = req.query.filterBy;
-    const data = await db.query(
-      `SELECT ${filterBy} AS "name",
-      (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y"
-      FROM test1 WHERE ST_Contains((SELECT ST_SetSRID(the_geom, 4326)
-      FROM zipcodes
-      WHERE zip=${zip}), test1.geometry) GROUP BY ${filterBy};`
-    );
+  const zip = req.query.zip;
+  const filterBy = req.query.filterBy;
+  const data = await db.query(
+    `SELECT ${filterBy} AS "name",
+    (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y"
+    FROM test1 WHERE ST_Contains((SELECT ST_SetSRID(the_geom, 4326)
+    FROM zipcodes
+    WHERE zip=${zip}), test1.geometry) GROUP BY ${filterBy};`
+  );
+
+  if (data) {
     res.status(200).send(data.rows);
-  }
-  catch(err) {
-    res.status(404).send(err);
   }
 }
 
