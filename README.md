@@ -15,6 +15,8 @@
 
 - Come to our meetings on Monday nights at 6pm PST. The video conference link is pinned to the top on the lucky-parking slack channel.
 
+- Review our [CONTRIBUTING.MD](https://github.com/hackforla/lucky-parking/blob/master/CONTRIBUTING.md)
+
 - If you decide to join, ask for the Google Sheet to add yourself to our roster with all your contact info.
 
 - Ask the project lead for Git access. Be sure to enable 2-factor authentication!
