@@ -130,8 +130,7 @@ const zipSelect = async (req, res) => {
   const data = await db.query(
     `SELECT ST_AsGeoJSON(geometry)
     FROM test1 AS citations
-    JOIN zip_4326
-    ON ST_WITHIN(citations.geometry, (SELECT ST_SetSRID(the_geom, 4326)
+    WHERE ST_WITHIN(citations.geometry, (SELECT ST_SetSRID(the_geom, 4326)
     FROM zipcodes
     WHERE zip=${zip}));`
   );
