@@ -114,9 +114,9 @@ const drawSelect = async (req, res) => {
   const polygon = req.query.polygon;
   const data = await db.query(
     `SELECT ST_AsGeoJSON(geometry) FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
-      'type': 'Polygon',
-      'coordinates': [${polygon}],
-      'crs': {'type': 'name', 'properties': {'name': 'EPSG:4326'}}										                            
+      "type": "Polygon",
+      "coordinates": [${polygon[0]}],
+      "crs": {"type": "name", "properties": {"name": "EPSG:4326"}}										                            
     }'), test1.geometry) LIMIT 30000;`
   );
 
