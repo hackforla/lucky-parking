@@ -229,7 +229,6 @@ const ConnectedMap = ({
     */
     const drawnData = async () => {
       var drawData = draw.getAll();
-
       try {
         const response = await axios.get(`${API_URL}/api/citation/draw`, {
           params: {
@@ -246,7 +245,7 @@ const ConnectedMap = ({
         );
         drawPolygon[0].disabled = true;
         drawPolygon[0].classList.add("disabled-button");
-
+        
         cameraMovement(drawData.features[0].geometry.coordinates);
       } catch (err) {
         console.log(err);
@@ -364,9 +363,10 @@ const ConnectedMap = ({
       const zip = e.features[0].properties.zipcode;
       const zipSource = map.getSource("zipcodes");
       const zipGeometry = {};
+
       // From all the possible zipcodes, get the specific zip only
       for (let element of zipSource["_data"].features){
-        if (element.id === zip){
+        if (element.properties.zipcode === zip){
           zipGeometry.data = element;
           break;
         }
