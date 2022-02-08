@@ -2,7 +2,7 @@
 
 - A Hack for LA project helping the city planners and the community make informed decisions about parking policies in the City of Los Angeles.
 
-- [http://d2pt4oopulljok.cloudfront.net/](Dev environment website)
+- [Dev environment website](http://d2pt4oopulljok.cloudfront.net/)
 
 ![logo](assets/Lucky_parking7.png)
 ## Project Context
