@@ -1,6 +1,6 @@
 #! /bin/bash
 cd ~/lucky-parking/server
-sudo git pull
+git pull
 pm2 stop "npm run server:dev"
 # kill the node process
 sudo pkill -f 'nodemon'
