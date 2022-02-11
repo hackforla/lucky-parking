@@ -1,5 +1,5 @@
 #! /bin/bash
-cd ~/lucky-parking/server
+cd ~/lucky-parking/js
 sudo git pull
 pm2 stop "npm run server:dev"
 # kill the node process
