@@ -1,11 +1,11 @@
-name: Continuous_Deployment_Dev_Server
+name: Continuous_Deployment_Prod_Server
 
 on:
   push:
     branches:
-      - dev
+      - master
     paths:
-      - 'server/**'
+      - 'js/server/**'
   workflow_dispatch:
 
 defaults:
@@ -19,10 +19,10 @@ jobs:
       - name: run deploy script on AWS prod
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.AWS_SSH_HOST_DEV }}
-          username: ${{ secrets.AWS_SSH_USER_DEV }}
-          key: ${{ secrets.AWS_SSH_PEM_KEY_DEV }}
+          host: ${{ secrets.AWS_SSH_HOST_PROD }}
+          username: ${{ secrets.AWS_SSH_USER_PROD }}
+          key: ${{ secrets.AWS_SSH_PEM_KEY_PROD }}
           script: |
             set -e
-            cd ~/lucky-parking/server
+            cd ~/lucky-parking/js
             ./deploy.sh
