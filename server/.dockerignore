@@ -2,6 +2,3 @@
 .cache
 .gitignore
 node_modules
-server/.env
-server/.gitignore
-server/node_modules
