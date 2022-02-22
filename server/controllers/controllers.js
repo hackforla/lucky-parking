@@ -89,7 +89,7 @@ const getPointData = async (req, res) => {
   );
 
   const data = await db.query(query);
-
+  
   if (data) {
     res.status(200).send(data.rows);
   }
