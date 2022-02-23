@@ -1,4 +1,4 @@
-# AWS Prod instance and AWS Dev instance
+# Base docker-compose file
 version: '3.8'
 
 services:  
@@ -10,12 +10,9 @@ services:
     environment:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: pgdb
-      DB_PORT: 5432
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       DB_DATABASE: ${DB_DATABASE}
       PORT: ${PORT}
-    ports:
-      - target: ${PORT}
-        published: ${PORT}
     volumes:
       - ./:/usr/src/app
