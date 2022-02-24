@@ -2,4 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 cd server
-npx lint-staged
+npx lint-staged --allow-empty
