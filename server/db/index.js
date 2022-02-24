@@ -16,14 +16,13 @@ const poolParameters = {
 
 const pool = new Pool(poolParameters);
 
-;(async () => {
+(async () => {
   const client = await pool.connect();
-  try{
+  try {
     logger.info('Database connected on port', config.DB_PORT);
-  }
-  finally {
+  } finally {
     client.release();
   }
-})().catch(err => logger.error(err.stack));
+})().catch((err) => logger.error(err.stack));
 
 module.exports = pool;
