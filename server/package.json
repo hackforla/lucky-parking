@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "server:dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix './**/*.{js}'",
+    "prettier": "prettier --write .",
+    "prepare": "cd .. && husky install server/.husky"
+  },
+  "lint-staged": {
+    "*.{js}": "npm run lint",
+    "*.{js,json}": "npm run prettier"
   },
   "repository": {
     "type": "git",
@@ -26,7 +33,16 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
     "pg": "^8.5.1",
-    "pg-format": "^1.0.4",
-    "pm2": "^5.1.2"
+    "pg-format": "^1.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "prettier": "^2.5.1"
   }
 }
