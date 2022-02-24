@@ -1,12 +1,10 @@
-const logger = require('../utils/logger');
-
 // middleware for unknown endpoints
 const unknownEndpoint = (req, res) => {
   res.status(404).json({
     error: 'Unknown endpoint',
     success: false,
   });
-}
+};
 
 // middleware for handling errors
 const errorHandler = (err, req, res, next) => {
@@ -15,11 +13,11 @@ const errorHandler = (err, req, res, next) => {
     error: err.message,
     success: false,
   });
-  
+
   next(err);
-}
+};
 
 module.exports = {
   unknownEndpoint,
-  errorHandler
-}
+  errorHandler,
+};

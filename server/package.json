@@ -6,13 +6,13 @@
   "scripts": {
     "server:dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix './**/*.{js}'",
+    "lint": "eslint --fix '**/*.js'",
     "prettier": "prettier --write .",
     "prepare": "cd .. && husky install server/.husky"
   },
   "lint-staged": {
-    "*.{js}": "npm run lint",
-    "*.{js,json}": "npm run prettier"
+    "*.js": "npm run lint",
+    "*.js,json": "npm run prettier"
   },
   "repository": {
     "type": "git",
