@@ -163,7 +163,10 @@ const ConnectedMap = ({
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-        bbox: [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]],
+        // for some reason, the bounds this is making is between Santa Monica (lower left) and slightly above the Getty (upper right)
+        // which breaks search functionality... hard coding the search to LA metropolitan area until a proper fix is added
+        // bbox: [bounds[0][0], bounds[0][1], bounds[1][0], bounds[1][1]],
+        bbox: [-118.6796, 33.6311, -117.8593, 34.3522],
         placeholder: "Search location",
       });
       mapRef.current.appendChild(geocoder.onAdd(map));
