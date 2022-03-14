@@ -3,6 +3,7 @@
 - A Hack for LA project helping the city planners and the community make informed decisions about parking policies in the City of Los Angeles.
 
 - [Dev environment website](http://d2pt4oopulljok.cloudfront.net/)
+- [Prod environment website](http://www.luckyparking.org)
 
 ![logo](assets/Lucky_parking7.png)
 ## Project Context
@@ -15,7 +16,7 @@
 
 - Come to our meetings on Monday nights at 6pm PST. The video conference link is pinned to the top on the lucky-parking slack channel.
 
-- Review our [CONTRIBUTING.MD](https://github.com/hackforla/lucky-parking/blob/dev/CONTRIBUTING.md)
+- Review our [CONTRIBUTING.MD](https://github.com/hackforla/lucky-parking/blob/master/CONTRIBUTING.md)
 
 - If you decide to join, ask for the Google Sheet to add yourself to our roster with all your contact info.
 
