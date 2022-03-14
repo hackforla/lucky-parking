@@ -1,0 +1,33 @@
+# Local dev environment
+version: '3.8'
+
+services:
+  pgdb:
+    container_name: lucky-parking-postgres
+    image: postgis/postgis
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - target: 5432
+        published: ${DB_PORT}
+    volumes:
+      - pgdb:/var/lib/postgresql/data
+      - ../db-backups/lp-db-dev.sql:/docker-entrypoint-initdb.d/lp-db-dev.sql
+  
+  node:
+    environment:
+      DB_HOST: pgdb
+      DB_PORT: 5432
+    ports:
+      - target: ${PORT}
+        published: ${PORT}
+    depends_on:
+      - pgdb
+  
+volumes:
+  pgdb:
+    driver: local
