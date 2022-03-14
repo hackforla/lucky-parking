@@ -71,6 +71,9 @@ const ConnectedMap = ({
   const [mounted, setMounted] = useState(false);
   const [zipLayer, setZipLayer] = useState(null);
   const hoverZip = useRef(null);
+  const activeZip = useRef(null);
+
+  const updateActiveZip = (zip) => activeZip.current = zip === activeZip.current ? null : zip;
 
   const [mapboxStyle, setMapBoxStyle] = useState(
     "mapbox://styles/mapbox/dark-v10"
@@ -137,6 +140,7 @@ const ConnectedMap = ({
       }
 
       onRemove() {
+        updateActiveZip(null);
         this._container.parentNode.removeChild(this._container);
         this._map = undefined;
       }
@@ -168,10 +172,11 @@ const ConnectedMap = ({
       mapRef.current.appendChild(geocoder.onAdd(map));
     });
 
+    // for the time being, simplify the draw tool
     var draw = new MapboxDraw({
-      modes: Object.assign(MapboxDraw.modes, {
-        draw_polygon: FreehandMode,
-      }),
+      // modes: Object.assign(MapboxDraw.modes, {
+      //   draw_polygon: FreehandMode,
+      // }),
       displayControlsDefault: false,
       controls: {
         polygon: true,
@@ -364,18 +369,24 @@ const ConnectedMap = ({
     */
     map.on("click", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
-      const zipSource = map.getSource("zipcodes");
-      const zipGeometry = {};
-
-      // From all the possible zipcodes, get the specific zip only
-      for (let element of zipSource["_data"].features){
-        if (element.properties.zipcode === zip){
-          zipGeometry.data = element;
-          break;
+      if (zip === activeZip.current) {
+        map.setLayoutProperty('heatmap', 'visibility', 'none');
+        map.setLayoutProperty('places', 'visibility', 'none');
+        sideBar[0].classList.remove("--container-open");
+      } else {
+        const zipSource = map.getSource('zipcodes');
+        const zipGeometry = {};
+        // From all the possible zipcodes, get the specific zip only
+        for (let element of zipSource['_data'].features){
+          if (element.id === zip){
+            zipGeometry.data = element;
+            break;
+          }
         }
+        zipStatics(zip);
+        cameraMovement(zipGeometry.data.geometry.coordinates[0]);
       }
-      zipStatics(zip);
-      cameraMovement(zipGeometry.data.geometry.coordinates[0]);
+      updateActiveZip(zip);
     });
 
     // Show zip code tooltip when
