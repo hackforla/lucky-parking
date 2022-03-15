@@ -370,21 +370,25 @@ const ConnectedMap = ({
     map.on("click", "zipcodes", (e) => {
       const zip = e.features[0].properties.zipcode;
       if (zip === activeZip.current) {
-        map.setLayoutProperty('heatmap', 'visibility', 'none');
-        map.setLayoutProperty('places', 'visibility', 'none');
+        map.setLayoutProperty("heatmap", "visibility", "none");
+        map.setLayoutProperty("places", "visibility", "none");
+        // map.setLayoutProperty('heatmap', 'visibility', 'none');
+        // map.setLayoutProperty('places', 'visibility', 'none');
         sideBar[0].classList.remove("--container-open");
       } else {
         const zipSource = map.getSource('zipcodes');
         const zipGeometry = {};
+        console.log(zipSource)
         // From all the possible zipcodes, get the specific zip only
         for (let element of zipSource['_data'].features){
-          if (element.id === zip){
+          if (element.properties.zipcode === zip){
             zipGeometry.data = element;
             break;
           }
         }
         zipStatics(zip);
-        cameraMovement(zipGeometry.data.geometry.coordinates[0]);
+        console.log(zipGeometry.data)
+        if (zipGeometry.data) cameraMovement(zipGeometry.data.geometry.coordinates[0]);
       }
       updateActiveZip(zip);
     });
