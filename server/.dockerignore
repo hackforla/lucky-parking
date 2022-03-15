@@ -1,0 +1,10 @@
+node_modules
+deploy.sh
+.git
+.cache
+.eslintrc.json
+.eslintignore
+.prettierrc.json
+.prettier.json
+.husky
+.gitignore

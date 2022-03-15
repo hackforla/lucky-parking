@@ -237,7 +237,6 @@ const ConnectedMap = ({
     */
     const drawnData = async () => {
       var drawData = draw.getAll();
-
       try {
         const response = await axios.get(`${API_URL}/api/citation/draw`, {
           params: {
@@ -254,7 +253,7 @@ const ConnectedMap = ({
         );
         drawPolygon[0].disabled = true;
         drawPolygon[0].classList.add("disabled-button");
-
+        
         cameraMovement(drawData.features[0].geometry.coordinates);
       } catch (err) {
         console.log(err);
