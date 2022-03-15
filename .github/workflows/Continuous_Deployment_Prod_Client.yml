@@ -5,12 +5,12 @@ on:
     branches:
       - master
     paths:
-      - 'js/client/**'
+      - 'client/**'
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: js/client
+    working-directory: client
 
 jobs:
   build:
