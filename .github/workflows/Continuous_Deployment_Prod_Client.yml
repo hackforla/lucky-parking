@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'js/client/**'
+      - 'client/**'
   workflow_dispatch:
 
 defaults:
