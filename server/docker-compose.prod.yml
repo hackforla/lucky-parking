@@ -1,6 +1,0 @@
-# AWS Prod instance and AWS Dev instance
-version: '3.8'
-
-services:  
-  node:
-    network_mode: host
