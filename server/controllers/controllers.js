@@ -220,6 +220,8 @@ const zipGraph = async (req, res) => {
 };
 
 module.exports = {
+  generateGeoData,
+  generateZipData,
   getAll,
   getZipLayer,
   getPointData,
