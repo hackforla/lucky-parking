@@ -4,8 +4,8 @@ const app = require('../../app');
 
 const api = supertest(app);
 
-describe('GET requests', () => {
-  it('should get citation points', async () => {
+describe('Citation points', () => {
+  it('should return as JSON', async () => {
     await api
       .get(
         '/api/citation?longitude[]=-118.408773813724&longitude[]=34.01247583460179&latitude[]=-118.33788618627656&latitude[]=34.109414445309824'
@@ -13,13 +13,16 @@ describe('GET requests', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/);
   });
+});
 
-  it('should get the zip layer', async () => {
-    jest.setTimeout(1000);
-    await api
+describe('Zip codes layer', () => {
+  it('should return the correct number of zip codes', async () => {
+    jest.setTimeout(5000);
+    const response = await api
       .get('/api/zipcodes')
       .expect(200)
       .expect('Content-Type', /application\/json/);
+    expect(response.body.features).toHaveLength(311);
   });
 });
 
