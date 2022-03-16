@@ -6,5 +6,5 @@ js/client/.eslintcache
 js/
 data/
 db-backups/
-src/data/__pycache__
+src/
 src.egg-info/

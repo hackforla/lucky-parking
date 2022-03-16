@@ -1,14 +1,10 @@
 node_modules/
 deploy.sh
 .env
-.eslintrc.json
 .eslintignore
-.prettierrc.json
-.prettier.json
+.prettierignore
 .husky
 .gitignore
 .dockerignore
 Dockerfile
 docker-compose.yml
-docker-compose.dev.yml
-docker-compose.prod.yml
