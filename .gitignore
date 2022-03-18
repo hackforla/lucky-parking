@@ -93,6 +93,6 @@ db-backups
 src/data/date_threshold.py
 
 # ignore server and client directories from developer branches
-js
-client
-server
+js/
+client/
+server/
