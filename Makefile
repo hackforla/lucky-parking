@@ -53,6 +53,14 @@ lint:
 upload_geojson:
 	$(PYTHON_INTERPRETER) src/data/upload.py
 
+## Upload zipcodes
+upload_zip:
+	$(PYTHON_INTERPRETER) src/data/upload_zip.py
+
+## Upload neighborhood council
+upload_neighborhood:
+	$(PYTHON_INTERPRETER) src/data/upload_neighborhood.py
+
 ## Create sample from raw data
 sample:
 	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned)
