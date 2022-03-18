@@ -57,6 +57,10 @@ upload_geojson:
 sample:
 	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned)
 
+## Make dataset
+serial_data: 
+	$(PYTHON_INTERPRETER) src/data/make_serial_data.py data/processed
+
 ## Set up python interpreter environment
 create_environment:
 ifeq (True,$(HAS_CONDA))

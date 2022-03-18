@@ -4,16 +4,14 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import os
 from make_dataset import clean, create_sample
+import platform
 
 
 @click.command()
 @click.argument("frac", type=click.FLOAT)
 @click.argument("cleaned", type=click.BOOL)
 def main(frac: float, cleaned: bool):
-    """Downloads full dataset from lacity.org, and runs data processing
-    scripts to turn raw data into cleaned data ready
-    to be analyzed. Also updates environmental
-    variable RAW_DATA_FILEPATH.
+    """Resamples and cleanes dataset using last download raw dataset.
     """
     if cleaned:
         clean(
