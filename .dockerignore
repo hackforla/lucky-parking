@@ -1,0 +1,10 @@
+node_modules/
+.vscode/
+client/
+server/
+data/
+src.egg-info/
+src/
+.git
+.cache
+.gitignore
