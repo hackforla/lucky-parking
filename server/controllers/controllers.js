@@ -17,6 +17,7 @@ const generateGeoData = (data) => {
   }));
 
   dataSources.features = dataFeatures;
+
   return dataSources;
 };
 
