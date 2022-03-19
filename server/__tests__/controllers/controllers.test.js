@@ -14,7 +14,7 @@ jest.mock('pg', () => {
   };
 });
 
-describe('Mocked controllers', () => {
+describe('Mocked', () => {
   let pool;
   const req = mockRequest();
   const res = mockResponse();
@@ -25,6 +25,12 @@ describe('Mocked controllers', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('PostgreSQL', () => {
+    it('should connect properly', () => {
+      expect(pool.connect).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('getAll returns a succesful mocked response', async () => {
