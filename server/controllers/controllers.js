@@ -17,6 +17,7 @@ const generateGeoData = (data) => {
   }));
 
   dataSources.features = dataFeatures;
+
   return dataSources;
 };
 
@@ -63,6 +64,11 @@ const getAll = async (req, res) => {
 
   if (data) {
     res.status(200).send(generateGeoData(data.rows));
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
@@ -74,6 +80,11 @@ const getZipLayer = async (req, res) => {
 
   if (data) {
     res.status(200).send(generateZipData(data.rows));
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
@@ -89,6 +100,11 @@ const getPointData = async (req, res) => {
 
   if (data) {
     res.status(200).send(data.rows);
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
@@ -116,6 +132,11 @@ const getTimestamps = async (req, res) => {
 
   if (data) {
     res.status(200).send(generateGeoData(data.rows));
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
@@ -142,6 +163,11 @@ const drawSelect = async (req, res) => {
 
   if (data) {
     res.status(200).send(generateGeoData(data.rows));
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
@@ -163,6 +189,11 @@ const zipSelect = async (req, res) => {
 
   if (data) {
     res.status(200).send(generateGeoData(data.rows));
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
@@ -192,6 +223,11 @@ const graph = async (req, res) => {
 
   if (data) {
     res.status(200).send(data.rows);
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
@@ -216,10 +252,17 @@ const zipGraph = async (req, res) => {
 
   if (data) {
     res.status(200).send(data.rows);
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
   }
 };
 
 module.exports = {
+  generateGeoData,
+  generateZipData,
   getAll,
   getZipLayer,
   getPointData,

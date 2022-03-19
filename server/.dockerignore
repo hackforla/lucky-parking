@@ -1,4 +1,7 @@
-node_modules
+node_modules/
+.husky/
+__tests__/
+jest.config.js
 deploy.sh
 .git
 .cache
@@ -6,5 +9,4 @@ deploy.sh
 .eslintignore
 .prettierrc.json
 .prettierignore
-.husky
 .gitignore
