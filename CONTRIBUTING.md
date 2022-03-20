@@ -15,4 +15,4 @@ For development purposes, we have two core branches to be aware of: `master` and
 We will treat the `dev` branch as the main contribution branch. When working on new issues, developers should checkout their branch off of `dev` and make Pull Requests to `dev`. Once the `dev` branch have code that is ready to be rolled to production, we will create a release branch where we stabilize the code, and eventually push to `master`. Pushes to `master` outside of release branches would be limited, and mostly will be handled by administrators.
 
 ## Setting up your local dev environment
-We are currently in the process of dockerizing the backend of the application to ease the workflow for developers. Before that, please follow this [wiki article](https://github.com/hackforla/lucky-parking/wiki/Developer-Contributing-Guide#using-git) on setting up your environment.
+Please follow this [wiki article](https://github.com/hackforla/lucky-parking/wiki/Developer-Contributing-Guide#using-git) on setting up your Git environment. Afterwards, please follow this [wiki article](https://github.com/hackforla/lucky-parking/wiki/Guide-to-Docker) for setting up Docker.
