@@ -3,7 +3,7 @@ lucky-parking-analysis
 
 Hack for LA analysis of parking citation data
 
-
+Check out our [data contributor's Wiki](https://github.com/hackforla/lucky-parking/wiki/Data-Team-Contributing-Guide)
 
 #### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder: 
 [Link to screenshots](references/awsEC2.pdf)
