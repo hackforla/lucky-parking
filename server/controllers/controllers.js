@@ -197,6 +197,33 @@ const zipSelect = async (req, res) => {
   }
 };
 
+// Queries and sends coordinates based on a period of time directed by the user
+const zipSelectInDates = async (req, res) => {
+  const { startDate } = req.query;
+  const { endDate } = req.query;
+
+  const query = format(
+    `
+      SELECT ST_AsGeoJSON(geometry)
+      FROM  test1
+      WHERE datetime BETWEEN %1L AND %2L;
+    `,
+    startDate,
+    endDate
+  );
+
+  const data = await db.query(query);
+
+  if (data) {
+    res.status(200).send(generateGeoData(data.rows));
+  } else {
+    res.status(400).send({
+      data: 'No data',
+      success: false,
+    });
+  }
+};
+
 const graph = async (req, res) => {
   const { polygon } = req.query;
   const { filterBy } = req.query;
@@ -271,4 +298,5 @@ module.exports = {
   zipSelect,
   graph,
   zipGraph,
+  zipSelectInDates,
 };
