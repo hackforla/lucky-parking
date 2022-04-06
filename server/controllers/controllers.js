@@ -202,7 +202,7 @@ const graph = async (req, res) => {
   const { filterBy } = req.query;
   const query = format(
     `
-    SELECT %1$L AS "name",
+    SELECT %1$s AS "name",
     (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y"
     FROM test1 WHERE ST_Contains(ST_GeomFromGeoJSON('{
       "type":"Polygon",
@@ -234,9 +234,10 @@ const graph = async (req, res) => {
 const zipGraph = async (req, res) => {
   const { zip } = req.query;
   const { filterBy } = req.query;
+
   const query = format(
     `
-    SELECT %1$L AS "name",
+    SELECT %1$s AS "name",
     (COUNT(*) / (SUM(COUNT(*)) OVER() )) * 100 AS "y"
     FROM test1 WHERE ST_Contains(
       (SELECT ST_SetSRID(the_geom, 4326)
