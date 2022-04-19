@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import click
 from pathlib import Path
-from dotenv import find_dotenv, load_dotenv, set_key
 import urllib3
 import shutil
 import os
+import glob
 import csv
 from datetime import date
 import pandas as pd
@@ -13,28 +13,25 @@ from pyproj import Transformer
 from typing import Union
 import geopandas as gpd
 from shapely.geometry import Point
+from make_dataset import download_raw, create_sample
 
 # Load project directory
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 
-
 @click.command()
 @click.argument("output_filedir", type=click.Path())
-def main(output_filedir: str):
+@click.argument("frac", type=click.FLOAT)
+@click.argument("geo", type=click.BOOL)
+def main(output_filedir: str, frac:float, geo: bool):
     """Cleans and serializes more of the dataset to speed uploading time"""
-    # If run as main, data is downloaded,  10% sampled, and cleaned
-    # If fails, it samples already downloaded data and samples at 1%, then cleans
-
-    try:
-        clean(
-            SAMPLED_DATA_FILEPATH,
-            output_filedir
-        )
-    except:
-        print("Failed")
-
-
-def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
+    # Load newest raw data file
+    raw_file_list = glob.glob(PROJECT_DIR / 'data/raw/*.csv')
+    if raw_file_list:
+        serial_clean(create_sample(max(raw_file_list, key=os.path.getctime), "data/interim", frac),output_filedir, geojson=geo)
+    else:
+        serial_clean(create_sample(download_raw('data/raw'), "data/interim", frac),output_filedir, geojson=geo)
+)
+def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bool):
     """Removes unnecessary columns, erroneous data points and aliases,
     changes geometry projection from epsg:2229 to epsg:4326, and converts
     time to datetime type.
@@ -57,8 +54,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
             "Make",
             "Body Style",
             "Color",
-        #    "Location",
-        #    "Violation code",
+            "Location",
+            "Violation code",
             "Violation Description",
             "Fine amount",
             "Latitude",
@@ -93,8 +90,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         "make",
         "body_style",
         "color",
-    #    "location",
-    #    "violation_code",
+        "location",
+        "violation_code",
         "violation_description",
         "fine_amount",
         "Latitude",
@@ -111,78 +108,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         df = df.replace(row[2], row[1])
 
     # Car makes to keep (Top 70 by count)
-    make_list = [
-        "Toyota",
-        "Honda",
-        "Ford",
-        "Nissan",
-        "Chevrolet",
-        "BMW",
-        "Mercedes Benz",
-        "Volkswagen",
-        "Hyundai",
-        "Dodge",
-        "Lexus",
-        "Kia",
-        "Jeep",
-        "Audi",
-        "Mazda",
-        "Other",
-        "GMC",
-        "Infinity",
-        "Chrysler",
-        "Subaru",
-        "Acura",
-        "Volvo",
-        "Land Rover",
-        "Mitsubishi",
-        "Cadillac",
-        "Mini",
-        "Porsche",
-        "Unknown",
-        "Buick",
-        "Freightliner",
-        "Tesla",
-        "Lincoln",
-        "Saturn",
-        "Pontiac",
-        "Grumman",
-        "Fiat",
-        "Jaguar",
-        "Mercury",
-        "Isuzu",
-        "International",
-        "Suzuki",
-        "Saab",
-        "Oldsmobile",
-        "Maserati",
-        "Peterbuilt",
-        "Kenworth",
-        "Smart",
-        "Plymouth",
-        "Hino",
-        "Harley-Davidson",
-        "Alfa Romero",
-        "Hummer",
-        "Bentley",
-        "Yamaha",
-        "Kawasaki",
-        "Geo Metro",
-        "Winnebago",
-        "Rolls-Royce",
-        "Scion",
-        "Triumph",
-        "Checker",
-        "Datsun",
-        "Ferrari",
-        "Sterling",
-        "Lamborghini",
-        "Aston Martin",
-        "Daewoo",
-        "Merkur",
-        "Mack",
-        "CIMC",
-    ]
+    with open(PROJECT_DIR / 'references/top_makes.txt', 'r') as file:
+        make_list = [_.strip('\n') for _ in file.readlines()]
 
     # Turn all other makes into "MISC."
     df.loc[~df.make.isin(make_list), "make"] = "MISC."
@@ -199,9 +126,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     )
 
     # Drop original coordinate columns
-    df = df.drop(["Latitude", "Longitude", "make"], axis=1)
-    # df.reset_index(drop=True,inplace=True)
-    # df.drop('Ticket number', axis=1)
+    df = df.drop(["Latitude", "Longitude"], axis=1)
 
     # Filter out bad coordinates
     df = df[
@@ -209,35 +134,44 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         (df['latitude'] > 33.5) &
         (df['longitude'] < -118) &
         (df['longitude'] > -118.75)
-        ].reset_index(drop=True)
-        
+    ].reset_index(drop=True)
+
     # Extract weekday and add as column
-    df["weekday"] = df.datetime.dt.weekday.astype(str)
+    df["weekday"] = df.datetime.dt.weekday.astype(int)
+
     # Set fine amount as int
     df["fine_amount"] = df.fine_amount.astype(int)
 
     # Drop filtered index and add new one
-    df.reset_index(drop=True, inplace=True)
+    df.reset_index(inplace=True)
 
-    df.to_csv(
-        PROJECT_DIR
-        / output_filedir
-        / (target_file.stem.replace("_raw", "_serialized") + ".csv"),
-        index=False,
-        quoting=csv.QUOTE_ALL,
-    )
+    if geojson:
+        gpd.GeoDataFrame(
+            df,
+            crs="EPSG:4326",
+            geometry=[Point(xy) for xy in zip(df.longitude, df.latitude)],
+        ).to_file(
+            PROJECT_DIR
+            / output_filedir
+            / (target_file.stem.replace("_raw", "_processed") + ".geojson"),
+            driver="GeoJSON",
+        )
+        return print("Saved as geojson!")
 
-    return print("Saved as csv!")
+    else:
+        df.to_csv(
+            PROJECT_DIR
+            / output_filedir
+            / (target_file.stem.replace("_raw", "_processed") + ".csv"),
+            index=False,
+            quoting=csv.QUOTE_ALL,
+        )
+        return print("Saved as csv!")
 
 
 if __name__ == "__main__":
     # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     # logging.basicConfig(level=logging.INFO, format=log_fmt)
-
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
-    load_dotenv(find_dotenv())
-    SAMPLED_DATA_FILEPATH = os.environ["SAMPLED_DATA_FILEPATH"]
 
     # Run main function
     # logger = logging.getLogger(__name__)

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import click
 from pathlib import Path
-from dotenv import find_dotenv, load_dotenv, set_key
 import urllib3
 import shutil
+import glob
 import os
 import csv
 from datetime import date
@@ -22,22 +22,15 @@ PROJECT_DIR = Path(__file__).resolve().parents[2]
 @click.argument("input_filedir", type=click.Path(exists=True))
 @click.argument("output_filedir", type=click.Path())
 def main(input_filedir: str, output_filedir: str):
-    """Downloads full dataset from lacity.org, and runs data processing
-    scripts to turn raw data into cleaned data ready
-    to be analyzed. Also updates environmental
-    variable RAW_DATA_FILEPATH.
     """
-    # If run as main, data is downloaded,  10% sampled, and cleaned
-    # If fails, it samples already downloaded data and samples at 1%, then cleans
-
-    try:
-        clean(
-            create_sample(download_raw(input_filedir), "data/interim", 0.1),
-            output_filedir,
-        )
-    except:
-        print("Failed at 10% sampling, trying again")
-        clean(create_sample(RAW_DATA_FILEPATH, output_filedir, 0.01), output_filedir)
+    Downloads full dataset from lacity.org, and runs data processing
+    scripts to turn raw data into cleaned data ready
+    to be analyzed. 
+    """
+    clean(
+        create_sample(download_raw(input_filedir), "data/interim", 0.01),
+        output_filedir,
+    )
 
 
 def download_raw(input_filedir: str) -> Path:
@@ -46,28 +39,34 @@ def download_raw(input_filedir: str) -> Path:
     """
     # Create name string using download date
     date_string = date.today().strftime("%Y-%m-%d")
+    RAW_DATA_FILEPATH = PROJECT_DIR / \
+        input_filedir / (date_string + "_raw.csv")
 
-    print("This will take a few minutes")
+    # If raw file already exists, then it doesn't download
+    if RAW_DATA_FILEPATH.is_file():
+        print('Raw file already exists')
 
-    # Setup connection and download into raw data folder
-    http = urllib3.PoolManager()
-    url = "https://data.lacity.org/api/views/wjz9-h9np/rows.csv?accessType=DOWNLOAD"
-    RAW_DATA_FILEPATH = PROJECT_DIR / input_filedir / (date_string + "_raw.csv")
-    with http.request("GET", url, preload_content=False) as res, open(
-        RAW_DATA_FILEPATH, "wb"
-    ) as out_file:
-        shutil.copyfileobj(res, out_file)
+    else:
 
-    print("Finished downloading raw dataset")
+        print("This will take a few minutes")
 
-    # Save raw file path as RAW_DATA_FILEPATH into .env
-    set_key(find_dotenv(), "RAW_DATA_FILEPATH", str(RAW_DATA_FILEPATH))
+        # Setup connection and download into raw data folder
+        http = urllib3.PoolManager()
+        url = "https://data.lacity.org/api/views/wjz9-h9np/rows.csv?accessType=DOWNLOAD"
+        with http.request("GET", url, preload_content=False) as res, open(
+            RAW_DATA_FILEPATH, "wb"
+        ) as out_file:
+            shutil.copyfileobj(res, out_file)
+
+        print("Finished downloading raw dataset")
+
     return RAW_DATA_FILEPATH
 
 
 def create_sample(
-    target_file: Union[Path, str], output_filedir: str, sample_frac: float
-) -> Path:
+        target_file: Union[Path, str],
+        output_filedir: str,
+        sample_frac: float) -> Path:
     """Samples the raw dataset to create a smaller dataset via random
     sampling according to sample_frac.
     """
@@ -86,21 +85,23 @@ def create_sample(
         / (target_file.stem + "_" + str(sample_frac).replace(".", "") + "samp.csv")
     )
 
-    # Save sampled file path as SAMPLED_DATA_FILEPATH into .env
-    set_key(find_dotenv(), "SAMPLED_DATA_FILEPATH", str(SAMPLED_DATA_FILEPATH))
+    # If raw file already exists, then it doesn't download
+    if SAMPLE_FILEPATH.is_file():
+        print('Sampled file already exists')
 
-    print(f"Creating {sample_frac * 100}% sample")
+    else:
+        print(f"Creating {sample_frac * 100}% sample")
 
-    # Read raw data and skiprows using random.random()
-    pd.read_csv(
-        target_file,
-        header=0,
-        index_col=0,
-        skiprows=lambda i: i > 0 and random.random() > sample_frac,
-        low_memory=False,
-    ).reset_index(drop=True).to_csv(SAMPLE_FILEPATH, index=False)
+        # Read raw data and skiprows using random.random()
+        pd.read_csv(
+            target_file,
+            header=0,
+            index_col=0,
+            skiprows=lambda i: i > 0 and random.random() > sample_frac,
+            low_memory=False,
+        ).reset_index(drop=True).to_csv(SAMPLE_FILEPATH, index=False)
 
-    print("Sample complete")
+        print("Sample complete")
 
     return SAMPLE_FILEPATH
 
@@ -182,78 +183,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         df = df.replace(row[2], row[1])
 
     # Car makes to keep (Top 70 by count)
-    make_list = [
-        "Toyota",
-        "Honda",
-        "Ford",
-        "Nissan",
-        "Chevrolet",
-        "BMW",
-        "Mercedes Benz",
-        "Volkswagen",
-        "Hyundai",
-        "Dodge",
-        "Lexus",
-        "Kia",
-        "Jeep",
-        "Audi",
-        "Mazda",
-        "Other",
-        "GMC",
-        "Infinity",
-        "Chrysler",
-        "Subaru",
-        "Acura",
-        "Volvo",
-        "Land Rover",
-        "Mitsubishi",
-        "Cadillac",
-        "Mini",
-        "Porsche",
-        "Unknown",
-        "Buick",
-        "Freightliner",
-        "Tesla",
-        "Lincoln",
-        "Saturn",
-        "Pontiac",
-        "Grumman",
-        "Fiat",
-        "Jaguar",
-        "Mercury",
-        "Isuzu",
-        "International",
-        "Suzuki",
-        "Saab",
-        "Oldsmobile",
-        "Maserati",
-        "Peterbuilt",
-        "Kenworth",
-        "Smart",
-        "Plymouth",
-        "Hino",
-        "Harley-Davidson",
-        "Alfa Romero",
-        "Hummer",
-        "Bentley",
-        "Yamaha",
-        "Kawasaki",
-        "Geo Metro",
-        "Winnebago",
-        "Rolls-Royce",
-        "Scion",
-        "Triumph",
-        "Checker",
-        "Datsun",
-        "Ferrari",
-        "Sterling",
-        "Lamborghini",
-        "Aston Martin",
-        "Daewoo",
-        "Merkur",
-        "Mack",
-        "CIMC",
-    ]
+    with open(PROJECT_DIR / 'references/top_makes.txt', 'r') as file:
+        make_list = [_.strip('\n') for _ in file.readlines()]
 
     # Turn all other makes into "MISC."
     df.loc[~df.make.isin(make_list), "make"] = "MISC."
@@ -271,8 +202,6 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
 
     # Drop original coordinate columns
     df = df.drop(["Latitude", "Longitude"], axis=1)
-    # df.reset_index(drop=True,inplace=True)
-    # df.drop('Ticket number', axis=1)
 
     # Filter out bad coordinates
     df = df[
@@ -280,7 +209,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         (df['latitude'] > 33.5) &
         (df['longitude'] < -118) &
         (df['longitude'] > -118.75)
-        ].reset_index(drop=True)
+    ].reset_index(drop=True)
 
     # Extract weekday and add as column
     df["weekday"] = df.datetime.dt.weekday.astype(str).replace(
@@ -299,7 +228,6 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     df["fine_amount"] = df.fine_amount.astype(int)
 
     # Drop filtered index and add new one
-    df.reset_index(drop=True, inplace=True)
     df.reset_index(inplace=True)
 
     if geojson:
@@ -330,13 +258,6 @@ if __name__ == "__main__":
     # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     # logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
-    if find_dotenv():
-        load_dotenv(find_dotenv())
-    else:
-        with open(PROJECT_DIR / ".env", "w"):
-            pass
     # Create data folders
     data_folders = ["raw", "interim", "external", "processed"]
     if not os.path.exists(PROJECT_DIR / "data"):

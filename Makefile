@@ -67,7 +67,7 @@ sample:
 
 ## Make dataset
 serial_data: 
-	$(PYTHON_INTERPRETER) src/data/make_serial_data.py data/processed
+	$(PYTHON_INTERPRETER) src/data/make_serial_data.py data/processed $(frac) $(geo)
 
 ## Set up python interpreter environment
 create_environment:
