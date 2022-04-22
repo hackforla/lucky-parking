@@ -141,7 +141,14 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     ]
 
     # Filter out data points with bad coordinates
-    df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
+    df = df[(df['Latitude'] != 99999) & (df['Longitude'] != 99999)]
+    # Filter out bad coordinates
+    df = df[
+        (df['Latitude'] < 6561666.667) &
+        (df['Latitude'] > 6332985.07046223) &
+        (df['Longitude'] < 2004341.8099511159) &
+        (df['Longitude'] > 1641269.8177664774)
+    ]
 
     # Filter out data points with no time/date stamps
     df = df[
@@ -199,14 +206,6 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
 
     # Drop original coordinate columns
     df = df.drop(["latitude", "longitude"], axis=1)
-
-    # Filter out bad coordinates
-    df = df[
-        (df['lat'] < 34.5) &
-        (df['lat'] > 33.5) &
-        (df['lon'] < -118) &
-        (df['lon'] > -118.75)
-    ].reset_index(drop=True)
 
     # Extract weekday and add as column
     df["weekday"] = df.datetime.dt.weekday.astype(str).replace(
