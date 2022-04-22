@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 import click
 from pathlib import Path
-import urllib3
-import shutil
 import os
-import glob
 import csv
-from datetime import date
 import pandas as pd
-import random
 from pyproj import Transformer
 from typing import Union
 import geopandas as gpd
@@ -16,7 +11,7 @@ from shapely.geometry import Point
 from make_dataset import download_raw, create_sample
 
 # Load project directory
-PROJECT_DIR = Path(__file__).resolve().parents[2]
+PROJECT_DIR = Path(os.path.abspath(__file__).replace('\\', '/')).resolve().parents[2]
 
 @click.command()
 @click.argument("output_filedir", type=click.Path())
@@ -25,7 +20,7 @@ PROJECT_DIR = Path(__file__).resolve().parents[2]
 def main(output_filedir: str, frac:float, geo: bool):
     """Cleans and serializes more of the dataset to speed uploading time"""
     # Load newest raw data file
-    raw_file_list = glob.glob(PROJECT_DIR / 'data/raw/*.csv')
+    raw_file_list = (PROJECT_DIR / 'data/raw').rglob('*.csv')
     if raw_file_list:
         serial_clean(create_sample(max(raw_file_list, key=os.path.getctime), "data/interim", frac),output_filedir, geojson=geo)
     else:
@@ -63,41 +58,40 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         ]
     ]
 
-    # Filter out data points with bad coordinates
-    df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
+    # Make column names more coding friendly 
+    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
 
     # Filter out data points with no time/date stamps
     df = df[
-        (df["Issue Date"].notna())
-        & (df["Issue time"].notna())
-        & (df["Fine amount"].notna())
+        (df["issue_date"].notna())
+        & (df["issue_time"].notna())
+        & (df["fine_amount"].notna())
+    ]
+
+    # Filter out data points with bad coordinates
+    df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
+
+    # Filter out bad coordinates
+    df = df[
+        (df['latitude'] < 6561666.667) &
+        (df['latitude'] > 6332985.07046223) &
+        (df['longitude'] < 2004341.8099511159) &
+        (df['longitude'] > 1641269.8177664774)
     ]
 
     # Convert Issue time and Issue Date strings into a combined datetime type
-    df["Issue time"] = df["Issue time"].apply(
+    df["issue_time"] = df["issue_time"].apply(
         lambda x: "0" * (4 - len(str(int(x)))) + str(int(x))
     )
-    df["Datetime"] = pd.to_datetime(
-        df["Issue Date"] + " " + df["Issue time"], format="%m/%d/%Y %H%M"
+    df["datetime"] = pd.to_datetime(
+        df["issue_date"] + " " + df["issue_time"], format="%m/%d/%Y %H%M"
     )
 
     # Drop original date/time columns
-    df = df.drop(["Issue Date", "Issue time"], axis=1)
+    df = df.drop(["issue_date", "issue_time"], axis=1)
 
-    # Make column names more coding friendly except for Lat/Lon
-    df.columns = [
-        "state_plate",
-        "make",
-        "body_style",
-        "color",
-        "location",
-        "violation_code",
-        "violation_description",
-        "fine_amount",
-        "Latitude",
-        "Longitude",
-        "datetime",
-    ]
+    # Make column names more coding friendly 
+    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
 
     # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
@@ -119,28 +113,30 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     make_dict = {make: ind for ind, make in enumerate(make_list)}
     df["make_ind"] = df.make.replace(make_dict)
 
+    # Read in violation regex rules
+    vio_regex = pd.read_csv(PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
+
+    # Iterate over makes and replace aliases
+    for row in vio_regex.itertuples():
+        df = df.replace(row[2], row[1])
+
     # Instantiate projection converter and change projection
     transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
-    df["latitude"], df["longitude"] = transformer.transform(
-        df["Latitude"].values, df["Longitude"].values
+    df["lat"], df["lon"] = transformer.transform(
+        df["latitude"].values, df["longitude"].values
     )
 
     # Drop original coordinate columns
-    df = df.drop(["Latitude", "Longitude"], axis=1)
-
-    # Filter out bad coordinates
-    df = df[
-        (df['latitude'] < 34.5) &
-        (df['latitude'] > 33.5) &
-        (df['longitude'] < -118) &
-        (df['longitude'] > -118.75)
-    ].reset_index(drop=True)
+    df = df.drop(["latitude", "longitude"], axis=1)
 
     # Extract weekday and add as column
-    df["weekday"] = df.datetime.dt.weekday.astype(int)
+    df["weekday"] = df["weekday"].dt.weekday.astype(int)
 
     # Set fine amount as int
-    df["fine_amount"] = df.fine_amount.astype(int)
+    df["fine_amount"] = df["fine_amount"].astype(int)
+
+    # To keep compatibility with website
+    df.rename(columns={"lat": "latitude", "lon": "longitude"})
 
     # Drop filtered index and add new one
     df.reset_index(inplace=True)

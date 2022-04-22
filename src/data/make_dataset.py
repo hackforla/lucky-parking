@@ -140,36 +140,36 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         ]
     ]
 
+    # Make column names more coding friendly 
+    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
+
     # Filter out data points with bad coordinates
-    df = df[(df['Latitude'] != 99999) & (df['Longitude'] != 99999)]
+    df = df[(df['latitude'] != 99999) & (df['longitude'] != 99999)]
+
     # Filter out bad coordinates
     df = df[
-        (df['Latitude'] < 6561666.667) &
-        (df['Latitude'] > 6332985.07046223) &
-        (df['Longitude'] < 2004341.8099511159) &
-        (df['Longitude'] > 1641269.8177664774)
+        (df['latitude'] < 6561666.667) &
+        (df['latitude'] > 6332985.07046223) &
+        (df['longitude'] < 2004341.8099511159) &
+        (df['longitude'] > 1641269.8177664774)
     ]
-
     # Filter out data points with no time/date stamps
     df = df[
-        (df["Issue Date"].notna())
-        & (df["Issue time"].notna())
-        & (df["Fine amount"].notna())
+        (df["issue_date"].notna())
+        & (df["issue_time"].notna())
+        & (df["fine_amount"].notna())
     ]
 
     # Convert Issue time and Issue Date strings into a combined datetime type
-    df["Issue time"] = df["Issue time"].apply(
+    df["issue_time"] = df["issue_time"].apply(
         lambda x: "0" * (4 - len(str(int(x)))) + str(int(x))
     )
-    df["Datetime"] = pd.to_datetime(
-        df["Issue Date"] + " " + df["Issue time"], format="%m/%d/%Y %H%M"
+    df["datetime"] = pd.to_datetime(
+        df["issue_date"] + " " + df["issue_time"], format="%m/%d/%Y %H%M"
     )
 
     # Drop original date/time columns
-    df = df.drop(["Issue Date", "Issue time"], axis=1)
-
-    # Make column names more coding friendly 
-    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
+    df = df.drop(["issue_date", "issue_time"], axis=1)
 
     # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
