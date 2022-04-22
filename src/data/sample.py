@@ -23,6 +23,8 @@ def main(frac: float, cleaned: bool):
                 "data/processed")
         else:
             create_sample(RAW_DATA_FILEPATH, "data/interim", frac)
+    else:
+        print('No raw data. Try make data')
 
 if __name__ == "__main__":
     # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
