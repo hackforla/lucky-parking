@@ -3,7 +3,6 @@ import click
 from pathlib import Path
 import urllib3
 import shutil
-import glob
 import os
 import csv
 from datetime import date
@@ -15,7 +14,7 @@ import geopandas as gpd
 from shapely.geometry import Point
 
 # Load project directory
-PROJECT_DIR = Path(__file__).resolve().parents[2]
+PROJECT_DIR = Path(os.path.abspath(__file__).replace('\\', '/')).resolve().parents[2]
 
 
 @click.command()
@@ -27,10 +26,13 @@ def main(input_filedir: str, output_filedir: str):
     scripts to turn raw data into cleaned data ready
     to be analyzed. 
     """
-    clean(
-        create_sample(download_raw(input_filedir), "data/interim", 0.01),
-        output_filedir,
-    )
+    try: 
+        clean(
+            create_sample(download_raw(input_filedir), "data/interim", 0.01),
+            output_filedir,
+        )
+    except Exception as e: 
+        print(e.message, e.args)
 
 
 def download_raw(input_filedir: str) -> Path:
@@ -159,20 +161,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     # Drop original date/time columns
     df = df.drop(["Issue Date", "Issue time"], axis=1)
 
-    # Make column names more coding friendly except for Lat/Lon
-    df.columns = [
-        "state_plate",
-        "make",
-        "body_style",
-        "color",
-        "location",
-        "violation_code",
-        "violation_description",
-        "fine_amount",
-        "Latitude",
-        "Longitude",
-        "datetime",
-    ]
+    # Make column names more coding friendly 
+    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
 
     # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
@@ -190,25 +180,32 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     df.loc[~df.make.isin(make_list), "make"] = "MISC."
     make_list.append("MISC.")
 
+    # Read in violation regex rules
+    vio_regex = pd.read_csv(PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
+
+    # Iterate over makes and replace aliases
+    for row in vio_regex.itertuples():
+        df = df.replace(row[2], row[1])
+
     # Enumerate list of car makes and replace with keys
     make_dict = {make: ind for ind, make in enumerate(make_list)}
     df["make_ind"] = df.make.replace(make_dict)
 
     # Instantiate projection converter and change projection
     transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
-    df["latitude"], df["longitude"] = transformer.transform(
-        df["Latitude"].values, df["Longitude"].values
+    df["lat"], df["lon"] = transformer.transform(
+        df["latitude"].values, df["longitude"].values
     )
 
     # Drop original coordinate columns
-    df = df.drop(["Latitude", "Longitude"], axis=1)
+    df = df.drop(["latitude", "longitude"], axis=1)
 
     # Filter out bad coordinates
     df = df[
-        (df['latitude'] < 34.5) &
-        (df['latitude'] > 33.5) &
-        (df['longitude'] < -118) &
-        (df['longitude'] > -118.75)
+        (df['lat'] < 34.5) &
+        (df['lat'] > 33.5) &
+        (df['lon'] < -118) &
+        (df['lon'] > -118.75)
     ].reset_index(drop=True)
 
     # Extract weekday and add as column
@@ -230,11 +227,14 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     # Drop filtered index and add new one
     df.reset_index(inplace=True)
 
+    # To keep compatibility with website
+    df.rename(columns={"lat": "latitude", "lon": "longitude"})
+
     if geojson:
         gpd.GeoDataFrame(
             df,
             crs="EPSG:4326",
-            geometry=[Point(xy) for xy in zip(df.longitude, df.latitude)],
+            geometry=[Point(xy) for xy in zip(df.latitude, df.longitude)],
         ).to_file(
             PROJECT_DIR
             / output_filedir
