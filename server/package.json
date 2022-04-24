@@ -7,7 +7,7 @@
     "server:dev": "nodemon index.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "lint": "eslint --fix '**/*.js'",
+    "lint": "eslint --fix \"**/*.js\"",
     "prettier": "prettier --write .",
     "prepare": "cd .. && husky install server/.husky"
   },
