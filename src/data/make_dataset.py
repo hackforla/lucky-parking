@@ -191,8 +191,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     vio_regex = pd.read_csv(PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
 
     # Iterate over makes and replace aliases
-    for row in vio_regex.itertuples():
-        df = df.replace(row[2], row[1])
+    for key in vio_regex.itertuples():
+        df.loc[df["violation_code"] == row[1], "violation_description"] = row[2]
 
     # Enumerate list of car makes and replace with keys
     make_dict = {make: ind for ind, make in enumerate(make_list)}
