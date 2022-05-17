@@ -7,7 +7,7 @@
     "server:dev": "nodemon index.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "lint": "eslint --fix '**/*.js'",
+    "lint": "eslint --fix \"**/*.js\"",
     "prettier": "prettier --write .",
     "prepare": "cd .. && husky install server/.husky"
   },
@@ -34,6 +34,7 @@
     "helmet": "^5.0.2",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
+    "npm": "^8.7.0",
     "pg": "^8.5.1",
     "pg-format": "^1.0.4"
   },

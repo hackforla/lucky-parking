@@ -140,23 +140,44 @@ const getTimestamps = async (req, res) => {
   }
 };
 
+// Queries and send geo data based on dates user requested
 const drawSelect = async (req, res) => {
   const { polygon } = req.query;
+  const { startDate } = req.query;
+  const { endDate } = req.query;
+  let datesConditionStr = '';
+
+  if (
+    (startDate !== undefined || startDate !== null) &&
+    (endDate !== undefined || endDate !== null)
+  ) {
+    datesConditionStr = 'AND datetime BETWEEN %2L AND %3L';
+  }
+
   const query = format(
     `
-    SELECT ST_AsGeoJSON(geometry) FROM test1
-    WHERE ST_Contains(ST_GeomFromGeoJSON('{
-      "type": "Polygon",
-      "coordinates": [%s],
-      "crs": {
-        "type": "name",
-        "properties": {
-          "name": "EPSG:4326"
+    SELECT ST_AsGeoJSON(geometry) 
+    FROM test1
+    WHERE ST_Contains(ST_GeomFromGeoJSON(
+      '{
+        "type": "Polygon",
+        "coordinates": [%s],
+        "crs": {
+          "type": "name",
+          "properties": {
+            "name": "EPSG:4326"
+          }
+        }										                            
         }
-      }										                            
-    }'), test1.geometry)
+      '
+      ),
+      test1.geometry
+    )
+    ${datesConditionStr} 
     LIMIT 30000;`,
-    polygon[0]
+    polygon[0],
+    startDate,
+    endDate
   );
 
   const data = await db.query(query);
@@ -171,18 +192,37 @@ const drawSelect = async (req, res) => {
   }
 };
 
+// Queries and sends coordinates based on a period of time directed by the user
 const zipSelect = async (req, res) => {
-  const zip = parseInt(req.query.zip, 10);
+  const { zip } = req.query;
+  const { startDate } = req.query;
+  const { endDate } = req.query;
+  let datesConditionStr = ';';
+
+  if (
+    (startDate !== undefined || startDate !== null) &&
+    (endDate !== undefined || endDate !== null)
+  ) {
+    datesConditionStr = 'AND datetime BETWEEN %2L AND %3L;';
+  }
+
   const query = format(
     `
-    SELECT ST_AsGeoJSON(geometry)
-    FROM test1 AS citations
-    WHERE ST_WITHIN(citations.geometry, (
-      SELECT ST_SetSRID(the_geom, 4326)
-      FROM zipcodes
-      WHERE zip = %L
-    ));`,
-    zip
+      SELECT ST_AsGeoJSON(geometry)
+      FROM  test1 AS citations
+      WHERE ST_WITHIN(
+        citations.geometry, 
+        (
+          SELECT ST_SetSRID(the_geom, 4326)
+          FROM zipcodes
+          WHERE zip = %1L
+        )
+      )
+      ${datesConditionStr}
+    `,
+    zip,
+    startDate,
+    endDate
   );
 
   const data = await db.query(query);
