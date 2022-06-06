@@ -11,7 +11,9 @@ from shapely.geometry import Point
 from make_dataset import download_raw, create_sample
 
 # Load project directory
-PROJECT_DIR = Path(os.path.abspath(__file__).replace('\\', '/')).resolve().parents[2]
+PROJECT_DIR = Path(os.path.abspath(__file__).replace(
+    '\\', '/')).resolve().parents[2]
+
 
 @click.command()
 @click.argument("output_filedir", type=click.Path())
@@ -21,9 +23,11 @@ def main(output_filedir: str, geo: bool):
     # Load newest raw data file
     raw_file_list = (PROJECT_DIR / 'data/interim').rglob('*.csv')
     if raw_file_list:
-        serial_clean(max(raw_file_list, key=os.path.getctime), (PROJECT_DIR / 'data/processed'), geojson=geo)
+        serial_clean(max(raw_file_list, key=os.path.getctime),
+                     (PROJECT_DIR / 'data/processed'), geojson=geo)
     else:
         print('Run make data first!')
+
 
 def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bool):
     """Removes unnecessary columns, erroneous data points and aliases,
@@ -57,8 +61,8 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         ]
     ]
 
-    # Make column names more coding friendly 
-    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
+    # Make column names more coding friendly
+    df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
 
     # Filter out data points with no time/date stamps
     df = df[
@@ -89,8 +93,8 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     # Drop original date/time columns
     df = df.drop(["issue_date", "issue_time"], axis=1)
 
-    # Make column names more coding friendly 
-    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
+    # Make column names more coding friendly
+    df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
 
     # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
@@ -112,9 +116,9 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     make_dict = {make: ind for ind, make in enumerate(make_list)}
     df["make_ind"] = df.make.replace(make_dict)
 
-
     # Read in violation regex rules
-    vio_regex = pd.read_csv(PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
+    vio_regex = pd.read_csv(
+        PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
 
     # Iterate over makes and replace aliases
     for row in vio_regex.itertuples():
@@ -125,7 +129,8 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         vio_desc_list = [_.strip('\n') for _ in file.readlines()]
 
     # Turn all other violations into "MISC."
-    df.loc[~df.violation_description.isin(vio_desc_list), "violation_description"] = "MISC."
+    df.loc[~df.violation_description.isin(
+        vio_desc_list), "violation_description"] = "MISC."
     vio_desc_list.append("MISC.")
 
     # Enumerate list of violations and replace with keys
@@ -160,7 +165,8 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     df["fine_amount"] = df["fine_amount"].astype(int)
 
     # To keep compatibility with website
-    df.rename(columns={"lat": "latitude", "lon": "longitude", "rp_state_plate": "state_plate"}, inplace=True)
+    df.rename(columns={"lat": "latitude", "lon": "longitude",
+              "rp_state_plate": "state_plate"}, inplace=True)
 
     # Drop filtered index and add new one
     df.reset_index(inplace=True)

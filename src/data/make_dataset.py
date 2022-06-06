@@ -14,7 +14,8 @@ import geopandas as gpd
 from shapely.geometry import Point
 
 # Load project directory
-PROJECT_DIR = Path(os.path.abspath(__file__).replace('\\', '/')).resolve().parents[2]
+PROJECT_DIR = Path(os.path.abspath(__file__).replace(
+    '\\', '/')).resolve().parents[2]
 
 
 @click.command()
@@ -26,12 +27,12 @@ def main(input_filedir: str, output_filedir: str):
     scripts to turn raw data into cleaned data ready
     to be analyzed. 
     """
-    try: 
+    try:
         clean(
             create_sample(download_raw(input_filedir), "data/interim", 0.01),
             output_filedir,
         )
-    except Exception as e: 
+    except Exception as e:
         print(e.message, e.args)
 
 
@@ -140,8 +141,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         ]
     ]
 
-    # Make column names more coding friendly 
-    df.columns = [_.lower().replace(' ','_') for _ in df.columns]
+    # Make column names more coding friendly
+    df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
 
     # Filter out data points with bad coordinates
     df = df[(df['latitude'] != 99999) & (df['longitude'] != 99999)]
@@ -188,11 +189,13 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     make_list.append("MISC.")
 
     # Read in violation regex rules
-    vio_regex = pd.read_csv(PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
+    vio_regex = pd.read_csv(
+        PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
 
     # Iterate over makes and replace aliases
     for key in vio_regex.itertuples():
-        df.loc[df["violation_code"] == row[1], "violation_description"] = row[2]
+        df.loc[df["violation_code"] == row[1],
+               "violation_description"] = row[2]
 
     # Enumerate list of car makes and replace with keys
     make_dict = {make: ind for ind, make in enumerate(make_list)}
@@ -227,8 +230,9 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     df.reset_index(inplace=True)
 
     # To keep compatibility with website
-    df.rename(columns={"lat": "latitude", "lon": "longitude", "rp_state_plate": "state_plate"}, inplace=True)
-    
+    df.rename(columns={"lat": "latitude", "lon": "longitude",
+              "rp_state_plate": "state_plate"}, inplace=True)
+
     if geojson:
         gpd.GeoDataFrame(
             df,
