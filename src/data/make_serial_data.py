@@ -130,7 +130,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     vio_desc_list.append("MISC.")
 
     # Enumerate list of violations and replace with keys
-    vio_desc_dict = {make: ind for ind, vio_d in enumerate(vio_desc_list)}
+    vio_desc_dict = {vio_d: ind for ind, vio_d in enumerate(vio_desc_list)}
     df["vio_desc_ind"] = df.violation_description.replace(vio_desc_dict)
 
     # Instantiate projection converter and change projection
