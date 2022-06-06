@@ -113,12 +113,37 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     make_dict = {make: ind for ind, make in enumerate(make_list)}
     df["make_ind"] = df.make.replace(make_dict)
 
+
     # Read in violation regex rules
     vio_regex = pd.read_csv(PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
 
     # Iterate over makes and replace aliases
     for row in vio_regex.itertuples():
         df = df.replace(row[2], row[1])
+
+    # Top violations to keep (Top 59 by count)
+    with open(PROJECT_DIR / 'references/top_violations.txt', 'r') as file:
+        vio_desc_list = [_.strip('\n') for _ in file.readlines()]
+
+    # Turn all other violations into "MISC."
+    df.loc[~df.violation_description.isin(vio_desc_list), "violation_description"] = "MISC."
+    vio_desc_list.append("MISC.")
+
+    # Enumerate list of violations and replace with keys
+    vio_desc_dict = {vio_d: ind for ind, vio_d in enumerate(vio_desc_list)}
+    df["vio_desc_ind"] = df.violation_description.replace(vio_desc_dict)
+
+    # Top violation codes to keep (Top 60 by count)
+    with open(PROJECT_DIR / 'references/top_violation_codes.txt', 'r') as file:
+        vio_code_list = [_.strip('\n') for _ in file.readlines()]
+
+    # Turn all other violation codes into "MISC."
+    df.loc[~df.violation_code.isin(vio_code_list), "violation_code"] = "MISC."
+    vio_code_list.append("MISC.")
+
+    # Enumerate list of violation codes and replace with keys
+    vio_code_dict = {vio_c: ind for ind, vio_c in enumerate(vio_code_list)}
+    df["vio_code_ind"] = df.violation_code.replace(vio_code_dict)
 
     # Instantiate projection converter and change projection
     transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
