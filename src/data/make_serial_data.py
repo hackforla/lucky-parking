@@ -15,17 +15,16 @@ PROJECT_DIR = Path(os.path.abspath(__file__).replace('\\', '/')).resolve().paren
 
 @click.command()
 @click.argument("output_filedir", type=click.Path())
-@click.argument("frac", type=click.FLOAT)
 @click.argument("geo", type=click.BOOL)
-def main(output_filedir: str, frac:float, geo: bool):
+def main(output_filedir: str, geo: bool):
     """Cleans and serializes more of the dataset to speed uploading time"""
     # Load newest raw data file
-    raw_file_list = (PROJECT_DIR / 'data/raw').rglob('*.csv')
+    raw_file_list = (PROJECT_DIR / 'data/interim').rglob('*.csv')
     if raw_file_list:
-        serial_clean(create_sample(max(raw_file_list, key=os.path.getctime), "data/interim", frac),output_filedir, geojson=geo)
+        serial_clean(max(raw_file_list, key=os.path.getctime), (PROJECT_DIR / 'data/processed'), geojson=geo)
     else:
-        serial_clean(create_sample(download_raw('data/raw'), "data/interim", frac),output_filedir, geojson=geo)
-)
+        print('Run make data first!')
+
 def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bool):
     """Removes unnecessary columns, erroneous data points and aliases,
     changes geometry projection from epsg:2229 to epsg:4326, and converts
@@ -69,7 +68,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     ]
 
     # Filter out data points with bad coordinates
-    df = df[(df.Latitude != 99999) & (df.Longitude != 99999)]
+    df = df[(df.latitude != 99999) & (df.longitude != 99999)]
 
     # Filter out bad coordinates
     df = df[
@@ -155,7 +154,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     df = df.drop(["latitude", "longitude"], axis=1)
 
     # Extract weekday and add as column
-    df["weekday"] = df["weekday"].dt.weekday.astype(int)
+    df["weekday"] = df["datetime"].dt.weekday.astype(int)
 
     # Set fine amount as int
     df["fine_amount"] = df["fine_amount"].astype(int)
