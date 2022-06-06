@@ -160,7 +160,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     df["fine_amount"] = df["fine_amount"].astype(int)
 
     # To keep compatibility with website
-    df.rename(columns={"lat": "latitude", "lon": "longitude"})
+    df.rename(columns={"lat": "latitude", "lon": "longitude", "rp_state_plate": "state_plate"}, inplace=True)
 
     # Drop filtered index and add new one
     df.reset_index(inplace=True)

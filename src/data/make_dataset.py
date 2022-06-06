@@ -227,8 +227,8 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     df.reset_index(inplace=True)
 
     # To keep compatibility with website
-    df.rename(columns={"lat": "latitude", "lon": "longitude"})
-
+    df.rename(columns={"lat": "latitude", "lon": "longitude", "rp_state_plate": "state_plate"}, inplace=True)
+    
     if geojson:
         gpd.GeoDataFrame(
             df,
