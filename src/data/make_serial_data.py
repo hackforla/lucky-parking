@@ -8,7 +8,6 @@ from pyproj import Transformer
 from typing import Union
 import geopandas as gpd
 from shapely.geometry import Point
-from make_dataset import download_raw, create_sample
 
 # Load project directory
 PROJECT_DIR = Path(os.path.abspath(__file__).replace(
@@ -93,9 +92,6 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     # Drop original date/time columns
     df = df.drop(["issue_date", "issue_time"], axis=1)
 
-    # Make column names more coding friendly
-    df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
-
     # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
     make_df["alias"] = make_df.alias.apply(lambda x: x.split(","))
@@ -170,6 +166,16 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
 
     # Drop filtered index and add new one
     df.reset_index(inplace=True)
+
+    # Writing the serialization documentation
+    with open(PROJECT_DIR / 'references/serial_key_values.txt', 'w', encoding='utf-8') as f:
+        f.write('\n'.join([str((colind, colname)).strip(r'\)\(')
+                for colind, colname in enumerate(df.columns)]))
+        f.write("\n\n")
+        for _ in [make_dict, vio_desc_dict, vio_code_dict]:
+            f.write(('\n'.join(str((k, v)).strip(r'\)\(')
+                    for v, k in _.items())))
+            f.write("\n\n")
 
     if geojson:
         gpd.GeoDataFrame(
