@@ -182,7 +182,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
                  )
 
     # Column serialization
-    column_dict = {colname: str(colind)
+    column_dict = {colname: str(colind)         # Geopandas only accepted strings as column names
                    for colind, colname in enumerate(df.columns)}
     df.rename(columns=column_dict, inplace=True)
 
@@ -197,7 +197,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         gpd.GeoDataFrame(
             df,
             crs="EPSG:4326",
-            geometry='7',
+            geometry=str(df.shape[1]),  # Picks last column as geometry
         ).to_file(
             PROJECT_DIR
             / output_filedir
