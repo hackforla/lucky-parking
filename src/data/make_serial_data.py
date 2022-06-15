@@ -8,7 +8,6 @@ from pyproj import Transformer
 from typing import Union
 import geopandas as gpd
 from shapely.geometry import Point
-from make_dataset import download_raw, create_sample
 
 # Load project directory
 PROJECT_DIR = Path(os.path.abspath(__file__).replace(
@@ -90,11 +89,11 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         df["issue_date"] + " " + df["issue_time"], format="%m/%d/%Y %H%M"
     )
 
+    # Extract weekday and add as column
+    df["weekday"] = df["datetime"].dt.weekday.astype(int)
+
     # Drop original date/time columns
     df = df.drop(["issue_date", "issue_time"], axis=1)
-
-    # Make column names more coding friendly
-    df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
 
     # Read in make aliases
     make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
@@ -109,8 +108,8 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         make_list = [_.strip('\n') for _ in file.readlines()]
 
     # Turn all other makes into "MISC."
-    df.loc[~df.make.isin(make_list), "make"] = "MISC."
-    make_list.append("MISC.")
+    df.loc[~df.make.isin(make_list), "make"] = "MISC"
+    make_list.append("MISC")
 
     # Enumerate list of car makes and replace with keys
     make_dict = {make: ind for ind, make in enumerate(make_list)}
@@ -130,8 +129,8 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
 
     # Turn all other violations into "MISC."
     df.loc[~df.violation_description.isin(
-        vio_desc_list), "violation_description"] = "MISC."
-    vio_desc_list.append("MISC.")
+        vio_desc_list), "violation_description"] = "MISC"
+    vio_desc_list.append("MISC")
 
     # Enumerate list of violations and replace with keys
     vio_desc_dict = {vio_d: ind for ind, vio_d in enumerate(vio_desc_list)}
@@ -142,8 +141,8 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         vio_code_list = [_.strip('\n') for _ in file.readlines()]
 
     # Turn all other violation codes into "MISC."
-    df.loc[~df.violation_code.isin(vio_code_list), "violation_code"] = "MISC."
-    vio_code_list.append("MISC.")
+    df.loc[~df.violation_code.isin(vio_code_list), "violation_code"] = "MISC"
+    vio_code_list.append("MISC")
 
     # Enumerate list of violation codes and replace with keys
     vio_code_dict = {vio_c: ind for ind, vio_c in enumerate(vio_code_list)}
@@ -155,27 +154,50 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         df["latitude"].values, df["longitude"].values
     )
 
+    # Round the coordinates
+    df[['lat', 'lon']] = df[['lat', 'lon']].round(5)
+
+    # Create geometry column
+    df['geometry'] = [Point(xy) for xy in zip(df['lon'], df['lat'])]
+
     # Drop original coordinate columns
     df = df.drop(["latitude", "longitude"], axis=1)
-
-    # Extract weekday and add as column
-    df["weekday"] = df["datetime"].dt.weekday.astype(int)
 
     # Set fine amount as int
     df["fine_amount"] = df["fine_amount"].astype(int)
 
-    # To keep compatibility with website
-    df.rename(columns={"lat": "latitude", "lon": "longitude",
-              "rp_state_plate": "state_plate"}, inplace=True)
-
     # Drop filtered index and add new one
-    df.reset_index(inplace=True)
+    df.reset_index(drop=True, inplace=True)
+
+    # Drop original columns
+    df = df.drop(["rp_state_plate",
+                  "make",
+                  "body_style",
+                  "color",
+                  "violation_code",
+                  "violation_description",
+                  "lat",
+                  'lon'],
+                 axis=1
+                 )
+
+    # Column serialization
+    column_dict = {colname: str(colind)
+                   for colind, colname in enumerate(df.columns)}
+    df.rename(columns=column_dict, inplace=True)
+
+    # Writing the serialization documentation
+    with open(PROJECT_DIR / 'references/serial_key_values.txt', 'w', encoding='utf-8') as f:
+        for _ in [column_dict, make_dict, vio_desc_dict, vio_code_dict]:
+            f.write(('\n'.join(str((k, v)).strip(r'\)\(')
+                    for v, k in _.items())))
+            f.write("\n\n")
 
     if geojson:
         gpd.GeoDataFrame(
             df,
             crs="EPSG:4326",
-            geometry=[Point(xy) for xy in zip(df.longitude, df.latitude)],
+            geometry='7',
         ).to_file(
             PROJECT_DIR
             / output_filedir
