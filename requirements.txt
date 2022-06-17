@@ -12,3 +12,4 @@ geopandas
 matplotlib
 sqlalchemy
 geoalchemy2
+ipython
