@@ -86,8 +86,10 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         lambda x: "0" * (4 - len(str(int(x)))) + str(int(x))
     )
     df["datetime"] = pd.to_datetime(
-        df["issue_date"] + " " + df["issue_time"], format="%m/%d/%Y %H%M"
+        df["issue_date"] + " " + df["issue_time"], format="%m/%d/%Y %H%M", errors='coerce'
     )
+    # Create shortened date string
+    df["datetimestr"] = df["datetime"].dt.strftime('%Y%m%d%H%M')
 
     # Extract weekday and add as column
     df["weekday"] = df["datetime"].dt.weekday.astype(int)
@@ -160,8 +162,11 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     # Create geometry column
     df['geometry'] = [Point(xy) for xy in zip(df['lon'], df['lat'])]
 
-    # Drop original coordinate columns
-    df = df.drop(["latitude", "longitude"], axis=1)
+    # Save date string as datetime
+    df["datetime"] = df["datetimestr"]
+
+    # Drop original coordinate columns and datetimestr
+    df = df.drop(["latitude", "longitude", "datetimestr"], axis=1)
 
     # Set fine amount as int
     df["fine_amount"] = df["fine_amount"].astype(int)
