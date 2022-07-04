@@ -13,3 +13,5 @@ matplotlib
 sqlalchemy
 geoalchemy2
 ipython
+python-dotenv
+psycopg2

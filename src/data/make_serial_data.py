@@ -174,11 +174,11 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     # Drop filtered index and add new one
     df.reset_index(drop=True, inplace=True)
 
+    # To keep compatibility with website
+    df.rename(columns={"rp_state_plate": "state_plate"}, inplace=True)
+
     # Drop original columns
-    df = df.drop(["rp_state_plate",
-                  "make",
-                  "body_style",
-                  "color",
+    df = df.drop(["make",
                   "violation_code",
                   "violation_description",
                   "lat",
@@ -202,7 +202,7 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
         gpd.GeoDataFrame(
             df,
             crs="EPSG:4326",
-            geometry=str(df.shape[1]),  # Picks last column as geometry
+            geometry=df.columns[-1],  # Picks last column as geometry
         ).to_file(
             PROJECT_DIR
             / output_filedir
