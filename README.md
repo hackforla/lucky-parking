@@ -5,19 +5,6 @@ Hack for LA analysis of parking citation data
 
 Check out our [data contributor's Wiki](https://github.com/hackforla/lucky-parking/wiki/Data-Team-Contributing-Guide)
 
-#### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder: 
-[Link to screenshots](references/awsEC2.pdf)
-
-```
-# Once you have setup your AWS instance, make sure you run 
-chmod 400 your_pem_file.pem
-
-# Move your pem file to your .ssh folder
-mv your_pem_file.pem ~/.ssh
-
-# Open a terminal and SSH into your instance
-ssh -i ~/.ssh/your_pem_file.pem ubuntu@your_aws_host_name_here
-```
 
 #### Running it locally:
 It is suggested that you work on a fork of the code. Use the fork button on the repo page to create your own copy.
@@ -66,16 +53,35 @@ conda activate lucky-parking-analysis
 # Sample data is cleaned to data/processed
 make data
 
-
 # To create a smaller or larger sample from full dataset
-# Where 0 < frac < 1 and clean is True/False
+# Where 0 < frac <= 1 and clean is True/False
 # If the sample is cleaned, it ends up in data/processed
 # If the sample is not cleaned, it ends up in data/interim
-
 # Example of 20% sampling of dataset and is cleaned
 make sample frac=0.2 cleaned=True
-```
 
+# To create serialized data use make serial_data
+# Takes newest raw data file in data/interm
+# Add geo=true for geojson, geo=false for csv format
+# Saves to data/processed
+# Example of creation of serialized geojson file
+make serial_data geo=true
+
+
+```
+#### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder: 
+[Link to screenshots](references/awsEC2.pdf)
+
+```
+# Once you have setup your AWS instance, make sure you run 
+chmod 400 your_pem_file.pem
+
+# Move your pem file to your .ssh folder
+mv your_pem_file.pem ~/.ssh
+
+# Open a terminal and SSH into your instance
+ssh -i ~/.ssh/your_pem_file.pem ubuntu@your_aws_host_name_here
+```
 
 #### Uploading your changes to your fork
 If you haven't already, create a fork of the repo--this is your version of our code from which you will do pull requests from. 
