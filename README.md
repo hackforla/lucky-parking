@@ -9,8 +9,25 @@ Check out our [data contributor's Wiki](https://github.com/hackforla/lucky-parki
 #### Running it locally:
 It is suggested that you work on a fork of the code. Use the fork button on the repo page to create your own copy.
 ``` 
+# If you're using Windows, install WSL2
+https://docs.microsoft.com/en-us/windows/wsl/install
+
+# Start WSL2 at the command line
+bash
+
+# If you're using Mac install [Anaconda](https://www.anaconda.com/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+
+# If you're using Mac, install [Homebrew](https://brew.sh/)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install [make for mac](https://formulae.brew.sh/formula/make)
+brew install make
+
 # Update
 sudo apt upgrade
+
+# Install Git
+sudo apt install git-all
 
 # Git clone your fork
 git clone https://github.com/(your Git username here)/lucky-parking.git
@@ -29,7 +46,16 @@ bash Miniconda3-latest-Linux-x86_64.sh
 # Restart shell
 exec bash
 
-# Conda should now be available
+# If you forgot to initilize conda you might need to add the location of conda to your PATH variable
+https://www.geeksforgeeks.org/how-to-setup-anaconda-path-to-environment-variable/
+
+#If're using WSL2 on Windows you might need to exit and initialize Conda
+exit
+# Then
+bash
+
+# You should now have (base) in front if your prompt
+
 # Remove installer (optional)
 rm Miniconda3-latest-Linux-x86_64.sh
 
@@ -38,8 +64,7 @@ If using VSCode, use Remote-SSH extension as your development environment:
 [Remote-SSH Tutorial](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
 #### Using the Makefile to create data:
-If you're using a Mac, you might have to install some certificates first
-https://stackoverflow.com/questions/52805115/certificate-verify-failed-unable-to-get-local-issuer-certificate
+
 ```
 # Create your conda environment
 cd lucky-parking
@@ -67,6 +92,13 @@ make sample frac=0.2 cleaned=True
 # Example of creation of serialized geojson file
 make serial_data geo=true
 
+# Upload serial data to your database
+# Make sure that you have the .env file in the root folder
+make upload_serial
+
+# Create a local instance of the Lucky Parking PostGIS database using Docker
+https://github.com/hackforla/lucky-parking/wiki/Guide-to-Docker
+
 
 ```
 #### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder: 
@@ -75,6 +107,9 @@ make serial_data geo=true
 ```
 # Once you have setup your AWS instance, make sure you run 
 chmod 400 your_pem_file.pem
+
+# If you're running Windows
+https://gist.github.com/jaskiratr/cfacb332bfdff2f63f535db7efb6df93
 
 # Move your pem file to your .ssh folder
 mv your_pem_file.pem ~/.ssh
