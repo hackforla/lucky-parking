@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env conda run -n citation-analysis python
 import click
 from pathlib import Path
 import urllib3

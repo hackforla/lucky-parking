@@ -69,6 +69,10 @@ sample:
 serial_data: 
 	$(PYTHON_INTERPRETER) src/data/make_serial_data.py data/processed $(geo)
 
+## Upload latest serial geojson
+upload_serial:
+	$(PYTHON_INTERPRETER) src/data/upload_serial.py
+
 ## Set up python interpreter environment
 create_environment:
 ifeq (True,$(HAS_CONDA))
