@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env conda run -n citation-analysis python
 from dotenv import find_dotenv, load_dotenv
 import os
 from sqlalchemy import *
