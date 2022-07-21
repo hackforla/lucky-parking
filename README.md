@@ -54,7 +54,7 @@ exit
 # Then
 bash
 
-# You should now have (base) in front if your prompt
+# You should now have (base) in front of your prompt
 
 # Remove installer (optional)
 rm Miniconda3-latest-Linux-x86_64.sh
