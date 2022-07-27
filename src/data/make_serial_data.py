@@ -8,6 +8,7 @@ from pyproj import Transformer
 from typing import Union
 import geopandas as gpd
 from shapely.geometry import Point
+import json
 
 # Load project directory
 PROJECT_DIR = Path(os.path.abspath(__file__).replace(
@@ -192,11 +193,11 @@ def serial_clean(target_file: Union[Path, str], output_filedir: str, geojson: bo
     df.rename(columns=column_dict, inplace=True)
 
     # Writing the serialization documentation
-    with open(PROJECT_DIR / 'references/serial_key_values.txt', 'w', encoding='utf-8') as f:
-        for _ in [column_dict, make_dict, vio_desc_dict, vio_code_dict]:
-            f.write(('\n'.join(str((k, v)).strip(r'\)\(')
-                    for v, k in _.items())))
-            f.write("\n\n")
+    ref_names = ['column_names', 'makes', 'violation_descriptions', 'violation_codes']
+    ref_dicts = [column_dict, make_dict, vio_desc_dict, vio_code_dict]
+    for ref_n, ref_d in zip(ref_names,ref_dicts):
+        with open(PROJECT_DIR / 'references'/str(ref_n + '.json'), 'w', encoding='utf-8') as f:
+            json.dump({v:k for k,v in ref_d.items()}, f, indent=4)
 
     if geojson:
         gpd.GeoDataFrame(
