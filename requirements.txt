@@ -15,3 +15,5 @@ geoalchemy2
 ipython
 python-dotenv
 psycopg2-binary
+praw
+nltk
