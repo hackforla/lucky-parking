@@ -89,8 +89,8 @@ db-backups
 # Mypy cache
 .mypy_cache/
 
-# test file
-src/data/date_threshold.py
+# PRAW config file
+praw.ini
 
 # ignore server and client directories from developer branches
 js/
