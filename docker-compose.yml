@@ -17,7 +17,8 @@ services:
         published: ${DB_PORT}
     volumes:
       - pgdb:/var/lib/postgresql/data
-      - ./db-backups/lp-db-dev.sql:/docker-entrypoint-initdb.d/lp-db-dev.sql
+#      - ./db-backups/lp-db-dev.sql:/docker-entrypoint-initdb.d/lp-db-dev.sql
+      - ./db/db-dev.sql:/docker-entrypoint-initdb.d/db-dev.sql
 
 volumes:
   pgdb:
