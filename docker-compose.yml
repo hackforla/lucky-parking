@@ -11,12 +11,14 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS}
     ports:
       - target: 5432
         published: ${DB_PORT}
     volumes:
       - pgdb:/var/lib/postgresql/data
-      - ./db-backups/lp-db-dev.sql:/docker-entrypoint-initdb.d/lp-db-dev.sql
+#      - ./db-backups/lp-db-dev.sql:/docker-entrypoint-initdb.d/lp-db-dev.sql
+      - ./db/db-dev.sql:/docker-entrypoint-initdb.d/db-dev.sql
 
 volumes:
   pgdb:
