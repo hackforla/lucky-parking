@@ -1,4 +1,7 @@
 require('dotenv').config({ path: `${__dirname}/../.env` });
+const logger = require('../utils/logger');
+
+logger.info('Environment: ', { path: `${__dirname}/../.env` });
 
 const { DB_USER } = process.env;
 const { DB_PASSWORD } = process.env;

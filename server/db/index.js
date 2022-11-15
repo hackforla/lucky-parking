@@ -23,6 +23,8 @@ const pool = new Pool(poolParameters);
   } finally {
     client.release();
   }
-})().catch((err) => logger.error(err.stack));
+})().catch((err) => {
+  logger.error(err.stack);
+});
 
 module.exports = pool;

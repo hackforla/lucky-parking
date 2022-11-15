@@ -46,30 +46,35 @@ const generateZipData = (data) => {
 */
 
 const getAll = async (req, res) => {
-  const { longitude } = req.query;
-  const { latitude } = req.query;
-  const query = format(
-    `
-    SELECT index, ST_AsGeoJSON(geometry) FROM test1
-    WHERE ST_X(geometry) BETWEEN %L AND %L
-    AND ST_Y(geometry) BETWEEN %L AND %L
-    LIMIT 15000;`,
-    longitude[0],
-    latitude[0],
-    longitude[1],
-    latitude[1]
-  );
+  // const { longitude } = req.query;
+  // const { latitude } = req.query;
+  // const query = format(
+  //   `
+  //   SELECT index, ST_AsGeoJSON(geometry) FROM test1
+  //   WHERE ST_X(geometry) BETWEEN %L AND %L
+  //   AND ST_Y(geometry) BETWEEN %L AND %L
+  //   LIMIT 15000;`,
+  //   longitude[0],
+  //   latitude[0],
+  //   longitude[1],
+  //   latitude[1]
+  // );
 
-  const data = await db.query(query);
+  // const data = await db.query(query);
 
-  if (data) {
-    res.status(200).send(generateGeoData(data.rows));
-  } else {
-    res.status(400).send({
-      data: 'No data',
-      success: false,
-    });
-  }
+  // if (data) {
+  //   res.status(200).send(generateGeoData(data.rows));
+  // } else {
+  //   res.status(400).send({
+  //     data: 'No data',
+  //     success: false,
+  //   });
+  // }
+
+  res.status(400).send({
+    data: 'No data',
+    success: false,
+  });
 };
 
 const getZipLayer = async (req, res) => {
