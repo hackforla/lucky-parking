@@ -13,7 +13,9 @@
         "outputPath": "dist/apps/api-legacy",
         "main": "apps/api-legacy/src/index.js",
         "tsConfig": "apps/api-legacy/tsconfig.app.json",
-        "assets": ["apps/api-legacy/src/assets"]
+        "assets": ["apps/api-legacy/src/assets"],
+        "webpackConfig": "apps/api-legacy/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
