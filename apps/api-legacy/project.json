@@ -11,7 +11,7 @@
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/apps/api-legacy",
-        "main": "apps/api-legacy/src/main.ts",
+        "main": "apps/api-legacy/src/index.js",
         "tsConfig": "apps/api-legacy/tsconfig.app.json",
         "assets": ["apps/api-legacy/src/assets"]
       },
