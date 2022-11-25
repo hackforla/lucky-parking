@@ -13,7 +13,7 @@
         "outputPath": "dist/apps/client-legacy",
         "index": "apps/client-legacy/src/index.html",
         "baseHref": "/",
-        "main": "apps/client-legacy/src/main.tsx",
+        "main": "apps/client-legacy/src/index.js",
         "polyfills": "apps/client-legacy/src/polyfills.ts",
         "tsConfig": "apps/client-legacy/tsconfig.app.json",
         "assets": [
