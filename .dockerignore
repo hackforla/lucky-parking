@@ -1,0 +1,15 @@
+# Ignore all
+*
+
+# Allow list for directories
+!/apps
+!/libs
+
+# Allow list for files
+!.env
+!Dockerfile*
+!babel.config.json
+!docker-compose*
+!package.json
+!tsconfig.base.json
+!yarn.lock

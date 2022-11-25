@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `${__dirname}/../.env` });
+require('dotenv').config();
 
 const { DB_USER } = process.env;
 const { DB_PASSWORD } = process.env;
