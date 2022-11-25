@@ -1,0 +1,73 @@
+/** 
+ * When instructions window is expanded
+ */
+.instructions-container {
+  grid-area: instr;
+  display: flex;
+  justify-content: center;
+  height: auto;
+  width: 100vw;
+  background-color: #e5e5e5;
+  color: black;
+  padding: 3em 0 1em 0;
+
+  h2 {
+    margin-right: 2em;
+    font-size: 30px;
+    font-weight: #{map-get($font-weight, bold)};
+    white-space: nowrap;
+  }
+
+  .instructions {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-self: center;
+
+    .text-description {
+      font-weight: #{map-get($font-weight, normal)};
+      line-height: #{map-get($line-height-base, desktop)};
+      font-size: 18px;
+      text-align: left;
+
+      .bullet-point {
+        font-weight: #{map-get($font-weight, light)};
+        line-height: #{map-get($line-height-base, desktop)};
+      }
+    }
+
+    ul {
+      margin: 0.5em 1em 0 1em;
+    }
+
+    .button-instructions {
+      width: 130px;
+      height: 32px;
+      margin: 2em 0 0 10em;
+      font-weight: #{map-get($font-weight, bold)};
+      font-size: 14px;
+      color: white;
+      background-color: #858585;
+      border-radius: 2px;
+    }
+  }
+}
+
+/** 
+ * When instructions window is collapsed
+ */
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .button-instructions {
+    width: 109px;
+    height: 29px;
+    font-weight: #{map-get($font-weight, bold)};
+    font-size: 14px;
+    color: white;
+    background-color: #858585;
+    border-radius: 2px;
+  }
+}
