@@ -1,0 +1,19 @@
+name: luckyparkingenv
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - python-dotenv
+  - sqlalchemy
+  - geoalchemy2
+  - nb_conda_kernels
+  - ipykernel
+  - jupyterlab
+  - pandas
+  - geopandas
+  - pygeos
+  - descartes
+  - dask
+  - pyarrow
+  - seaborn
+  - matplotlib
