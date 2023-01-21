@@ -22,11 +22,7 @@ A [Hack for LA](https://www.hackforla.org/) project to help city planners and th
 ## Local Development
 
 - Fork the repository: https://github.com/hackforla/lucky-parking/fork.
-- Clone the project:
-
-```bash
-git clone https://github.com/hackforla/lucky-parking.git
-```
+- Clone your fork.
 
 - Install dependencies:
 
