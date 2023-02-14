@@ -1,4 +1,16 @@
-const typography = {
+type Typography = {
+    [key: string]: {
+            [key: string]: {
+                fontFamily: string;
+                fontSize: string;
+                fontWeight: number;
+                lineHeight: number;
+                letterSpacing?: string;
+            };
+    };
+};
+
+const typography: Typography =  {
     large: {
         'Headline 1': {
             fontFamily: 'Work Sans',
@@ -96,7 +108,7 @@ const typography = {
         'Headline 1 Small': {
             fontFamily: 'Work Sans',
             fontSize: '34px',
-            fontWeight: 600,
+            fontWeight: 400,
             lineHeight: 1.50,
             letterSpacing: '0.25px'
         },
@@ -156,7 +168,5 @@ const typography = {
             letterSpacing: '0.4px'
         },
     }
-
-}
-
+};
 export default typography;
