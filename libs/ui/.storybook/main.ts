@@ -21,6 +21,15 @@ const config: StorybookConfig = {
 
     // add your own webpack tweaks if needed
 
+    config?.module?.rules?.push({
+      use: [
+        {
+          loader: "postcss-loader",
+          options: {implementation: require.resolve("postcss")},
+        },
+      ],
+    });
+
     return config;
   },
 };
