@@ -1,4 +1,5 @@
 import typography from '../tokens/typography';
+import colors from '../tokens/colors';
 import React from 'react';
 
 type TagProps = {
@@ -6,12 +7,12 @@ type TagProps = {
     color: 'blue' | 'purple' | 'green';
 };
 const colorHexMap = {
-    'blue': '#D4E7FA',
-    'purple': '#EBDBFB',
-    'green': '#B3ECEC',
+    'blue': colors['primary']['200'],
+    'purple': colors['secondary']['200'],
+    'green': colors['tertiary']['200'],
 };
 
-const typographyMap = typography['large']['Paragraph 1 Regular'];
+const typographyMap = typography['screen']['Paragraph 1 Regular'];
 
 export default function Tag({ children, color}: TagProps) {
 

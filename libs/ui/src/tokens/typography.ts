@@ -11,7 +11,7 @@ type Typography = {
 };
 
 const typography: Typography =  {
-    large: {
+    screen: {
         'Headline 1': {
             fontFamily: 'Work Sans',
             fontSize: '55px',
@@ -104,7 +104,7 @@ const typography: Typography =  {
             letterSpacing: '0.03em',
         },
     },
-    small: {
+    mobile: {
         'Headline 1 Small': {
             fontFamily: 'Work Sans',
             fontSize: '34px',
