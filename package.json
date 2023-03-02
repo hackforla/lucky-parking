@@ -55,7 +55,7 @@
     "@babel/core": "7.12.13",
     "@babel/preset-typescript": "7.12.13",
     "@emotion/babel-plugin": "11.10.2",
-    "@nrwl/cli": "15.2.1",
+    "@nrwl/cli": "^15.6.0",
     "@nrwl/cypress": "15.2.1",
     "@nrwl/eslint-plugin-nx": "15.2.1",
     "@nrwl/express": "15.2.1",
