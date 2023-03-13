@@ -12,7 +12,20 @@ const config: StorybookConfig = {
     '../src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../src/theme/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
-  addons: [...(rootMain.addons || []), '@nrwl/react/plugins/storybook'],
+  addons: [
+    ...(rootMain.addons || []),
+    // '@nrwl/react/plugins/storybook',
+    '@storybook/addon-links',
+    '@storybook/addon-interactions',
+    {
+      name: '@storybook/addon-styling',
+      options: {
+        // Check out https://github.com/storybookjs/addon-styling/blob/main/docs/api.md
+        // For more details on this addon's options.
+        postCss: true,
+      },
+    },
+  ],
   webpackFinal: async (config, { configType }: Options) => {
     // apply any global webpack configs that might have been specified in .storybook/main.ts
     if (rootMain.webpackFinal) {
@@ -20,15 +33,6 @@ const config: StorybookConfig = {
     }
 
     // add your own webpack tweaks if needed
-
-    config?.module?.rules?.push({
-      use: [
-        {
-          loader: "postcss-loader",
-          options: {implementation: require.resolve("postcss")},
-        },
-      ],
-    });
 
     return config;
   },
