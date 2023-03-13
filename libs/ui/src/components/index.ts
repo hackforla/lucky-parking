@@ -1,1 +1,1 @@
-export * from './Tag.stories.mdx';
+export { default as Tag } from './tag';
