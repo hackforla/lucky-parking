@@ -1,0 +1,54 @@
+name: Feature request
+description: 'Suggest an idea for a new feature or enhancement '
+title: '[FEATURE] <TITLE_OF_FEATURE>'
+body:
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: >-
+        A short, simple description of a feature told from the perspective of
+        the person who desires the new capability.
+      placeholder: As a [persona], I want to <...> , so that <...>
+      value: As a [persona], I want to <...> , so that <...>
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: >-
+        A clear and concise description of what you want to happen, including
+        project impact, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: The Definition of Done for this request to be considered completed.
+      placeholder: >-
+        A list of requirements that a user story must adhere to for the team to
+        call it complete.
+      value: |-
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: references-design
+    attributes:
+      label: Design References
+      description: Any links to wireframes, mockups, etc.
+  - type: textarea
+    id: references-technical
+    attributes:
+      label: Technical References
+      description: Any links to technical documentation, code examples, etc.
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: Any additional notes, screenshots, etc. for the team to consider.
+      placeholder: >-
+        TIP: You can attach images by clicking this area to highlight it and
+        then dragging files inside.
