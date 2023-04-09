@@ -1,0 +1,21 @@
+{
+  "name": "lucky-parking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf dist node_modules && pnpm --recursive --parallel exec rm -rf dist node_modules",
+    "preinstall": "npx only-allow pnpm"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@changesets/cli": "^2.26.1",
+    "nx": "^15.9.2",
+    "vite-tsconfig-paths": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
