@@ -12,6 +12,7 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
+    "@storybook/builder-vite": "^7.0.2",
     "nx": "^15.9.2",
     "vite-tsconfig-paths": "^4.1.0"
   },
