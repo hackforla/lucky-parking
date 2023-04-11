@@ -1,0 +1,78 @@
+import _ from 'lodash';
+import { Meta, Story, Canvas } from '@storybook/blocks';
+import typography from '../tokens/typography';
+import '../assets/fonts/fonts.css';
+
+<Meta title="Theme/Typography" />
+
+# Typography
+###
+### Screen
+***Font:*** Work Sans
+***Weights:*** 400, 500, 600, 700
+<Canvas>
+    <Story name="Sceen (Desktop/Laptop)">
+        {_.map(typography.screen, (fontStyles, typographyName) => (
+            <div key={typographyName} style={{display: 'flex', alignItems: 'center'}}>
+                <div
+                    style={{
+                        fontFamily: `${fontStyles.fontFamily}`,
+                        fontSize: 14, 
+                        fontWeight: 400,
+                        color: '#999',
+                        marginRight: 10,
+                    }}
+                >
+                    {fontStyles.fontSize}
+                </div>
+                <div
+                    style= {{
+                        fontFamily: `${fontStyles.fontFamily}`,
+                        fontSize: `${fontStyles.fontSize}`, 
+                        fontWeight: `${fontStyles.fontWeight}`,
+                        lineHeight: `${fontStyles.lineHeight}`,
+                        letterSpacing: `${fontStyles.letterSpacing}`,
+                    }}
+                >
+                    {typographyName}
+                </div>
+            </div>
+        ))}
+    </Story>
+</Canvas>
+
+###
+### Mobile
+***Font:*** Work Sans 
+***Weights:*** 400, 500, 600, 700 
+<Canvas>
+    <Story name="Mobile">
+        {_.map(typography.mobile, (fontStyles, typographyName) => (
+            <div key={typographyName} style={{display: 'flex', alignItems: 'center'}}>
+                <div
+                    style={{
+                        fontFamily: `${fontStyles.fontFamily}`,
+                        fontSize: 14, 
+                        fontWeight: 400,
+                        color: '#999',
+                        marginRight: 10,
+                    }}
+                >
+                    {fontStyles.fontSize}
+                </div>
+                <div
+                    style= {{
+                        fontFamily: `${fontStyles.fontFamily}`,
+                        fontSize: `${fontStyles.fontSize}`, 
+                        fontWeight: `${fontStyles.fontWeight}`,
+                        lineHeight: `${fontStyles.lineHeight}`,
+                        letterSpacing: `${fontStyles.letterSpacing}`,
+                    }}
+                >
+                    {typographyName}
+                </div>
+            </div>
+        ))}
+    </Story>
+</Canvas>
+
