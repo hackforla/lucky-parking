@@ -92,9 +92,10 @@ def create_sample(
     pd.read_csv(
         target_file,
         header=0,
+        index_col=0,
         skiprows=lambda i: i > 0 and random.random() > sample_frac,
         low_memory=False,
-    ).to_csv(SAMPLE_FILEPATH, index=False)
+    ).reset_index(drop=True).to_csv(SAMPLE_FILEPATH, index=False)
 
     print("Sample complete")
 
@@ -118,7 +119,10 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     # Select columns of interest
     df = df[
         [
+<<<<<<< HEAD
             "Ticket number",
+=======
+>>>>>>> ff9e748 (migrate data)
             "Issue Date",
             "Issue time",
             "RP State Plate",
