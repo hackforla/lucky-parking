@@ -1,5 +1,6 @@
 {
-  "name": "client",
+  "name": "@lucky-parking/website",
+  "description": "",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,6 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "ui": "workspace:*"
+    "@lucky-parking/ui": "workspace:*"
   }
 }

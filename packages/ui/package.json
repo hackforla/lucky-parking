@@ -1,12 +1,14 @@
 {
-  "name": "ui",
+  "name": "@lucky-parking/ui",
+  "description": "",
   "private": true,
   "version": "0.0.0",
-  "files": ["./dist"],
-  "main": "./dist/main.js",
+  "main": "./index.ts",
   "scripts": {
-    "build": "rm -rf dist && tsc",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED"
 }

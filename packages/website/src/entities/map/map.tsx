@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { LngLat, LngLatBounds, Map as Mapbox } from 'mapbox-gl';
-import { FullContainer } from 'ui/src/components';
+import { FullContainer } from '@lucky-parking/ui';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 const LA_COUNTY_SW_POS = new LngLat(-117.646374, 34.823302);

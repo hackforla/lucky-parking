@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { FullContainer, ScreenContainer } from "ui/src/components";
+import { FullContainer, ScreenContainer } from "@lucky-parking/ui";
 
 export default function ScreenLayout() {
   return (
