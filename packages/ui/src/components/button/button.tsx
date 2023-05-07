@@ -18,16 +18,16 @@ const BUTTON_SIZE_STYLES: Record<ButtonSize, string> = {
 };
 
 const BUTTON_VARIANT_STYLES: Record<ButtonVariant, string> = {
-  [ButtonVariant.primary]: "bg-lp-blue-500 text-light-100 hover:bg-lp-blue-400",
-  [ButtonVariant.secondary]: "bg-lp-blue-200 text-lp-blue-700 hover:bg-lp-blue-300",
+  [ButtonVariant.primary]: "bg-blue-500 text-white-100 hover:bg-blue-400",
+  [ButtonVariant.secondary]: "bg-blue-200 text-blue-700 hover:bg-blue-300",
   [ButtonVariant.outline]:
-      "bg-lp-light-100 border border-lp-blue-500 text-lp-blue-500 hover:bg-lp-blue-100",
+      "bg-white-100 border border-blue-500 text-blue-500 hover:bg-blue-100",
 };
 
 const BUTTON_DISABLED_VARIANT_STYLES: Record<ButtonVariant, string> = {
-  [ButtonVariant.primary]: "bg-dark-200 text-light-200",
-  [ButtonVariant.secondary]: "bg-light-500 text-dark-200",
-  [ButtonVariant.outline]: "bg-light-400 border border-dark-200 text-dark-200",
+  [ButtonVariant.primary]: "bg-black-200 text-white-200",
+  [ButtonVariant.secondary]: "bg-white-500 text-black-200",
+  [ButtonVariant.outline]: "bg-white-400 border border-black-200 text-black-200",
 };
 
 interface ButtonProps extends PropsWithChildren {
@@ -44,19 +44,21 @@ export default function Button(props: ButtonProps) {
     variant = ButtonVariant.primary,
   } = props;
 
+  if (!children) return null;
+
   return (
-    <button
-      className={
-        clsx(
-          "rounded font-bold text-sm leading-5 tracking-wide",
-          BUTTON_SIZE_STYLES[size],
-          isDisabled
-            ? BUTTON_DISABLED_VARIANT_STYLES[variant]
-            : BUTTON_VARIANT_STYLES[variant]
-        )
-      }
-    >
-      {children}
-    </button>
+      <button
+          className={
+            clsx(
+                "rounded font-bold text-sm leading-5 tracking-wide",
+                BUTTON_SIZE_STYLES[size],
+                isDisabled
+                    ? BUTTON_DISABLED_VARIANT_STYLES[variant]
+                    : BUTTON_VARIANT_STYLES[variant]
+            )
+          }
+      >
+        {children}
+      </button>
   );
 }

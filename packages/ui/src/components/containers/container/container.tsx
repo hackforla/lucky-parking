@@ -1,5 +1,5 @@
-import { ElementType, forwardRef, PropsWithChildren } from 'react';
-import clsx from 'clsx';
+import { ElementType, forwardRef, PropsWithChildren } from "react";
+import clsx from "clsx";
 
 interface ContainerProps extends PropsWithChildren {
   as?: ElementType;
@@ -7,10 +7,10 @@ interface ContainerProps extends PropsWithChildren {
 }
 
 function Container(props: ContainerProps, ref: any) {
-  const { as: Element = 'div', className = '', children } = props;
+  const { as: Element = "div", className = "", children } = props;
 
   return (
-    <Element className={clsx('flex', className)} ref={ref}>
+    <Element className={clsx("flex", className)} ref={ref}>
       {children}
     </Element>
   );
