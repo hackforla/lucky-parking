@@ -1,8 +1,14 @@
-import React from 'react';
-import { Map } from '@/entities';
+import { Map } from "@/entities";
+import Header from "@/widgets/header";
+import Page from "@/shared/ui/page";
 
 function MainPage() {
-    return <Map />;
+  return (
+    <Page>
+      <Header />
+      <Map />
+    </Page>
+  );
 }
 
 export default MainPage;
