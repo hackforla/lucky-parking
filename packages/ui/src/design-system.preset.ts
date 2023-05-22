@@ -1,4 +1,4 @@
-import { colors, fontFamily, fontWeight } from "@/theme/tokens";
+import { colors, fontFamily, fontWeight } from "./theme/tokens";
 
 const preset = {
   theme: {
