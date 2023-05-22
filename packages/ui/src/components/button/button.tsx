@@ -21,13 +21,14 @@ const BUTTON_VARIANT_STYLES: Record<ButtonVariant, string> = {
   [ButtonVariant.primary]: "bg-blue-500 text-white-100 hover:bg-blue-400",
   [ButtonVariant.secondary]: "bg-blue-200 text-blue-700 hover:bg-blue-300",
   [ButtonVariant.outline]:
-      "bg-white-100 border border-blue-500 text-blue-500 hover:bg-blue-100",
+    "bg-white-100 border border-blue-500 text-blue-500 hover:bg-blue-100",
 };
 
 const BUTTON_DISABLED_VARIANT_STYLES: Record<ButtonVariant, string> = {
   [ButtonVariant.primary]: "bg-black-200 text-white-200",
   [ButtonVariant.secondary]: "bg-white-500 text-black-200",
-  [ButtonVariant.outline]: "bg-white-400 border border-black-200 text-black-200",
+  [ButtonVariant.outline]:
+    "bg-white-400 border border-black-200 text-black-200",
 };
 
 interface ButtonProps extends PropsWithChildren {
@@ -47,18 +48,18 @@ export default function Button(props: ButtonProps) {
   if (!children) return null;
 
   return (
-      <button
-          className={
-            clsx(
-                "rounded font-bold text-sm leading-5 tracking-wide",
-                BUTTON_SIZE_STYLES[size],
-                isDisabled
-                    ? BUTTON_DISABLED_VARIANT_STYLES[variant]
-                    : BUTTON_VARIANT_STYLES[variant]
-            )
-          }
-      >
+    <button
+      className={clsx(
+        "rounded",
+        BUTTON_SIZE_STYLES[size],
+        isDisabled
+          ? BUTTON_DISABLED_VARIANT_STYLES[variant]
+          : BUTTON_VARIANT_STYLES[variant]
+      )}
+    >
+      <span className="flex w-full justify-center items-center space-x-2.5 uppercase font-bold text-sm leading-5 tracking-wide">
         {children}
-      </button>
+      </span>
+    </button>
   );
 }
