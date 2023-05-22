@@ -11,6 +11,10 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.2",
     "clsx": "^1.2.1",
     "lodash": "^4.17.21",
     "mapbox-gl": "^2.13.0",
