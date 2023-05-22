@@ -1,6 +1,5 @@
 import { Button, ButtonVariant } from "@lucky-parking/ui";
 import Logo from "src/shared/ui/logo";
-import VerticalDivider from "@/shared/ui/vertical-divider";
 
 export default function Header() {
   return (
