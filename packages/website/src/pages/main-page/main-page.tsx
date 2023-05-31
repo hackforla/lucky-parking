@@ -1,7 +1,7 @@
-import { Map } from "@/entities";
 import Header from "@/widgets/header";
 import Page from "@/shared/ui/page";
-import ActionBox from "src/widgets/action-box";
+import ActionBox from "@/widgets/action-box";
+import ParkingInsightsMap from "@/widgets/parking-insights-map";
 
 function MainPage() {
   return (
@@ -12,7 +12,7 @@ function MainPage() {
         <ActionBox />
       </div>
 
-      <Map />
+      <ParkingInsightsMap />
     </Page>
   );
 }
