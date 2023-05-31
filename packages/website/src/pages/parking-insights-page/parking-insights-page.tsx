@@ -3,7 +3,7 @@ import Page from "@/shared/ui/page";
 import ActionBox from "@/widgets/action-box";
 import ParkingInsightsMap from "@/widgets/parking-insights-map";
 
-function MainPage() {
+function ParkingInsightsPage() {
   return (
     <Page>
       <Header />
@@ -17,4 +17,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default ParkingInsightsPage;
