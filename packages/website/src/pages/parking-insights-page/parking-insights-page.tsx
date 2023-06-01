@@ -8,7 +8,7 @@ function ParkingInsightsPage() {
     <Page>
       <Header />
 
-      <div className="absolute z-50 top-20 left-4">
+      <div className="absolute z-40 top-20 left-4">
         <ActionBox />
       </div>
 
