@@ -1,6 +1,6 @@
-import AreaSearch from "@/features/area-search/area-search";
 import DrawBoundaryButton from "@/widgets/action-box/ui/single-search-section/draw-boundary-button";
 import ActionBoxSection from "src/widgets/action-box/ui/action-box-section";
+import Geocoder from "@/shared/ui/geocoder";
 
 export default function SingleSearchSection() {
   return (
@@ -9,7 +9,7 @@ export default function SingleSearchSection() {
         Get Citation Data for One Area
       </p>
 
-      <AreaSearch />
+      <Geocoder />
 
       <div className="w-1/2">
         <DrawBoundaryButton />
