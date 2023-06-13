@@ -2,7 +2,6 @@ const express = require("express");
 const routes = require("./routes");
 import { connectToDatabase } from "./services/database.service"
 
-
 const PORT = 3000;
 
 const app = express();
