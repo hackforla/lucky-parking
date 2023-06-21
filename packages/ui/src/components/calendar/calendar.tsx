@@ -11,12 +11,16 @@ import { isEqual } from './utils/isEqual';
 import { getMinMaxYear } from './utils/getMinMaxYear';
 
 interface CalendarProps { 
-  initDate?: Date
+  initDate?: Date,
+  onSelectValueChange: (arg0: Date) => void
 }
 
 const [minYear, maxYear] = getMinMaxYear(YEAR_RANGE)
+const minDate = new Date(minYear, 0, 1)
+const maxDate = new Date(maxYear, 11, 31)
 
-export default function Calendar({ initDate = new Date() }: CalendarProps) {
+export default function Calendar({ initDate = new Date(), onSelectValueChange }: CalendarProps) {
+  const [selected, setSelected] = useState<Date | null>(null)
   const [date, setDate] = useState(initDate)
   const [month, setMonth] = useState(initDate.getMonth() as Month)
   const [year, setYear]   = useState(clamp(initDate.getFullYear(), minYear, maxYear))
@@ -24,20 +28,18 @@ export default function Calendar({ initDate = new Date() }: CalendarProps) {
 
   function handleUpdateMonth(type: 'prev' | 'next') {
     const modify = type === 'prev' ? -1 : 1
-    const min = new Date(minYear, 0, 1)
-    const max = new Date(maxYear, 11, 31)
     const newDate = new Date(date)
     newDate.setMonth(date.getMonth() + modify)
   
-    if (newDate <= min) {
+    if (newDate <= minDate) {
       setMonth(0)
       setYear(minYear as Year)
-      setDate(min)
+      setDate(minDate)
     }
-    else if (newDate >= max) {
+    else if (newDate >= maxDate) {
       setMonth(11)
       setYear(maxYear as Year)
-      setDate(max)
+      setDate(maxDate)
     }
     else {
       setMonth(newDate.getMonth() as Month)
@@ -67,7 +69,13 @@ export default function Calendar({ initDate = new Date() }: CalendarProps) {
     })
   }
 
-  const handleSelected = (value: string) => { }
+  const handleSelected = ({ day, month, year }: CalendarDate) => { 
+    const newDate = new Date(year, month, day)
+    if (newDate > maxDate || newDate < minDate) return
+
+    setSelected(newDate)
+    onSelectValueChange(newDate)
+  }
 
   return (
     <div className="w-64">
@@ -110,16 +118,20 @@ export default function Calendar({ initDate = new Date() }: CalendarProps) {
                   }
                   const { day, month, year } = ele as CalendarDate
                   const key = `${month}/${day}/${year}`
+                  const isSelected = isEqual(ele as CalendarDate, selected)
                   const isCurrDate = isEqual(ele as CalendarDate, initDate)
                   const isCurrMonth = month === date.getMonth()
+
                   return (
                     <td
                       key={key}
-                      onClick={() => handleSelected(key)}
+                      onClick={() => handleSelected(ele as CalendarDate)}
                       className={clsx(
                         "h-8 w-8 font-normal leading-[18.8px] text-xs text-center",
-                        isCurrMonth ? 'text-black-500' : 'text-black-200',
-                        isCurrDate && 'inline-flex justify-center items-center rounded-full border-[1px]'
+                        isCurrDate && 'inline-flex justify-center items-center rounded-full border-[1px]',
+                        !isCurrMonth && 'text-black-200',
+                        !isSelected && 'hover:bg-blue-200 rounded-full',
+                        isSelected && 'rounded-full bg-blue-500 text-white-100'
                       )}
                     >
                       {day}
