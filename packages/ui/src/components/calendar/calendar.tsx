@@ -10,7 +10,7 @@ import { T_Calendar, CalendarDate, createCalendar } from './utils/createCalender
 import { isEqual } from './utils/isEqual';
 import { getMinMaxYear } from './utils/getMinMaxYear';
 
-interface CalendarProps { 
+interface CalendarProps {
   initDate?: Date,
   onSelectValueChange: (arg0: Date) => void
 }
@@ -21,7 +21,7 @@ const maxDate = new Date(maxYear, 11, 31)
 
 export default function Calendar({ initDate = new Date(), onSelectValueChange }: CalendarProps) {
   const [selected, setSelected] = useState<Date | null>(null)
-  const [date, setDate] = useState(initDate)
+  const [date, setDate]   = useState(initDate)
   const [month, setMonth] = useState(initDate.getMonth() as Month)
   const [year, setYear]   = useState(clamp(initDate.getFullYear(), minYear, maxYear))
   const calendar = createCalendar(year as Year, month)
@@ -30,7 +30,7 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
     const modify = type === 'prev' ? -1 : 1
     const newDate = new Date(date)
     newDate.setMonth(date.getMonth() + modify)
-  
+
     if (newDate <= minDate) {
       setMonth(0)
       setYear(minYear as Year)
@@ -45,10 +45,10 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
       setMonth(newDate.getMonth() as Month)
       setYear(newDate.getFullYear() as Year)
       setDate(newDate)
-    }  
-   }
+    }
+  }
 
-  const handleSetYear = (value: string) => { 
+  const handleSetYear = (value: string) => {
     const val = parseInt(value) as Year
     setYear(val)
 
@@ -59,9 +59,10 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
     })
   }
 
-  const handleSetMonth = (value: string) => { 
+  const handleSetMonth = (value: string) => {
     const val = parseInt(value) as Month
     setMonth(val)
+
     setDate(prev => {
       const newDate = new Date(prev)
       newDate.setMonth(val)
@@ -69,7 +70,7 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
     })
   }
 
-  const handleSelected = ({ day, month, year }: CalendarDate) => { 
+  const handleSelected = ({ day, month, year }: CalendarDate) => {
     const newDate = new Date(year, month, day)
     if (newDate > maxDate || newDate < minDate) return
 
@@ -110,11 +111,11 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
             </tr>
           </thead>
           <tbody>
-          {calendar.map((week: any, weekIdx: number) => (
+            {calendar.map((week: any, weekIdx: number) => (
               <tr key={'month' + weekIdx}>
                 {week.map((ele: T_Calendar, colIdx: any) => {
                   if (isEmpty(ele)) {
-                    return <td key={'empty' + colIdx} className='h-8 w-8'/>
+                    return <td key={'empty' + colIdx} className='h-8 w-8' />
                   }
                   const { day, month, year } = ele as CalendarDate
                   const key = `${month}/${day}/${year}`

@@ -5,7 +5,7 @@ export type MONTHS_OPTION = {
   text: string
 }
 
-export const MONTHS_RANGE: MONTHS_OPTION [] = [
+export const MONTHS_RANGE: MONTHS_OPTION[] = [
   { value: 0, text: 'January' },
   { value: 1, text: 'February' },
   { value: 2, text: 'March' },
