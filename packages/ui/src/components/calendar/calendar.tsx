@@ -22,13 +22,24 @@ export default function Calendar({ initDate = new Date() }: CalendarProps) {
   function handleUpdateMonth(type: 'prev' | 'next') { }
 
   const handleSetYear = (value: string) => { 
-    const val = parseInt(value)
+    const val = parseInt(value) as Year
     setYear(val)
+
+    setDate(prev => {
+      const newDate = new Date(prev)
+      newDate.setFullYear(val)
+      return newDate
+    })
   }
 
   const handleSetMonth = (value: string) => { 
     const val = parseInt(value) as Month
     setMonth(val)
+    setDate(prev => {
+      const newDate = new Date(prev)
+      newDate.setMonth(val)
+      return newDate
+    })
   }
 
   const handleSelected = (value: string) => { }
