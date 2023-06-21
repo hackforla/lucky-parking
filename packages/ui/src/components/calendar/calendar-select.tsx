@@ -34,17 +34,17 @@ export default function Select<T>({
   optionWidth,
 }: SelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false)
-  const renderIcon = isOpen 
-    ?  <ArrowDropUpIcon    sx={{ fontSize: 16, color: '#7A7A7B' }} />
-    :  <ArrowDropDownIcon  sx={{ fontSize: 16, color: '#7A7A7B' }} /> 
+  const renderIcon = isOpen
+    ? <ArrowDropUpIcon sx={{ fontSize: 16, color: '#7A7A7B' }} />
+    : <ArrowDropDownIcon sx={{ fontSize: 16, color: '#7A7A7B' }} />
 
   return (
-    <Root 
-      name={id} 
-      value={value as string} 
+    <Root
+      name={id}
+      value={value as string}
       onOpenChange={setIsOpen}
       onValueChange={onChange}
-      >
+    >
       <Trigger
         aria-label={id}
         className={clsx(
@@ -66,13 +66,13 @@ export default function Select<T>({
           <Viewport>
             <Group>
               {options.map(({ text, value }: any) => (
-                <Item 
+                <Item
                   value={value}
                   className={clsx(
-                  'flex items-center py-1.5 pl-3 select-none drop-shadow-md',
-                  'leading-[19.6px] text-sm text-black-500',
-                  'data-[highlighted]:outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white-100',
-                  center && 'pl-0 justify-center'
+                    'flex items-center py-1.5 pl-3 select-none drop-shadow-md',
+                    'leading-[19.6px] text-sm text-black-500',
+                    'data-[highlighted]:outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white-100',
+                    center && 'pl-0 justify-center'
                   )}
                 >
                   <ItemText>{text}</ItemText>
