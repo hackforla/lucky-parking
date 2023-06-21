@@ -1,3 +1,4 @@
+import { useState } from "react";
 import clsx from "clsx";
 import {
   Content,
@@ -13,7 +14,6 @@ import {
 } from '@radix-ui/react-select';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useState } from "react";
 interface SelectProps<T> {
   id: string;
   center?: boolean;
@@ -75,7 +75,7 @@ export default function Select<T>({
                   center && 'pl-0 justify-center'
                   )}
                 >
-                  <ItemText className=''>{text}</ItemText>
+                  <ItemText>{text}</ItemText>
                 </Item>
               ))}
             </Group>

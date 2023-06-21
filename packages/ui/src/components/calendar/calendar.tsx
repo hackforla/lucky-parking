@@ -1,18 +1,29 @@
+import { useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Select from './calendar-select';
+import { YEAR_RANGE } from './options_data/years';
+import { MONTHS_RANGE, Month } from './options_data/months';
 
 interface CalendarProps { }
 
 const tempCalendar = Array.from(Array(4), () => new Array(7).fill(0))
 
 export default function Calendar(props: CalendarProps) {
+  const [month, setMonth] = useState(5)
+  const [year, setYear]   = useState(2023)
 
   function handleUpdateMonth(type: 'prev' | 'next') { }
 
-  const handleSetYear = (value: string) => { }
+  const handleSetYear = (value: string) => { 
+    const val = parseInt(value)
+    setYear(val)
+  }
 
-  const handleSetMonth = (value: string) => { }
+  const handleSetMonth = (value: string) => { 
+    const val = parseInt(value) as Month
+    setMonth(val)
+  }
 
   const handleSelected = (value: string) => { }
 
@@ -20,8 +31,21 @@ export default function Calendar(props: CalendarProps) {
     <div className="w-64">
       <div className="flex px-6 h-[52px]">
         <div className="flex flex-1 items-center space-x-2">
-          <Select id='Year' />
-          <Select id='Month' />
+          <Select
+            id='Year'
+            value={month}
+            options={MONTHS_RANGE}
+            onChange={handleSetMonth}
+            optionWidth={100}
+          />
+          <Select
+            id='Year'
+            center={true}
+            value={year}
+            options={YEAR_RANGE}
+            onChange={handleSetYear}
+            optionWidth={58}
+          />
         </div>
         <div className="flex justify-center space-x-7">
           <button className="px-2" onClick={() => handleUpdateMonth('prev')}> <ArrowBackIosNewIcon sx={{ fontSize: 8, color: '#7A7A7B' }} /></button>
