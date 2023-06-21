@@ -1,17 +1,23 @@
 import { useState } from 'react';
+import clsx from 'clsx';
+import { isEmpty } from 'lodash';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Select from './calendar-select';
-import { YEAR_RANGE } from './options_data/years';
+import { YEAR_RANGE, Year } from './options_data/years';
 import { MONTHS_RANGE, Month } from './options_data/months';
+import { T_Calendar, CalendarDate, createCalendar } from './utils/createCalender';
+import { isEqual } from './utils/isEqual';
 
-interface CalendarProps { }
+interface CalendarProps { 
+  initDate?: Date
+}
 
-const tempCalendar = Array.from(Array(4), () => new Array(7).fill(0))
-
-export default function Calendar(props: CalendarProps) {
-  const [month, setMonth] = useState(5)
-  const [year, setYear]   = useState(2023)
+export default function Calendar({ initDate = new Date() }: CalendarProps) {
+  const [date, setDate] = useState(initDate)
+  const [month, setMonth] = useState<Month>(5)
+  const [year, setYear]   = useState<Year>(2023)
+  const calendar = createCalendar(year, month)
 
   function handleUpdateMonth(type: 'prev' | 'next') { }
 
@@ -60,10 +66,29 @@ export default function Calendar(props: CalendarProps) {
             </tr>
           </thead>
           <tbody>
-            {tempCalendar.map((week) => (
-              <tr>
-                {week.map((ele, idx) => {
-                  return <td className='h-8 w-8 font-normal leading-[18.8px] text-xs text-black-500 text-center'>{idx}</td>
+          {calendar.map((week: any, weekIdx: number) => (
+              <tr key={'month' + weekIdx}>
+                {week.map((ele: T_Calendar, colIdx: any) => {
+                  if (isEmpty(ele)) {
+                    return <td key={'empty' + colIdx} className='h-8 w-8'/>
+                  }
+                  const { day, month, year } = ele as CalendarDate
+                  const key = `${month}/${day}/${year}`
+                  const isCurrDate = isEqual(ele as CalendarDate, initDate)
+                  const isCurrMonth = month === date.getMonth()
+                  return (
+                    <td
+                      key={key}
+                      onClick={() => handleSelected(key)}
+                      className={clsx(
+                        "h-8 w-8 font-normal leading-[18.8px] text-xs text-center",
+                        isCurrMonth ? 'text-black-500' : 'text-black-200',
+                        isCurrDate && 'inline-flex justify-center items-center rounded-full border-[1px]'
+                      )}
+                    >
+                      {day}
+                    </td>
+                  )
                 })}
               </tr>
             ))}
