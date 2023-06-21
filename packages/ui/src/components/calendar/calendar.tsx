@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import clsx from 'clsx';
-import { isEmpty } from 'lodash';
+import { clamp, isEmpty } from 'lodash';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Select from './calendar-select';
@@ -8,18 +8,43 @@ import { YEAR_RANGE, Year } from './options_data/years';
 import { MONTHS_RANGE, Month } from './options_data/months';
 import { T_Calendar, CalendarDate, createCalendar } from './utils/createCalender';
 import { isEqual } from './utils/isEqual';
+import { getMinMaxYear } from './utils/getMinMaxYear';
 
 interface CalendarProps { 
   initDate?: Date
 }
 
+const [minYear, maxYear] = getMinMaxYear(YEAR_RANGE)
+
 export default function Calendar({ initDate = new Date() }: CalendarProps) {
   const [date, setDate] = useState(initDate)
-  const [month, setMonth] = useState<Month>(5)
-  const [year, setYear]   = useState<Year>(2023)
-  const calendar = createCalendar(year, month)
+  const [month, setMonth] = useState(initDate.getMonth() as Month)
+  const [year, setYear]   = useState(clamp(initDate.getFullYear(), minYear, maxYear))
+  const calendar = createCalendar(year as Year, month)
 
-  function handleUpdateMonth(type: 'prev' | 'next') { }
+  function handleUpdateMonth(type: 'prev' | 'next') {
+    const modify = type === 'prev' ? -1 : 1
+    const min = new Date(minYear, 0, 1)
+    const max = new Date(maxYear, 11, 31)
+    const newDate = new Date(date)
+    newDate.setMonth(date.getMonth() + modify)
+  
+    if (newDate <= min) {
+      setMonth(0)
+      setYear(minYear as Year)
+      setDate(min)
+    }
+    else if (newDate >= max) {
+      setMonth(11)
+      setYear(maxYear as Year)
+      setDate(max)
+    }
+    else {
+      setMonth(newDate.getMonth() as Month)
+      setYear(newDate.getFullYear() as Year)
+      setDate(newDate)
+    }  
+   }
 
   const handleSetYear = (value: string) => { 
     const val = parseInt(value) as Year
