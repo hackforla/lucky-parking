@@ -37,15 +37,12 @@ def main(input_filedir: str, output_filedir: str):
         else:
             RAW_DATA_FILEPATH = download_raw(input_filedir)
         clean(
-            create_sample(RAW_DATA_FILEPATH, "data/interim", 0.1),
-            output_filedir,
-        )
-    except:
-        print("Failed at 10% sampling, trying again")
-        clean(
             create_sample(RAW_DATA_FILEPATH, "data/interim", 0.01),
             output_filedir,
         )
+    except:
+        print("Failed")
+
 
 def download_raw(input_filedir: Union[Path, str]) -> Path:
     """Downloads raw dataset from lacity.org to input_filedir as {date}
