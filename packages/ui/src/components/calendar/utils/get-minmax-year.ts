@@ -1,4 +1,4 @@
-import { YEAR_OPTIONS } from "../options_data/years"
+import { YEAR_OPTIONS } from "../option-data/years"
 
 export const getMinMaxYear = (YEARS: YEAR_OPTIONS[]) => {
   let min = Infinity

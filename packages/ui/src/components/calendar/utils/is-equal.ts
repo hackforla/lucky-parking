@@ -1,4 +1,4 @@
-import { CalendarDate } from "./createCalender"
+import { CalendarDate } from "./create-calendar"
 
 export function isEqual({ day, month, year }: CalendarDate, targetDate: Date | null): boolean {
   if (!targetDate) return false
