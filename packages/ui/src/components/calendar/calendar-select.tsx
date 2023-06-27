@@ -69,10 +69,10 @@ export default function Select<T>({
                 <Item
                   value={value}
                   className={clsx(
-                    'flex items-center py-1.5 pl-3 select-none drop-shadow-md',
+                    'flex items-center py-1.5 px-3 select-none drop-shadow-md',
                     'leading-[19.6px] text-sm text-black-500',
                     'data-[highlighted]:outline-none data-[highlighted]:bg-blue-500 data-[highlighted]:text-white-100',
-                    center && 'pl-0 justify-center'
+                    center && 'px-1 justify-center'
                   )}
                 >
                   <ItemText>{text}</ItemText>

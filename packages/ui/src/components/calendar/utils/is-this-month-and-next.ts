@@ -1,4 +1,4 @@
-import { Month } from "../options_data/months"
+import { Month } from "../option-data/months"
 
 export function isThisAndNextMonth(date: Date, initMonth: Month): boolean {
   const currMonth = date.getMonth()
