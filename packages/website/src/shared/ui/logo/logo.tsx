@@ -9,7 +9,6 @@ export default function Logo() {
   
       {/* For Smaller Screens */}
       {/* <LogoSolidBlue /> */}
-  
     </div>
   );
 }
