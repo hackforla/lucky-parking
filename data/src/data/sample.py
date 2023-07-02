@@ -4,7 +4,8 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import os
 from make_dataset import clean, create_sample
-
+# Load project directory
+PROJECT_DIR = Path(__file__).resolve().parents[2]
 
 @click.command()
 @click.argument("frac", type=click.FLOAT)
@@ -12,9 +13,11 @@ from make_dataset import clean, create_sample
 def main(frac: float, cleaned: bool):
     """Downloads full dataset from lacity.org, and runs data processing
     scripts to turn raw data into cleaned data ready
-    to be analyzed. Also updates environmental
-    variable RAW_DATA_FILEPATH.
+    to be analyzed.
     """
+    raw_list = [_ for _ in (PROJECT_DIR / "data" /  "raw").glob("*.csv")]
+    RAW_DATA_FILEPATH = raw_list[0]
+
     if cleaned:
         clean(
             create_sample(RAW_DATA_FILEPATH, "data/interim", frac),
@@ -26,11 +29,6 @@ def main(frac: float, cleaned: bool):
 if __name__ == "__main__":
     # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     # logging.basicConfig(level=logging.INFO, format=log_fmt)
-
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
-    load_dotenv(find_dotenv())
-    RAW_DATA_FILEPATH = os.environ["RAW_DATA_FILEPATH"]
 
     # Run main function
     # logger = logging.getLogger(__name__)
