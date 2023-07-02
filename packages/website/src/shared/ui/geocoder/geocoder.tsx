@@ -38,7 +38,7 @@ export default function Geocoder(props: GeocoderProps) {
       const { features } = await fetchGeocodingData(query);
       setResults(features || []);
     })();
-  }, [hasQuery]);
+  }, [query]);
 
   return (
     <SearchInput
