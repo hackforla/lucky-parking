@@ -1,14 +1,20 @@
 import CompareModeButton from "@/widgets/action-box/ui/compare-section/compare-mode-button";
 import ActionBoxSection from "src/widgets/action-box/ui/action-box-section";
 
-export default function CompareSection() {
+interface CompareSectionProps {
+  onClose: () => void;
+}
+
+export default function CompareSection({ onClose }: CompareSectionProps) {
   return (
     <ActionBoxSection>
       <p className="heading-5 text-black-500 uppercase">
         Compare Data for Two Areas
       </p>
 
-      <CompareModeButton />
+      <div onClick={onClose} className="flex flex-col w-full">
+        <CompareModeButton />
+      </div>
     </ActionBoxSection>
   );
 }
