@@ -15,6 +15,9 @@ const getTag = (feature: IGeocoderResult) => {
     case "postcode": {
       return "Zip Code";
     }
+    case "council": {
+      return "Neighborhood Council";
+    }
     case "address":
     default:
       return "Place (Radius)";
