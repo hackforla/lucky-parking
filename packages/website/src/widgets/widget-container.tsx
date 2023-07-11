@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ActionBox from './action-box/ui/action-box';
 import CompareBox from './compare-box/ui/compare-box';
+import RegionData from './region-data/ui/region-data';
 
 const WidgetContainer = () => {
   const [currentWidget, setCurrentWidget] = useState('ActionBox');
