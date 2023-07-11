@@ -3,6 +3,8 @@ import Page from "@/shared/ui/page";
 import ParkingInsightsMap from "@/widgets/parking-insights-map";
 import WidgetContainer from "@/widgets/widget-container";
 
+import RegionData from "@/widgets/region-data/ui/region-data";
+
 function ParkingInsightsPage() {
   return (
     <Page>
