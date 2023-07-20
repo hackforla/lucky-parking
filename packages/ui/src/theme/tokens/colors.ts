@@ -10,7 +10,7 @@ const colors = {
     100: "#FBFBFB",
     200: "#F2F2F4",
     300: "#EDEDEF",
-    400: "rgba(229, 229, 231, 0.8)",
+    400: "#E9E9EB",
     500: "#E5E5E7",
   },
   blue: {
