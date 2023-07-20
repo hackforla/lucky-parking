@@ -3,7 +3,7 @@ import LogoSolidBlue from "../../../../public/logoVariants/logoSolidBlue.tsx";
 
 export default function Logo() {
   return (
-    <div className="flex space-x-2.5">
+    <div role="logo" className="flex space-x-2.5">
       {/* For Larger Screens */}
       <LogoPlusText />
   
