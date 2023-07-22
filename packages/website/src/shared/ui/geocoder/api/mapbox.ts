@@ -17,6 +17,7 @@ export const fetchGeocodingData = async (value: string) => {
   const res = await fetch(
     `https://api.mapbox.com/geocoding/v5/mapbox.places/${value}.json?${params}`
   );
+
   return res.ok ? res.json() : undefined;
 };
 
