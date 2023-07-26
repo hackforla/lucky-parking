@@ -43,6 +43,7 @@ export default function Button(props: ButtonProps) {
     isDisabled = false,
     size = ButtonSize.small,
     variant = ButtonVariant.primary,
+    ...rest
   } = props;
 
   if (!children) return null;
@@ -56,6 +57,7 @@ export default function Button(props: ButtonProps) {
           ? BUTTON_DISABLED_VARIANT_STYLES[variant]
           : BUTTON_VARIANT_STYLES[variant]
       )}
+      {...rest}
     >
       <span className="flex w-full justify-center items-center space-x-2.5 uppercase font-bold text-sm leading-5 tracking-wide">
         {children}
