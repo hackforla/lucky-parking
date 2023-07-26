@@ -6,11 +6,14 @@ const config: Config = {
   collectCoverage: true,
   collectCoverageFrom: [
     "!<rootDir>/node_modules",
+    "<rootDir>/packages/ui/**/*.{ts,tsx}",
     "<rootDir>/packages/website/**/*.{ts,tsx}",
   ],
-  modulePaths: ['<rootDir>/packages/website'],
+  modulePaths: [
+    '<rootDir>/packages/website', 
+  ],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/packages/website/src/$1'
+    '^@/(.*)$': ['<rootDir>/packages/website/src/$1'],
   },
   transform: {
     '^.+\\.(ts|tsx)?': ['ts-jest', {
