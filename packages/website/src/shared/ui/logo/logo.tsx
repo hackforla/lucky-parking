@@ -6,7 +6,7 @@ export default function Logo() {
     <div role="logo" className="flex space-x-2.5">
       {/* For Larger Screens */}
       <LogoPlusText />
-  
+
       {/* For Smaller Screens */}
       {/* <LogoSolidBlue /> */}
     </div>

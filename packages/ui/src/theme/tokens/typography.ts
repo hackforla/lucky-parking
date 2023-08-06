@@ -96,7 +96,7 @@ const typography: Typography = {
       fontWeight: 600,
       lineHeight: 1.4,
     },
-    BUTTON: {
+    "BUTTON": {
       fontFamily: "Work Sans",
       fontSize: "14px",
       fontWeight: 700,
@@ -153,14 +153,14 @@ const typography: Typography = {
       lineHeight: 1.5,
       letterSpacing: "1.25px",
     },
-    OVERLINE: {
+    "OVERLINE": {
       fontFamily: "Work Sans",
       fontSize: "12px",
       fontWeight: 700,
       lineHeight: 1.5,
       letterSpacing: "1.5px",
     },
-    Caption: {
+    "Caption": {
       fontFamily: "Work Sans",
       fontSize: "14px",
       fontWeight: 600,

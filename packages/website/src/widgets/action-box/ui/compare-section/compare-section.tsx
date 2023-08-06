@@ -12,7 +12,7 @@ export default function CompareSection({ onClose }: CompareSectionProps) {
         Compare Data for Two Areas
       </p>
 
-      <div onClick={onClose} className="flex flex-col w-full">
+      <div onClick={onClose} className="flex w-full flex-col">
         <CompareModeButton />
       </div>
     </ActionBoxSection>

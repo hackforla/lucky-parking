@@ -1,26 +1,29 @@
 import { Meta, StoryObj } from "@storybook/react";
-import AnnouncementIcon from '@mui/icons-material/Announcement';
+import AnnouncementIcon from "@mui/icons-material/Announcement";
 import Button, { ButtonVariant } from "../button";
 import { Modal, ModalClose, ModalContent, ModalTrigger } from "./modal";
 
 const meta: Meta<typeof Modal> = {
   title: "Components/Modal",
-  component: Modal
-}
+  component: Modal,
+};
 
-type Content  = StoryObj<typeof ModalContent>;
+type Content = StoryObj<typeof ModalContent>;
 
 export const Basic: Content = {
   args: {
-    title: 'Message',
-    description: 'The slime replies back',
+    title: "Message",
+    description: "The slime replies back",
   },
   render: (args) => (
     <Modal>
-      <ModalTrigger > <AnnouncementIcon /> </ModalTrigger>
+      <ModalTrigger>
+        {" "}
+        <AnnouncementIcon />{" "}
+      </ModalTrigger>
       <ModalContent {...args}>
         <div className="w-52"> Hello World! I'm not a bad slime </div>
-        <div className="flex justify-end mt-6">
+        <div className="mt-6 flex justify-end">
           <ModalClose asChild>
             <Button variant={ButtonVariant.primary}>
               <p>Submit</p>
@@ -32,4 +35,4 @@ export const Basic: Content = {
   ),
 };
 
-export default meta
+export default meta;

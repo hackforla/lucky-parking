@@ -1,17 +1,19 @@
 name: Defect report
 description: Create a report to help us improve
-title: '[Defect]: <TITLE_OF_DEFECT>'
+title: "[Defect]: <TITLE_OF_DEFECT>"
 body:
   - type: textarea
     id: environment
     attributes:
       label: Environment
       description: >-
-        A summary of the environment in which the defect was found, including
-        but not limited to the following.
+        A summary of the environment in which the defect was found, including but not limited to the following.
+
+
       placeholder: >-
-        Include any information regarding the device, operating system, web
-        browser, links, etc.
+        Include any information regarding the device, operating system, web browser, links, etc.
+
+
       value: |-
         - **Device**:
         - **OS Version**:
@@ -24,11 +26,13 @@ body:
     attributes:
       label: Steps to Reproduce
       description: >-
-        A list of steps that, when followed, will precisely reproduce the
-        defect.
+        A list of steps that, when followed, will precisely reproduce the defect.
+
+
       placeholder: >-
-        A list of steps that, when followed, will precisely reproduce the
-        defect.
+        A list of steps that, when followed, will precisely reproduce the defect.
+
+
       value: |-
         1.
         2.
@@ -48,8 +52,9 @@ body:
     attributes:
       label: Actual Behavior
       description: >-
-        A clear and concise summary of what actually happened, i.e. the
-        defective behavior.
+        A clear and concise summary of what actually happened, i.e. the defective behavior.
+
+
       placeholder: What actually happened was ...
     validations:
       required: true
@@ -58,8 +63,9 @@ body:
     attributes:
       label: Additional Information
       description: >-
-        Any additional notes, screenshots, etc. for the team to consider to help
-        resolve this defect.
+        Any additional notes, screenshots, etc. for the team to consider to help resolve this defect.
+
+
       placeholder: >-
-        TIP: You can attach images or log files by clicking this area to
-        highlight it and then dragging files inside.
+        TIP: You can attach images or log files by clicking this area to highlight it and then dragging files inside.
+

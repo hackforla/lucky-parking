@@ -7,7 +7,7 @@ interface ActionBoxProps {
 
 export default function ActionBox({ onClose }: ActionBoxProps) {
   return (
-    <div className="flex flex-col w-[500px] bg-white-200 space-y-2">
+    <div className="bg-white-200 flex w-[500px] flex-col space-y-2">
       <SingleSearchSection />
 
       <CompareSection onClose={onClose} />

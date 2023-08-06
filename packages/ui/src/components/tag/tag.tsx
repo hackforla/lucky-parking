@@ -29,12 +29,11 @@ export default function Tag(props: TagProps) {
   if (!children) return null;
 
   return (
-      <span
-          className={clsx(
-              "inline-flex items-center rounded-full px-4 py-2 text-dark-500 paragraph-1 leading-none whitespace-nowrap",
-              TagBackgroundColor[color]
-          )}
-      >
+    <span
+      className={clsx(
+        "text-dark-500 paragraph-1 inline-flex items-center whitespace-nowrap rounded-full px-4 py-2 leading-none",
+        TagBackgroundColor[color],
+      )}>
       <p>{children}</p>
     </span>
   );

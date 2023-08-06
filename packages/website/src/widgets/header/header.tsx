@@ -3,11 +3,11 @@ import Logo from "@/shared/ui/logo";
 
 export default function Header() {
   return (
-    <div className="flex flex-1 h-[60px] px-5 py-2 justify-between items-center">
+    <div className="flex h-[60px] flex-1 items-center justify-between px-5 py-2">
       {/* Branding */}
       <div className="flex flex-1 items-center space-x-6">
         <Logo />
-          
+
         {/* Description */}
         <div>
           <p className="heading-4">Los Angeles Parking Citation Data</p>

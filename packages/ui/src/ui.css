@@ -3,122 +3,122 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: "Work Sans";
-    src: url("./assets/fonts/work-sans.ttf") format("truetype");
+  font-family: "Work Sans";
+  src: url("./assets/fonts/work-sans.ttf") format("truetype");
 }
 
 @layer components {
-    .heading-1 {
-        /*@apply font-semibold text-[55px] leading-[120%]*/
-        font-weight: 600;
-        font-size: 55px;
-        line-height: 120%;
-    }
+  .heading-1 {
+    /*@apply font-semibold text-[55px] leading-[120%]*/
+    font-weight: 600;
+    font-size: 55px;
+    line-height: 120%;
+  }
 
-    .heading-2 {
-        /*@apply font-semibold text-[40px] leading-[120%]*/
-        font-weight: 600;
-        font-size: 40px;
-        line-height: 120%;
-    }
+  .heading-2 {
+    /*@apply font-semibold text-[40px] leading-[120%]*/
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 120%;
+  }
 
-    .heading-3 {
-        /*@apply font-semibold text-[30px] leading-[120%]*/
-        font-weight: 600;
-        font-size: 30px;
-        line-height: 120%;
-    }
+  .heading-3 {
+    /*@apply font-semibold text-[30px] leading-[120%]*/
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 120%;
+  }
 
-    .heading-4 {
-        /*@apply font-semibold text-[20px] leading-[120%]*/
-        font-weight: 600;
-        font-size: 20px;
-        line-height: 120%;
-    }
+  .heading-4 {
+    /*@apply font-semibold text-[20px] leading-[120%]*/
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 120%;
+  }
 
-    .heading-5 {
-        /*@apply font-semibold text-[16px] leading-[120%]*/
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 120%;
-    }
+  .heading-5 {
+    /*@apply font-semibold text-[16px] leading-[120%]*/
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 120%;
+  }
 
-    .paragraph-1 {
-        /*@apply font-normal text-[12px] leading-[140%]*/
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 140%;
-    }
+  .paragraph-1 {
+    /*@apply font-normal text-[12px] leading-[140%]*/
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 140%;
+  }
 
-    .paragraph-2 {
-        @apply font-normal text-[14px] leading-[140%]
-        /*font-weight: 400;*/
-        /*font-size: 14px;*/
-        /*line-height: 140%;*/
-    }
+  .paragraph-2 {
+    @apply /*font-weight: 400;*/ /*font-size:
+        14px;*/ /*line-height:
+        140%;*/ text-[14px]
+        font-normal leading-[140%];
+  }
 
-    .paragraph-3 {
-        /*@apply font-normal text-[16px] leading-[140%]*/
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 140%;
-    }
+  .paragraph-3 {
+    /*@apply font-normal text-[16px] leading-[140%]*/
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+  }
 
-    .heading-1-sm {
-        /*@apply font-normal text-[534x] leading-[150%]*/
-        font-weight: 400;
-        font-size: 34px;
-        line-height: 150%;
-    }
+  .heading-1-sm {
+    /*@apply font-normal text-[534x] leading-[150%]*/
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 150%;
+  }
 
-    .heading-2-sm {
-        /*@apply font-semibold text-[24px] leading-[150%]*/
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 150%;
-    }
+  .heading-2-sm {
+    /*@apply font-semibold text-[24px] leading-[150%]*/
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 150%;
+  }
 
-    .heading-3-sm {
-        /*@apply font-medium text-[22px] leading-[150%]*/
-        font-weight: 500;
-        font-size: 22px;
-        line-height: 150%;
-    }
+  .heading-3-sm {
+    /*@apply font-medium text-[22px] leading-[150%]*/
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 150%;
+  }
 
-    .subtitle {
-        /*@apply font-semibold text-[18px] leading-[150%]*/
-        font-weight: 600;
-        font-size: 18px;
-        line-height: 150%;
-    }
+  .subtitle {
+    /*@apply font-semibold text-[18px] leading-[150%]*/
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 150%;
+  }
 
-    .body-1 {
-        /*@apply font-medium text-[18px] leading-[150%]*/
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 150%;
-    }
+  .body-1 {
+    /*@apply font-medium text-[18px] leading-[150%]*/
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 150%;
+  }
 
-    .body-2 {
-        /*@apply font-medium text-[16px] leading-[150%]*/
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 150%;
-    }
+  .body-2 {
+    /*@apply font-medium text-[16px] leading-[150%]*/
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+  }
 
-    .overline {
-        /*@apply font-bold text-[12px] leading-[150%] tracking-[1.5px]*/
-        font-weight: 700;
-        font-size: 12px;
-        line-height: 150%;
-        letter-spacing: 1.5px;
-    }
+  .overline {
+    /*@apply font-bold text-[12px] leading-[150%] tracking-[1.5px]*/
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 150%;
+    letter-spacing: 1.5px;
+  }
 
-    .caption {
-        /*@apply font-semibold text-[14px] leading-[150%] tracking-[0.4px]*/
-        font-weight: 600;
-        font-size: 14px;
-        line-height: 150%;
-        letter-spacing: 0.4px;
-    }
+  .caption {
+    /*@apply font-semibold text-[14px] leading-[150%] tracking-[0.4px]*/
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    letter-spacing: 0.4px;
+  }
 }

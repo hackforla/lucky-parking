@@ -88,8 +88,9 @@ body:
         - label: "[Leads] Add to team email"
           required: false
         - label: >-
-            [Data, Dev, UX] Grant access to the shared Google Drive as a
-            "content manager"
+            [Data, Dev, UX] Grant access to the shared Google Drive as a "content manager"
+
+
           required: false
         - label: '[PM] Grant access to the shared Google Drive as a "manager"'
           required: false
@@ -103,8 +104,9 @@ body:
         - label: "[Leads] Add to the lead team #lucky-parking-core channel"
           required: false
         - label: >-
-            [Data] Add to the development team #lucky-parking-data-science
-            channel
+            [Data] Add to the development team #lucky-parking-data-science channel
+
+
           required: false
         - label: "[Devs] Add to the development team #lucky-parking-dev channel"
           required: false
@@ -138,8 +140,9 @@ body:
         - label: "[All] Inviting to calendar events"
           required: false
         - label: >-
-            [All] Using the Zoom spreadsheet, 1Password vaults, and Zoom
-            accounts
+            [All] Using the Zoom spreadsheet, 1Password vaults, and Zoom accounts
+
+
           required: false
   - type: textarea
     id: notes
@@ -149,48 +152,43 @@ body:
     attributes:
       value: >-
         ---
-
-
+        
+        
         ## References
-
-
+        
+        
         **Figma**
-
-
-        - [Figma Design
-        File](https://www.figma.com/file/R3N7mvDtlFbFgQm4OXcMih/Lucky-Parking)
-
-
+        
+        
+        - [Figma Design File](https://www.figma.com/file/R3N7mvDtlFbFgQm4OXcMih/Lucky-Parking)
+        
+        
         **GitHub**
-
-        - [Configuring two-factor
-        authentication](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication)
-
+        
+        - [Configuring two-factor authentication](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication)
+        
         - Teams:
           - [lucky-parking-write team](https://github.com/orgs/hackforla/teams/lucky-parking-write)
-
+        
         **Roster**
-
-
-        - [Roster
-        spreadsheet](https://docs.google.com/spreadsheets/d/1rtou2FkVwKV7-2RKiRDXb2uAq_w0jHakFydzUhoW2dU/edit)
-
-
+        
+        
+        - [Roster spreadsheet](https://docs.google.com/spreadsheets/d/1rtou2FkVwKV7-2RKiRDXb2uAq_w0jHakFydzUhoW2dU/edit)
+        
+        
         **Slack**
-
-
+        
+        
         - [#lucky-parking](https://hackforla.slack.com/archives/CPFDMSV6V)
-
-        -
-        [#lucky-parking-core](https://hackforla.slack.com/archives/C0522K72NAU)
-
+        
+        - [#lucky-parking-core](https://hackforla.slack.com/archives/C0522K72NAU)
+        
         - [#lucky-parking-dev](https://hackforla.slack.com/archives/C049S985R7W)
-
-        -
-        [#lucky-parking-data-science](https://hackforla.slack.com/archives/C044H1DETLH)
-
-
+        
+        - [#lucky-parking-data-science](https://hackforla.slack.com/archives/C044H1DETLH)
+        
+        
         **Hack for LA**
+        
+        - [Organization Onboarding/Offboarding Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)
 
-        - [Organization Onboarding/Offboarding
-        Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)

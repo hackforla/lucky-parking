@@ -18,7 +18,7 @@ export default function RegionList() {
     <div>
       {optionData.map((option) => (
         <div className="flex items-center" key={option.id}>
-          <label className="relative flex cursor-pointer items-center rounded-full py-[8px] mr-[8px]">
+          <label className="relative mr-[8px] flex cursor-pointer items-center rounded-full py-[8px]">
             <input
               type="radio"
               id={option.id}
@@ -28,7 +28,7 @@ export default function RegionList() {
               onChange={handleRadioChange}
               checked={selectedOption === option.id}
             />
-            <div className="pointer-events-none absolute top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 opacity-0 peer-checked:opacity-100">
+            <div className="pointer-events-none absolute left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 opacity-0 peer-checked:opacity-100">
               <svg className="h-3 w-3" viewBox="0 0 16 16" fill="currentColor">
                 <circle cx="8" cy="8" r="8"></circle>
               </svg>
@@ -42,4 +42,3 @@ export default function RegionList() {
     </div>
   );
 }
-
