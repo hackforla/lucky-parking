@@ -7,7 +7,7 @@ interface CompareBoxProps {
 
 export default function CompareBox({ onClose }: CompareBoxProps) {
   return (
-    <div className="flex flex-col w-[500px] bg-[#CFCFD1] space-y-[1px]">
+    <div className="flex w-[500px] flex-col space-y-[1px] bg-[#CFCFD1]">
       <CompareTitleSection onClose={onClose} />
 
       <SelectRegionSection />

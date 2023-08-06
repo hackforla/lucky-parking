@@ -7,7 +7,10 @@
       "type": "Feature",
       "place_type": ["place"],
       "relevance": 1,
-      "properties": {"wikidata": "Q65", "mapbox_id": "dXJuOm1ieHBsYzpDM2ZvN0E"},
+      "properties": {
+        "wikidata": "Q65",
+        "mapbox_id": "dXJuOm1ieHBsYzpDM2ZvN0E"
+      },
       "text_en": "Los Angeles",
       "language_en": "en",
       "place_name_en": "Los Angeles, California, United States",
@@ -16,7 +19,7 @@
       "place_name": "Los Angeles, California, United States",
       "bbox": [-118.521447, 33.899991, -118.126728, 34.161439],
       "center": [-118.242766, 34.053691],
-      "geometry": {"type": "Point", "coordinates": [-118.242766, 34.053691]},
+      "geometry": { "type": "Point", "coordinates": [-118.242766, 34.053691] },
       "context": [
         {
           "id": "district.14051052",

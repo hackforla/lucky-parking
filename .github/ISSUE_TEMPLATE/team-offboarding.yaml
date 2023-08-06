@@ -111,12 +111,12 @@ body:
     attributes:
       value: >-
         ---
-
-
+        
+        
         ## References
-
-
+        
+        
         **Hack for LA**
+        
+        - [Organization Onboarding/Offboarding Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)
 
-        - [Organization Onboarding/Offboarding
-        Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)

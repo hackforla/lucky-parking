@@ -10,16 +10,14 @@ import typography from "./typography";
 
 ### Screen
 
-**_Font:_** Work Sans
-**_Weights:_** 400, 500, 600, 700
+**_Font:_** Work Sans **_Weights:_** 400, 500, 600, 700
 
 <Canvas>
   <Story name="Sceen (Desktop/Laptop)">
     {_.map(typography.screen, (fontStyles, typographyName) => (
       <div
         key={typographyName}
-        style={{ display: "flex", alignItems: "center" }}
-      >
+        style={{ display: "flex", alignItems: "center" }}>
         <div
           style={{
             fontFamily: `${fontStyles.fontFamily}`,
@@ -27,8 +25,7 @@ import typography from "./typography";
             fontWeight: 400,
             color: "#999",
             marginRight: 10,
-          }}
-        >
+          }}>
           {fontStyles.fontSize}
         </div>
         <div
@@ -38,8 +35,7 @@ import typography from "./typography";
             fontWeight: `${fontStyles.fontWeight}`,
             lineHeight: `${fontStyles.lineHeight}`,
             letterSpacing: `${fontStyles.letterSpacing}`,
-          }}
-        >
+          }}>
           {typographyName}
         </div>
       </div>
@@ -51,16 +47,14 @@ import typography from "./typography";
 
 ### Mobile
 
-**_Font:_** Work Sans
-**_Weights:_** 400, 500, 600, 700
+**_Font:_** Work Sans **_Weights:_** 400, 500, 600, 700
 
 <Canvas>
   <Story name="Mobile">
     {_.map(typography.mobile, (fontStyles, typographyName) => (
       <div
         key={typographyName}
-        style={{ display: "flex", alignItems: "center" }}
-      >
+        style={{ display: "flex", alignItems: "center" }}>
         <div
           style={{
             fontFamily: `${fontStyles.fontFamily}`,
@@ -68,8 +62,7 @@ import typography from "./typography";
             fontWeight: 400,
             color: "#999",
             marginRight: 10,
-          }}
-        >
+          }}>
           {fontStyles.fontSize}
         </div>
         <div
@@ -79,8 +72,7 @@ import typography from "./typography";
             fontWeight: `${fontStyles.fontWeight}`,
             lineHeight: `${fontStyles.lineHeight}`,
             letterSpacing: `${fontStyles.letterSpacing}`,
-          }}
-        >
+          }}>
           {typographyName}
         </div>
       </div>

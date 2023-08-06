@@ -1,1 +1,1 @@
-export { default } from "./region-section.tsx"
+export { default } from "./region-section.tsx";

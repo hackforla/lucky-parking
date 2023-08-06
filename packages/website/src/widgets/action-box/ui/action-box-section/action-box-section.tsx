@@ -4,6 +4,6 @@ export default function ActionBoxSection(props: PropsWithChildren) {
   const { children } = props;
 
   return (
-    <div className="flex flex-col p-6 space-y-4 bg-white-100">{children}</div>
+    <div className="bg-white-100 flex flex-col space-y-4 p-6">{children}</div>
   );
 }

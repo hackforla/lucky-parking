@@ -6,7 +6,10 @@ interface SeeDataButtonProps {
   regionNumber: number;
 }
 
-export default function SeeDataButton({ buttonText, regionNumber }: SeeDataButtonProps) {
+export default function SeeDataButton({
+  buttonText,
+  regionNumber,
+}: SeeDataButtonProps) {
   const [showData, setShowData] = useState(false);
   const [key, setKey] = useState(0);
 
@@ -18,9 +21,8 @@ export default function SeeDataButton({ buttonText, regionNumber }: SeeDataButto
   return (
     <div>
       <div
-        className="absolute right-5 uppercase text-[#154782] heading-5 cursor-pointer"
-        onClick={handleClick}
-      >
+        className="heading-5 absolute right-5 cursor-pointer uppercase text-[#154782]"
+        onClick={handleClick}>
         {buttonText}
       </div>
       <div className="absolute right-0 top-0 z-20">

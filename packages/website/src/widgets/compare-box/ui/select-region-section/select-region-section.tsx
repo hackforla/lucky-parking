@@ -11,12 +11,12 @@ export default function CompareSection() {
 
   const [secondRegion, setSecondRegion] = useState("");
   const [showSecondSeeDataButton, setShowSecondSeeDataButton] = useState(false);
-  
+
   const handleFirstGeocoderSelect = (result: string) => {
     setFirstRegion(result);
     setShowFirstSeeDataButton(true);
   };
-  
+
   const handleSecondGeocoderSelect = (result: string) => {
     setSecondRegion(result);
     setShowSecondSeeDataButton(true);
@@ -56,7 +56,7 @@ export default function CompareSection() {
         <Geocoder onSelect={handleSecondGeocoderSelect} />
       </div>
 
-      <div className="flex flex-col w-full pt-2">
+      <div className="flex w-full flex-col pt-2">
         <NextButton />
       </div>
     </CompareBoxSection>

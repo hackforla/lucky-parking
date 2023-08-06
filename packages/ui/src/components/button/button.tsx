@@ -55,11 +55,10 @@ export default function Button(props: ButtonProps) {
         BUTTON_SIZE_STYLES[size],
         isDisabled
           ? BUTTON_DISABLED_VARIANT_STYLES[variant]
-          : BUTTON_VARIANT_STYLES[variant]
+          : BUTTON_VARIANT_STYLES[variant],
       )}
-      {...rest}
-    >
-      <span className="flex w-full justify-center items-center space-x-2.5 uppercase font-bold text-sm leading-5 tracking-wide">
+      {...rest}>
+      <span className="flex w-full items-center justify-center space-x-2.5 text-sm font-bold uppercase leading-5 tracking-wide">
         {children}
       </span>
     </button>

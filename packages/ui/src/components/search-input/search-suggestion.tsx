@@ -19,9 +19,8 @@ export default function SearchSuggestion({
 
   return (
     <div
-      className="flex items-center justify-between h-[50px] px-5 space-x-3 cursor-pointer"
-      onClick={onSuggestionClick}
-    >
+      className="flex h-[50px] cursor-pointer items-center justify-between space-x-3 px-5"
+      onClick={onSuggestionClick}>
       {children}
     </div>
   );
