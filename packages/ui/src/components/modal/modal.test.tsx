@@ -1,10 +1,10 @@
 import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { Modal, ModalClose, ModalContent, ModalTrigger } from "./modal";
+import { Modal, ModalClose, ModalContent, ModalDescription, ModalTitle, ModalTrigger } from "./modal";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import Button, { ButtonVariant } from "../button/button";
 
-describe("Modal and click modal trigger", () => {
+describe("Default Modal and click modal trigger", () => {
   beforeEach(() => {
     render(
       <Modal>
@@ -67,5 +67,41 @@ describe("Modal and click modal trigger", () => {
     const closeModal = screen.getByRole("button", { name: /close-modal/i });
     fireEvent.click(closeModal);
     expect(closeModal).not.toBeInTheDocument();
+  });
+});
+
+describe("Custom Modal Description and Title and click modal trigger", () => {
+  beforeEach(() => {
+    render(
+      <Modal>
+        <ModalTrigger asChild aria-label="open-modal">
+          <Button>
+            <p>Custom</p>
+          </Button>
+        </ModalTrigger>
+        <ModalContent className='w-[200px]'>
+          <ModalTitle className='text-3xl mb-4'>Kamina</ModalTitle>
+          <ModalDescription className='mb-3'>Believe In The <span className='font-bold'>Me</span> That Believe In <span className="font-bold">You</span></ModalDescription>
+          <ModalClose asChild>
+            <Button variant={ButtonVariant.primary}>
+              <p>Ok!</p>
+            </Button>
+          </ModalClose>
+        </ModalContent>
+      </Modal>
+    );
+
+    const openModal = screen.getByRole("button", { name: /open-modal/i });
+    fireEvent.click(openModal);
+  });
+
+
+  test("renders custom title", () => {
+    expect(screen.getByText("Kamina")).toBeInTheDocument();
+  });
+
+  test("renders custom description", () => {
+    const ele = screen.getByText('Believe ', { exact: false })
+    expect(ele.textContent).toEqual('Believe In The Me That Believe In You')
   });
 });
