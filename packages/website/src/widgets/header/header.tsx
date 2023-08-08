@@ -1,5 +1,5 @@
-import { Button, ButtonVariant } from "@lucky-parking/ui";
 import Logo from "@/shared/ui/logo";
+import HowItWorksButton from "./how-it-works-button";
 
 export default function Header() {
   return (
@@ -18,9 +18,7 @@ export default function Header() {
       </div>
 
       {/* Actions */}
-      <div>
-        <Button variant={ButtonVariant.secondary}>HOW IT WORKS</Button>
-      </div>
+      <HowItWorksButton/> 
     </div>
   );
 }
