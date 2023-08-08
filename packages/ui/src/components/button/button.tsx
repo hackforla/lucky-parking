@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, forwardRef } from "react";
 import clsx from "clsx";
 
 export enum ButtonSize {
@@ -37,7 +37,7 @@ interface ButtonProps extends PropsWithChildren {
   variant?: ButtonVariant;
 }
 
-export default function Button(props: ButtonProps) {
+export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(props: ButtonProps, ref) {
   const {
     children,
     isDisabled = false,
@@ -50,6 +50,7 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button
+      ref={ref}
       className={clsx(
         "rounded",
         BUTTON_SIZE_STYLES[size],
@@ -63,4 +64,5 @@ export default function Button(props: ButtonProps) {
       </span>
     </button>
   );
-}
+});
+

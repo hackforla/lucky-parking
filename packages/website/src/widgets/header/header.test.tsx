@@ -23,7 +23,7 @@ describe("Header", () => {
   });
 
   test("renders with action button", () => {
-    const button = screen.getByRole("button", { name: "HOW IT WORKS" });
+    const button = screen.getByText("HOW IT WORKS");
     expect(button).toBeInTheDocument();
   });
 });

@@ -7,7 +7,7 @@
     "clean": "rm -rf dist node_modules && pnpm --recursive --parallel exec rm -rf dist node_modules",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "jest --maxWorkers=50%"
   },
   "keywords": [],
   "author": "",
