@@ -17,11 +17,11 @@ interface ModalContentProps {
   title?: string;
   description?: string;
   children: ReactNode | undefined;
-  navClose?: boolean
+  showTopRightCloseButton?: boolean
 }
 
 export const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
-  ({ className='', title, description, children, navClose=true, ...props }, forwardedRef) => (
+  ({ className='', title, description, children, showTopRightCloseButton=true, ...props }, forwardedRef) => (
     <Portal>
       <Overlay className='bg-black-500 opacity-60 fixed inset-0 z-50'/>
       <Content 
@@ -33,7 +33,7 @@ export const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
         )}
         {...props}
         >
-        {title && navClose && (
+        {title && showTopRightCloseButton && (
           <div
             className={clsx(
               "mb-1 flex justify-end",
@@ -42,7 +42,7 @@ export const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
             {title && (
               <Title className="text-black-500 text-xl leading-5">{title}</Title>
             )}
-            {navClose &&
+            {showTopRightCloseButton &&
               <Close aria-label="close-modal">
                 <CloseIcon sx={{ fontSize: 24, color: "#1F1F1F" }} />
               </Close>

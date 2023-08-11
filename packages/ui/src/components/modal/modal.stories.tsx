@@ -18,8 +18,7 @@ export const Default: Content = {
   render: (args) => (
     <Modal key="default">
       <ModalTrigger>
-        {" "}
-        <AnnouncementIcon />{" "}
+        <AnnouncementIcon />
       </ModalTrigger>
       <ModalContent {...args}>
         <div className="w-52"> Hello World! I'm not a bad slime </div>

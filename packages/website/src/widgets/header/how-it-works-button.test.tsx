@@ -1,13 +1,15 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event'
 import HowItWorksButton from "./how-it-works-button";
 
 describe("Modal and click modal trigger", () => {
-  beforeEach(() => {
+  const user = userEvent.setup()
+  beforeEach( async () => {
     render(<HowItWorksButton/>);
 
     const openModal = screen.getByRole("button", { name: /open-modal/i });
-    fireEvent.click(openModal);
+    await user.click(openModal);
   })
   
   test("renders title", () => {
@@ -58,9 +60,9 @@ describe("Modal and click modal trigger", () => {
     expect(closeButton).toBeInTheDocument();
   });
 
-  test("pressing close button closes modal", () => {
+  test("pressing close button closes modal", async () => {
     const closeButton = screen.getByRole("button", { name: "GOT IT!" });
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
     
     expect(closeButton).not.toBeInTheDocument();
   });
