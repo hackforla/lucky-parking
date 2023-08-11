@@ -1,11 +1,13 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event'
 import { Modal, ModalClose, ModalContent, ModalDescription, ModalTitle, ModalTrigger } from "./modal";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import Button, { ButtonVariant } from "../button/button";
 
 describe("Default Modal and click modal trigger", () => {
-  beforeEach(() => {
+  const user = userEvent.setup()
+  beforeEach(async () => {
     render(
       <Modal>
         <ModalTrigger aria-label="open-modal">
@@ -26,7 +28,7 @@ describe("Default Modal and click modal trigger", () => {
     );
 
     const openModal = screen.getByRole("button", { name: /open-modal/i });
-    fireEvent.click(openModal);
+    await user.click(openModal);
   });
 
   test("renders announcement icon", () => {
@@ -51,9 +53,9 @@ describe("Default Modal and click modal trigger", () => {
     expect(screen.getByText("Submit")).toBeInTheDocument();
   });
 
-  test("clicking submit button closes modal", () => {
+  test("clicking submit button closes modal", async () => {
     const submitBttn = screen.getByText("Submit");
-    fireEvent.click(submitBttn);
+    await user.click(submitBttn);
     expect(submitBttn).not.toBeInTheDocument();
   });
 
@@ -63,15 +65,16 @@ describe("Default Modal and click modal trigger", () => {
     ).toBeInTheDocument();
   });
 
-  test("clicking close trigger button should close modal", () => {
+  test("clicking close trigger button should close modal", async () => {
     const closeModal = screen.getByRole("button", { name: /close-modal/i });
-    fireEvent.click(closeModal);
+    await user.click(closeModal);
     expect(closeModal).not.toBeInTheDocument();
   });
 });
 
 describe("Custom Modal Description and Title and click modal trigger", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    const user = userEvent.setup()
     render(
       <Modal>
         <ModalTrigger asChild aria-label="open-modal">
@@ -92,7 +95,7 @@ describe("Custom Modal Description and Title and click modal trigger", () => {
     );
 
     const openModal = screen.getByRole("button", { name: /open-modal/i });
-    fireEvent.click(openModal);
+    await user.click(openModal);
   });
 
 
