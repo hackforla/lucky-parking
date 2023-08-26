@@ -1,0 +1,41 @@
+name: CDK Deploy
+
+on:
+  push:
+    branches:
+      - main-test
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout main-test branch
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20'
+
+    - name: Install Client dependencies
+      run: |
+        npm install
+      working-directory: client
+
+    - name: Install CDK dependencies
+      run: |
+        npm install
+        npm install -g aws-cdk
+      working-directory: cdk
+
+    # - name: Run Tests
+    #   run: npm test
+
+    - name: CDK Deploy
+      run: cdk deploy
+      working-directory: cdk
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        AWS_DEFAULT_REGION: 'us-east-2'
