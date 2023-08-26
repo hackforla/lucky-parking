@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  ui:
+    build: ./packages/ui  # Location of the Dockerfile for the UI service
+    ports:
+      - "3000:3000"  # Map port 3000 in the container to port 3000 on the host
+    networks:
+      - mynetwork  # Attach this service to a custom network
+  
+  website:
+    build: ./packages/website  # Location of the Dockerfile for the website service
+    ports:
+      - "8080:8080"  # Map port 8080 in the container to port 8080 on the host
+    networks:
+      - mynetwork  # Attach this service to a custom network
+
+networks:
+  mynetwork:  # Custom network for the services to communicate
+    driver: bridge
