@@ -10,3 +10,5 @@ COPY . .
 
 RUN npm run build
 
+EXPOSE 80
+
