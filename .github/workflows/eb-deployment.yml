@@ -30,7 +30,7 @@ jobs:
     #   working-directory: cdk
 
     - name: CDK Deploy DockerStack
-      run: cdk deploy docker-stack
+      run: cdk deploy EcrDockerStack
       working-directory: cdk
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
@@ -51,7 +51,7 @@ jobs:
         sed -i "s#second-container-image#${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
 
     - name: CDK Deploy EbStack
-      run: cdk deploy eb-stack
+      run: cdk deploy MyElasticBeanstalkStack
       working-directory: cdk
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
