@@ -30,7 +30,7 @@ jobs:
     #   working-directory: cdk
 
     - name: CDK Deploy DockerStack
-      run: cdk deploy EcrDockerStack
+      run: cdk deploy MyEcrDockerStack
       working-directory: cdk
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
