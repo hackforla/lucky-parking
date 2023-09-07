@@ -2,9 +2,14 @@ FROM node:14-alpine as build-stage
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy package.json, pnpm-lock.yaml, and .pnpm-store to the container
+COPY package*.json pnpm-lock.yaml .pnpm-store ./
 
-RUN npm install
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Install dependencies using pnpm
+RUN pnpm install
 
 COPY . .
 
