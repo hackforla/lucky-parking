@@ -1,15 +1,40 @@
-FROM node:14-alpine as build-stage
+# Use Node.js image
+FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
+# Copy pnpm lock and workspace files at the root
+COPY pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml ./
+COPY tsconfig.base.json ./
+
+# Copy just the package.json and pnpm-lock.yaml for website
+COPY packages/website/package.json ./packages/website/
+COPY packages/ui/package.json ./packages/ui/
+
+# Install global pnpm
 RUN npm install -g pnpm
 
-COPY ../../package*.json ../../pnpm-lock.yaml ./
+# Install dependencies
+RUN pnpm install --frozen-lockfile --recursive
 
-RUN pnpm install
+WORKDIR /app/packages/website
+RUN pnpm install typescript --save-dev
 
-COPY . .
+# Copy all other files for website
+COPY packages/website ./packages/website
+COPY packages/ui ./packages/ui
 
-RUN npm run build
+# Set working directory for website
+WORKDIR /app/packages/website
 
-EXPOSE 8080
+# Build your code
+RUN pnpm run build
+
+# Start your app
+CMD ["pnpm", "start"]
+
+
+
+
