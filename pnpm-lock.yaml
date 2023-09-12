@@ -182,7 +182,11 @@ importers:
 
   packages/api-express: {}
 
-  packages/ui: {}
+  packages/ui:
+    devDependencies:
+      vite:
+        specifier: ^4.2.0
+        version: 4.2.0(@types/node@20.2.5)
 
   packages/website:
     dependencies:

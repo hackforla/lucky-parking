@@ -1,2 +1,5 @@
 **/.stories/
 **/*.stories.*
+node_modules
+.git
+.gitignore

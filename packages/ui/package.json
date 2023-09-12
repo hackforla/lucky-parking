@@ -7,7 +7,10 @@
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build": "react-scripts build"
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^4.2.0"
   },
   "keywords": [],
   "author": "",
