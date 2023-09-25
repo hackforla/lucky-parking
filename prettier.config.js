@@ -8,7 +8,7 @@ module.exports = {
   insertPragma: false,
   plugins: ["prettier-plugin-tailwindcss"],
   jsxSingleQuote: false,
-  printWidth: 80,
+  printWidth: 120,
   proseWrap: "never",
   quoteProps: "consistent",
   requirePragma: false,
