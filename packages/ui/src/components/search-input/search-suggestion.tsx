@@ -5,10 +5,7 @@ interface SearchSuggestionProps extends PropsWithChildren {
   onClick: () => void;
 }
 
-export default function SearchSuggestion({
-  children,
-  ...props
-}: SearchSuggestionProps) {
+export default function SearchSuggestion({ children, ...props }: SearchSuggestionProps) {
   const { onClick = _.noop } = props;
 
   const onSuggestionClick = (event: any) => {
@@ -18,10 +15,10 @@ export default function SearchSuggestion({
   };
 
   return (
-    <div
-      className="flex h-[50px] cursor-pointer items-center justify-between space-x-3 px-5"
+    <li
+      className="z-[100] flex h-[50px] cursor-pointer items-center justify-between space-x-3 px-5"
       onClick={onSuggestionClick}>
       {children}
-    </div>
+    </li>
   );
 }
