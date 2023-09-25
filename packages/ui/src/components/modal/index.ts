@@ -1,8 +1,1 @@
-export { 
-  Modal, 
-  ModalClose, 
-  ModalContent, 
-  ModalDescription,
-  ModalTitle, 
-  ModalTrigger 
-} from "./modal.tsx";
+export { Modal, ModalClose, ModalContent, ModalDescription, ModalTitle, ModalTrigger } from "./modal";
