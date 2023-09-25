@@ -6,11 +6,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import Select from "./calendar-select";
 import { YEAR_RANGE, Year } from "./option-data/years";
 import { MONTHS_RANGE, Month } from "./option-data/months";
-import {
-  T_Calendar,
-  CalendarDate,
-  createCalendar,
-} from "./utils/create-calendar";
+import { T_Calendar, CalendarDate, createCalendar } from "./utils/create-calendar";
 import { isEqual } from "./utils/is-equal";
 import { getMinMaxYear } from "./utils/get-minmax-year";
 
@@ -23,16 +19,11 @@ const [minYear, maxYear] = getMinMaxYear(YEAR_RANGE);
 const minDate = new Date(minYear, 0, 1);
 const maxDate = new Date(maxYear, 11, 31);
 
-export default function Calendar({
-  initDate = new Date(),
-  onSelectValueChange,
-}: CalendarProps) {
+export default function Calendar({ initDate = new Date(), onSelectValueChange }: CalendarProps) {
   const [selected, setSelected] = useState<Date | null>(null);
   const [date, setDate] = useState(initDate);
   const [month, setMonth] = useState(initDate.getMonth() as Month);
-  const [year, setYear] = useState(
-    clamp(initDate.getFullYear(), minYear, maxYear),
-  );
+  const [year, setYear] = useState(clamp(initDate.getFullYear(), minYear, maxYear));
   const calendar = createCalendar(year as Year, month);
 
   function handleUpdateMonth(type: "prev" | "next") {
@@ -86,24 +77,11 @@ export default function Calendar({
   };
 
   return (
-    <div className="w-64">
+    <div className="bg-white-100 w-64">
       <div className="flex h-[52px] px-6">
         <div className="flex flex-1 items-center space-x-2">
-          <Select
-            id="Year"
-            value={month}
-            options={MONTHS_RANGE}
-            onChange={handleSetMonth}
-            optionWidth={100}
-          />
-          <Select
-            id="Year"
-            center={true}
-            value={year}
-            options={YEAR_RANGE}
-            onChange={handleSetYear}
-            optionWidth={58}
-          />
+          <Select id="Year" value={month} options={MONTHS_RANGE} onChange={handleSetMonth} optionWidth={100} />
+          <Select id="Year" center={true} value={year} options={YEAR_RANGE} onChange={handleSetYear} optionWidth={58} />
         </div>
         <div className="flex justify-center space-x-7">
           <button className="px-2" onClick={() => handleUpdateMonth("prev")}>
@@ -121,9 +99,7 @@ export default function Calendar({
           <thead>
             <tr>
               {["M", "T", "W", "T", "F", "S", "S"].map((ele: string) => (
-                <td className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">
-                  {ele}
-                </td>
+                <td className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">{ele}</td>
               ))}
             </tr>
           </thead>
@@ -146,8 +122,7 @@ export default function Calendar({
                       onClick={() => handleSelected(ele as CalendarDate)}
                       className={clsx(
                         "h-8 w-8 text-center text-xs font-normal leading-[18.8px]",
-                        isCurrDate &&
-                          "inline-flex items-center justify-center rounded-full border-[1px]",
+                        isCurrDate && "inline-flex items-center justify-center rounded-full border-[1px]",
                         !isCurrMonth && "text-black-200",
                         !isSelected && "rounded-full hover:bg-blue-200",
                         isSelected && "text-white-100 rounded-full bg-blue-500",
