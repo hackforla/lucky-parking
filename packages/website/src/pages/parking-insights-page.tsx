@@ -1,8 +1,10 @@
+import { useSelector } from "react-redux";
 import { MapDrawControl, useMapDraw } from "@/entities/map/lib/controls";
-import Map from "@/features/map";
+import Map, { MapDrawInstructions } from "@/features/map";
 import Page from "@/pages/page";
-import Header from "@/widgets/header";
+import { selectors } from "@/shared/data/store/ui-slice";
 import { CitationExplorer } from "@/widgets/citation";
+import Header from "@/widgets/header";
 import { RadiusTool } from "@/widgets/radius-tool";
 
 const MAP_NAME = "parking-insights";
@@ -10,11 +12,22 @@ const MAP_NAME = "parking-insights";
 export default function ParkingInsightsPage() {
   const { drawRef } = useMapDraw();
 
+  const ui = useSelector(selectors.selectUi);
+
   return (
     <Page>
       <Header />
-      <div className="bg-white-100 absolute left-4 top-20 z-40 flex w-[500px] flex-col">
-        <CitationExplorer />
+
+      <div className="absolute top-20 z-40 w-full">
+        <div className="bg-white-100 absolute left-4 w-[500px]">
+          <CitationExplorer />
+        </div>
+
+        {ui.isMapInstructionsVisible && (
+          <div className="absolute left-[540px] right-5 ">
+            <MapDrawInstructions />
+          </div>
+        )}
       </div>
       <div className="absolute left-1/2 top-20 z-40">
         <RadiusTool isSubmitDisabled={false} onSubmit={(value) => console.log(value)} />

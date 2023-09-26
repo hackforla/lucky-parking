@@ -1,5 +1,5 @@
 import Geocoder, { SearchModeToggleButton } from "@/features/geocoder";
-import { DrawButton } from "@/features/map";
+import { MapDrawButton } from "@/features/map";
 import type { onEvent } from "@/shared/lib/types";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
@@ -21,7 +21,7 @@ export default function SingleSearch(props: SingleSearchProps) {
         <Geocoder onSelect={onSelect} />
 
         <div className="w-1/2">
-          <DrawButton />
+          <MapDrawButton />
         </div>
       </CitationExplorerSection>
 
