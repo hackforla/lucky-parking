@@ -19,6 +19,7 @@
     "@mui/material": "^5.14.11",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
+    "@reduxjs/toolkit": "^1.9.6",
     "@turf/turf": "^6.5.0",
     "@types/geojson": "^7946.0.11",
     "@types/lodash": "^4.14.199",
@@ -31,6 +32,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.1.6",
+    "react-redux": "^8.1.2",
     "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
