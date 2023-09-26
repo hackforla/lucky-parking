@@ -16,7 +16,7 @@ export default function ParkingInsightsPage() {
       <div className="absolute left-1/2 top-20 z-40">
         <RadiusTool isSubmitDisabled={false} onSubmit={(value) => console.log(value)} />
       </div>
-      <Map name={MAP_NAME} />;
+      <Map name={MAP_NAME} />
     </Page>
   );
 }
