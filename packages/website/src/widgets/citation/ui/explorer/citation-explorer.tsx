@@ -2,12 +2,16 @@ import _ from "lodash";
 import { useState } from "react";
 import { PlaceType, REGION_TYPE_BY_PLACE_TYPE, RegionType } from "@/features/geocoder/lib/constants";
 import { FeatureResult } from "@/features/geocoder/lib/types";
+import { selectors } from "@/shared/data/store/ui-slice";
+import { useSelector } from "react-redux";
 import ComparativeSearch from "../search/comparative-search";
+import DrawSearch from "../search/draw-search";
 import SingleSearch from "../search/single-seach";
 import ComparativeSearchVisualization from "../visualization/comparative-search-visualization";
 import SingleSearchVisualization from "../visualization/single-search-visualization";
 
 export default function CitationExplorer() {
+  const ui = useSelector(selectors.selectUi);
   const [isSingleSearchMode, setSingleSearchMode] = useState(true);
   const [isVisualizationMode, setVisualizationMode] = useState(false);
   const [regionType, setRegionType] = useState<RegionType | null>(null);
@@ -28,6 +32,10 @@ export default function CitationExplorer() {
     setRegionType(REGION_TYPE_BY_PLACE_TYPE[_.first(feature.place_type) as PlaceType]);
     setVisualizationMode(true);
   };
+
+  if (ui.isMapInstructionsVisible) {
+    return <DrawSearch />;
+  }
 
   if (isVisualizationMode && isSingleSearchMode) {
     return (
