@@ -19,7 +19,7 @@ export class UnitConvertor {
         break;
 
       case TYPE.KILOMETER:
-        this.context = new KiloMeterConvertor();
+        this.context = new KilometerConvertor();
         break;
 
       case TYPE.MILES:
@@ -80,7 +80,7 @@ class FeetConvertor implements Strategy {
   }
 }
 
-class KiloMeterConvertor implements Strategy {
+class KilometerConvertor implements Strategy {
   public feet(units: number) {
     return units * 3280.84;
   }
