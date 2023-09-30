@@ -1,3 +1,4 @@
+import { MapDrawControl, useMapDraw } from "@/entities/map/lib/controls";
 import Map from "@/features/map";
 import Page from "@/pages/page";
 import Header from "@/widgets/header";
@@ -7,6 +8,8 @@ import { RadiusTool } from "@/widgets/radius-tool";
 const MAP_NAME = "parking-insights";
 
 export default function ParkingInsightsPage() {
+  const { drawRef } = useMapDraw();
+
   return (
     <Page>
       <Header />
@@ -16,7 +19,9 @@ export default function ParkingInsightsPage() {
       <div className="absolute left-1/2 top-20 z-40">
         <RadiusTool isSubmitDisabled={false} onSubmit={(value) => console.log(value)} />
       </div>
-      <Map name={MAP_NAME} />
+      <Map name={MAP_NAME}>
+        <MapDrawControl ref={drawRef} mapId={MAP_NAME} />
+      </Map>
     </Page>
   );
 }
