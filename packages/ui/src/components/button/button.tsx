@@ -38,7 +38,7 @@ export interface ButtonProps extends PropsWithChildren {
   isDisabled?: boolean;
   size?: ButtonSize;
   variant?: ButtonVariant;
-  onClick?: (event: MouseEvent) => void;
+  onClick?: (arg0: any) => void;
 }
 
 export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(props: ButtonProps, ref) {
