@@ -2,8 +2,8 @@ import _ from "lodash";
 import { PropsWithChildren } from "react";
 import { SearchSuggestion } from "@lucky-parking/ui/src/components/search-input";
 import Tag, { TagColor } from "@lucky-parking/ui/src/components/tag";
+import { GeocodeResult } from "@/shared/lib/types";
 import { PlaceType, REGION_TYPE_BY_PLACE_TYPE, RegionType } from "../lib/constants";
-import { FeatureResult } from "../lib/types";
 
 type GeocoderResultColor = Record<string, TagColor>;
 
@@ -14,7 +14,7 @@ const COLOR: GeocoderResultColor = {
 };
 
 interface GeocoderResultProps extends PropsWithChildren {
-  feature: FeatureResult;
+  feature: GeocodeResult;
   onClick: (arg0?: any) => void;
 }
 

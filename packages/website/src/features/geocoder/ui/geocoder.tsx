@@ -3,10 +3,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import SearchInput from "@lucky-parking/ui/src/components/search-input";
 import { actions } from "@/shared/data/store/ui-slice";
-import type { Nil, onEvent } from "@/shared/lib/types";
+import type { GeocodeResult, Nil, onEvent } from "@/shared/lib/types";
 import { fetchForwardGeocodingData } from "../api";
 import type { PlaceType } from "../lib/constants";
-import type { FeatureResult } from "../lib/types";
 import { forwardGeocodeNeighborhoodCouncil } from "../lib/utilities";
 import GeocoderResult from "./geocoder-result";
 import GeocoderResultHeader from "./geocoder-result-header";
@@ -27,7 +26,7 @@ export default function Geocoder(props: GeocoderProps) {
 
   const [isSuggestionsVisible, setSuggestionsVisible] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<FeatureResult[]>([]);
+  const [results, setResults] = useState<GeocodeResult[]>([]);
 
   const hasQuery = useMemo(() => query && !_.isEmpty(query), [query]);
   const hasResults = useMemo(() => results && !_.isEmpty(results), [results]);
@@ -37,7 +36,7 @@ export default function Geocoder(props: GeocoderProps) {
     setSuggestionsVisible(true);
   };
 
-  const onSuggestionClick = (result: FeatureResult) => {
+  const onSuggestionClick = (result: GeocodeResult) => {
     setQuery(result.place_name);
     setSuggestionsVisible(false);
     setResults([]);

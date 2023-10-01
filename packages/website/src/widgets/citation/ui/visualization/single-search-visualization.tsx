@@ -3,17 +3,17 @@ import Tag from "@lucky-parking/ui/src/components/tag";
 import { CitationDataCategories, CitationDataFilter, CitationDataInsights } from "@/features/citation";
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
 import FakeInput from "@/shared/ui/fake-input";
-import type { onEvent } from "@/shared/lib/types";
+import type { GeocodeResult, onEvent } from "@/shared/lib/types";
 import { calculateDateRange, formatToRange } from "@/shared/lib/utilities/date";
 import { getFirstEnum } from "@/shared/lib/utilities/enum";
-import type { FeatureResult, RegionType } from "@/features/geocoder";
+import type { RegionType } from "@/features/geocoder";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerSectionTitle from "../explorer/citation-explorer-section-title";
 
 interface SingleSearchVisualizationProps {
   onClose: onEvent;
-  region: FeatureResult;
+  region: GeocodeResult;
   regionType: RegionType;
 }
 

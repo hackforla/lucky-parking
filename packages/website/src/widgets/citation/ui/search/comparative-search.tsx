@@ -2,8 +2,7 @@ import _ from "lodash";
 import { useState } from "react";
 import Button, { ButtonSize, ButtonVariant } from "@lucky-parking/ui/src/components/button";
 import Geocoder, { PLACE_TYPE_BY_REGION_TYPE, RegionType, RegionTypesSelection } from "@/features/geocoder";
-import type { FeatureResult } from "@/features/geocoder";
-import type { onEvent } from "@/shared/lib/types";
+import type { GeocodeResult, onEvent } from "@/shared/lib/types";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerSectionTitle from "../explorer/citation-explorer-section-title";
 import CitationExplorerTitle from "../explorer/citation-explorer-title";
@@ -22,8 +21,8 @@ interface ComparativeSearchProps {
   onRegion2Select: onEvent;
   onRegionTypeSelect: onEvent;
   onSubmit: onEvent;
-  region1: FeatureResult;
-  region2: FeatureResult;
+  region1: GeocodeResult;
+  region2: GeocodeResult;
   regionType: RegionType;
 }
 

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { CitationDataCategories, CitationDataFilter, CitationDataInsights } from "@/features/citation";
-import { FeatureResult } from "@/features/geocoder";
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
-import type { onEvent } from "@/shared/lib/types";
+import type { GeocodeResult, onEvent } from "@/shared/lib/types";
 import { calculateDateRange, formatToRange } from "@/shared/lib/utilities/date";
 import { getFirstEnum } from "@/shared/lib/utilities/enum";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
@@ -11,8 +10,8 @@ import CitationExplorerTitle from "../explorer/citation-explorer-title";
 
 interface ComparativeSearchVisualizationProps {
   onClose: onEvent;
-  region1: FeatureResult;
-  region2: FeatureResult;
+  region1: GeocodeResult;
+  region2: GeocodeResult;
   regionType: string;
 }
 
