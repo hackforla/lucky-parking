@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { useState } from "react";
 import { PlaceType, REGION_TYPE_BY_PLACE_TYPE, RegionType } from "@/features/geocoder/lib/constants";
-import { FeatureResult } from "@/features/geocoder/lib/types";
 import { selectors } from "@/shared/data/store/ui-slice";
+import { GeocodeResult } from "@/shared/lib/types";
 import { useSelector } from "react-redux";
 import ComparativeSearch from "../search/comparative-search";
 import DrawSearch from "../search/draw-search";
@@ -15,8 +15,8 @@ export default function CitationExplorer() {
   const [isSingleSearchMode, setSingleSearchMode] = useState(true);
   const [isVisualizationMode, setVisualizationMode] = useState(false);
   const [regionType, setRegionType] = useState<RegionType | null>(null);
-  const [region1, setRegion1] = useState<FeatureResult | null>(null);
-  const [region2, setRegion2] = useState<FeatureResult | null>(null);
+  const [region1, setRegion1] = useState<GeocodeResult | null>(null);
+  const [region2, setRegion2] = useState<GeocodeResult | null>(null);
 
   const onSearchModeToggle = () => {
     setSingleSearchMode((prevState) => !prevState);
@@ -25,7 +25,7 @@ export default function CitationExplorer() {
 
   const onVisualizationModeToggle = () => setVisualizationMode((prevState) => !prevState);
 
-  const onRegionSelect = (feature: FeatureResult) => {
+  const onRegionSelect = (feature: GeocodeResult) => {
     if (_.isNil(feature)) return;
 
     setRegion1(feature);
@@ -41,7 +41,7 @@ export default function CitationExplorer() {
     return (
       <SingleSearchVisualization
         regionType={regionType as RegionType}
-        region={region1 as FeatureResult}
+        region={region1 as GeocodeResult}
         onClose={onVisualizationModeToggle}
       />
     );
@@ -51,8 +51,8 @@ export default function CitationExplorer() {
     return (
       <ComparativeSearchVisualization
         onClose={onVisualizationModeToggle}
-        region1={region1 as FeatureResult}
-        region2={region2 as FeatureResult}
+        region1={region1 as GeocodeResult}
+        region2={region2 as GeocodeResult}
         regionType={regionType as RegionType}
       />
     );
@@ -67,8 +67,8 @@ export default function CitationExplorer() {
       onRegion2Select={setRegion2}
       onRegionTypeSelect={setRegionType}
       onSubmit={onVisualizationModeToggle}
-      region1={region1 as FeatureResult}
-      region2={region2 as FeatureResult}
+      region1={region1 as GeocodeResult}
+      region2={region2 as GeocodeResult}
       regionType={regionType as RegionType}
     />
   );
