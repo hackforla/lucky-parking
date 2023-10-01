@@ -28,10 +28,15 @@ export default function ParkingInsightsPage() {
             <MapDrawInstructions />
           </div>
         )}
+
+        {/* TODO: Implement actual behavior */}
+        {!ui.isMapInstructionsVisible && (
+          <div className="absolute left-1/2">
+            <RadiusTool isSubmitDisabled={false} onSubmit={(value) => console.log(value)} />
+          </div>
+        )}
       </div>
-      <div className="absolute left-1/2 top-20 z-40">
-        <RadiusTool isSubmitDisabled={false} onSubmit={(value) => console.log(value)} />
-      </div>
+
       <Map name={MAP_NAME}>
         <MapDrawControl ref={drawRef} mapId={MAP_NAME} />
       </Map>
