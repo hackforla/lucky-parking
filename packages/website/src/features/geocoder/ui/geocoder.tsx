@@ -1,6 +1,8 @@
 import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import SearchInput from "@lucky-parking/ui/src/components/search-input";
+import { actions } from "@/shared/data/store/ui-slice";
 import type { Nil, onEvent } from "@/shared/lib/types";
 import { fetchForwardGeocodingData } from "../api";
 import type { PlaceType } from "../lib/constants";
@@ -21,6 +23,8 @@ interface GeocoderProps {
 export default function Geocoder(props: GeocoderProps) {
   const { filters = [], isDisabled = false, onSelect, placeholder = DEFAULT_PLACEHOLDER } = props;
 
+  const dispatch = useDispatch();
+
   const [isSuggestionsVisible, setSuggestionsVisible] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<FeatureResult[]>([]);
@@ -38,6 +42,8 @@ export default function Geocoder(props: GeocoderProps) {
     setSuggestionsVisible(false);
     setResults([]);
     onSelect(result);
+
+    dispatch(actions.setMapFocusedFeature(result));
   };
 
   useEffect(() => {
@@ -45,6 +51,8 @@ export default function Geocoder(props: GeocoderProps) {
       setQuery(query);
       setResults([]);
       onSelect(null);
+
+      dispatch(actions.setMapFocusedFeature(null));
     }
 
     (async () => {
