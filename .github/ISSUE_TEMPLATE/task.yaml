@@ -1,5 +1,6 @@
 name: Task
 description: Create a task
+title: "[Task]: <TITLE_OF_TASK>"
 body:
   - type: textarea
     id: overview
