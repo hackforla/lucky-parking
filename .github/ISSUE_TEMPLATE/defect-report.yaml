@@ -19,8 +19,6 @@ body:
         - **OS Version**:
         - **Browser Version**:
         - **Link**:
-    validations:
-      required: true
   - type: textarea
     id: steps-to-reproduce
     attributes:
