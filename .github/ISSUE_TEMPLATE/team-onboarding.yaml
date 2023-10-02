@@ -9,27 +9,6 @@ body:
       description: Enter your first or preferred name.
     validations:
       required: true
-  - type: input
-    id: email
-    attributes:
-      label: Email Address
-      description: Enter your email address.
-    validations:
-      required: true
-  - type: input
-    id: github-username
-    attributes:
-      label: GitHub Username
-      description: Enter your GitHub username.
-    validations:
-      required: true
-  - type: input
-    id: slack-name
-    attributes:
-      label: Slack Display Name
-      description: Enter your name as it appears on Slack.
-    validations:
-      required: true
   - type: dropdown
     id: team
     attributes:
