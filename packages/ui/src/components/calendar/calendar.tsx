@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { RefObject, forwardRef, useState } from "react";
 import clsx from "clsx";
 import { clamp, isEmpty } from "lodash";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -11,6 +11,8 @@ import { isEqual } from "./utils/is-equal";
 import { getMinMaxYear } from "./utils/get-minmax-year";
 
 interface CalendarProps {
+  ref?: any;
+  addMultiRef: (args0: any) => void;
   initDate?: Date;
   onSelectValueChange: (arg0: Date) => void;
 }
@@ -19,7 +21,10 @@ const [minYear, maxYear] = getMinMaxYear(YEAR_RANGE);
 const minDate = new Date(minYear, 0, 1);
 const maxDate = new Date(maxYear, 11, 31);
 
-export default function Calendar({ initDate = new Date(), onSelectValueChange }: CalendarProps) {
+export default forwardRef<HTMLDivElement, CalendarProps>(function Calendar(
+  { initDate = new Date(), onSelectValueChange, addMultiRef },
+  ref,
+) {
   const [selected, setSelected] = useState<Date | null>(null);
   const [date, setDate] = useState(initDate);
   const [month, setMonth] = useState(initDate.getMonth() as Month);
@@ -77,11 +82,28 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
   };
 
   return (
-    <div className="bg-white-100 w-64">
+    <div className="bg-white-100 w-64" ref={addMultiRef}>
       <div className="flex h-[52px] px-6">
         <div className="flex flex-1 items-center space-x-2">
-          <Select id="Year" value={month} options={MONTHS_RANGE} onChange={handleSetMonth} optionWidth={100} />
-          <Select id="Year" center={true} value={year} options={YEAR_RANGE} onChange={handleSetYear} optionWidth={58} />
+          <Select
+            id="Month"
+            key="Month"
+            addMultiRef={addMultiRef}
+            value={month}
+            options={MONTHS_RANGE}
+            onChange={handleSetMonth}
+            optionWidth={100}
+          />
+          <Select
+            id="Year"
+            addMultiRef={addMultiRef}
+            key="Year"
+            center={true}
+            value={year}
+            options={YEAR_RANGE}
+            onChange={handleSetYear}
+            optionWidth={58}
+          />
         </div>
         <div className="flex justify-center space-x-7">
           <button className="px-2" onClick={() => handleUpdateMonth("prev")}>
@@ -138,4 +160,4 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
       </div>
     </div>
   );
-}
+});

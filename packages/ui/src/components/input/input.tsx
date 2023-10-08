@@ -5,17 +5,30 @@ interface InputProps {
   className?: string;
   id: string;
   type?: string;
-  value?: string;
+  value?: string | null;
+  onClick?: () => void;
   onChange?: (value: string) => void;
   onBlur?: () => void;
 }
 
 export default forwardRef<HTMLInputElement, InputProps>(function Input(props, ref) {
-  const { id, className = "", onBlur = () => null, onChange = () => null, type = "text", value } = props;
+  const {
+    id,
+    className = "",
+    onBlur = () => null,
+    onClick = () => null,
+    onChange = () => null,
+    type = "text",
+    value = "",
+  } = props;
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     onChange && onChange(e.target.value);
+  };
+
+  const handleOnClick = () => {
+    onClick && onClick();
   };
 
   const handleOnWheel = (e: React.WheelEvent<HTMLInputElement>) => {
@@ -35,6 +48,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(props, re
       )}
       type={type}
       onBlur={onBlur}
+      onClick={handleOnClick}
       onChange={handleOnChange}
       onWheel={handleOnWheel}
       value={value}
