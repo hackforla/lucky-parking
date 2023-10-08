@@ -21,7 +21,7 @@ export default function CitationDataPresetsSelection(props: CitationDataPresetsS
   return (
     <PickList
       id="citation-date-presets"
-      className="w-[135px] text-[16px]"
+      className="h-[48px] w-[135px] py-1 text-[15.88px] leading-[16.83px]"
       onChange={onChange}
       options={CITATION_DATE_PRESETS}
       value={CITATION_DATE_PRESETS[0].value}

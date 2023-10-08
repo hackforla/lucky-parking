@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { useState } from "react";
-import { getFirstEnum } from "@/shared/lib/utilities/enum";
+
+import PickList from "@lucky-parking/ui/src/components/pick-list";
 import type { onEvent } from "@/shared/lib/types";
 import { CitationDataCategories } from "../lib";
 
@@ -8,23 +8,23 @@ interface CitationDataCategorySelectionProps {
   onSelect: onEvent;
 }
 
+const CITATION_DATA_CATEGORIES = _.map(CitationDataCategories, (value, key) => {
+  return { value: value, text: value };
+});
+
 export default function CitationDataCategorySelection(props: CitationDataCategorySelectionProps) {
   const { onSelect } = props;
-
-  const [value, setValue] = useState(getFirstEnum(CitationDataCategories));
-
   const onChange = (newValue: string) => {
-    setValue(newValue);
     onSelect(newValue);
   };
 
   return (
-    <select name="citation-data-categories" value={value} onChange={(event) => onChange(event.target.value)}>
-      {_.map(CitationDataCategories, (category) => (
-        <option value={category} key={category}>
-          {category}
-        </option>
-      ))}
-    </select>
+    <PickList
+      id="citation-data-categories"
+      className="h-[48px] text-[15.88px]"
+      onChange={onChange}
+      options={CITATION_DATA_CATEGORIES}
+      value={CITATION_DATA_CATEGORIES[0].value}
+    />
   );
 }
