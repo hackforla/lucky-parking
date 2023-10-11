@@ -18,9 +18,9 @@ export default function CitationDataFilter(props: CitationDataFilterProps) {
       <div className="flex w-full items-center space-x-2">
         <CitationDatePresetsSelection onSelect={onDatePresetSelect} />
 
-        <p className="paragraph-2 font-medium">or</p>
+        <p className="paragraph-2 text-black-400 font-medium">or</p>
 
-        <div className="flex w-full items-center space-x-1">
+        <div className="flex flex-auto items-center space-x-1">
           <DateInput>From</DateInput>
           <DateInput>To</DateInput>
         </div>
