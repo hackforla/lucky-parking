@@ -7,22 +7,16 @@ interface CitationDataPresetsSelection {
   onSelect: onEvent;
 }
 
-const CITATION_DATE_PRESETS = _.map(RelativeDatePresets, (value, key) => {
-  return { value: value, text: value };
-});
+const CITATION_DATE_PRESETS = _.map(RelativeDatePresets, (value, key) => ({ value, text: value }));
 
 export default function CitationDataPresetsSelection(props: CitationDataPresetsSelection) {
   const { onSelect } = props;
-
-  const onChange = (newValue: string) => {
-    onSelect(newValue);
-  };
 
   return (
     <PickList
       id="citation-date-presets"
       className="h-[48px] w-[135px] py-1 text-[15.88px] leading-[16.83px]"
-      onChange={onChange}
+      onChange={onSelect}
       options={CITATION_DATE_PRESETS}
       value={CITATION_DATE_PRESETS[0].value}
     />

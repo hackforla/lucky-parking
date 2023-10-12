@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { PropsWithChildren, useEffect, useState } from "react";
 import Calendar from "@lucky-parking/ui/src/components/calendar";
 import { formatToMiddleEndian } from "@/shared/lib/utilities/date";
-import { useMultiRefs } from "@/shared/lib/utilities/useMultiRef";
+import { useMultiRefs } from "@/shared/lib/utilities/use-multi-refs";
 
 export default function DateInput({ children }: PropsWithChildren) {
   const [multiRefs, addMultiRef] = useMultiRefs();
