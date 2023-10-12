@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist node_modules",
     "dev": "nodemon index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

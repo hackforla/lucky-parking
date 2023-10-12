@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "pnpm nx run-many --target=build --all",
     "clean": "rm -rf dist node_modules && pnpm --recursive --parallel exec rm -rf dist node_modules",
+    "dev": "pnpm nx run-many --target=dev --all",
+    "graph": "pnpm nx graph",
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky install",
-    "test": "jest --maxWorkers=50%"
+    "prepare": "node ./scripts/prepare.js",
+    "test": "pnpm nx run-many --target=test --all"
   },
   "keywords": [],
   "author": "",
