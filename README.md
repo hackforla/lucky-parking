@@ -48,6 +48,13 @@ Runs the Storybook instance of the UI library. Open [http://localhost:6006/](htt
 
 Builds the website app and express server.
 
+## Docker
+
+```
+docker build . --target website --tag website:latest
+docker compose up
+```
+
 ## Contributing
 
 Contributions are always welcome!

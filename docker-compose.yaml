@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  website:
+    image: website
+    container_name: website
+    ports:
+      - "5173:80"
