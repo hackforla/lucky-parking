@@ -1,29 +1,25 @@
 import clsx from "clsx";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import Calendar from "@lucky-parking/ui/src/components/calendar";
 import { formatToMiddleEndian } from "@/shared/lib/utilities/date";
-import { useMultiRefs } from "@/shared/lib/utilities/use-multi-refs";
 
 export default function DateInput({ children }: PropsWithChildren) {
-  const [multiRefs, addMultiRef] = useMultiRefs();
+  const calendarRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<string | null>();
   const [isCalendarVisible, setCalendarVisible] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      const arr = multiRefs() as HTMLElement[];
-      if (!arr.length) return;
-
-      //check if click event is within any of our refs
-      const isInsideClick = arr.some((element: HTMLElement) => element.contains(event.target as Node));
-      if (!isInsideClick) setCalendarVisible(false);
+      if (!calendarRef || calendarRef.current === null) return;
+      if (calendarRef && calendarRef.current.contains(event.target as Node)) return;
+      setCalendarVisible(false);
     }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [multiRefs, value]);
+  }, [calendarRef, setValue]);
 
   return (
     <div className="relative flex-auto">
@@ -45,11 +41,8 @@ export default function DateInput({ children }: PropsWithChildren) {
         </div>
       </div>
       {isCalendarVisible && (
-        <div className="z-100 absolute mt-2 drop-shadow">
-          <Calendar
-            addMultiRef={addMultiRef}
-            onSelectValueChange={(newValue: Date) => setValue(formatToMiddleEndian(newValue))}
-          />
+        <div className="absolute z-50 mt-2 drop-shadow" ref={calendarRef}>
+          <Calendar onSelectValueChange={(newValue: Date) => setValue(formatToMiddleEndian(newValue))} />
         </div>
       )}
     </div>
