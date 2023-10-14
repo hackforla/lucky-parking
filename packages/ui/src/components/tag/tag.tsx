@@ -31,7 +31,7 @@ export default function Tag(props: TagProps) {
   return (
     <span
       className={clsx(
-        "text-dark-500 paragraph-1 inline-flex items-center whitespace-nowrap rounded-full px-4 py-2 leading-none",
+        "text-dark-500 paragraph-1 inline-flex items-center whitespace-nowrap rounded-full px-4 py-2 normal-case leading-none",
         TagBackgroundColor[color],
       )}>
       <p>{children}</p>

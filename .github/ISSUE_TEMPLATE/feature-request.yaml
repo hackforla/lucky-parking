@@ -1,6 +1,6 @@
 name: Feature request
 description: "Suggest an idea for a new feature or enhancement "
-title: "[FEATURE] <TITLE_OF_FEATURE>"
+title: "[Feature] <TITLE_OF_FEATURE>"
 body:
   - type: textarea
     id: user-story
@@ -32,9 +32,9 @@ body:
 
 
       value: |-
-        1.
-        2.
-        3.
+        - [ ] 
+        - [ ] 
+        - [ ]
     validations:
       required: true
   - type: textarea

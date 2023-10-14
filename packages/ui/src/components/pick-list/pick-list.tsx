@@ -1,46 +1,24 @@
 import { useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import {
-  Content,
-  Group,
-  Icon,
-  Item,
-  ItemText,
-  Portal,
-  Root,
-  Trigger,
-  Value,
-  Viewport,
-} from "@radix-ui/react-select";
+import { Content, Group, Icon, Item, ItemText, Portal, Root, Trigger, Value, Viewport } from "@radix-ui/react-select";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 interface PickListProps<T> {
   id: string;
   className?: string;
-  options: T[];
+  options: Array<{ value: T; text: string }>;
   onChange: (args0: string) => void; //radix's select onValueChange only returns a string
   placeholder?: string;
-  value?: number | "string";
+  value?: T;
 }
 
-export default function PickList<T>({
-  id,
-  className,
-  options,
-  onChange,
-  placeholder,
-  value,
-}: PickListProps<T>) {
+export default function PickList<T>({ id, className, options, onChange, placeholder, value }: PickListProps<T>) {
   const eleRef = useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Root
-      name={id}
-      value={value as string}
-      onOpenChange={setIsOpen}
-      onValueChange={onChange}>
+    <Root name={id} value={value as string} onOpenChange={setIsOpen} onValueChange={onChange}>
       <Trigger aria-label={id} asChild>
         <button
           ref={eleRef}
@@ -64,7 +42,7 @@ export default function PickList<T>({
         <Content
           position="popper"
           sideOffset={4}
-          className="bg-white-100 drop-shadow-md"
+          className="bg-white-100 z-40 drop-shadow-md"
           style={{
             //tailwind does not allow dynamic styling :(
             width: eleRef.current?.offsetWidth,
