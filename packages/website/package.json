@@ -10,7 +10,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "start": "vite preview",
-    "test": "jest --maxWorders=50%"
+    "test": "jest --config jest.config.js"
   },
   "dependencies": {
     "@lucky-parking/ui": "workspace:*"
