@@ -8,7 +8,7 @@ const BUILDER_PATTERN_QUERY = "<%= query %>";
 const BUILDER_PATTERN_SEARCH_PARAMS = "<%= search-params %>";
 
 const ENDPOINT_SEARCH_PARAMS = {
-  access_token: import.meta.env["VITE_MAPBOX_TOKEN"],
+  access_token: process.env["VITE_MAPBOX_TOKEN"] || "",
   address_accuracy: "address",
   // @ts-ignore
   bbox: _.first(losAngelesFeatures?.features).bbox.toString(),
