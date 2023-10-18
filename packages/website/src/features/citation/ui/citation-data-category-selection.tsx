@@ -19,7 +19,7 @@ export default function CitationDataCategorySelection(props: CitationDataCategor
       className="h-[48px] text-[15.88px]"
       onChange={onSelect}
       options={CITATION_DATA_CATEGORIES}
-      value={CITATION_DATA_CATEGORIES[0].value}
+      placeholder={CITATION_DATA_CATEGORIES[0].text}
     />
   );
 }
