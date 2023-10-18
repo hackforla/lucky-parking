@@ -18,7 +18,7 @@ export default function CitationDataPresetsSelection(props: CitationDataPresetsS
       className="h-[48px] w-[135px] py-1 text-[15.88px] leading-[16.83px]"
       onChange={onSelect}
       options={CITATION_DATE_PRESETS}
-      value={CITATION_DATE_PRESETS[0].value}
+      placeholder={CITATION_DATE_PRESETS[0].text}
     />
   );
 }
