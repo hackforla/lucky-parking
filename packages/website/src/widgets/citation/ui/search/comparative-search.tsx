@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button, { ButtonSize, ButtonVariant } from "@lucky-parking/ui/src/components/button";
 import Geocoder, { PLACE_TYPE_BY_REGION_TYPE, RegionType, RegionTypesSelection } from "@/features/geocoder";
 import type { GeocodeResult, onEvent } from "@/shared/lib/types";
@@ -34,6 +34,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
     props;
 
   const [dataFocus, setDataFocus] = useState<number | null>(null);
+  const [currentStep, setCurrentStep] = useState<number>(0);
 
   if (dataFocus) {
     return (
@@ -44,6 +45,18 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
       />
     );
   }
+
+  useEffect(() => {
+    if (regionType) {
+      setCurrentStep(1);
+    } else if (region1) {
+      setCurrentStep(2);
+    }
+  }, [regionType, region1]);
+
+  const regionTypeTitle = (
+    <CitationExplorerSectionTitle>Select One Region Type to Compare</CitationExplorerSectionTitle>
+  );
 
   const firstRegionTitleContainer = (
     <div className="flex justify-between">
@@ -71,16 +84,14 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
     <>
       <CitationExplorerTitle onClose={onClose}>Compare Mode</CitationExplorerTitle>
       <CitationExplorerSection>
-        <StepperContainer currentStep={1}>
-          <StepperItem
-            title={<CitationExplorerSectionTitle>Select One Region Type to Compare</CitationExplorerSectionTitle>}
-            isFinished={false}>
+        <StepperContainer currentStep={0}>
+          <StepperItem title={regionTypeTitle} isFinished={!_.isNil(regionType)}>
             <div className="my-3">
               <RegionTypesSelection onChange={onRegionTypeSelect} />
             </div>
           </StepperItem>
 
-          <StepperItem title={firstRegionTitleContainer} isFinished={false}>
+          <StepperItem title={firstRegionTitleContainer} isFinished={!_.isNil(region1)}>
             <div className="my-3">
               <Geocoder
                 onSelect={onRegion1Select}
@@ -91,7 +102,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
             </div>
           </StepperItem>
 
-          <StepperItem title={secondRegionTitleContainer}>
+          <StepperItem title={secondRegionTitleContainer} isFinished={!_.isNil(region2)}>
             <div className="my-3 justify-self-end">
               <Geocoder
                 onSelect={onRegion2Select}
