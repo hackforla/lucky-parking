@@ -10,7 +10,7 @@ export function StepperContainer({ currentStep = 0, children }: StepperContainer
   const len = items.length;
 
   return (
-    <div className="ml-4 flex flex-col">
+    <div className="flex flex-col">
       {items.map((child, idx) => {
         if (!isValidElement(child)) return;
         return createElement(child.type, {

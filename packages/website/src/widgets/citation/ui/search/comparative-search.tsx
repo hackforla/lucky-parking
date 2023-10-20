@@ -59,7 +59,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
   );
 
   const firstRegionTitleContainer = (
-    <div className="flex justify-between">
+    <div className="flex w-[420px] justify-between">
       <CitationExplorerSectionTitle>First Region</CitationExplorerSectionTitle>
       {region1 && (
         <Button variant={ButtonVariant.text} onClick={() => setDataFocus(1)}>
@@ -70,7 +70,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
   );
 
   const secondRegionTitleContainer = (
-    <div className="flex justify-between">
+    <div className="flex w-[420px] justify-between">
       <CitationExplorerSectionTitle>Second Region</CitationExplorerSectionTitle>
       {region2 && (
         <Button variant={ButtonVariant.text} onClick={() => setDataFocus(2)}>
@@ -86,13 +86,13 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
       <CitationExplorerSection>
         <StepperContainer currentStep={0}>
           <StepperItem title={regionTypeTitle} isFinished={!_.isNil(regionType)}>
-            <div className="my-3">
+            <div className="mb-3 mt-2">
               <RegionTypesSelection onChange={onRegionTypeSelect} />
             </div>
           </StepperItem>
 
           <StepperItem title={firstRegionTitleContainer} isFinished={!_.isNil(region1)}>
-            <div className="my-3">
+            <div className="mb-5 mt-2 w-[420px]">
               <Geocoder
                 onSelect={onRegion1Select}
                 placeholder={GEOCODER_PLACEHOLDERS[regionType] || ""}
@@ -103,7 +103,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
           </StepperItem>
 
           <StepperItem title={secondRegionTitleContainer} isFinished={!_.isNil(region2)}>
-            <div className="my-3 justify-self-end">
+            <div className="my-2 w-[420px]">
               <Geocoder
                 onSelect={onRegion2Select}
                 placeholder={GEOCODER_PLACEHOLDERS[regionType] || ""}
@@ -114,7 +114,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
           </StepperItem>
         </StepperContainer>
 
-        <Button size={ButtonSize.large} onClick={onSubmit} isDisabled={!(region1 || region2)}>
+        <Button size={ButtonSize.large} onClick={onSubmit} isDisabled={!(region1 || region2)} className="ml-8">
           Comparison Chart
         </Button>
       </CitationExplorerSection>
