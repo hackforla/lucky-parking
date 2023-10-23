@@ -5,10 +5,13 @@ import { RegionType } from "../lib/constants";
 
 interface RegionTypesSelectionProps {
   onChange: onEvent;
+  savedSelection?: string;
 }
 
 export default function RegionTypesSelection(props: RegionTypesSelectionProps) {
-  const { onChange } = props;
+  const { onChange, savedSelection } = props;
 
-  return <RadioGroup name="region-type" options={_.values(RegionType)} onChange={onChange} />;
+  return (
+    <RadioGroup name="region-type" options={_.values(RegionType)} onChange={onChange} savedSelection={savedSelection} />
+  );
 }

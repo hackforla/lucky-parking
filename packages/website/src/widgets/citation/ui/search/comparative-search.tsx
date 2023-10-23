@@ -34,7 +34,6 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
     props;
 
   const [dataFocus, setDataFocus] = useState<number | null>(null);
-  const [currentStep, setCurrentStep] = useState<number>(0);
 
   if (dataFocus) {
     return (
@@ -46,13 +45,17 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
     );
   }
 
-  useEffect(() => {
-    if (regionType) {
-      setCurrentStep(1);
-    } else if (region1) {
-      setCurrentStep(2);
+  const getCurrentStep = () => {
+    if (region1) {
+      return 2;
+    } else if (regionType) {
+      return 1;
+    } else {
+      return 0;
     }
-  }, [regionType, region1]);
+  };
+
+  const currentStep = getCurrentStep();
 
   const regionTypeTitle = (
     <CitationExplorerSectionTitle>Select One Region Type to Compare</CitationExplorerSectionTitle>
@@ -84,10 +87,10 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
     <>
       <CitationExplorerTitle onClose={onClose}>Compare Mode</CitationExplorerTitle>
       <CitationExplorerSection>
-        <StepperContainer currentStep={0}>
+        <StepperContainer currentStep={currentStep}>
           <StepperItem title={regionTypeTitle} isFinished={!_.isNil(regionType)}>
             <div className="mb-3 mt-2">
-              <RegionTypesSelection onChange={onRegionTypeSelect} />
+              <RegionTypesSelection onChange={onRegionTypeSelect} savedSelection={regionType} />
             </div>
           </StepperItem>
 
@@ -98,6 +101,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
                 placeholder={GEOCODER_PLACEHOLDERS[regionType] || ""}
                 filters={PLACE_TYPE_BY_REGION_TYPE[regionType]}
                 isDisabled={_.isNil(regionType)}
+                savedQuery={region1}
               />
             </div>
           </StepperItem>
@@ -109,6 +113,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
                 placeholder={GEOCODER_PLACEHOLDERS[regionType] || ""}
                 filters={regionType && PLACE_TYPE_BY_REGION_TYPE[regionType]}
                 isDisabled={_.isNil(regionType)}
+                savedQuery={region2}
               />
             </div>
           </StepperItem>
