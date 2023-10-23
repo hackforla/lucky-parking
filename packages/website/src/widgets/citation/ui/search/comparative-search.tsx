@@ -120,7 +120,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
         </StepperContainer>
 
         <Button size={ButtonSize.large} onClick={onSubmit} isDisabled={!(region1 || region2)} className="ml-8">
-          Comparison Chart
+          <p>Comparison Chart</p>
         </Button>
       </CitationExplorerSection>
     </>
