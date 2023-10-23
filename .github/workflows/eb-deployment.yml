@@ -10,52 +10,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout main-test branch
-      uses: actions/checkout@v2
+      - name: Checkout main-test branch
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20'
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
 
-    - name: Install CDK dependencies
-      run: |
-        npm install
-        npm install -g aws-cdk
-      working-directory: cdk
+      - name: Install CDK dependencies
+        run: |
+          npm install
+          npm install -g aws-cdk
+        working-directory: cdk
 
-    # Uncomment below if you want to run tests
-    # - name: Run Tests
-    #   run: npm test
-    #   working-directory: cdk
+      # Uncomment below if you want to run tests
+      # - name: Run Tests
+      #   run: npm test
+      #   working-directory: cdk
 
-    - name: CDK Deploy DockerStack
-      run: cdk deploy MyEcrDockerStack
-      working-directory: cdk
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        AWS_DEFAULT_REGION: 'us-east-2'
+      - name: CDK Deploy DockerStack
+        run: cdk deploy MyEcrDockerStack
+        working-directory: cdk
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: "us-east-2"
 
-    - name: Fetch ECR URIs
-      id: fetch-ecr-uris
-      run: |
-        UI_URI=$(aws ecr describe-repositories --repository-names ui-repo --query 'repositories[0].repositoryUri' --output text)
-        WEBSITE_URI=$(aws ecr describe-repositories --repository-names website-repo --query 'repositories[0].repositoryUri' --output text)
-        echo "::set-output name=UI_URI::$UI_URI"
-        echo "::set-output name=WEBSITE_URI::$WEBSITE_URI"
+      - name: Fetch ECR URIs
+        id: fetch-ecr-uris
+        run: |
+          WEBSITE_URI=$(aws ecr describe-repositories --repository-names website-repo --query 'repositories[0].repositoryUri' --output text)
+          echo "::set-output name=WEBSITE_URI::$WEBSITE_URI"
 
-    - name: Generate Dockerrun.aws.json
-      run: |
-        sed -i "s#first-container-image#${{ steps.fetch-ecr-uris.outputs.UI_URI }}#g" Dockerrun.aws.json
-        sed -i "s#second-container-image#${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
+      - name: Generate Dockerrun.aws.json
+        run: |
+          sed -i "s#second-container-image#${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
 
-    - name: CDK Deploy EbStack
-      run: cdk deploy MyElasticBeanstalkStack
-      working-directory: cdk
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        AWS_DEFAULT_REGION: 'us-east-2'
-        UI_URI: ${{ steps.fetch-ecr-uris.outputs.UI_URI }}
-        WEBSITE_URI: ${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}
+      - name: CDK Deploy EbStack
+        run: cdk deploy MyElasticBeanstalkStack
+        working-directory: cdk
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_DEFAULT_REGION: "us-east-2"
+          UI_URI: ${{ steps.fetch-ecr-uris.outputs.UI_URI }}
+          WEBSITE_URI: ${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}
