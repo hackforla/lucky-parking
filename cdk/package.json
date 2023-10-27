@@ -2,7 +2,7 @@
   "name": "cdk",
   "version": "0.1.0",
   "bin": {
-    "cdk": "bin/cdk.js"
+    "cdk": "./bin/cdk.js"
   },
   "scripts": {
     "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",

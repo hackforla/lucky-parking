@@ -1,6 +1,7 @@
 const cdk = require("aws-cdk-lib");
 const ecr = require("aws-cdk-lib/aws-ecr");
 const ecrAssets = require("aws-cdk-lib/aws-ecr-assets");
+const path = require("path");
 
 class EcrDockerStack extends cdk.Stack {
   constructor(scope, id, props) {
@@ -12,7 +13,7 @@ class EcrDockerStack extends cdk.Stack {
 
     // Create Docker image asset and upload to the ECR repository
     new ecrAssets.DockerImageAsset(this, "WebsiteDockerImage", {
-      directory: "../", // Location of the Dockerfile
+      directory: path.join(__dirname, "../../../lucky-parking"),
       repository: websiteEcrRepo,
     });
 
