@@ -4,6 +4,7 @@ const s3 = require("aws-cdk-lib/aws-s3");
 const s3Assets = require("aws-cdk-lib/aws-s3-assets");
 // const { EcrDockerStack } = require("./docker-stack");
 const iam = require("aws-cdk-lib/aws-iam");
+const path = require("path");
 
 class MyElasticBeanstalkStack extends cdk.Stack {
   constructor(scope, id, props) {
