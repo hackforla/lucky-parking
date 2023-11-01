@@ -1,0 +1,81 @@
+import _ from "lodash";
+import { Meta, Story, Canvas } from "@storybook/blocks";
+import typography from "./typography";
+
+<Meta title="Theme/Typography" />
+
+# Typography
+
+###
+
+### Screen
+
+**_Font:_** Work Sans **_Weights:_** 400, 500, 600, 700
+
+<Canvas>
+  <Story name="Sceen (Desktop/Laptop)">
+    {_.map(typography.screen, (fontStyles, typographyName) => (
+      <div
+        key={typographyName}
+        style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            fontFamily: `${fontStyles.fontFamily}`,
+            fontSize: 14,
+            fontWeight: 400,
+            color: "#999",
+            marginRight: 10,
+          }}>
+          {fontStyles.fontSize}
+        </div>
+        <div
+          style={{
+            fontFamily: `${fontStyles.fontFamily}`,
+            fontSize: `${fontStyles.fontSize}`,
+            fontWeight: `${fontStyles.fontWeight}`,
+            lineHeight: `${fontStyles.lineHeight}`,
+            letterSpacing: `${fontStyles.letterSpacing}`,
+          }}>
+          {typographyName}
+        </div>
+      </div>
+    ))}
+  </Story>
+</Canvas>
+
+###
+
+### Mobile
+
+**_Font:_** Work Sans **_Weights:_** 400, 500, 600, 700
+
+<Canvas>
+  <Story name="Mobile">
+    {_.map(typography.mobile, (fontStyles, typographyName) => (
+      <div
+        key={typographyName}
+        style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            fontFamily: `${fontStyles.fontFamily}`,
+            fontSize: 14,
+            fontWeight: 400,
+            color: "#999",
+            marginRight: 10,
+          }}>
+          {fontStyles.fontSize}
+        </div>
+        <div
+          style={{
+            fontFamily: `${fontStyles.fontFamily}`,
+            fontSize: `${fontStyles.fontSize}`,
+            fontWeight: `${fontStyles.fontWeight}`,
+            lineHeight: `${fontStyles.lineHeight}`,
+            letterSpacing: `${fontStyles.letterSpacing}`,
+          }}>
+          {typographyName}
+        </div>
+      </div>
+    ))}
+  </Story>
+</Canvas>

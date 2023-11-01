@@ -29,26 +29,30 @@ def main(input_filedir: str, output_filedir: str):
     """
     # If run as main, data is downloaded,  10% sampled, and cleaned
     # If fails, it samples already downloaded data and samples at 1%, then cleans
-
+    # Create name string using download date
+    raw_list = [_ for _ in (PROJECT_DIR / "data" /  "raw").glob("*.csv")]
     try:
+        if raw_list:
+            RAW_DATA_FILEPATH = raw_list[0]
+        else:
+            RAW_DATA_FILEPATH = download_raw(input_filedir)
         clean(
-            create_sample(download_raw(input_filedir), "data/interim", 0.1),
+            create_sample(RAW_DATA_FILEPATH, "data/interim", 0.01),
             output_filedir,
         )
     except:
-        print("Failed at 10% sampling, trying again")
-        clean(create_sample(RAW_DATA_FILEPATH, output_filedir, 0.01), output_filedir)
+        print("Failed")
 
 
-def download_raw(input_filedir: str) -> Path:
+def download_raw(input_filedir: Union[Path, str]) -> Path:
     """Downloads raw dataset from lacity.org to input_filedir as {date}
     raw.csv. Also updates environmental variable RAW_DATA_FILEPATH.
     """
-    # Create name string using download date
-    date_string = date.today().strftime("%Y-%m-%d")
+
 
     print("This will take a few minutes")
-
+    # Create name string using download date
+    date_string = date.today().strftime("%Y-%m-%d")
     # Setup connection and download into raw data folder
     http = urllib3.PoolManager()
     url = "https://data.lacity.org/api/views/wjz9-h9np/rows.csv?accessType=DOWNLOAD"
@@ -60,8 +64,7 @@ def download_raw(input_filedir: str) -> Path:
 
     print("Finished downloading raw dataset")
 
-    # Save raw file path as RAW_DATA_FILEPATH into .env
-    set_key(find_dotenv(), "RAW_DATA_FILEPATH", str(RAW_DATA_FILEPATH))
+
     return RAW_DATA_FILEPATH
 
 
@@ -157,6 +160,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
 
     # Make column names more coding friendly except for Lat/Lon
     df.columns = [
+        "ticket_number",
         "state_plate",
         "make",
         "body_style",
@@ -319,13 +323,7 @@ if __name__ == "__main__":
     # log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     # logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-    # find .env automagically by walking up directories until it's found, then
-    # load up the .env entries as environment variables
-    if find_dotenv():
-        load_dotenv(find_dotenv())
-    else:
-        with open(PROJECT_DIR / ".env", "w"):
-            pass
+
     # Create data folders
     data_folders = ["raw", "interim", "external", "processed"]
     if not os.path.exists(PROJECT_DIR / "data"):

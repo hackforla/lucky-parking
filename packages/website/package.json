@@ -1,0 +1,18 @@
+{
+  "name": "@lucky-parking/website",
+  "description": "",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "clean": "rm -rf dist node_modules",
+    "dev": "vite",
+    "preview": "vite preview",
+    "start": "vite preview",
+    "test": "jest --config jest.config.js"
+  },
+  "dependencies": {
+    "@lucky-parking/ui": "workspace:*"
+  }
+}

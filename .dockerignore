@@ -2,14 +2,14 @@
 *
 
 # Allow list for directories
-!/apps
-!/libs
+!/packages
+!/scripts
 
 # Allow list for files
 !.env
 !Dockerfile*
-!babel.config.json
 !docker-compose*
+!nx.json
 !package.json
-!tsconfig.base.json
-!yarn.lock
+!pnpm*
+!tsconfig*

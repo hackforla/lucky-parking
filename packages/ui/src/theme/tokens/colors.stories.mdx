@@ -1,0 +1,11 @@
+import _ from "lodash";
+import { Meta, ColorPalette, ColorItem } from "@storybook/blocks";
+import colors from "./colors";
+
+<Meta title="Theme/Colors" />
+
+<ColorPalette>
+  {_.map(colors, (shades, color) => (
+    <ColorItem title={color} subtitle={""} colors={shades} key={color} />
+  ))}
+</ColorPalette>
