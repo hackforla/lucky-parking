@@ -12,10 +12,10 @@ import psycopg2
 
 load_dotenv(find_dotenv(), override=True)
 user = os.getenv("DB_USER")
-password = os.getenv("DB_PW")
+password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
 port = os.getenv("DB_PORT")
-database = os.getenv("DB_NAME")
+database = os.getenv("DB_DATABASE")
 
 
 # Load project directory
@@ -32,31 +32,24 @@ def main():
 
     df = (
         gpd.read_file(latest_file, crs="EPSG:4326")
-        .set_index("index")
-        .dropna(subset=["geometry"])
-        .reset_index(drop=True)
     )
-    print(df.head())
     try:
         df.to_postgis(
-            "keyed",
+            "serial",
             engine,
             if_exists="replace",
             index=True,
             dtype={
-                "datetime": DateTime,
-                "fine_amount": Integer,
-                "latitude": Float,
-                "longitude": Float,
-                "state_plate": String,
-                "make_ind": Integer,
-                "make": String,
-                "body_style": String,
-                "color": String,
-                "location": String,
-                "violation_code": String,
-                "violation_description": String,
-                "weekday": String,
+                "0": String,
+                "1": String,
+                "2": String,
+                "3": String,
+                "4": Integer,
+                "5": BigInteger,
+                "6": Integer,
+                "7": Integer,
+                "8": Integer,
+                "9": Integer,
                 "geometry": Geometry(geometry_type="POINT", srid=4326),
             },
         )
