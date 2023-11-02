@@ -2,11 +2,12 @@
   "name": "@lucky-parking/api-express",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.ts",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist node_modules",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon --exec ts-node index.ts"
   },
   "author": "",
   "license": "UNLICENSED"
