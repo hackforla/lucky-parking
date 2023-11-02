@@ -21,7 +21,7 @@ database = os.getenv("DB_NAME")
 # Load project directory
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 latest_file = max(
-    (PROJECT_DIR / "data" / "processed").glob('*.geojson'), key=os.path.getctime
+    (PROJECT_DIR / "data" / "external").glob('zipcodes.geojson'), key=os.path.getctime
 )
 
 
@@ -32,34 +32,35 @@ def main():
 
     df = (
         gpd.read_file(latest_file, crs="EPSG:4326")
-        .set_index("index")
-        .dropna(subset=["geometry"])
-        .reset_index(drop=True)
+        # .set_index("index")
+        # .dropna(subset=["the_geom"])
+        # .reset_index(drop=True)
     )
     print(df.head())
     try:
         df.to_postgis(
-            "keyed",
+            "zipcodes",
             engine,
             if_exists="replace",
-            index=True,
+            # index=True,
             dtype={
-                "datetime": DateTime,
-                "fine_amount": Integer,
-                "latitude": Float,
-                "longitude": Float,
-                "state_plate": String,
-                "make_ind": Integer,
-                "make": String,
-                "body_style": String,
-                "color": String,
-                "location": String,
-                "violation_code": String,
-                "violation_description": String,
-                "weekday": String,
-                "geometry": Geometry(geometry_type="POINT", srid=4326),
+                "objectid": BIGINT,
+                "zipcode": Numeric,
+                "shape_area": Numeric,
+                "shape_len": Numeric,
+                "geometry": Geometry(geometry_type="MultiPolygon", srid=4326),
             },
         )
+        print("changing column names...")
+        with engine.connect() as con:
+          con.execute("""
+            ALTER TABLE zipcodes
+            RENAME COLUMN objectid TO object_id;
+            ALTER TABLE zipcodes
+            RENAME COLUMN zipcode TO zip;
+            ALTER TABLE zipcodes
+            RENAME COLUMN geometry TO the_geom;
+          """)
         print("done!")
     except Exception as e:
         print(e)
