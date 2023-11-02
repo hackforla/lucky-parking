@@ -1,18 +1,13 @@
-const express = require("express");
-const routes = require("./routes");
-import { connectToDatabase } from "./services/database.service";
+import "dotenv/config";
+import express from "express";
 
-const PORT = 3000;
+import routes from "./routes";
+import "./database/db";
+
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
-connectToDatabase()
-  .then(() => {
-    app.use("/", routes);
+app.use("/", routes);
 
-    app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-  })
-  .catch((error: Error) => {
-    console.error("Database connection failed", error);
-    process.exit();
-  });
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

@@ -1,6 +1,9 @@
-const { Router } = require("express");
+import { Router } from "express";
+import citationRoutes from "./citations";
+
 const router = Router();
 
 router.get("/", (req, res) => res.send("Hello World!"));
+router.use("/citations", citationRoutes);
 
-module.exports = router;
+export default router;
