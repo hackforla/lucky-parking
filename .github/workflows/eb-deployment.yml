@@ -52,7 +52,7 @@ jobs:
 
       - name: Generate Dockerrun.aws.json
         run: |
-          sed -i "s#website-image#${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
+          sed -i "s#website-image#${{ steps.fetch-outputs.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
 
       - name: CDK Deploy EbStack
         run: cdk deploy MyElasticBeanstalkStack
