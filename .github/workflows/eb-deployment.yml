@@ -49,6 +49,12 @@ jobs:
           DOCKERRUN_S3_KEY=$(aws cloudformation describe-stacks --stack-name EcrDockerStack --query "Stacks[0].Outputs[?OutputKey=='DockerrunS3Key'].OutputValue" --output text)
           echo "::set-output name=dockerrun_s3_key::$DOCKERRUN_S3_KEY"
 
+      - name: Print environment variables
+        run: |
+          echo "Website URI: $WEBSITE_URI"
+          echo "Dockerrun Bucket Name: $DOCKERRUN_BUCKET_NAME"
+          echo "Dockerrun S3 Key: $DOCKERRUN_S3_KEY"
+
       - name: Generate Dockerrun.aws.json
         run: |
           sed -i "s#website-image#${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
