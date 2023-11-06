@@ -10,6 +10,12 @@ class MyElasticBeanstalkStack extends cdk.Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
 
+    console.log("Environment Variables:", {
+      WEBSITE_URI: process.env.WEBSITE_URI,
+      DOCKERRUN_BUCKET_NAME: process.env.DOCKERRUN_BUCKET_NAME,
+      DOCKERRUN_S3_KEY: process.env.DOCKERRUN_S3_KEY,
+    });
+
     const dockerrunBucket = s3.Bucket.fromBucketAttributes(this, "ImportedBucket", {
       bucketName: process.env.DOCKERRUN_BUCKET_NAME,
     });
