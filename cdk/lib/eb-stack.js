@@ -2,13 +2,17 @@ const cdk = require("aws-cdk-lib");
 const eb = require("aws-cdk-lib/aws-elasticbeanstalk");
 const s3 = require("aws-cdk-lib/aws-s3");
 const s3Assets = require("aws-cdk-lib/aws-s3-assets");
-// const { EcrDockerStack } = require("./docker-stack");
+const { EcrDockerStack } = require("./docker-stack");
 const iam = require("aws-cdk-lib/aws-iam");
 const path = require("path");
 
 class MyElasticBeanstalkStack extends cdk.Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
+
+    const dockerrunBucket = s3.Bucket.fromBucketAttributes(this, "ImportedBucket", {
+      bucketName: process.env.DOCKERRUN_BUCKET_NAME,
+    });
 
     const ebRole = new iam.Role(this, "EBInstanceRole", {
       assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
@@ -18,15 +22,7 @@ class MyElasticBeanstalkStack extends cdk.Stack {
       roles: [ebRole.roleName],
     });
 
-    // Creates an S3 bucket to store Dockerrun file which points to Docker image on ECR
-    const dockerrunBucket = new s3.Bucket(this, "DockerrunBucket");
-
-    // adds the Dockerrun file into the S3 bucket
-    const dockerrunAsset = new s3Assets.Asset(this, "DockerrunAsset", {
-      path: path.join(__dirname, "../Dockerrun.aws.json"),
-    });
-
-    const dockerrunS3Key = dockerrunAsset.s3ObjectKey;
+    const dockerrunS3Key = process.env.DOCKERRUN_S3_KEY;
 
     dockerrunBucket.grantRead(ebRole); // Grant the EB role read access to the bucket
 
@@ -38,7 +34,7 @@ class MyElasticBeanstalkStack extends cdk.Stack {
     new eb.CfnApplicationVersion(this, "MyAppVersion", {
       applicationName: ebApplication.applicationName,
       sourceBundle: {
-        s3Bucket: dockerrunBucket.bucketName,
+        s3Bucket: process.env.DOCKERRUN_BUCKET_NAME,
         s3Key: dockerrunS3Key,
       },
     });
@@ -58,7 +54,6 @@ class MyElasticBeanstalkStack extends cdk.Stack {
           "rds:*",
           "sqs:*",
           "ecs:*",
-          // Add other permissions as necessary
         ],
       }),
     );

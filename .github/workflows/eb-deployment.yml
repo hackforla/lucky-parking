@@ -37,15 +37,21 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_DEFAULT_REGION: "us-east-2"
 
-      - name: Fetch ECR URIs
-        id: fetch-ecr-uris
+      - name: Fetch Multiple Outputs
+        id: fetch-outputs
         run: |
-          WEBSITE_URI=$(aws ecr describe-repositories --repository-names website-repo --query 'repositories[0].repositoryUri' --output text)
-          echo "::set-output name=WEBSITE_URI::$WEBSITE_URI"
+          WEBSITE_URI=$(aws cloudformation describe-stacks --stack-name EcrDockerStack --query "Stacks[0].Outputs[?OutputKey=='WebsiteRepoUri'].OutputValue" --output text)
+          echo "::set-output name=website_uri::$WEBSITE_URI"
+
+          DOCKERRUN_BUCKET_NAME=$(aws cloudformation describe-stacks --stack-name EcrDockerStack --query "Stacks[0].Outputs[?OutputKey=='DockerrunBucketName'].OutputValue" --output text)
+          echo "::set-output name=dockerrun_bucket_name::$DOCKERRUN_BUCKET_NAME"
+
+          DOCKERRUN_S3_KEY=$(aws cloudformation describe-stacks --stack-name EcrDockerStack --query "Stacks[0].Outputs[?OutputKey=='DockerrunS3Key'].OutputValue" --output text)
+          echo "::set-output name=dockerrun_s3_key::$DOCKERRUN_S3_KEY"
 
       - name: Generate Dockerrun.aws.json
         run: |
-          sed -i "s#second-container-image#${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
+          sed -i "s#website-image#${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}#g" Dockerrun.aws.json
 
       - name: CDK Deploy EbStack
         run: cdk deploy MyElasticBeanstalkStack
@@ -54,4 +60,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_DEFAULT_REGION: "us-east-2"
-          WEBSITE_URI: ${{ steps.fetch-ecr-uris.outputs.WEBSITE_URI }}
+          WEBSITE_URI: ${{ steps.fetch-outputs.outputs.WEBSITE_URI }}
+          DOCKERRUN_S3_KEY: ${{ steps.fetch-outputs.outputs.DOCKERRUN_S3_KEY }}
+          DOCKERRUN_BUCKET_NAME: ${{ steps.fetch-outputs.outputs.DOCKERRUN_BUCKET_NAME }}
