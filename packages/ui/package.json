@@ -5,9 +5,9 @@
   "version": "0.0.0",
   "main": "./index.ts",
   "scripts": {
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build --disable-telemetry",
     "clean": "rm -rf dist node_modules",
-    "dev": "storybook dev -p 6006"
+    "dev": "storybook dev --port 6006 --no-open --disable-telemetry"
   },
   "keywords": [],
   "author": "",
