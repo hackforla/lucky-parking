@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "pnpm nx run-many --target=build --all",
+    "build": "pnpm nx run-many --target=build --output-style=stream --all",
     "clean": "rm -rf dist node_modules && pnpm --recursive --parallel exec rm -rf dist node_modules",
-    "dev": "pnpm nx run-many --target=dev --all",
+    "dev": "pnpm nx run-many --target=dev --output-style=stream --all",
     "graph": "pnpm nx graph",
     "preinstall": "npx only-allow pnpm",
     "prepare": "node ./scripts/prepare.js",
