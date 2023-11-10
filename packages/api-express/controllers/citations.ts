@@ -1,12 +1,11 @@
-import citationService from "../services/citations";
+import { Request, Response } from "express";
+import { CitationService } from "../services";
 
-// STUB
-const listCitations = async (req, res) => {
-  console.debug("Request received to list citations");
+export const listCitations = async (req: Request, res: Response) => {
+  const { dates, geometry } = req.body;
+  const citations = await CitationService.findCitations({ dates, geometry });
 
-  const citations = await citationService.findCitations();
-
-  res.json({
+  res.status(200).json({
     data: citations,
   });
 };

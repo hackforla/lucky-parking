@@ -4,7 +4,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 
-import routes from "./routes";
+import router from "./routes";
 import "./database/db";
 
 const { PORT = 3000 } = process.env;
@@ -18,6 +18,6 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-app.use(`/${VERSION}`, routes);
+app.use(`/${VERSION}`, router);
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
