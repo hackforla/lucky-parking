@@ -1,8 +1,13 @@
 import { Router } from "express";
-import citationController from "../controllers/citations";
+import { z } from "zod";
+import { CitationController } from "../controllers";
+import validate from "../middleware/validator";
+import * as schemas from "../utilities/schemas";
 
-const router = Router();
+const ListCitationRequestSchema = z.object({ body: schemas.CitationFiltersSchema });
 
-router.post("/", citationController.listCitations);
+const citationRouter = Router();
 
-export default router;
+citationRouter.post("/", validate(ListCitationRequestSchema), CitationController.listCitations);
+
+export default citationRouter;

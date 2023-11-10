@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "esModuleInterop": true,
     "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "dist",
     "sourceMap": true,
+    "strict": true,
     "target": "es2022"
   },
   "ts-node": {
