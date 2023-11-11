@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist node_modules",
-    "dev": "nodemon --exec ts-node index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "author": "",
   "license": "UNLICENSED"
