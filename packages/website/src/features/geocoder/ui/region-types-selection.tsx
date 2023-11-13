@@ -1,6 +1,6 @@
 import _ from "lodash";
 import type { onEvent } from "@/shared/lib/types";
-import RadioGroup from "@/shared/ui/radio-group";
+import RadioGroup from "@lucky-parking/ui/src/components/radio-group";
 import { RegionType } from "../lib/constants";
 
 interface RegionTypesSelectionProps {
