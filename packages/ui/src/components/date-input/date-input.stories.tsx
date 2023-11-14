@@ -8,7 +8,7 @@ const meta: Meta<typeof DateInput> = {
 
 type DateInputStory = StoryObj<typeof DateInput>;
 
-export const Primary: DateInputStory = {
+export const Default: DateInputStory = {
   render: (args) => <DateInput {...args} />,
   args: {
     children: "From",
