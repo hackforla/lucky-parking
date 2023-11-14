@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
-import Calendar from "@lucky-parking/ui/src/components/calendar";
-import { formatToMiddleEndian } from "@/shared/lib/utilities/date";
+import Calendar from "../calendar";
+import { formatToMiddleEndian } from "./utils/date";
 
 export default function DateInput({ children }: PropsWithChildren) {
   const calendarRef = useRef<HTMLDivElement>(null);
