@@ -24,6 +24,7 @@ export default function DateInput({ children }: PropsWithChildren) {
   return (
     <div className="relative flex-auto">
       <div
+        data-testid="date-input-trigger"
         className={clsx(
           "flex h-[48px] flex-auto flex-col items-start justify-center ",
           "px-4 text-base leading-[22.4px]",
