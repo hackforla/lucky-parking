@@ -116,8 +116,12 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
         <table className="border-collaspse">
           <thead>
             <tr>
-              {["M", "T", "W", "T", "F", "S", "S"].map((ele: string) => (
-                <td className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">{ele}</td>
+              {["M", "T", "W", "T", "F", "S", "S"].map((ele: string, index: number) => (
+                <td
+                  key={ele + index}
+                  className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">
+                  {ele}
+                </td>
               ))}
             </tr>
           </thead>
