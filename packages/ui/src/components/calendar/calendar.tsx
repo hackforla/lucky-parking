@@ -78,7 +78,7 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
   };
 
   return (
-    <div className="bg-white-100 w-64" ref={setContainer}>
+    <div data-testid="calendar-input" className="bg-white-100 w-64" ref={setContainer}>
       <div className="flex h-[52px] px-6">
         <div className="flex flex-1 items-center space-x-2">
           <Select
