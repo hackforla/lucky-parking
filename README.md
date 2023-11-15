@@ -28,21 +28,32 @@ To install a new dependency, run `pnpm install -w <package>`.
 
 To install a new dev dependency, run `pnpm install -wD <package>'`.
 
-### pnpm run clean
+### pnpm install
+
+Installs the dependencies for all packages.
+
+### pnpm clean
 
 Deletes any build artifacts and dependencies from the workspace and packages. You will need to re-execute `pnpm install` to run the project locally.
 
-### pnpx nx dev @lucky-parking/website
+### pnpm dev
 
 Runs the website app in development mode. Open [http://localhost:5173/](http://localhost:5173/) in your browser to view the client application.
 
-### pnpx nx dev @lucky-parking/api-express
-
 Runs the express server in development mode at [http://localhost:3000/](http://localhost:3000/).
 
-### pnpx nx storybook @lucky-parking/ui
-
 Runs the Storybook instance of the UI library. Open [http://localhost:6006/](http://localhost:6006/) in your browser to explore the UI library.
+
+### pnpm build
+
+Builds the website app and express server.
+
+## Docker
+
+```
+docker build . --target website --tag website:latest
+docker compose up
+```
 
 ## Contributing
 

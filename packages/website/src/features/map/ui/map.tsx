@@ -63,7 +63,7 @@ export default function Map({ children, ...props }: MapProps) {
       id={name}
       initialViewState={DEFAULT_VIEW_STATE}
       mapStyle={DEFAULT_MAP_STYLE}
-      mapboxAccessToken={import.meta.env["VITE_MAPBOX_TOKEN"]}>
+      mapboxAccessToken={process.env["VITE_MAPBOX_TOKEN"] || ""}>
       {children}
     </MapGL>
   );

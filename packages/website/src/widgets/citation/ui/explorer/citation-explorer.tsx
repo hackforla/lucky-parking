@@ -21,6 +21,8 @@ export default function CitationExplorer() {
   const onSearchModeToggle = () => {
     setSingleSearchMode((prevState) => !prevState);
     setRegionType(null);
+    setRegion1(null);
+    setRegion2(null);
   };
 
   const onVisualizationModeToggle = () => setVisualizationMode((prevState) => !prevState);

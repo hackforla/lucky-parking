@@ -2,11 +2,12 @@
   "name": "@lucky-parking/api-express",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rm -rf dist node_modules",
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "author": "",
   "license": "UNLICENSED"

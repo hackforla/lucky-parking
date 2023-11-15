@@ -5,9 +5,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "clean": "rm -rf dist node_modules",
+    "dev": "vite",
+    "preview": "vite preview",
+    "start": "vite preview",
+    "test": "jest --config jest.config.js"
   },
   "dependencies": {
     "@lucky-parking/ui": "workspace:*"

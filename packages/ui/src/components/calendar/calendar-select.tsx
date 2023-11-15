@@ -1,17 +1,6 @@
 import { useState } from "react";
 import clsx from "clsx";
-import {
-  Content,
-  Group,
-  Icon,
-  Item,
-  ItemText,
-  Portal,
-  Root,
-  Trigger,
-  Value,
-  Viewport,
-} from "@radix-ui/react-select";
+import { Content, Group, Icon, Item, ItemText, Portal, Root, Trigger, Value, Viewport } from "@radix-ui/react-select";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 interface SelectProps<T> {
@@ -19,6 +8,7 @@ interface SelectProps<T> {
   center?: boolean;
   options: T[];
   onChange: (args0: string) => void; //radix's select onValueChange only returns a string
+  parentContainer: HTMLDivElement | null;
   placeholder?: string;
   value: number | "string";
   optionWidth?: number;
@@ -29,6 +19,7 @@ export default function Select<T>({
   center,
   options = [],
   onChange,
+  parentContainer,
   placeholder,
   value,
   optionWidth,
@@ -41,31 +32,22 @@ export default function Select<T>({
   );
 
   return (
-    <Root
-      name={id}
-      value={value as string}
-      onOpenChange={setIsOpen}
-      onValueChange={onChange}>
+    <Root name={id} value={value as string} onOpenChange={setIsOpen} onValueChange={onChange}>
       <Trigger
         aria-label={id}
-        className={clsx(
-          "flex h-[17px] items-center",
-          "text-black-300 text-xs font-normal outline-none",
-        )}>
+        className={clsx("flex h-[17px] items-center", "text-black-300 z-50 text-xs font-normal outline-none")}>
         <Value placeholder={placeholder} />
         <Icon>{renderIcon}</Icon>
       </Trigger>
-      <Portal>
+      <Portal container={parentContainer}>
         <Content
           position="popper"
-          className={clsx(
-            "bg-white-100 py-1 drop-shadow-md",
-            optionWidth && `w-[${optionWidth}px]`,
-          )}>
+          className={clsx("bg-white-100 z-40 z-40 py-1 drop-shadow-md", optionWidth && `w-[${optionWidth}px]`)}>
           <Viewport>
             <Group>
               {options.map(({ text, value }: any) => (
                 <Item
+                  key={text}
                   value={value}
                   className={clsx(
                     "flex select-none items-center px-3 py-1.5 drop-shadow-md",
