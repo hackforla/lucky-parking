@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import CitationDataCategorySelection from "./citation-data-category-selection";
@@ -12,11 +12,10 @@ describe("Citation Data Category Selection", () => {
   });
 
   test("renders citation data categories with initial placeholder text", async () => {
-    const user = userEvent.setup();
     expect(screen.getByText(options[0]));
   });
 
-  test("Allows user to change the current citation data category", async () => {
+  test("should allow user to change the current citation data category", async () => {
     const user = userEvent.setup();
 
     expect(screen.queryByText("Total $ Fine Amount")).toBe(null);

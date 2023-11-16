@@ -11,12 +11,11 @@ describe("Citation Date Presets Selection", () => {
     render(<CitationDatePresetsSelection onSelect={() => {}} />);
   });
 
-  test("renders citation data categories with initial placeholder text", async () => {
-    const user = userEvent.setup();
+  test("renders citation date presets with initial placeholder text", async () => {
     expect(screen.getByText(options[0]));
   });
 
-  test("Allows user to change the current citation data category", async () => {
+  test("should allow user to change the current citation date preset", async () => {
     const user = userEvent.setup();
 
     expect(screen.queryByText("Total $ Fine Amount")).toBe(null);
