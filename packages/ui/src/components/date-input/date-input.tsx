@@ -34,6 +34,7 @@ export default function DateInput({ children }: PropsWithChildren) {
         onClick={() => setCalendarVisible((prevState) => !prevState)}>
         <div className={clsx("paragraph-1", isCalendarVisible ? "text-blue-500" : "text-black-300")}> {children}</div>
         <div
+          data-testid="date-input-value"
           className={clsx(
             "text-[15.88px] font-medium leading-[18.63px]",
             isCalendarVisible ? "text-blue-500" : "text-black-300",
