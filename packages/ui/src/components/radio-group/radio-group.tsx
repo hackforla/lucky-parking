@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { onEvent } from "@/shared/lib/types";
+import type { onEvent } from "../../../../website/src/shared/lib/types";
 import RadioOption from "./radio-option";
 
 interface RadioGroupProps {
