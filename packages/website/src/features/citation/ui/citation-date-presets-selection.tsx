@@ -9,7 +9,7 @@ interface CitationDataPresetsSelection {
 
 const CITATION_DATE_PRESETS = _.map(RelativeDatePresets, (value, key) => ({ value, text: value }));
 
-export default function CitationDataPresetsSelection(props: CitationDataPresetsSelection) {
+export default function CitationDatePresetsSelection(props: CitationDataPresetsSelection) {
   const { onSelect } = props;
 
   return (
