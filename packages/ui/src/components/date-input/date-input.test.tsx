@@ -34,6 +34,21 @@ describe("Date Input", () => {
     expect(screen.getByTestId("date-input-value")).toHaveTextContent("mm/dd/yy");
   });
 
+  test("date input value in the Calendar component is today's date by default", () => {
+    const today = new Date();
+    const day = today.getDate().toString();
+    const month = today.toLocaleString("default", { month: "long" });
+    const year = today.getFullYear().toString();
+
+    const monthOptions = screen.getByLabelText("Month");
+    const yearOptions = screen.getByLabelText("Year");
+
+    expect(monthOptions).toHaveTextContent(month);
+    expect(yearOptions).toHaveTextContent(year);
+
+    expect(screen.getByText(day).getAttribute("class")).toContain("rounded-full");
+  });
+
   test("date input value updates when date is selected in Calendar", async () => {
     const monthOptions = screen.getByLabelText("Month");
     const yearOptions = screen.getByLabelText("Year");
