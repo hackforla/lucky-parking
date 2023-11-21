@@ -1,14 +1,15 @@
+import { Db } from "mongodb";
 import client from "./client";
 
-let db;
+let db: Db;
 
 try {
-  db = await client.connect();
+  const mongoClient = await client.connect();
+  db = mongoClient.db(process.env.DB_NAME);
   console.log("Server connected to MongoDB");
 } catch (e) {
   console.error(e);
 } finally {
-  await client.close();
+  //await client.close();
 }
-
-export default db;
+export { db };
