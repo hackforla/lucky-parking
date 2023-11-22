@@ -4,7 +4,7 @@ import Line from "./stepper-line";
 
 interface StepperItemProps {
   children?: ReactNode;
-  title?: string;
+  title?: string | ReactNode;
   isCurrent?: boolean;
   isFinished?: boolean;
   isLast?: boolean;
@@ -23,7 +23,7 @@ export function StepperItem({
         <div className="flex w-4 justify-center">
           <Circle isCurrent={isCurrent} isFinished={isFinished} />
         </div>
-        {title.length !== 0 && <div className="black-500 l-[19.2px] text-base font-semibold">{title}</div>}
+        {title !== "" && <div className="black-500 l-[19.2px] text-base font-semibold">{title}</div>}
       </div>
 
       <div className="flex space-x-4">

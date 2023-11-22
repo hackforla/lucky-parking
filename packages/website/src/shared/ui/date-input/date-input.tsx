@@ -1,22 +1,48 @@
-import { PropsWithChildren, useState } from "react";
+import clsx from "clsx";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import Calendar from "@lucky-parking/ui/src/components/calendar";
 import { formatToMiddleEndian } from "@/shared/lib/utilities/date";
 
 export default function DateInput({ children }: PropsWithChildren) {
+  const calendarRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<string | null>();
   const [isCalendarVisible, setCalendarVisible] = useState(false);
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!calendarRef || calendarRef.current === null) return;
+      if (calendarRef && calendarRef.current.contains(event.target as Node)) return;
+      setCalendarVisible(false);
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [calendarRef, setValue]);
+
   return (
-    <div className="relative w-full">
+    <div className="relative flex-auto">
       <div
-        className="ring-black-200 flex h-[48px] w-full select-none flex-col rounded border-0 bg-white py-1.5 pl-3 pr-3 ring-1 ring-inset"
+        className={clsx(
+          "flex h-[48px] flex-auto flex-col items-start justify-center ",
+          "px-4 text-base leading-[22.4px]",
+          "bg-white-100 select-none  rounded-sm outline outline-1",
+          isCalendarVisible ? "text-blue-500" : "text-black-500",
+        )}
         onClick={() => setCalendarVisible((prevState) => !prevState)}>
-        <p className="text-black-300 paragraph-1">{children}</p>
-        <p className="text-black-300">{value || "mm/dd/yy"}</p>
+        <div className={clsx("paragraph-1", isCalendarVisible ? "text-blue-500" : "text-black-300")}> {children}</div>
+        <div
+          className={clsx(
+            "text-[15.88px] font-medium leading-[18.63px]",
+            isCalendarVisible ? "text-blue-500" : "text-black-300",
+          )}>
+          {value || "mm/dd/yy"}
+        </div>
       </div>
       {isCalendarVisible && (
-        <div className="z-100 absolute drop-shadow">
-          <Calendar onSelectValueChange={(newValue) => setValue(formatToMiddleEndian(newValue))} />
+        <div className="absolute z-50 mt-2 drop-shadow" ref={calendarRef}>
+          <Calendar onSelectValueChange={(newValue: Date) => setValue(formatToMiddleEndian(newValue))} />
         </div>
       )}
     </div>

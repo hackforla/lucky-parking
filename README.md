@@ -36,7 +36,7 @@ Installs the dependencies for all packages.
 
 Deletes any build artifacts and dependencies from the workspace and packages. You will need to re-execute `pnpm install` to run the project locally.
 
-### pnpx dev
+### pnpm dev
 
 Runs the website app in development mode. Open [http://localhost:5173/](http://localhost:5173/) in your browser to view the client application.
 

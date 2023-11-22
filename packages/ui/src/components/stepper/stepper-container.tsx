@@ -1,4 +1,4 @@
-import { ReactNode, createElement } from "react";
+import { Children, ReactNode, createElement, isValidElement } from "react";
 
 interface StepperContainerProps {
   currentStep?: number;
@@ -6,13 +6,19 @@ interface StepperContainerProps {
 }
 
 export function StepperContainer({ currentStep = 0, children }: StepperContainerProps) {
-  const len = children?.length;
+  const items = Children.toArray(children);
+  const len = items.length;
 
   return (
-    <div className="ml-4 flex flex-col">
-      {children?.map((child: any, idx: number) => {
-        const isLast = idx === len - 1;
-        return createElement(child.type, { key: idx, ...child.props, isCurrent: currentStep === idx, isLast });
+    <div className="flex flex-col">
+      {items.map((child, idx) => {
+        if (!isValidElement(child)) return;
+        return createElement(child.type, {
+          key: idx,
+          isCurrent: currentStep === idx,
+          isLast: idx === len - 1,
+          ...child.props,
+        });
       })}
     </div>
   );

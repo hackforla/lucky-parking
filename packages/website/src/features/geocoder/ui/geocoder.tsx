@@ -17,15 +17,16 @@ interface GeocoderProps {
   isDisabled?: boolean;
   onSelect: onEvent;
   placeholder?: string;
+  savedQuery?: GeocodeResult;
 }
 
 export default function Geocoder(props: GeocoderProps) {
-  const { filters = [], isDisabled = false, onSelect, placeholder = DEFAULT_PLACEHOLDER } = props;
+  const { filters = [], isDisabled = false, onSelect, placeholder = DEFAULT_PLACEHOLDER, savedQuery } = props;
 
   const dispatch = useDispatch();
 
   const [isSuggestionsVisible, setSuggestionsVisible] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(savedQuery?.place_name || "");
   const [results, setResults] = useState<GeocodeResult[]>([]);
 
   const hasQuery = useMemo(() => query && !_.isEmpty(query), [query]);

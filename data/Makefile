@@ -6,7 +6,7 @@
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
-PROJECT_NAME = lucky-parking-analysis
+PROJECT_NAME = citation-analysis
 PYTHON_INTERPRETER = python3
 
 ifeq (,$(shell which conda))
@@ -53,9 +53,25 @@ lint:
 upload_geojson:
 	$(PYTHON_INTERPRETER) src/data/upload.py
 
+## Upload zipcodes
+upload_zip:
+	$(PYTHON_INTERPRETER) src/data/upload_zip.py
+
+## Upload neighborhood council
+upload_neighborhood:
+	$(PYTHON_INTERPRETER) src/data/upload_neighborhood.py
+
 ## Create sample from raw data
 sample:
 	$(PYTHON_INTERPRETER) src/data/sample.py $(frac) $(cleaned)
+
+## Make dataset
+serial_data: 
+	$(PYTHON_INTERPRETER) src/data/make_serial_data.py data/processed $(geo)
+
+## Upload latest serial geojson
+upload_serial:
+	$(PYTHON_INTERPRETER) src/data/upload_serial.py
 
 ## Set up python interpreter environment
 create_environment:
