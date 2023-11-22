@@ -31,15 +31,7 @@ class EcrDockerStack extends cdk.Stack {
     new cdk.CfnOutput(this, "DockerrunS3Key", {
       value: this.dockerrunAsset.s3ObjectKey,
     });
-    // added something
-
-    console.log("CFN Outputs:", this.dockerrunBucket.bucketName, this.dockerrunAsset.s3ObjectKey);
   }
 }
 
 module.exports = { EcrDockerStack };
-
-// Don't think I need this:
-// const websiteEcrRepo = new ecr.Repository(this, "WebsiteEcrRepo", {
-//   repositoryName: "website-repo",
-// });
