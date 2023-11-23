@@ -9,7 +9,7 @@ describe("Citation-data-filter rendering", () => {
     render(<CitationDataFilter onCategorySelect={() => {}} onDatePresetSelect={() => {}} />);
   });
 
-  test("should redner citation data categories with initial placeholder", async () => {
+  test("should render citation data categories with initial placeholder", async () => {
     expect(screen.getByText("Total # Citations"));
   });
 
