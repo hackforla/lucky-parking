@@ -3,7 +3,7 @@ import { CitationDataCategories, CitationDataFilter, CitationDataInsights } from
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
 import type { GeocodeResult, onEvent } from "@/shared/lib/types";
 import { calculateDateRange, formatToRangeString } from "@/shared/lib/utilities/date";
-import { getFirstEnum } from "@/shared/lib/utilities/enum";
+import { getFirst } from "@/shared/lib/utilities/enum";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerTitle from "../explorer/citation-explorer-title";
@@ -18,8 +18,8 @@ interface ComparativeSearchVisualizationProps {
 export default function ComparativeSearchVisualization(props: ComparativeSearchVisualizationProps) {
   const { onClose, region1, region2, regionType } = props;
 
-  const [category, setCategory] = useState(getFirstEnum(CitationDataCategories));
-  const [dates, setDates] = useState(calculateDateRange(getFirstEnum(RelativeDatePresets)));
+  const [category, setCategory] = useState(getFirst(CitationDataCategories));
+  const [dates, setDates] = useState(calculateDateRange(getFirst(RelativeDatePresets)));
 
   const mockDatasets = [
     {
