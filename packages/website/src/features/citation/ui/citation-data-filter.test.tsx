@@ -18,17 +18,8 @@ describe("Citation-data-filter rendering", () => {
   });
 
   test("should render date inputs with initial placeholders", async () => {
-    const fromInput = screen.getByText("From");
-    const toInput = screen.getByText("To");
-
-    expect(fromInput).toBeInTheDocument();
-    expect(toInput).toBeInTheDocument();
-
-    const fromValue = fromInput.nextElementSibling;
-    const toValue = toInput.nextElementSibling;
-
-    expect(fromValue).toHaveTextContent("mm/dd/yy");
-    expect(toValue).toHaveTextContent("mm/dd/yy");
+    expect(screen.getByLabelText("From")).toHaveTextContent("mm/dd/yy");
+    expect(screen.getByLabelText("To")).toHaveTextContent("mm/dd/yy");
   });
 });
 
@@ -44,16 +35,33 @@ describe("Citation-data-filter interactions", () => {
 
     await user.click(screen.getByRole("combobox", { name: "citation-date-presets" }));
     await user.click(screen.getByRole("option", { name: "Year to Date" }));
+
+    await user.click(screen.getByLabelText("From"));
+    await user.click(screen.getByRole("combobox", { name: "Month" }));
+    await user.click(screen.getByRole("option", { name: "January" }));
+    await user.click(screen.getByRole("combobox", { name: "Year" }));
+    await user.click(screen.getByRole("option", { name: "2020" }));
+    await user.click(screen.getByText("25"));
+
+    await user.click(screen.getByLabelText("To"));
+    await user.click(screen.getByRole("combobox", { name: "Month" }));
+    await user.click(screen.getByRole("option", { name: "February" }));
+    await user.click(screen.getByRole("combobox", { name: "Year" }));
+    await user.click(screen.getByRole("option", { name: "2023" }));
+    await user.click(screen.getByText("27"));
   });
 
   test("should not render with default options", () => {
     expect(screen.queryByText("Total # Citations")).toBe(null);
     expect(screen.queryByText("Past 1 Year")).toBe(null);
+    expect(screen.queryByText("mm/dd/yy")).toBe(null);
   });
 
   test("should render with selected options", async () => {
     expect(screen.getByText("Violation Type"));
     expect(screen.getByText("Year to Date"));
+    expect(screen.getByText("01/25/2020"));
+    expect(screen.getByText("02/27/2023"));
   });
 
   test("should return selected options", async () => {
