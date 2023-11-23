@@ -11,14 +11,16 @@ export const calculateDateRange = (preset: RelativeDatePresets) => {
       return [sub(startOfToday(), { months: 3 }), startOfToday()];
     case RelativeDatePresets.MONTHS_1:
       return [sub(startOfToday(), { months: 1 }), startOfToday()];
+
+    /* istanbul ignore next */
     default:
-      return null;
+      throw new Error(`Unhandled preset: ${preset}`);
   }
 };
 
 export const formatToMiddleEndian = (date: Date) => format(date, "MM/dd/yyyy");
 
-export const formatToRange = (dates: Date[]) => {
+export const formatToRangeString = (dates: Date[]) => {
   const fromDate = formatToMiddleEndian(dates[0]);
   const toDate = formatToMiddleEndian(dates[1]);
 
