@@ -4,7 +4,7 @@ import { CitationDataCategories, CitationDataFilter, CitationDataInsights } from
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
 import FakeInput from "@/shared/ui/fake-input";
 import type { GeocodeResult, onEvent } from "@/shared/lib/types";
-import { calculateDateRange, formatToRange } from "@/shared/lib/utilities/date";
+import { calculateDateRange, formatToRangeString } from "@/shared/lib/utilities/date";
 import { getFirstEnum } from "@/shared/lib/utilities/enum";
 import type { RegionType } from "@/features/geocoder";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
@@ -54,7 +54,7 @@ export default function SingleSearchVisualization(props: SingleSearchVisualizati
         <CitationDataInsights
           category={category}
           datasets={mockDataset}
-          dates={formatToRange(dates as Date[])}
+          dates={formatToRangeString(dates as Date[])}
           onClick={() => {}}
           stat="112,338"
           title={region.place_name}

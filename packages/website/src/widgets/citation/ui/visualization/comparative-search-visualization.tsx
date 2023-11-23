@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CitationDataCategories, CitationDataFilter, CitationDataInsights } from "@/features/citation";
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
 import type { GeocodeResult, onEvent } from "@/shared/lib/types";
-import { calculateDateRange, formatToRange } from "@/shared/lib/utilities/date";
+import { calculateDateRange, formatToRangeString } from "@/shared/lib/utilities/date";
 import { getFirstEnum } from "@/shared/lib/utilities/enum";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
@@ -50,7 +50,7 @@ export default function ComparativeSearchVisualization(props: ComparativeSearchV
         <CitationDataInsights
           category={category}
           datasets={mockDatasets}
-          dates={formatToRange(dates as Date[])}
+          dates={formatToRangeString(dates as Date[])}
           onClick={() => {}}
           title={regionType ? `${regionType} Comparison` : "Comparison"}
         />
