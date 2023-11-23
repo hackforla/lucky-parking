@@ -3,7 +3,12 @@ import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import Calendar from "../calendar";
 import { formatToMiddleEndian } from "./utils/date";
 
-export default function DateInput({ children }: PropsWithChildren) {
+interface DateInputProps {
+  id: string;
+  children: PropsWithChildren;
+}
+
+export default function DateInput({ id, children }: PropsWithChildren<DateInputProps>) {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<string | null>();
   const [isCalendarVisible, setCalendarVisible] = useState(false);
@@ -25,6 +30,7 @@ export default function DateInput({ children }: PropsWithChildren) {
     <div className="relative flex-auto">
       <div
         data-testid="date-input-trigger"
+        aria-label={id}
         className={clsx(
           "flex h-[48px] flex-auto flex-col items-start justify-center ",
           "px-4 text-base leading-[22.4px]",
