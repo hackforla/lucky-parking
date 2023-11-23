@@ -1,5 +1,7 @@
 const { defaults } = require("jest-config");
 
+process.env.TZ = "UTC";
+
 const baseConfig = {
   ...defaults,
   collectCoverage: true,
