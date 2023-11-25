@@ -8,7 +8,7 @@ describe("Date Input", () => {
   beforeEach(async () => {
     render(
       <div>
-        <DateInput>From</DateInput>
+        <DateInput id="From">From</DateInput>
         <button data-testid="outside-event-listener">Exit calendar</button>
       </div>,
     );
