@@ -8,7 +8,8 @@ interface DateInputProps {
   children: PropsWithChildren;
 }
 
-export default function DateInput({ id, children }: PropsWithChildren<DateInputProps>) {
+export default function DateInput({ children, ...props }: PropsWithChildren<DateInputProps>) {
+  const { id } = props;
   const calendarRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<string | null>();
   const [isCalendarVisible, setCalendarVisible] = useState(false);
