@@ -6,6 +6,6 @@ export const DateRangeSchema = z.array(z.string().datetime());
 export const GeoPolygon = z.any();
 
 export const CitationFiltersSchema = z.object({
-  dates: DateRangeSchema,
-  geometry: GeoPolygon,
+  dates: DateRangeSchema.optional(),
+  geometry: GeoPolygon.optional(),
 });
