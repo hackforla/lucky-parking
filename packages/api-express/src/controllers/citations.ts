@@ -5,7 +5,11 @@ export const listCitations = async (req: Request, res: Response) => {
   const { dates, geometry } = req.body;
   const citations = await CitationService.findCitations({ dates, geometry });
 
-  res.status(200).json({
+  const headers = {
+    "X-Total-Count": citations.length,
+  };
+
+  res.status(200).set(headers).json({
     data: citations,
   });
 };

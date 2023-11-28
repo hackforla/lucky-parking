@@ -1,9 +1,15 @@
 import clsx from "clsx";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
-import Calendar from "@lucky-parking/ui/src/components/calendar";
-import { formatToMiddleEndian } from "@/shared/lib/utilities/date";
+import Calendar from "../calendar";
+import { formatToMiddleEndian } from "./utils/date";
 
-export default function DateInput({ children }: PropsWithChildren) {
+interface DateInputProps {
+  id: string;
+  children: PropsWithChildren;
+}
+
+export default function DateInput({ children, ...props }: PropsWithChildren<DateInputProps>) {
+  const { id } = props;
   const calendarRef = useRef<HTMLDivElement>(null);
   const [value, setValue] = useState<string | null>();
   const [isCalendarVisible, setCalendarVisible] = useState(false);
@@ -24,6 +30,8 @@ export default function DateInput({ children }: PropsWithChildren) {
   return (
     <div className="relative flex-auto">
       <div
+        data-testid="date-input-trigger"
+        aria-label={id}
         className={clsx(
           "flex h-[48px] flex-auto flex-col items-start justify-center ",
           "px-4 text-base leading-[22.4px]",
@@ -33,6 +41,7 @@ export default function DateInput({ children }: PropsWithChildren) {
         onClick={() => setCalendarVisible((prevState) => !prevState)}>
         <div className={clsx("paragraph-1", isCalendarVisible ? "text-blue-500" : "text-black-300")}> {children}</div>
         <div
+          data-testid="date-input-value"
           className={clsx(
             "text-[15.88px] font-medium leading-[18.63px]",
             isCalendarVisible ? "text-blue-500" : "text-black-300",

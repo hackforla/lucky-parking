@@ -78,7 +78,7 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
   };
 
   return (
-    <div className="bg-white-100 w-64" ref={setContainer}>
+    <div data-testid="calendar-input" className="bg-white-100 w-64" ref={setContainer}>
       <div className="flex h-[52px] px-6">
         <div className="flex flex-1 items-center space-x-2">
           <Select
@@ -116,8 +116,12 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
         <table className="border-collaspse">
           <thead>
             <tr>
-              {["M", "T", "W", "T", "F", "S", "S"].map((ele: string) => (
-                <td className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">{ele}</td>
+              {["M", "T", "W", "T", "F", "S", "S"].map((ele: string, index: number) => (
+                <td
+                  key={ele + index}
+                  className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">
+                  {ele}
+                </td>
               ))}
             </tr>
           </thead>
