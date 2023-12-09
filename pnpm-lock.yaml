@@ -239,6 +239,21 @@ importers:
 
   packages/api-express: {}
 
+  packages/typings:
+    devDependencies:
+      glob:
+        specifier: ^10.3.10
+        version: 10.3.10
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      vite:
+        specifier: ^5.0.0
+        version: 5.0.7(@types/node@20.7.0)
+      vite-plugin-dts:
+        specifier: ^3.6.4
+        version: 3.6.4(@types/node@20.7.0)(typescript@5.2.2)(vite@5.0.7)
+
   packages/ui:
     dependencies:
       "@lucky-parking/utilities":
@@ -5008,7 +5023,7 @@ packages:
       find-cache-dir: 3.3.2
       find-up: 5.0.0
       fs-extra: 11.1.1
-      glob: 10.3.9
+      glob: 10.3.10
       handlebars: 4.7.8
       lazy-universal-dotenv: 4.0.0
       node-fetch: 2.7.0
@@ -9732,19 +9747,6 @@ packages:
   /glob@10.3.10:
     resolution:
       { integrity: sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g== }
-    engines: { node: ">=16 || 14 >=14.17" }
-    hasBin: true
-    dependencies:
-      foreground-child: 3.1.1
-      jackspeak: 2.3.5
-      minimatch: 9.0.3
-      minipass: 7.0.3
-      path-scurry: 1.10.1
-    dev: true
-
-  /glob@10.3.9:
-    resolution:
-      { integrity: sha512-2tU/LKevAQvDVuVJ9pg9Yv9xcbSh+TqHuTaXTNbQwf+0kDl9Fm6bMovi4Nm5c8TVvfxo2LLcqCGtmO9KoJaGWg== }
     engines: { node: ">=16 || 14 >=14.17" }
     hasBin: true
     dependencies:
