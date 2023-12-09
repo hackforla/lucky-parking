@@ -239,7 +239,11 @@ importers:
 
   packages/api-express: {}
 
-  packages/ui: {}
+  packages/ui:
+    dependencies:
+      "@lucky-parking/utilities":
+        specifier: workspace:^
+        version: link:../utilities
 
   packages/utilities:
     dependencies:
