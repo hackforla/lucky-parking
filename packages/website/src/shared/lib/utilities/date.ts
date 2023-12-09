@@ -1,4 +1,4 @@
-import { format, startOfToday, startOfYear, sub } from "date-fns";
+import { startOfToday, startOfYear, sub } from "date-fns";
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
 
 export const calculateDateRange = (preset: RelativeDatePresets) => {
@@ -16,13 +16,4 @@ export const calculateDateRange = (preset: RelativeDatePresets) => {
     default:
       throw new Error(`Unhandled preset: ${preset}`);
   }
-};
-
-export const formatToMiddleEndian = (date: Date) => format(date, "MM/dd/yyyy");
-
-export const formatToRangeString = (dates: Date[]) => {
-  const fromDate = formatToMiddleEndian(dates[0]);
-  const toDate = formatToMiddleEndian(dates[1]);
-
-  return `${fromDate} - ${toDate}`;
 };
