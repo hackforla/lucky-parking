@@ -11,5 +11,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@lucky-parking/utilities": "workspace:^"
+  }
 }

@@ -1,7 +1,7 @@
+import { formatToMiddleEndian } from "@lucky-parking/utilities/dist/date";
 import clsx from "clsx";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import Calendar from "../calendar";
-import { formatToMiddleEndian } from "./utils/date";
 
 interface DateInputProps {
   id: string;
