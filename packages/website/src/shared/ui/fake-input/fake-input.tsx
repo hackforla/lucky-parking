@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
+import type { onEvent } from "@lucky-parking/typings";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseIcon from "@mui/icons-material/Close";
-import type { onEvent } from "@/shared/lib/types";
 
 interface FakeInputProps extends PropsWithChildren {
   onClose: onEvent;
