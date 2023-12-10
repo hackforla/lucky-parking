@@ -256,6 +256,9 @@ importers:
 
   packages/ui:
     dependencies:
+      "@lucky-parking/typings":
+        specifier: workspace:^
+        version: link:../typings
       "@lucky-parking/utilities":
         specifier: workspace:^
         version: link:../utilities
