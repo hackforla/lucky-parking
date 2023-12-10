@@ -1,4 +1,4 @@
-import type { onEvent } from "@/shared/lib/types";
+import type { onEvent } from "@lucky-parking/typings";
 import DateInput from "@lucky-parking/ui/src/components/date-input";
 import CitationDataCategorySelection from "./citation-data-category-selection";
 import CitationDatePresetsSelection from "./citation-date-presets-selection";

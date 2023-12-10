@@ -1,8 +1,8 @@
 import _ from "lodash";
+import type { Nil } from "@lucky-parking/typings";
 import { createContext, MutableRefObject, PropsWithChildren, useCallback, useRef, useState } from "react";
 import { MapProvider as MapGLProvider } from "react-map-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-import { Nil } from "@/shared/lib/types";
 
 type DrawControl = MapboxDraw | Nil;
 type DrawControlRef = MutableRefObject<MapboxDraw | undefined> | Nil;

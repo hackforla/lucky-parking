@@ -1,9 +1,10 @@
 import _ from "lodash";
+import type { Nil, onEvent } from "@lucky-parking/typings";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import SearchInput from "@lucky-parking/ui/src/components/search-input";
 import { actions } from "@/shared/data/store/ui-slice";
-import type { GeocodeResult, Nil, onEvent } from "@/shared/lib/types";
+import type { GeocodeResult } from "@/shared/lib/types";
 import { fetchForwardGeocodingData } from "../api";
 import type { PlaceType } from "../lib/constants";
 import { forwardGeocodeNeighborhoodCouncil } from "../lib/utilities";

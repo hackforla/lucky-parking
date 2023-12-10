@@ -1,7 +1,7 @@
 import _ from "lodash";
+import type { onEvent } from "@lucky-parking/typings";
 import PickList from "@lucky-parking/ui/src/components/pick-list";
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
-import type { onEvent } from "@/shared/lib/types";
 
 interface CitationDataPresetsSelection {
   onSelect: onEvent;

@@ -1,6 +1,6 @@
+import type { onEvent } from "@lucky-parking/typings";
 import Geocoder, { SearchModeToggleButton } from "@/features/geocoder";
 import { MapDrawButton } from "@/features/map";
-import type { onEvent } from "@/shared/lib/types";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerSectionTitle from "../explorer/citation-explorer-section-title";

@@ -1,11 +1,12 @@
 import { useState } from "react";
+import type { onEvent } from "@lucky-parking/typings";
 import { formatToRangeString } from "@lucky-parking/utilities/dist/date";
 import { getFirst } from "@lucky-parking/utilities/dist/enum";
 import Tag from "@lucky-parking/ui/src/components/tag";
 import { CitationDataCategories, CitationDataFilter, CitationDataInsights } from "@/features/citation";
 import { RelativeDatePresets } from "@/shared/lib/constants/date";
 import FakeInput from "@/shared/ui/fake-input";
-import type { GeocodeResult, onEvent } from "@/shared/lib/types";
+import type { GeocodeResult } from "@/shared/lib/types";
 import { calculateDateRange } from "@/shared/lib/utilities/date";
 import type { RegionType } from "@/features/geocoder";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";

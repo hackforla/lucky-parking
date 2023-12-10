@@ -15,7 +15,3 @@ export type GeocodeResult = BaseGeocodeResult & {
   relevance?: number;
   text?: string;
 };
-
-export type Nil = null | undefined;
-
-export type onEvent = (arg0: any) => void;

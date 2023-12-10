@@ -1,10 +1,10 @@
 import { useState } from "react";
+import type { onEvent } from "@lucky-parking/typings";
 import Button from "@lucky-parking/ui/src/components/button";
 import Input from "@lucky-parking/ui/src/components/input";
 import PickList from "@lucky-parking/ui/src/components/pick-list";
 import { formatDecimals } from "./utils/formatDecimals";
 import { UnitConvertor, Units } from "./utils/unit-convertor";
-import { onEvent } from "@/shared/lib/types";
 
 interface RadiusToolProps {
   isSubmitDisabled?: boolean;

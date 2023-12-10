@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
+import type { onEvent } from "@lucky-parking/typings";
 import CloseIcon from "@mui/icons-material/Close";
-import type { onEvent } from "@/shared/lib/types";
 
 interface CitationExplorerTitleProps extends PropsWithChildren {
   onClose?: onEvent;
