@@ -13,6 +13,7 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
+    "@lucky-parking/typings": "workspace:^",
     "@lucky-parking/utilities": "workspace:^"
   }
 }

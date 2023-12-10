@@ -1,4 +1,4 @@
-import type { onEvent } from "../../../../website/src/shared/lib/types";
+import type { onEvent } from "@lucky-parking/typings";
 
 interface RadioOptionProp {
   children: string;
