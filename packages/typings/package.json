@@ -6,7 +6,6 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build"
   },
   "devDependencies": {
