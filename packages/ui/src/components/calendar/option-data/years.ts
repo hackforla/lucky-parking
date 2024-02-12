@@ -1,4 +1,4 @@
-export type Year = 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023;
+export type Year = 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024;
 
 export type YEAR_OPTIONS = {
   value: Year;
@@ -13,4 +13,5 @@ export const YEAR_RANGE: YEAR_OPTIONS[] = [
   { value: 2021, text: "2021" },
   { value: 2022, text: "2022" },
   { value: 2023, text: "2023" },
+  { value: 2024, text: "2024" },
 ];
