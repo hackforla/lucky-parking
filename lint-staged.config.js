@@ -1,3 +1,3 @@
 module.exports = {
-  "**/*": "prettier --write --ignore-unknown",
+  "**/*": ["prettier --write --ignore-unknown", "eslint"],
 };
