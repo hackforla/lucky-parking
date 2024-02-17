@@ -30,7 +30,7 @@ export default function Select<T>({
   ) : (
     <ArrowDropDownIcon sx={{ fontSize: 16, color: "#7A7A7B" }} />
   );
-
+  console.log("options", options);
   return (
     <Root name={id} value={value as string} onOpenChange={setIsOpen} onValueChange={onChange}>
       <Trigger

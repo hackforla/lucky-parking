@@ -3,7 +3,7 @@ import client from "./client";
 
 const { DB_NAME } = process.env;
 
-let db: Db;
+let db: Db = null;
 
 try {
   const mongo = await client.connect();
@@ -13,5 +13,4 @@ try {
   console.error(e);
 }
 
-// @ts-ignore
 export default db;

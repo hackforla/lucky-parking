@@ -1,5 +1,6 @@
+import { onEvent } from "@lucky-parking/typings";
 import _ from "lodash";
-import { PropsWithChildren, forwardRef, MouseEvent } from "react";
+import { PropsWithChildren, forwardRef } from "react";
 import clsx from "clsx";
 
 export enum ButtonSize {
@@ -38,7 +39,7 @@ export interface ButtonProps extends PropsWithChildren {
   isDisabled?: boolean;
   size?: ButtonSize;
   variant?: ButtonVariant;
-  onClick?: (arg0: any) => void;
+  onClick?: onEvent;
 }
 
 export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(props: ButtonProps, ref) {

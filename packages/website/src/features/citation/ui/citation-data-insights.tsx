@@ -3,7 +3,7 @@ import { VisualizationStub } from "@/shared/ui/visualization";
 
 interface CitationDataset {
   name?: string;
-  data: Object[];
+  data: object[];
 }
 
 interface CitationDataInsightsProps {
