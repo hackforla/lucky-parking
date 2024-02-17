@@ -1,3 +1,4 @@
+import { onEvent } from "@lucky-parking/typings";
 import _ from "lodash";
 import { PropsWithChildren } from "react";
 import { SearchSuggestion } from "@lucky-parking/ui/src/components/search-input";
@@ -15,7 +16,7 @@ const COLOR: GeocoderResultColor = {
 
 interface GeocoderResultProps extends PropsWithChildren {
   feature: GeocodeResult;
-  onClick: (arg0?: any) => void;
+  onClick: onEvent;
 }
 
 export default function GeocoderResult({ children, ...props }: GeocoderResultProps) {
