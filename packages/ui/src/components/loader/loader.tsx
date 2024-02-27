@@ -16,7 +16,7 @@ const Loader: React.FC<LoaderProps> = ({
   backgroundColor = "gray-100",
 }) => {
   return (
-    <div className={`bg-${backgroundColor} h-${height} w-${width} flex flex-col items-center justify-center`}>
+    <div data-testid="loader" className={`bg-${backgroundColor} h-${height} w-${width} flex flex-col items-center justify-center`}>
       <svg
         className={`-ml-1 mb-2 mr-3 h-${spinnerSize} w-${spinnerSize} animate-spin text-white`}
         xmlns="http://www.w3.org/2000/svg"
