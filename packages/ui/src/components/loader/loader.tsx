@@ -8,15 +8,38 @@ interface LoaderProps {
 }
 
 const Loader: React.FC<LoaderProps> = ({
+  /**
+   * The height and width of the loader, using Tailwind CSS sizing classes.
+   * @default 'h-16' height: 4rem; (64px)
+   * @default 'w-16' width: 4rem; (64px)
+   */
   height = "16",
   width = "16",
+  /**
+   * The color of the text within the loader, using a Tailwind CSS color class.
+   * @default 'text-blue-500' color: rgb(59 130 246);
+   */
   textColor = "blue-500",
+  /**
+   * The color of the spinner within the loader.
+   * @default '#1d4ed8' branding color
+   */
   spinnerColor = "#1d4ed8",
+  /**
+   * The size of the spinner, using Tailwind CSS sizing classes.
+   * @default 'h-12 w-12' height: 3rem; width: 3rem; (48px)
+   */
   spinnerSize = "12",
+  /**
+   * The background color of the loader, using a Tailwind CSS color class.
+   * @default 'bg-gray-100' background-color: rgb(243 244 246);
+   */
   backgroundColor = "gray-100",
 }) => {
   return (
-    <div data-testid="loader" className={`bg-${backgroundColor} h-${height} w-${width} flex flex-col items-center justify-center`}>
+    <div
+      data-testid="loader"
+      className={`bg-${backgroundColor} h-${height} w-${width} flex flex-col items-center justify-center`}>
       <svg
         className={`-ml-1 mb-2 mr-3 h-${spinnerSize} w-${spinnerSize} animate-spin text-white`}
         xmlns="http://www.w3.org/2000/svg"
