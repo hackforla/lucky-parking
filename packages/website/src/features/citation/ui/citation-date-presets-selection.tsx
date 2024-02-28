@@ -7,7 +7,7 @@ interface CitationDataPresetsSelection {
   onSelect: onEvent;
 }
 
-const CITATION_DATE_PRESETS = _.map(RelativeDatePresets, (value) => ({ value, text: value }));
+const CITATION_DATE_PRESETS = _.map(RelativeDatePresets, (value, key) => ({ value, text: value }));
 
 export default function CitationDatePresetsSelection(props: CitationDataPresetsSelection) {
   const { onSelect } = props;

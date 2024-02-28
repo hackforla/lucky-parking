@@ -19,8 +19,8 @@ const findCitations = async (filters: CitationFilters) => {
   try {
     const collection = db.collection(COL_CITATIONS as string);
     return await collection.find(query).toArray();
-  } catch (e: unknown) {
-    if (e instanceof Error) console.error(e.message);
+  } catch (error: any) {
+    throw new Error(error.message);
   }
 };
 

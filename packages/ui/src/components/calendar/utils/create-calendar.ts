@@ -1,4 +1,3 @@
-import { EmptyObject } from "@reduxjs/toolkit";
 import { Month } from "../option-data/months";
 import { Year } from "../option-data/years";
 import { isThisAndNextMonth } from "./is-this-month-and-next";
@@ -42,14 +41,16 @@ export interface CalendarDate {
   year: Year;
 }
 
-export type T_Calendar = CalendarDate | EmptyObject;
+export type T_Calendar = CalendarDate | {};
 
 export function createCalendar(year: Year, month: Month): T_Calendar[] {
   const startDay = 1; // Monday: 0 (Sunday) to 6 (Saturday)
   const currentDate = new Date(year, month, 1);
 
   // Set the day of the week for the start day
-  currentDate.setDate(currentDate.getDate() - ((currentDate.getDay() - startDay + 7) % 7));
+  currentDate.setDate(
+    currentDate.getDate() - ((currentDate.getDay() - startDay + 7) % 7),
+  );
 
   // Initialize a two-dimensional array to hold the calendar
   const calendar: any = [];
