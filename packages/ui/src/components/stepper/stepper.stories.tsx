@@ -10,7 +10,7 @@ const meta: Meta<typeof StepperContainer> = {
 type Stories = StoryObj<typeof StepperContainer>;
 
 export const Basic: Stories = {
-  render: () => (
+  render: (args: any) => (
     <div className="w-[500px]">
       <StepperContainer currentStep={1}>
         <StepperItem title="Hey, I just met you, and this is crazy" isFinished={true}>

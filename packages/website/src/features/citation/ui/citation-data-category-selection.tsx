@@ -7,7 +7,7 @@ interface CitationDataCategorySelectionProps {
   onSelect: onEvent;
 }
 
-const CITATION_DATA_CATEGORIES = _.map(CitationDataCategories, (value) => ({ value, text: value }));
+const CITATION_DATA_CATEGORIES = _.map(CitationDataCategories, (value, key) => ({ value, text: value }));
 
 export default function CitationDataCategorySelection(props: CitationDataCategorySelectionProps) {
   const { onSelect } = props;

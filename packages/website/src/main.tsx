@@ -1,5 +1,7 @@
 /* istanbul ignore file */
 
+import { date } from "@lucky-parking/utilities";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "@/app";

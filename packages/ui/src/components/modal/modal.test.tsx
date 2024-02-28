@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import userEvent from '@testing-library/user-event'
 import { Modal, ModalClose, ModalContent, ModalDescription, ModalTitle, ModalTrigger } from "./modal";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import Button, { ButtonVariant } from "../button/button";
 
 describe("Default Modal and click modal trigger", () => {
-  const user = userEvent.setup();
+  const user = userEvent.setup()
   beforeEach(async () => {
     render(
       <Modal>
@@ -15,7 +15,7 @@ describe("Default Modal and click modal trigger", () => {
           <AnnouncementIcon />{" "}
         </ModalTrigger>
         <ModalContent title={"Messages"} description={"The Slime replied back"}>
-          <div className="w-52">Hello World! I`&apos;`m not a bad slime</div>
+          <div className="w-52">Hello World! I'm not a bad slime</div>
           <div className="mt-6 flex justify-end space-x-2">
             <ModalClose asChild>
               <Button variant={ButtonVariant.primary}>
@@ -44,7 +44,9 @@ describe("Default Modal and click modal trigger", () => {
   });
 
   test("renders content test", () => {
-    expect(screen.getByText("Hello World! I'm not a bad slime")).toBeInTheDocument();
+    expect(
+      screen.getByText("Hello World! I'm not a bad slime"),
+    ).toBeInTheDocument();
   });
 
   test("renders submit button", () => {
@@ -58,7 +60,9 @@ describe("Default Modal and click modal trigger", () => {
   });
 
   test("renders close trigger button", () => {
-    expect(screen.getByRole("button", { name: /close-modal/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /close-modal/i }),
+    ).toBeInTheDocument();
   });
 
   test("clicking close trigger button should close modal", async () => {
@@ -70,7 +74,7 @@ describe("Default Modal and click modal trigger", () => {
 
 describe("Custom Modal Description and Title and click modal trigger", () => {
   beforeEach(async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup()
     render(
       <Modal>
         <ModalTrigger asChild aria-label="open-modal">
@@ -78,30 +82,29 @@ describe("Custom Modal Description and Title and click modal trigger", () => {
             <p>Custom</p>
           </Button>
         </ModalTrigger>
-        <ModalContent className="w-[200px]">
-          <ModalTitle className="mb-4 text-3xl">Kamina</ModalTitle>
-          <ModalDescription className="mb-3">
-            Believe In The <span className="font-bold">Me</span> That Believe In <span className="font-bold">You</span>
-          </ModalDescription>
+        <ModalContent className='w-[200px]'>
+          <ModalTitle className='text-3xl mb-4'>Kamina</ModalTitle>
+          <ModalDescription className='mb-3'>Believe In The <span className='font-bold'>Me</span> That Believe In <span className="font-bold">You</span></ModalDescription>
           <ModalClose asChild>
             <Button variant={ButtonVariant.primary}>
               <p>Ok!</p>
             </Button>
           </ModalClose>
         </ModalContent>
-      </Modal>,
+      </Modal>
     );
 
     const openModal = screen.getByRole("button", { name: /open-modal/i });
     await user.click(openModal);
   });
 
+
   test("renders custom title", () => {
     expect(screen.getByText("Kamina")).toBeInTheDocument();
   });
 
   test("renders custom description", () => {
-    const ele = screen.getByText("Believe ", { exact: false });
-    expect(ele.textContent).toEqual("Believe In The Me That Believe In You");
+    const ele = screen.getByText('Believe ', { exact: false })
+    expect(ele.textContent).toEqual('Believe In The Me That Believe In You')
   });
 });
