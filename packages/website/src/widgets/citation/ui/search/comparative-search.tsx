@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { onEvent } from "@lucky-parking/typings";
 import Button, { ButtonSize, ButtonVariant } from "@lucky-parking/ui/src/components/button";
 import Geocoder, { PLACE_TYPE_BY_REGION_TYPE, RegionType, RegionTypesSelection } from "@/features/geocoder";

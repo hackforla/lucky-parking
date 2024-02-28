@@ -1,6 +1,6 @@
 import _ from "lodash";
 import SearchIcon from "@mui/icons-material/Search";
-import { ChangeEvent, PropsWithChildren, useMemo } from "react";
+import { ChangeEvent, PropsWithChildren, useMemo, useState } from "react";
 
 interface SearchInputProps extends PropsWithChildren {
   isDisabled?: boolean;
