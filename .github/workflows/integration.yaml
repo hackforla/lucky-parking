@@ -1,0 +1,40 @@
+name: integration
+
+on:
+  pull_request:
+    branches:
+      - main
+      - stable
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+      - stable
+
+jobs:
+  code-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare
+        uses: hackforla/lucky-parking/github/workflows/prepare.yaml@main
+
+      - name: Code Formatting
+        run: pnpm ci:format
+
+      - name: Code Linting
+        run: pnpm ci:lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare
+        uses: hackforla/lucky-parking/github/workflows/prepare.yaml@main
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
