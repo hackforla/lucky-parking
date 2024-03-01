@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlaceType, REGION_TYPE_BY_PLACE_TYPE, RegionType } from "@/features/geocoder/lib/constants";
 import { selectors } from "@/shared/data/store/ui-slice";
 import { GeocodeResult } from "@/shared/lib/types";
@@ -9,6 +9,7 @@ import DrawSearch from "../search/draw-search";
 import SingleSearch from "../search/single-seach";
 import ComparativeSearchVisualization from "../visualization/comparative-search-visualization";
 import SingleSearchVisualization from "../visualization/single-search-visualization";
+import { useSearchParams } from "react-router-dom";
 
 export default function CitationExplorer() {
   const ui = useSelector(selectors.selectUi);
@@ -17,15 +18,20 @@ export default function CitationExplorer() {
   const [regionType, setRegionType] = useState<RegionType | null>(null);
   const [region1, setRegion1] = useState<GeocodeResult | null>(null);
   const [region2, setRegion2] = useState<GeocodeResult | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const onSearchModeToggle = () => {
     setSingleSearchMode((prevState) => !prevState);
     setRegionType(null);
     setRegion1(null);
     setRegion2(null);
+    setSearchParams({});
   };
 
-  const onVisualizationModeToggle = () => setVisualizationMode((prevState) => !prevState);
+  const onVisualizationModeToggle = () => {
+    setVisualizationMode((prevState) => !prevState);
+    setSearchParams({});
+  };
 
   const onRegionSelect = (feature: GeocodeResult) => {
     if (_.isNil(feature)) return;
@@ -33,7 +39,21 @@ export default function CitationExplorer() {
     setRegion1(feature);
     setRegionType(REGION_TYPE_BY_PLACE_TYPE[_.first(feature.place_type) as PlaceType]);
     setVisualizationMode(true);
+
+    if (searchParams.size == 0) {
+      setSearchParams({place_name: feature.place_name, place_type: feature.place_type });
+    }
   };
+
+  useEffect(() => {
+    if (!isSingleSearchMode) {
+      setSearchParams((prevParams) => {
+        prevParams.set("compare_mode", "true");
+        return prevParams;
+      })
+
+    }
+  }, [isSingleSearchMode])
 
   if (ui.isMapInstructionsVisible) {
     return <DrawSearch />;
@@ -61,7 +81,7 @@ export default function CitationExplorer() {
   }
 
   return isSingleSearchMode ? (
-    <SingleSearch onToggle={onSearchModeToggle} onSelect={onRegionSelect} />
+    <SingleSearch onToggle={onSearchModeToggle} onSelect={onRegionSelect} savedQuery={searchParams} />
   ) : (
     <ComparativeSearch
       onClose={onSearchModeToggle}

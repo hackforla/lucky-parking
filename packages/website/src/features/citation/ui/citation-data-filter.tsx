@@ -6,25 +6,27 @@ import CitationDatePresetsSelection from "./citation-date-presets-selection";
 interface CitationDataFilterProps {
   onCategorySelect: onEvent;
   onDatePresetSelect: onEvent;
+  onCustomDateSelect: onEvent;
+  category: string;
+  datePreset: string;
+  dateFrom?: string;
+  dateTo?: string;
 }
 
 export default function CitationDataFilter(props: CitationDataFilterProps) {
-  const { onCategorySelect, onDatePresetSelect } = props;
+  const { onCategorySelect, onDatePresetSelect, onCustomDateSelect, category, datePreset, dateFrom, dateTo } = props;
 
   return (
-    <>
-      <CitationDataCategorySelection onSelect={onCategorySelect} />
-
-      <div className="flex w-full items-center space-x-2">
-        <CitationDatePresetsSelection onSelect={onDatePresetSelect} />
-
-        <p className="paragraph-2 text-black-400 font-medium">or</p>
-
-        <div className="flex flex-auto items-center space-x-1">
-          <DateInput id="From">From</DateInput>
-          <DateInput id="To">To</DateInput>
-        </div>
-      </div>
-    </>
+  	<>
+  		<CitationDataCategorySelection category={category} onSelect={onCategorySelect} />
+  		<div className="flex w-full items-center space-x-2">
+  			<CitationDatePresetsSelection datePreset={datePreset} onSelect={onDatePresetSelect} />
+  			<p className="paragraph-2 text-black-400 font-medium">or</p>
+  			<div className="flex flex-auto items-center space-x-1">
+  				<DateInput id="From" date={dateFrom} onSelect={onCustomDateSelect}>From</DateInput>
+  				<DateInput id="To" date={dateTo} onSelect={onCustomDateSelect}>To</DateInput>
+  			</div>
+  		</div>
+  	</>
   );
 }

@@ -5,12 +5,13 @@ import { CitationDataCategories } from "../lib";
 
 interface CitationDataCategorySelectionProps {
   onSelect: onEvent;
+  category: string;
 }
 
 const CITATION_DATA_CATEGORIES = _.map(CitationDataCategories, (value) => ({ value, text: value }));
 
 export default function CitationDataCategorySelection(props: CitationDataCategorySelectionProps) {
-  const { onSelect } = props;
+  const { onSelect, category } = props;
 
   return (
     <PickList
@@ -19,6 +20,7 @@ export default function CitationDataCategorySelection(props: CitationDataCategor
       onChange={onSelect}
       options={CITATION_DATA_CATEGORIES}
       placeholder={CITATION_DATA_CATEGORIES[0].text}
+      value={category}
     />
   );
 }

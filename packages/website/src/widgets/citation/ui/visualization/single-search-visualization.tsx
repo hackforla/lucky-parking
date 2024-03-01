@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { onEvent } from "@lucky-parking/typings";
 import { formatToRangeString } from "@lucky-parking/utilities/dist/date";
 import { getFirst } from "@lucky-parking/utilities/dist/enum";
@@ -12,6 +12,8 @@ import type { RegionType } from "@/features/geocoder";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerSectionTitle from "../explorer/citation-explorer-section-title";
+import { useSearchParams } from "react-router-dom";
+import { formatToMiddleEndian } from "@lucky-parking/utilities/dist/date";
 
 interface SingleSearchVisualizationProps {
   onClose: onEvent;
@@ -21,13 +23,62 @@ interface SingleSearchVisualizationProps {
 
 export default function SingleSearchVisualization(props: SingleSearchVisualizationProps) {
   const { onClose, region, regionType } = props;
-
-  const [category, setCategory] = useState(getFirst(CitationDataCategories));
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [category, setCategory] = useState(searchParams.get("category") || getFirst(CitationDataCategories));
+  const [datePreset, setDatePreset] = useState(searchParams.get("date_preset") || getFirst(RelativeDatePresets));
   const [dates, setDates] = useState(calculateDateRange(getFirst(RelativeDatePresets)));
+  const [dateFrom, setDateFrom] = useState(null);
+  const [dateTo, setDateTo] = useState(null);
+  const [customDateToggle, setCustomDateToggle] = useState(false);
 
   const onDatePresetSelect = (preset: RelativeDatePresets) => {
+    setCustomDateToggle(false);
+    setDateFrom(null);
+    setDateTo(null);
+
     setDates(calculateDateRange(preset));
+    setDatePreset(preset);
+    setSearchParams((prevParams) => {
+      prevParams.set("date_from", formatToMiddleEndian(dates[0]));
+      prevParams.set("date_to", formatToMiddleEndian(dates[1]));
+      return prevParams;
+    })
   };
+
+  const onCategorySelect = (value: string) => {
+    setCategory(value);
+    setSearchParams((prevParams) => {
+      prevParams.set("category", value);
+      return prevParams;
+    });
+  }
+
+  const onCustomDateSelect = (value: object) => {
+    console.log(value);
+    if (value.id === "From") {
+      setDateFrom(value.date);
+    }
+    if (value.id === "To") {
+      setDateTo(value.date);
+    }
+  }
+
+  useEffect(() =>  {
+    if (dateFrom && dateTo) {
+      setCustomDateToggle(true);
+    }
+  }, [dateFrom, dateTo]);
+
+
+  useEffect(() => {
+    if (customDateToggle && dateFrom && dateTo) {
+      const a = new Date(dateFrom);
+      const b = new Date(dateTo);
+      setDates([a, b])
+
+    }
+  }, [customDateToggle, dateFrom, dateTo]);
 
   const mockDataset = [{ data: [] }];
 
@@ -47,7 +98,15 @@ export default function SingleSearchVisualization(props: SingleSearchVisualizati
       <CitationExplorerDivider />
 
       <CitationExplorerSection>
-        <CitationDataFilter onCategorySelect={setCategory} onDatePresetSelect={onDatePresetSelect} />
+        <CitationDataFilter 
+          onCategorySelect={onCategorySelect} 
+          onDatePresetSelect={onDatePresetSelect} 
+          onCustomDateSelect={onCustomDateSelect}
+          category={category} 
+          datePreset={datePreset}
+          dateFrom={dateFrom}
+          dateTo={dateTo}
+        />
       </CitationExplorerSection>
 
       <CitationExplorerDivider />
