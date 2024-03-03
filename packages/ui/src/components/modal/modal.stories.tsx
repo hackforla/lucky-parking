@@ -21,7 +21,7 @@ export const Default: Content = {
         <AnnouncementIcon />
       </ModalTrigger>
       <ModalContent {...args}>
-        <div className="w-52"> Hello World! I'm not a bad slime </div>
+        <div className="w-52"> Hello World! I&#39;m not a bad slime </div>
         <div className="mt-6 flex justify-end">
           <ModalClose asChild>
             <Button variant={ButtonVariant.primary}>
