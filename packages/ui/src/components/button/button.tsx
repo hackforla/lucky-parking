@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { PropsWithChildren, forwardRef, MouseEvent } from "react";
+import { PropsWithChildren, forwardRef } from "react";
 import clsx from "clsx";
 
 export enum ButtonSize {
