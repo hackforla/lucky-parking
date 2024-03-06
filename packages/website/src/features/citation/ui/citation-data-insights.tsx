@@ -1,5 +1,6 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { VisualizationStub } from "@/shared/ui/visualization";
+import React, { Suspense } from "react";
+import Loader from "@lucky-parking/ui/src/components/loader";
 
 interface CitationDataset {
   name?: string;
@@ -14,6 +15,8 @@ interface CitationDataInsightsProps {
   stat?: string;
   title: string;
 }
+
+const LazyVisualizationStub = React.lazy(() => import("@/shared/ui/visualization/visualization-stub"));
 
 export default function CitationDataInsights(props: CitationDataInsightsProps) {
   const { category, datasets, dates, onClick, stat, title } = props;
@@ -35,8 +38,10 @@ export default function CitationDataInsights(props: CitationDataInsightsProps) {
       {datasets.map(({ name, data }, index) => (
         <div className="flex flex-col" key={name || `${title}-${index}`}>
           {name && <p className="paragraph-3 text-center font-semibold">{name}</p>}
-          {/*// @ts-ignore*/}
-          <VisualizationStub data={data} />
+          <Suspense fallback={<Loader height="64" width="full" />}>
+            {/*// @ts-ignore*/}
+            <LazyVisualizationStub data={data} />
+          </Suspense>
         </div>
       ))}
 
