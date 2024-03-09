@@ -17,8 +17,24 @@ on:
 jobs:
   code-analysis:
     runs-on: ubuntu-latest
-    uses: hackforla/lucky-parking/.github/workflows/prepare.yaml@main
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up package manager
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Code Formatting
         run: pnpm ci:format
 
@@ -27,8 +43,24 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    uses: hackforla/lucky-parking/.github/workflows/prepare.yaml@main
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up package manager
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Build
         run: pnpm build
 
