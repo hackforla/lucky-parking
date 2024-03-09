@@ -17,10 +17,8 @@ on:
 jobs:
   code-analysis:
     runs-on: ubuntu-latest
+    uses: hackforla/lucky-parking/.github/workflows/prepare.yaml@main
     steps:
-      - name: Prepare
-        uses: hackforla/lucky-parking/.github/workflows/prepare.yaml@main
-
       - name: Code Formatting
         run: pnpm ci:format
 
@@ -29,10 +27,8 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    uses: hackforla/lucky-parking/.github/workflows/prepare.yaml@main
     steps:
-      - name: Prepare
-        uses: hackforla/lucky-parking/.github/workflows/prepare.yaml@main
-
       - name: Build
         run: pnpm build
 
