@@ -35,10 +35,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Code Formatting
+      - name: Check formatting
         run: pnpm ci:format
 
-      - name: Code Linting
+      - name: Check linting
         run: pnpm ci:lint
 
   test:
