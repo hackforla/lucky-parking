@@ -1,4 +1,4 @@
-import type { onEvent } from "@lucky-parking/typings";
+import type { onEvent, Nil } from "@lucky-parking/typings";
 import { formatToMiddleEndian } from "@lucky-parking/utilities/dist/date";
 import clsx from "clsx";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
@@ -7,20 +7,18 @@ import Calendar from "../calendar";
 interface DateInputProps {
   id: string;
   children: PropsWithChildren;
-  date?: string;
+  date: Date | Nil;
   onSelect: onEvent;
 }
 
 export default function DateInput({ children, ...props }: PropsWithChildren<DateInputProps>) {
   const { id, date, onSelect } = props;
   const calendarRef = useRef<HTMLDivElement>(null);
-  const [value, setValue] = useState<string | null>(date || null);
+  const [value, setValue] = useState<string | Nil>(date ? formatToMiddleEndian(date) : null);
   const [isCalendarVisible, setCalendarVisible] = useState(false);
 
   useEffect(() => {
-    if (!date) {
-      setValue(null);
-    }
+    setValue(date ? formatToMiddleEndian(date) : null);
   }, [date]);
 
   useEffect(() => {
@@ -38,7 +36,7 @@ export default function DateInput({ children, ...props }: PropsWithChildren<Date
 
   const handleSelectValueChange = (newValue: Date) => {
     setValue(formatToMiddleEndian(newValue));
-    onSelect({id: id, date: formatToMiddleEndian(newValue)});
+    onSelect({id: id, date: newValue});
   };
 
   return (

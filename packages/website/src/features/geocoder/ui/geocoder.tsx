@@ -18,8 +18,7 @@ interface GeocoderProps {
   isDisabled?: boolean;
   onSelect: onEvent;
   placeholder?: string;
-  // savedQuery?: GeocodeResult;
-  savedQuery?: any;
+  savedQuery: string | Nil;
 }
 
 export default function Geocoder(props: GeocoderProps) {
@@ -28,10 +27,10 @@ export default function Geocoder(props: GeocoderProps) {
   const dispatch = useDispatch();
 
   const [isSuggestionsVisible, setSuggestionsVisible] = useState(false);
-  const [query, setQuery] = useState(savedQuery?.get("place_name") || "");
+  const [query, setQuery] = useState(savedQuery || "");
   const [results, setResults] = useState<GeocodeResult[]>([]);
 
-  const hasSavedQuery = useMemo(() => savedQuery?.size != 0, [savedQuery]);
+  const hasSavedQuery = useMemo(() => savedQuery !== null, [savedQuery]);
   const hasQuery = useMemo(() => query && !_.isEmpty(query), [query]);
   const hasResults = useMemo(() => results && !_.isEmpty(results), [results]);
 

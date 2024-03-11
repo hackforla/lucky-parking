@@ -1,4 +1,4 @@
-import type { onEvent } from "@lucky-parking/typings";
+import type { onEvent, Nil } from "@lucky-parking/typings";
 import Geocoder, { SearchModeToggleButton } from "@/features/geocoder";
 import { MapDrawButton } from "@/features/map";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
@@ -9,8 +9,7 @@ import type { GeocodeResult } from "@/shared/lib/types";
 interface SingleSearchProps {
   onSelect: onEvent;
   onToggle: onEvent;
-  // savedQuery?: GeocodeResult;
-  savedQuery?: any;
+  savedQuery: string | Nil;
 }
 
 export default function SingleSearch(props: SingleSearchProps) {

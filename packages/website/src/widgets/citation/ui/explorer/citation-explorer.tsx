@@ -9,7 +9,7 @@ import DrawSearch from "../search/draw-search";
 import SingleSearch from "../search/single-seach";
 import ComparativeSearchVisualization from "../visualization/comparative-search-visualization";
 import SingleSearchVisualization from "../visualization/single-search-visualization";
-import { useSearchParams } from "react-router-dom";
+import useCitationSearchParams from "@/features/citation/ui/use-citation-search-params";
 
 export default function CitationExplorer() {
   const ui = useSelector(selectors.selectUi);
@@ -18,19 +18,19 @@ export default function CitationExplorer() {
   const [regionType, setRegionType] = useState<RegionType | null>(null);
   const [region1, setRegion1] = useState<GeocodeResult | null>(null);
   const [region2, setRegion2] = useState<GeocodeResult | null>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const {clearSearchParams, searchParams, placeName, placeType } = useCitationSearchParams();
 
   const onSearchModeToggle = () => {
     setSingleSearchMode((prevState) => !prevState);
     setRegionType(null);
     setRegion1(null);
     setRegion2(null);
-    setSearchParams({});
+    clearSearchParams();
   };
 
   const onVisualizationModeToggle = () => {
     setVisualizationMode((prevState) => !prevState);
-    setSearchParams({});
+    clearSearchParams();
   };
 
   const onRegionSelect = (feature: GeocodeResult) => {
@@ -41,7 +41,8 @@ export default function CitationExplorer() {
     setVisualizationMode(true);
 
     if (searchParams.size == 0) {
-      setSearchParams({place_name: feature.place_name, place_type: feature.place_type });
+      placeName.set(feature.place_name);
+      placeType.set(feature.place_type[0]);
     }
   };
 
@@ -51,7 +52,6 @@ export default function CitationExplorer() {
         prevParams.set("compare_mode", "true");
         return prevParams;
       })
-
     }
   }, [isSingleSearchMode])
 
@@ -81,7 +81,7 @@ export default function CitationExplorer() {
   }
 
   return isSingleSearchMode ? (
-    <SingleSearch onToggle={onSearchModeToggle} onSelect={onRegionSelect} savedQuery={searchParams} />
+    <SingleSearch onToggle={onSearchModeToggle} onSelect={onRegionSelect} savedQuery={placeName.get()} />
   ) : (
     <ComparativeSearch
       onClose={onSearchModeToggle}

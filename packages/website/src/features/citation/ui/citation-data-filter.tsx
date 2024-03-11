@@ -1,4 +1,4 @@
-import type { onEvent } from "@lucky-parking/typings";
+import type { onEvent, Nil } from "@lucky-parking/typings";
 import DateInput from "@lucky-parking/ui/src/components/date-input";
 import CitationDataCategorySelection from "./citation-data-category-selection";
 import CitationDatePresetsSelection from "./citation-date-presets-selection";
@@ -9,12 +9,12 @@ interface CitationDataFilterProps {
   onCustomDateSelect: onEvent;
   category: string;
   datePreset: string;
-  dateFrom?: string;
-  dateTo?: string;
+  customDateFromInput: Date | Nil;
+  customDateToInput: Date | Nil;
 }
 
 export default function CitationDataFilter(props: CitationDataFilterProps) {
-  const { onCategorySelect, onDatePresetSelect, onCustomDateSelect, category, datePreset, dateFrom, dateTo } = props;
+  const { onCategorySelect, onDatePresetSelect, onCustomDateSelect, category, datePreset, customDateFromInput, customDateToInput } = props;
 
   return (
   	<>
@@ -23,8 +23,8 @@ export default function CitationDataFilter(props: CitationDataFilterProps) {
   			<CitationDatePresetsSelection datePreset={datePreset} onSelect={onDatePresetSelect} />
   			<p className="paragraph-2 text-black-400 font-medium">or</p>
   			<div className="flex flex-auto items-center space-x-1">
-  				<DateInput id="From" date={dateFrom} onSelect={onCustomDateSelect}>From</DateInput>
-  				<DateInput id="To" date={dateTo} onSelect={onCustomDateSelect}>To</DateInput>
+  				<DateInput id="From" date={customDateFromInput} onSelect={onCustomDateSelect}>From</DateInput>
+  				<DateInput id="To" date={customDateToInput} onSelect={onCustomDateSelect}>To</DateInput>
   			</div>
   		</div>
   	</>

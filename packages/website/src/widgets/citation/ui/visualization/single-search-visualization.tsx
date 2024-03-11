@@ -14,6 +14,7 @@ import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerSectionTitle from "../explorer/citation-explorer-section-title";
 import { useSearchParams } from "react-router-dom";
 import { formatToMiddleEndian } from "@lucky-parking/utilities/dist/date";
+import useCitationSearchParams from "@/features/citation/ui/use-citation-search-params";
 
 interface SingleSearchVisualizationProps {
   onClose: onEvent;
@@ -24,61 +25,55 @@ interface SingleSearchVisualizationProps {
 export default function SingleSearchVisualization(props: SingleSearchVisualizationProps) {
   const { onClose, region, regionType } = props;
   
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [category, setCategory] = useState(searchParams.get("category") || getFirst(CitationDataCategories));
-  const [datePreset, setDatePreset] = useState(searchParams.get("date_preset") || getFirst(RelativeDatePresets));
-  const [dates, setDates] = useState(calculateDateRange(getFirst(RelativeDatePresets)));
-  const [dateFrom, setDateFrom] = useState(null);
-  const [dateTo, setDateTo] = useState(null);
+  const citationSearchParams = useCitationSearchParams();
+  const [category, setCategory] = useState(citationSearchParams.category.get() || getFirst(CitationDataCategories));
+  const [datePreset, setDatePreset] = useState(citationSearchParams.datePreset.get() || getFirst(RelativeDatePresets));
+  const [dateRange, setDateRange] = useState<Date[]>(citationSearchParams.dateRange.get() || calculateDateRange(datePreset));
+  const [hasSavedDateRange, setHasSavedDateRange] = useState(citationSearchParams.dateRange.get() !== null);
+  const [customDateFromInput, setCustomDateFromInput] = useState<Date | null>(hasSavedDateRange ? dateRange[0]: null);
+  const [customDateToInput, setCustomDateToInput] = useState<Date | null>(hasSavedDateRange ? dateRange[1]: null);
   const [customDateToggle, setCustomDateToggle] = useState(false);
 
   const onDatePresetSelect = (preset: RelativeDatePresets) => {
     setCustomDateToggle(false);
-    setDateFrom(null);
-    setDateTo(null);
+    setCustomDateFromInput(null);
+    setCustomDateToInput(null);
 
-    setDates(calculateDateRange(preset));
+    setDateRange(calculateDateRange(preset));
     setDatePreset(preset);
-    setSearchParams((prevParams) => {
-      prevParams.set("date_from", formatToMiddleEndian(dates[0]));
-      prevParams.set("date_to", formatToMiddleEndian(dates[1]));
-      return prevParams;
-    })
+    citationSearchParams.dateRange.set(preset);
   };
 
   const onCategorySelect = (value: string) => {
     setCategory(value);
-    setSearchParams((prevParams) => {
-      prevParams.set("category", value);
-      return prevParams;
-    });
+    citationSearchParams.category.set(value);
   }
 
-  const onCustomDateSelect = (value: object) => {
+  const onCustomDateSelect = (value: {id: string, date: Date} ) => {
     console.log(value);
     if (value.id === "From") {
-      setDateFrom(value.date);
+      setCustomDateFromInput(value.date);
     }
     if (value.id === "To") {
-      setDateTo(value.date);
+      setCustomDateToInput(value.date);
     }
   }
 
   useEffect(() =>  {
-    if (dateFrom && dateTo) {
+    if (customDateFromInput && customDateToInput) {
       setCustomDateToggle(true);
     }
-  }, [dateFrom, dateTo]);
+  }, [customDateFromInput, customDateToInput]);
 
 
   useEffect(() => {
-    if (customDateToggle && dateFrom && dateTo) {
-      const a = new Date(dateFrom);
-      const b = new Date(dateTo);
-      setDates([a, b])
-
+    if (customDateToggle && customDateFromInput && customDateToInput) {
+      const a = new Date(customDateFromInput);
+      const b = new Date(customDateToInput);
+      setDateRange([a, b])
+      citationSearchParams.dateRange.set([a, b]);
     }
-  }, [customDateToggle, dateFrom, dateTo]);
+  }, [customDateToggle, customDateFromInput, customDateToInput]);
 
   const mockDataset = [{ data: [] }];
 
@@ -104,8 +99,9 @@ export default function SingleSearchVisualization(props: SingleSearchVisualizati
           onCustomDateSelect={onCustomDateSelect}
           category={category} 
           datePreset={datePreset}
-          dateFrom={dateFrom}
-          dateTo={dateTo}
+          // dateRange={hasSavedDateRange ? dateRange: null}
+          customDateFromInput={customDateFromInput}
+          customDateToInput={customDateToInput}
         />
       </CitationExplorerSection>
 
@@ -115,7 +111,7 @@ export default function SingleSearchVisualization(props: SingleSearchVisualizati
         <CitationDataInsights
           category={category}
           datasets={mockDataset}
-          dates={formatToRangeString(dates as Date[])}
+          dates={formatToRangeString(dateRange as Date[])}
           onClick={() => {}}
           stat="112,338"
           title={region.place_name}
