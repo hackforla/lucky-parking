@@ -28,11 +28,22 @@ interface ComparativeSearchProps {
   region1: GeocodeResult;
   region2: GeocodeResult;
   regionType: RegionType;
+  region1SavedQuery: string | null;
+  region2SavedQuery: string | null;
 }
 
 export default function ComparativeSearch(props: ComparativeSearchProps) {
-  const { onClose, onRegion1Select, onRegion2Select, onRegionTypeSelect, onSubmit, region1, region2, regionType } =
-    props;
+  const { 
+    onClose, 
+    onRegion1Select, 
+    onRegion2Select, 
+    onRegionTypeSelect, 
+    onSubmit, 
+    region1, 
+    region2, 
+    regionType, 
+    region1SavedQuery, 
+    region2SavedQuery } = props;
 
   const [dataFocus, setDataFocus] = useState<number | null>(null);
 
@@ -102,7 +113,7 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
                 placeholder={GEOCODER_PLACEHOLDERS[regionType] || ""}
                 filters={PLACE_TYPE_BY_REGION_TYPE[regionType]}
                 isDisabled={_.isNil(regionType)}
-                savedQuery={region1}
+                savedQuery={region1SavedQuery}
               />
             </div>
           </StepperItem>
@@ -114,13 +125,13 @@ export default function ComparativeSearch(props: ComparativeSearchProps) {
                 placeholder={GEOCODER_PLACEHOLDERS[regionType] || ""}
                 filters={regionType && PLACE_TYPE_BY_REGION_TYPE[regionType]}
                 isDisabled={_.isNil(regionType)}
-                savedQuery={region2}
+                savedQuery={region2SavedQuery}
               />
             </div>
           </StepperItem>
         </StepperContainer>
 
-        <Button size={ButtonSize.large} onClick={onSubmit} isDisabled={!(region1 || region2)} className="ml-8">
+        <Button size={ButtonSize.large} onClick={onSubmit} isDisabled={!(region1 && region2)} className="ml-8">
           <p>Comparison Chart</p>
         </Button>
       </CitationExplorerSection>

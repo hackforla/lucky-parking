@@ -54,6 +54,24 @@ export default function useCitationSearchParams() {
         return prevParams;
     });
 
+    const getRegion1 = () => searchParams.get("region1");
+    const setRegion1 = (value: string) => setSearchParams((prevParams) => {
+        prevParams.set("region1", value);
+        return prevParams;
+    });
+
+    const getRegion2 = () => searchParams.get("region2");
+    const setRegion2 = (value: string) => setSearchParams((prevParams) => {
+        prevParams.set("region2", value);
+        return prevParams;
+    });
+
+    const getCompareMode = () => searchParams.get("compare_mode");
+    const setCompareMode = () => setSearchParams((prevParams) => {
+        prevParams.set("compare_mode", "true");
+        return prevParams;
+    })
+
     const clearSearchParams = () => setSearchParams({});
 
     return {
@@ -76,6 +94,18 @@ export default function useCitationSearchParams() {
         placeType: {
             get: getPlaceType,
             set: setPlaceType,
+        },
+        region1: {
+            get: getRegion1,
+            set: setRegion1,
+        },
+        region2: {
+            get: getRegion2,
+            set: setRegion2,
+        },
+        compareMode: {
+            get: getCompareMode,
+            set: setCompareMode,
         },
         clearSearchParams: clearSearchParams,
         searchParams: searchParams,

@@ -99,7 +99,6 @@ export default function SingleSearchVisualization(props: SingleSearchVisualizati
           onCustomDateSelect={onCustomDateSelect}
           category={category} 
           datePreset={datePreset}
-          // dateRange={hasSavedDateRange ? dateRange: null}
           customDateFromInput={customDateFromInput}
           customDateToInput={customDateToInput}
         />
