@@ -1,25 +1,47 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { formatCitations } from "./utils/format-citations";
-import { payload } from "./data/citations";
 
-interface HorizontalBarGraph {
-  //category of organizing the citations
-  //payload
+interface Citation {
+  _id: string;
+  agency: string;
+  agency_desc: string;
+  body_style: string;
+  body_style_desc: string;
+  color: string;
+  color_desc: string;
+  fine_amount: string;
+  issue_date: string;
+  issue_time: string;
+  latitude: string;
+  location: string;
+  longitude: string;
+  make: string;
+  marked_time: string;
+  plate_expiry_date: string;
+  rp_state_plate: string;
+  ticket_number: string;
+  violation_code: string;
+  violation_description: string;
+  route: string;
+  geometry: {
+    type: string;
+    coordinates: number[];
+  };
 }
 
-const HorizontalBarGraph = () => {
-  const data = formatCitations(payload.data);
+interface HorizontalBarGraph {
+  category: string;
+  payload: { data: Citation[] };
+}
+
+const HorizontalBarGraph = ({ category, payload }: HorizontalBarGraph) => {
+  const data = formatCitations(category, payload.data);
   return (
     <div className="bg-white-100 flex h-80 w-96 flex-col items-start justify-start">
-      <div className="flex w-full flex-row justify-between">
-        <h2 className="font-semibold">Echo Park NC</h2>
-        <div>INSERT IMAGE</div>
-      </div>
-      <h3>Citaitons per Sq. Mile</h3>
       <ResponsiveBar
         data={data}
         keys={["count"]}
-        indexBy="violation_description"
+        indexBy="index_key"
         layout="horizontal"
         margin={{ top: 10, right: 40, bottom: 55, left: 150 }}
         padding={0.5}
@@ -56,10 +78,9 @@ const HorizontalBarGraph = () => {
         }}
         isFocusable={true}
         role="list"
-        ariaLabel="Horrizontal bar chart"
+        ariaLabel="Horizontal bar chart"
         barAriaLabel={(e) => e.formattedValue + e.indexValue}
       />
-      <div className="mx-auto">INSERT DATE</div>
     </div>
   );
 };
