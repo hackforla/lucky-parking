@@ -11,10 +11,7 @@ function FullContainer(props: Props, ref: Ref<unknown> | undefined) {
   const { as: Element = "div", className = "", children } = props;
 
   return (
-    <Container
-      as={Element}
-      className={clsx("h-full w-full", className)}
-      ref={ref}>
+    <Container as={Element} className={clsx("h-full w-full", className)} ref={ref}>
       {children}
     </Container>
   );

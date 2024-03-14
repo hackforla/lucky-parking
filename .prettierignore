@@ -1,4 +1,8 @@
+*-lock.*
+.pnpm-store
 build
 coverage
+data
 dist
 node_modules
+package.*
