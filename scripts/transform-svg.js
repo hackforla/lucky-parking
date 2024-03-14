@@ -4,7 +4,7 @@ module.exports = {
   getCacheKey() {
     return "svg-transform";
   },
-  process(src, filename) {
+  process(src) {
     return { code: `module.exports = ${JSON.stringify(path.basename(src))}` };
   },
 };
