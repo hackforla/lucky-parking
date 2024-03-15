@@ -59,10 +59,18 @@ export default function useCitationSearchParams() {
         prevParams.set("region1", value);
         return prevParams;
     });
+    const deleteRegion1 = () => setSearchParams((prevParams) => {
+        prevParams.delete("region1");
+        return prevParams;
+    });
 
     const getRegion2 = () => searchParams.get("region2");
     const setRegion2 = (value: string) => setSearchParams((prevParams) => {
         prevParams.set("region2", value);
+        return prevParams;
+    });
+    const deleteRegion2 = () => setSearchParams((prevParams) => {
+        prevParams.delete("region2");
         return prevParams;
     });
 
@@ -70,7 +78,17 @@ export default function useCitationSearchParams() {
     const setCompareMode = () => setSearchParams((prevParams) => {
         prevParams.set("compare_mode", "true");
         return prevParams;
-    })
+    });
+
+    const getVisualizationMode = () => searchParams.get("visualization_mode");
+    const setVisualizationMode = () => setSearchParams((prevParams) => {
+        prevParams.set("visualization_mode", "true");
+        return prevParams;
+    });
+    const deleteVisualizationMode = () => setSearchParams((prevParams) => {
+        prevParams.delete("visualization_mode");
+        return prevParams;
+    });
 
     const clearSearchParams = () => setSearchParams({});
 
@@ -98,14 +116,21 @@ export default function useCitationSearchParams() {
         region1: {
             get: getRegion1,
             set: setRegion1,
+            delete: deleteRegion1,
         },
         region2: {
             get: getRegion2,
             set: setRegion2,
+            delete: deleteRegion2,
         },
         compareMode: {
             get: getCompareMode,
             set: setCompareMode,
+        },
+        visualizationMode: {
+            get: getVisualizationMode,
+            set: setVisualizationMode,
+            delete: deleteVisualizationMode,
         },
         clearSearchParams: clearSearchParams,
         searchParams: searchParams,

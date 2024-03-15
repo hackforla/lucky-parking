@@ -14,15 +14,17 @@ import GeocoderResultHeader from "./geocoder-result-header";
 const DEFAULT_PLACEHOLDER = "Neighborhood Council, Zip Code, Address";
 
 interface GeocoderProps {
+  id?: string;
   filters?: PlaceType[] | Nil;
   isDisabled?: boolean;
   onSelect: onEvent;
   placeholder?: string;
   savedQuery: string | Nil;
+  onClearRegion?: onEvent;
 }
 
 export default function Geocoder(props: GeocoderProps) {
-  const { filters = [], isDisabled = false, onSelect, placeholder = DEFAULT_PLACEHOLDER, savedQuery } = props;
+  const { id, filters = [], isDisabled = false, onSelect, placeholder = DEFAULT_PLACEHOLDER, savedQuery, onClearRegion } = props;
 
   const dispatch = useDispatch();
 
@@ -35,6 +37,9 @@ export default function Geocoder(props: GeocoderProps) {
   const hasResults = useMemo(() => results && !_.isEmpty(results), [results]);
 
   const onInputChange = (value: string) => {
+    if (value === "" && onClearRegion) {
+      onClearRegion({id: id, value: value})
+    }
     setQuery(value);
     setSuggestionsVisible(true);
   };
