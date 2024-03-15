@@ -40,8 +40,6 @@ export const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
   ),
 );
 
-ModalContent.displayName = "ModalContent";
-
 export const Modal = Root;
 export const ModalDescription = Description;
 export const ModalTitle = Title;

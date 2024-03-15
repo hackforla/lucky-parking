@@ -1,4 +1,3 @@
-import { onEvent } from "@lucky-parking/typings";
 import _ from "lodash";
 import { PropsWithChildren, forwardRef } from "react";
 import clsx from "clsx";
@@ -39,7 +38,7 @@ export interface ButtonProps extends PropsWithChildren {
   isDisabled?: boolean;
   size?: ButtonSize;
   variant?: ButtonVariant;
-  onClick?: onEvent;
+  onClick?: (arg0: any) => void;
 }
 
 export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(props: ButtonProps, ref) {

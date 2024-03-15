@@ -15,7 +15,7 @@ describe("Default Modal and click modal trigger", () => {
           <AnnouncementIcon />{" "}
         </ModalTrigger>
         <ModalContent title={"Messages"} description={"The Slime replied back"}>
-          <div className="w-52">Hello World! I`&apos;`m not a bad slime</div>
+          <div className="w-52">Hello World! I&#39;m not a bad slime</div>
           <div className="mt-6 flex justify-end space-x-2">
             <ModalClose asChild>
               <Button variant={ButtonVariant.primary}>
