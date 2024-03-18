@@ -27,11 +27,16 @@ describe("Citation-data-filter", () => {
   describe("interactions", () => {
     const onCategorySelectMock = jest.fn();
     const onDatePresetSelectMock = jest.fn();
+    const onCustomDateSelectMock = jest.fn();
 
     beforeEach(async () => {
       const user = userEvent.setup();
       render(
-        <CitationDataFilter onCategorySelect={onCategorySelectMock} onDatePresetSelect={onDatePresetSelectMock} />,
+        <CitationDataFilter
+          onCategorySelect={onCategorySelectMock}
+          onDatePresetSelect={onDatePresetSelectMock}
+          onCustomDateSelect={onCustomDateSelectMock}
+        />,
       );
 
       await user.click(screen.getByRole("combobox", { name: "citation-data-categories" }));

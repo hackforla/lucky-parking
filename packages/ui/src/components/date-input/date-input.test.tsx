@@ -6,9 +6,12 @@ import DateInput from "./date-input";
 describe("Date Input", () => {
   const user = userEvent.setup();
   beforeEach(async () => {
+    const onSelectMock = jest.fn();
     render(
       <div>
-        <DateInput id="From">From</DateInput>
+        <DateInput id="From" onSelect={onSelectMock}>
+          From
+        </DateInput>
         <button data-testid="outside-event-listener">Exit calendar</button>
       </div>,
     );
