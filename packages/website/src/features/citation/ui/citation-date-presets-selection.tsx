@@ -5,7 +5,7 @@ import { RelativeDatePresets } from "@/shared/lib/constants/date";
 
 interface CitationDataPresetsSelection {
   onSelect: onEvent;
-  datePreset: string;
+  datePreset?: string;
 }
 
 const CITATION_DATE_PRESETS = _.map(RelativeDatePresets, (value) => ({ value, text: value }));

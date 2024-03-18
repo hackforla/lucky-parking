@@ -7,7 +7,9 @@ import CitationDataFilter from "./citation-data-filter";
 describe("Citation-data-filter", () => {
   describe("rendering", () => {
     beforeEach(() => {
-      render(<CitationDataFilter onCategorySelect={() => {}} onDatePresetSelect={() => {}} />);
+      render(
+        <CitationDataFilter onCategorySelect={() => {}} onDatePresetSelect={() => {}} onCustomDateSelect={() => {}} />,
+      );
     });
 
     it("renders citation data categories with initial placeholder", async () => {

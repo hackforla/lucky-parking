@@ -7,7 +7,7 @@ import Calendar from "../calendar";
 interface DateInputProps {
   id: string;
   children: PropsWithChildren;
-  date: Date | Nil;
+  date?: Date | Nil;
   onSelect: onEvent;
 }
 
@@ -36,7 +36,7 @@ export default function DateInput({ children, ...props }: PropsWithChildren<Date
 
   const handleSelectValueChange = (newValue: Date) => {
     setValue(formatToMiddleEndian(newValue));
-    onSelect({id: id, date: newValue});
+    onSelect({ id: id, date: newValue });
   };
 
   return (

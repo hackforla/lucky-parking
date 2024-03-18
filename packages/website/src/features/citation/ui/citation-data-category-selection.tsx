@@ -5,7 +5,7 @@ import { CitationDataCategories } from "../lib";
 
 interface CitationDataCategorySelectionProps {
   onSelect: onEvent;
-  category: string;
+  category?: string;
 }
 
 const CITATION_DATA_CATEGORIES = _.map(CitationDataCategories, (value) => ({ value, text: value }));

@@ -19,12 +19,20 @@ interface GeocoderProps {
   isDisabled?: boolean;
   onSelect: onEvent;
   placeholder?: string;
-  savedQuery: string | Nil;
+  savedQuery?: string | Nil;
   onClearRegion?: onEvent;
 }
 
 export default function Geocoder(props: GeocoderProps) {
-  const { id, filters = [], isDisabled = false, onSelect, placeholder = DEFAULT_PLACEHOLDER, savedQuery, onClearRegion } = props;
+  const {
+    id,
+    filters = [],
+    isDisabled = false,
+    onSelect,
+    placeholder = DEFAULT_PLACEHOLDER,
+    savedQuery,
+    onClearRegion,
+  } = props;
 
   const dispatch = useDispatch();
 
@@ -38,7 +46,7 @@ export default function Geocoder(props: GeocoderProps) {
 
   const onInputChange = (value: string) => {
     if (value === "" && onClearRegion) {
-      onClearRegion({id: id, value: value})
+      onClearRegion({ id: id, value: value });
     }
     setQuery(value);
     setSuggestionsVisible(true);
@@ -76,7 +84,7 @@ export default function Geocoder(props: GeocoderProps) {
       setResults(results);
 
       if (hasSavedQuery) {
-        onSuggestionClick(results[0])
+        onSuggestionClick(results[0]);
       }
     })();
   }, [query]);
