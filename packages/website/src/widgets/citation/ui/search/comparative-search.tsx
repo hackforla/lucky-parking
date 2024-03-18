@@ -33,17 +33,18 @@ interface ComparativeSearchProps {
 }
 
 export default function ComparativeSearch(props: ComparativeSearchProps) {
-  const { 
-    onClose, 
-    onComparativeRegionSelect, 
-    onRegionTypeSelect, 
+  const {
+    onClose,
+    onComparativeRegionSelect,
+    onRegionTypeSelect,
     onClearRegion,
-    onSubmit, 
-    region1, 
-    region2, 
-    regionType, 
-    region1SavedQuery, 
-    region2SavedQuery } = props;
+    onSubmit,
+    region1,
+    region2,
+    regionType,
+    region1SavedQuery,
+    region2SavedQuery,
+  } = props;
 
   const [dataFocus, setDataFocus] = useState<number | null>(null);
 

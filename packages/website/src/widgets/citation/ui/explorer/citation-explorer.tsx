@@ -17,7 +17,7 @@ export default function CitationExplorer() {
   const [isSingleSearchMode, setSingleSearchMode] = useState(citationSearchParams.compareMode.get() === null);
   const [isVisualizationMode, setVisualizationMode] = useState(false);
   const [regionType, setRegionType] = useState<RegionType | null>(citationSearchParams.placeType.get() as RegionType);
-  const [region1, setRegion1] = useState<GeocodeResult | null>(null); 
+  const [region1, setRegion1] = useState<GeocodeResult | null>(null);
   const [region2, setRegion2] = useState<GeocodeResult | null>(null);
 
   const onSearchModeToggle = () => {
@@ -45,7 +45,7 @@ export default function CitationExplorer() {
   // For single search mode
   const onRegionSelect = (feature: GeocodeResult) => {
     if (_.isNil(feature)) return;
-    
+
     setRegion1(feature);
     setRegionType(REGION_TYPE_BY_PLACE_TYPE[_.first(feature.place_type) as PlaceType]);
     setVisualizationMode(true);
@@ -58,11 +58,11 @@ export default function CitationExplorer() {
 
   // For comparative search mode
   const onRegionTypeSelect = (regionType: RegionType) => {
-    setRegionType(regionType)
+    setRegionType(regionType);
     citationSearchParams.placeType.set(regionType);
-  }
+  };
 
-  const onComparativeRegionSelect = (value: {id: string, feature: GeocodeResult}) => {
+  const onComparativeRegionSelect = (value: { id: string; feature: GeocodeResult }) => {
     if (value.id === "region1") {
       if (_.isNil(value.feature)) return;
 
@@ -75,9 +75,9 @@ export default function CitationExplorer() {
       setRegion2(value.feature);
       citationSearchParams.region2.set(value.feature.place_name);
     }
-  }
+  };
 
-  const onClearRegion = (value: {id: string, value: string}) => {
+  const onClearRegion = (value: { id: string; value: string }) => {
     if (value.id === "region1") {
       setRegion1(null);
       citationSearchParams.region1.delete();
@@ -86,7 +86,7 @@ export default function CitationExplorer() {
       setRegion2(null);
       citationSearchParams.region2.delete();
     }
-  }
+  };
 
   useEffect(() => {
     if (citationSearchParams.visualizationMode.get() && region1 && region2) {
@@ -98,7 +98,7 @@ export default function CitationExplorer() {
     if (!isSingleSearchMode) {
       citationSearchParams.compareMode.set();
     }
-  }, [isSingleSearchMode])
+  }, [isSingleSearchMode]);
 
   if (ui.isMapInstructionsVisible) {
     return <DrawSearch />;
@@ -126,10 +126,10 @@ export default function CitationExplorer() {
   }
 
   return isSingleSearchMode ? (
-    <SingleSearch 
-      onToggle={onSearchModeToggle} 
-      onSelect={onRegionSelect} 
-      savedQuery={citationSearchParams.placeName.get()} 
+    <SingleSearch
+      onToggle={onSearchModeToggle}
+      onSelect={onRegionSelect}
+      savedQuery={citationSearchParams.placeName.get()}
     />
   ) : (
     <ComparativeSearch
