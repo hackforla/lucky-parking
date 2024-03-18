@@ -9,6 +9,7 @@ import { calculateDateRange } from "@/shared/lib/utilities/date";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerTitle from "../explorer/citation-explorer-title";
+import useCitationSearchParams from "@/features/citation/ui/use-citation-search-params";
 
 interface ComparativeSearchVisualizationProps {
   onClose: onEvent;
@@ -20,7 +21,8 @@ interface ComparativeSearchVisualizationProps {
 export default function ComparativeSearchVisualization(props: ComparativeSearchVisualizationProps) {
   const { onClose, region1, region2, regionType } = props;
 
-  const [category, setCategory] = useState(getFirst(CitationDataCategories));
+  const citationSearchParams = useCitationSearchParams();
+  const [category, setCategory] = useState(citationSearchParams.category.get() || getFirst(CitationDataCategories));
   const [dates, setDates] = useState(calculateDateRange(getFirst(RelativeDatePresets)));
 
   const mockDatasets = [
@@ -38,6 +40,11 @@ export default function ComparativeSearchVisualization(props: ComparativeSearchV
     setDates(calculateDateRange(preset));
   };
 
+  const onCategorySelect = (value: string) => {
+    setCategory(value);
+    citationSearchParams.category.set(value);
+  };
+
   return (
     <>
       <CitationExplorerTitle onClose={onClose}>Comparison Data</CitationExplorerTitle>
@@ -45,7 +52,11 @@ export default function ComparativeSearchVisualization(props: ComparativeSearchV
       <CitationExplorerDivider />
 
       <CitationExplorerSection>
-        <CitationDataFilter onCategorySelect={setCategory} onDatePresetSelect={onDatePresetSelect} />
+        <CitationDataFilter
+          onCategorySelect={onCategorySelect}
+          onDatePresetSelect={onDatePresetSelect}
+          category={category}
+        />
       </CitationExplorerSection>
 
       <CitationExplorerSection>
