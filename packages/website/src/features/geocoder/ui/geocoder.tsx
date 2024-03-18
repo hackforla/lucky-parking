@@ -14,26 +14,40 @@ import GeocoderResultHeader from "./geocoder-result-header";
 const DEFAULT_PLACEHOLDER = "Neighborhood Council, Zip Code, Address";
 
 interface GeocoderProps {
+  id?: string;
   filters?: PlaceType[] | Nil;
   isDisabled?: boolean;
   onSelect: onEvent;
   placeholder?: string;
-  savedQuery?: GeocodeResult;
+  savedQuery?: string | Nil;
+  onClearRegion?: onEvent;
 }
 
 export default function Geocoder(props: GeocoderProps) {
-  const { filters = [], isDisabled = false, onSelect, placeholder = DEFAULT_PLACEHOLDER, savedQuery } = props;
+  const {
+    id,
+    filters = [],
+    isDisabled = false,
+    onSelect,
+    placeholder = DEFAULT_PLACEHOLDER,
+    savedQuery,
+    onClearRegion,
+  } = props;
 
   const dispatch = useDispatch();
 
   const [isSuggestionsVisible, setSuggestionsVisible] = useState(false);
-  const [query, setQuery] = useState(savedQuery?.place_name || "");
+  const [query, setQuery] = useState(savedQuery || "");
   const [results, setResults] = useState<GeocodeResult[]>([]);
 
+  const hasSavedQuery = useMemo(() => savedQuery !== null, [savedQuery]);
   const hasQuery = useMemo(() => query && !_.isEmpty(query), [query]);
   const hasResults = useMemo(() => results && !_.isEmpty(results), [results]);
 
   const onInputChange = (value: string) => {
+    if (value === "" && onClearRegion) {
+      onClearRegion({ id: id, value: value });
+    }
     setQuery(value);
     setSuggestionsVisible(true);
   };
@@ -68,6 +82,10 @@ export default function Geocoder(props: GeocoderProps) {
         .slice(0, 5)
         .value();
       setResults(results);
+
+      if (hasSavedQuery) {
+        onSuggestionClick(results[0]);
+      }
     })();
   }, [query]);
 

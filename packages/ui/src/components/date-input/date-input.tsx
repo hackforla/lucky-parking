@@ -1,3 +1,4 @@
+import type { onEvent, Nil } from "@lucky-parking/typings";
 import { formatToMiddleEndian } from "@lucky-parking/utilities/dist/date";
 import clsx from "clsx";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
@@ -6,13 +7,19 @@ import Calendar from "../calendar";
 interface DateInputProps {
   id: string;
   children: PropsWithChildren;
+  date?: Date | Nil;
+  onSelect: onEvent;
 }
 
 export default function DateInput({ children, ...props }: PropsWithChildren<DateInputProps>) {
-  const { id } = props;
+  const { id, date, onSelect } = props;
   const calendarRef = useRef<HTMLDivElement>(null);
-  const [value, setValue] = useState<string | null>();
+  const [value, setValue] = useState<string | Nil>(date ? formatToMiddleEndian(date) : null);
   const [isCalendarVisible, setCalendarVisible] = useState(false);
+
+  useEffect(() => {
+    setValue(date ? formatToMiddleEndian(date) : null);
+  }, [date]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -26,6 +33,11 @@ export default function DateInput({ children, ...props }: PropsWithChildren<Date
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [calendarRef, setValue]);
+
+  const handleSelectValueChange = (newValue: Date) => {
+    setValue(formatToMiddleEndian(newValue));
+    onSelect({ id: id, date: newValue });
+  };
 
   return (
     <div className="relative flex-auto">
@@ -51,7 +63,7 @@ export default function DateInput({ children, ...props }: PropsWithChildren<Date
       </div>
       {isCalendarVisible && (
         <div className="absolute z-50 mt-2 drop-shadow" ref={calendarRef}>
-          <Calendar onSelectValueChange={(newValue: Date) => setValue(formatToMiddleEndian(newValue))} />
+          <Calendar onSelectValueChange={handleSelectValueChange} />
         </div>
       )}
     </div>

@@ -5,12 +5,13 @@ import { RelativeDatePresets } from "@/shared/lib/constants/date";
 
 interface CitationDataPresetsSelection {
   onSelect: onEvent;
+  datePreset?: string;
 }
 
 const CITATION_DATE_PRESETS = _.map(RelativeDatePresets, (value) => ({ value, text: value }));
 
 export default function CitationDatePresetsSelection(props: CitationDataPresetsSelection) {
-  const { onSelect } = props;
+  const { onSelect, datePreset } = props;
 
   return (
     <PickList
@@ -19,6 +20,7 @@ export default function CitationDatePresetsSelection(props: CitationDataPresetsS
       onChange={onSelect}
       options={CITATION_DATE_PRESETS}
       placeholder={CITATION_DATE_PRESETS[0].text}
+      value={datePreset}
     />
   );
 }

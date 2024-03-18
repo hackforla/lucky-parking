@@ -35,7 +35,12 @@ export default function ComparativeSearchVisualizationFocused(props: Comparative
       <CitationExplorerDivider />
 
       <CitationExplorerSection>
-        <CitationDataFilter onCategorySelect={setCategory} onDatePresetSelect={onDatePresetSelect} />
+        {/* TODO: implement onCustomDateSelect based on date selection approach chosen */}
+        <CitationDataFilter
+          onCategorySelect={setCategory}
+          onDatePresetSelect={onDatePresetSelect}
+          onCustomDateSelect={() => {}}
+        />
       </CitationExplorerSection>
 
       <CitationExplorerDivider />
