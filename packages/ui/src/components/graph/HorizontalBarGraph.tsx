@@ -1,5 +1,5 @@
 import { ResponsiveBar } from "@nivo/bar";
-import { formatCitations } from "./utils/format-citations";
+import { formatBarGraphCitations } from "./utils/format-citations";
 
 interface Citation {
   _id: string;
@@ -35,8 +35,9 @@ interface HorizontalBarGraph {
 }
 
 const HorizontalBarGraph = ({ category, payload }: HorizontalBarGraph) => {
-  const data = formatCitations(category, payload.data);
+  const data = formatBarGraphCitations(category, payload.data);
   return (
+    //To Future Devs: ResponsiveBar requires a specified Width and Height in parent container to render
     <div className="bg-white-100 flex h-80 w-96 flex-col items-start justify-start">
       <ResponsiveBar
         data={data}
@@ -77,9 +78,9 @@ const HorizontalBarGraph = ({ category, payload }: HorizontalBarGraph) => {
           );
         }}
         isFocusable={true}
-        role="list"
-        ariaLabel="Horizontal bar chart"
-        barAriaLabel={(e) => e.formattedValue + e.indexValue}
+        role="graphics-document"
+        ariaLabel={`Horizontal Bar Chart for citations by ${category}`}
+        barAriaLabel={(e) => `${e.formattedValue} ${e.indexValue} Citations`}
       />
     </div>
   );

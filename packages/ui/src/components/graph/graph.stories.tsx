@@ -30,7 +30,7 @@ interface Citation {
   };
 }
 
-interface Args {
+interface BarGrpahArgs {
   category: string;
   payload: { data: Citation[] };
 }
@@ -42,7 +42,7 @@ const meta: Meta<typeof HorizontalBarGraph> = {
 
 type ResponsiveBarStory = StoryObj<typeof HorizontalBarGraph>;
 
-export const Horizontal_Bar: ResponsiveBarStory = (args: Args) => {
+export const Horizontal_Bar: ResponsiveBarStory = (args: BarGrpahArgs) => {
   const { category, payload } = args;
   return <HorizontalBarGraph category={category} payload={payload} />;
 };
@@ -57,7 +57,7 @@ const categoryOptions = ["Day of the Week", "Violation Type"];
 Horizontal_Bar.argTypes = {
   category: {
     control: { type: "select" },
-    options: categoryOptions ,
+    options: categoryOptions,
   },
 };
 
