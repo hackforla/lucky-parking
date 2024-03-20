@@ -5,11 +5,11 @@ import { selectors } from "@/shared/data/store/ui-slice";
 import MapDrawActionButton from "./map-draw-action-button";
 
 export default function MapDrawApplyButton(props: ButtonProps) {
-  const { onClick = _.noop } = props;
+  const { isDisabled, onClick = _.noop } = props;
 
   const ui = useSelector(selectors.selectUi);
 
-  const _onClick = () => {
+  const _onClick = (event: Event) => {
     // TODO: Call API to fetch data
     onClick();
   };

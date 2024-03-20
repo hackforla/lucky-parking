@@ -4,7 +4,7 @@ import Loader from "@lucky-parking/ui/src/components/loader";
 
 interface CitationDataset {
   name?: string;
-  data: object[];
+  data: Object[];
 }
 
 interface CitationDataInsightsProps {
