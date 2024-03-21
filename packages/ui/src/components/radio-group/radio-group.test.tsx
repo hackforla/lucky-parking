@@ -1,9 +1,5 @@
-//External Imports
 import "@testing-library/jest-dom";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
-
-//Internal Imports
+import { render, screen, fireEvent } from "@testing-library/react";
 import RadioGroup from "./index";
 
 describe("Radio Group Component", () => {

@@ -9,6 +9,7 @@ body:
       description: >-
         A description of a large body of work that can be broken down into a number of smaller stories/tasks.
 
+
     validations:
       required: true
   - type: textarea
