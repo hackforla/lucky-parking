@@ -1,0 +1,41 @@
+env:
+  browser: true
+  es2021: true
+  jest: true
+  node: true
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:react/recommended
+  - plugin:react/jsx-runtime
+ignorePatterns:
+  - coverage
+  - data
+  - dist
+  - node_modules
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: latest
+  sourceType: module
+plugins:
+  - "@typescript-eslint"
+  - react
+rules:
+  # FIXME: Fix problems
+  "@typescript-eslint/ban-ts-comment":
+    - warn
+    - ts-expect-error: allow-with-description
+  # FIXME: Fix problems then remove this rule
+  "@typescript-eslint/ban-types": warn
+  # FIXME: Fix problems then remove this rule
+  "@typescript-eslint/no-explicit-any": warn
+  "@typescript-eslint/no-var-requires": warn
+  # FIXME: Fix problems then remove this rule
+  react/display-name: warn
+  # FIXME: Fix problems then remove this rule
+  react/prop-types: warn
+settings:
+  react:
+    version: detect

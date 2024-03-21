@@ -48,9 +48,7 @@ export function createCalendar(year: Year, month: Month): T_Calendar[] {
   const currentDate = new Date(year, month, 1);
 
   // Set the day of the week for the start day
-  currentDate.setDate(
-    currentDate.getDate() - ((currentDate.getDay() - startDay + 7) % 7),
-  );
+  currentDate.setDate(currentDate.getDate() - ((currentDate.getDay() - startDay + 7) % 7));
 
   // Initialize a two-dimensional array to hold the calendar
   const calendar: any = [];
