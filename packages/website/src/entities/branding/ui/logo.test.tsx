@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import Logo from "./logo";
 
-test("clicking on the logo redirects to the home page", async () => {
+test("clicking on the logo redirects to the home page", () => {
   render(
     <MemoryRouter>
       <Logo />
