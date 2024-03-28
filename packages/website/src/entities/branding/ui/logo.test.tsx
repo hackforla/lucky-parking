@@ -10,7 +10,7 @@ test("clicking on the logo redirects to the home page", () => {
     </MemoryRouter>,
   );
 
-  const logo = screen.getByTestId("logo");
+  const logo = screen.getByAltText("Parking Insights brand mark");
   userEvent.click(logo);
 
   expect(window.location.pathname).toBe("/");
