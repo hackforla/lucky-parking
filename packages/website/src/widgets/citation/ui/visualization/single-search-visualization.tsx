@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { onEvent } from "@lucky-parking/typings";
 import { formatToRangeString } from "@lucky-parking/utilities/dist/date";
 import { getFirst } from "@lucky-parking/utilities/dist/enum";
@@ -12,6 +12,7 @@ import type { RegionType } from "@/features/geocoder";
 import CitationExplorerDivider from "../explorer/citation-explorer-divider";
 import CitationExplorerSection from "../explorer/citation-explorer-section";
 import CitationExplorerSectionTitle from "../explorer/citation-explorer-section-title";
+import useCitationSearchParams from "@/features/citation/ui/use-citation-search-params";
 
 interface SingleSearchVisualizationProps {
   onClose: onEvent;
@@ -22,12 +23,55 @@ interface SingleSearchVisualizationProps {
 export default function SingleSearchVisualization(props: SingleSearchVisualizationProps) {
   const { onClose, region, regionType } = props;
 
-  const [category, setCategory] = useState(getFirst(CitationDataCategories));
-  const [dates, setDates] = useState(calculateDateRange(getFirst(RelativeDatePresets)));
+  const citationSearchParams = useCitationSearchParams();
+  const hasSavedDateRange = citationSearchParams.dateRange.get() !== null;
+  const [category, setCategory] = useState(citationSearchParams.category.get() || getFirst(CitationDataCategories));
+  const [datePreset, setDatePreset] = useState(citationSearchParams.datePreset.get() || getFirst(RelativeDatePresets));
+  const [dateRange, setDateRange] = useState<Date[]>(
+    citationSearchParams.dateRange.get() || calculateDateRange(datePreset),
+  );
+  const [customDateFromInput, setCustomDateFromInput] = useState<Date | null>(hasSavedDateRange ? dateRange[0] : null);
+  const [customDateToInput, setCustomDateToInput] = useState<Date | null>(hasSavedDateRange ? dateRange[1] : null);
+  const [customDateToggle, setCustomDateToggle] = useState(false);
 
   const onDatePresetSelect = (preset: RelativeDatePresets) => {
-    setDates(calculateDateRange(preset));
+    setCustomDateToggle(false);
+    setCustomDateFromInput(null);
+    setCustomDateToInput(null);
+
+    setDateRange(calculateDateRange(preset));
+    setDatePreset(preset);
+    citationSearchParams.dateRange.set(preset);
   };
+
+  const onCategorySelect = (value: string) => {
+    setCategory(value);
+    citationSearchParams.category.set(value);
+  };
+
+  const onCustomDateSelect = (value: { id: string; date: Date }) => {
+    if (value.id === "From") {
+      setCustomDateFromInput(value.date);
+    }
+    if (value.id === "To") {
+      setCustomDateToInput(value.date);
+    }
+  };
+
+  useEffect(() => {
+    if (customDateFromInput && customDateToInput) {
+      setCustomDateToggle(true);
+    }
+  }, [customDateFromInput, customDateToInput]);
+
+  useEffect(() => {
+    if (customDateToggle && customDateFromInput && customDateToInput) {
+      const a = new Date(customDateFromInput);
+      const b = new Date(customDateToInput);
+      setDateRange([a, b]);
+      citationSearchParams.dateRange.set([a, b]);
+    }
+  }, [customDateToggle, customDateFromInput, customDateToInput]);
 
   const mockDataset = [{ data: [] }];
 
@@ -47,7 +91,15 @@ export default function SingleSearchVisualization(props: SingleSearchVisualizati
       <CitationExplorerDivider />
 
       <CitationExplorerSection>
-        <CitationDataFilter onCategorySelect={setCategory} onDatePresetSelect={onDatePresetSelect} />
+        <CitationDataFilter
+          onCategorySelect={onCategorySelect}
+          onDatePresetSelect={onDatePresetSelect}
+          onCustomDateSelect={onCustomDateSelect}
+          category={category}
+          datePreset={datePreset}
+          customDateFromInput={customDateFromInput}
+          customDateToInput={customDateToInput}
+        />
       </CitationExplorerSection>
 
       <CitationExplorerDivider />
@@ -56,7 +108,7 @@ export default function SingleSearchVisualization(props: SingleSearchVisualizati
         <CitationDataInsights
           category={category}
           datasets={mockDataset}
-          dates={formatToRangeString(dates as Date[])}
+          dates={formatToRangeString(dateRange as Date[])}
           onClick={() => {}}
           stat="112,338"
           title={region.place_name}

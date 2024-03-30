@@ -7,7 +7,9 @@ import CitationDataFilter from "./citation-data-filter";
 describe("Citation-data-filter", () => {
   describe("rendering", () => {
     beforeEach(() => {
-      render(<CitationDataFilter onCategorySelect={() => {}} onDatePresetSelect={() => {}} />);
+      render(
+        <CitationDataFilter onCategorySelect={() => {}} onDatePresetSelect={() => {}} onCustomDateSelect={() => {}} />,
+      );
     });
 
     it("renders citation data categories with initial placeholder", async () => {
@@ -27,11 +29,16 @@ describe("Citation-data-filter", () => {
   describe("interactions", () => {
     const onCategorySelectMock = jest.fn();
     const onDatePresetSelectMock = jest.fn();
+    const onCustomDateSelectMock = jest.fn();
 
     beforeEach(async () => {
       const user = userEvent.setup();
       render(
-        <CitationDataFilter onCategorySelect={onCategorySelectMock} onDatePresetSelect={onDatePresetSelectMock} />,
+        <CitationDataFilter
+          onCategorySelect={onCategorySelectMock}
+          onDatePresetSelect={onDatePresetSelectMock}
+          onCustomDateSelect={onCustomDateSelectMock}
+        />,
       );
 
       await user.click(screen.getByRole("combobox", { name: "citation-data-categories" }));
