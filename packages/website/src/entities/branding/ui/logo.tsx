@@ -11,10 +11,6 @@ export default function Logo(props: LogoProps) {
 
   return (
     <div className="flex items-center space-x-2" onClick={onClick}>
-      /**
-       * reloadDocument - A property used in the Link component from React Router to skip client side routing and let the browser handle the transition normally (as if it were an <a href>).
-       * @typedef {boolean} reloadDocument
-       */
       <Link to="/" reloadDocument={true} className="flex items-center space-x-2">
         <img src={BrandMark} alt="Parking Insights brand mark" />
 
