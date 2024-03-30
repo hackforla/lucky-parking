@@ -1,41 +1,41 @@
 interface LoaderProps {
-  height?: string;
-  width?: string;
-  textColor?: string;
-  spinnerColor?: string;
-  spinnerSize?: string;
-  backgroundColor?: string;
-}
-
-const Loader: React.FC<LoaderProps> = ({
   /**
    * The height and width of the loader, using Tailwind CSS sizing classes.
    * @default 'h-16' height: 4rem; (64px)
    * @default 'w-16' width: 4rem; (64px)
    */
-  height = "16",
-  width = "16",
+  height?: string;
+  width?: string;
   /**
    * The color of the text within the loader, using a Tailwind CSS color class.
    * @default 'text-blue-500' color: rgb(59 130 246);
    */
-  textColor = "blue-500",
+  textColor?: string;
   /**
    * The color of the spinner within the loader.
    * @default '#1d4ed8' branding color
    */
-  spinnerColor = "#1d4ed8",
+  spinnerColor?: string;
   /**
    * The size of the spinner, using Tailwind CSS sizing classes.
    * @default 'h-12 w-12' height: 3rem; width: 3rem; (48px)
    */
-  spinnerSize = "12",
+  spinnerSize?: string;
   /**
    * The background color of the loader, using a Tailwind CSS color class.
    * @default 'bg-gray-100' background-color: rgb(243 244 246);
    */
+  backgroundColor?: string;
+}
+
+const Loader = ({
+  height = "16",
+  width = "16",
+  textColor = "blue-500",
+  spinnerColor = "#1d4ed8",
+  spinnerSize = "12",
   backgroundColor = "gray-100",
-}) => {
+}: LoaderProps) => {
   return (
     <div
       data-testid="loader"
