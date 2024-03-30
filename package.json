@@ -24,6 +24,8 @@
     "@mapbox/mapbox-gl-draw-static-mode": "^1.0.1",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
+    "@nivo/bar": "^0.84.0",
+    "@nivo/core": "^0.84.0",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@reduxjs/toolkit": "^1.9.6",
