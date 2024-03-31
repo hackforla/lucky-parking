@@ -49,7 +49,7 @@ jobs:
             commentFlag = true;
           }
           if (commentFlag) {
-            const prComment = `@${prOwner}, this Pull Request is not linked to a valid issue. Please provide a valid linked issue "Linked Issues" above, in the format of "Resolves #" + issue number.`;
+            const prComment = `@${prOwner}, this Pull Request is not linked to a valid issue. Please provide a valid linked issue in "Related Issues" above, using the format of "Resolves #" + issue number.`;
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
