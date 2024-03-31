@@ -22,7 +22,7 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
-          // Retrieve body of context.payload and search for GitHub keywords
+          // Retrieve body of context.payload and search for GitHub keywords and issue number
           const prBody = context.payload.pull_request.body;
           const prNumber = context.payload.pull_request.number;
           const prOwner = context.payload.pull_request.user.login;
@@ -56,5 +56,4 @@ jobs:
               body: prComment,
             });
           }
-          
-          
+  
