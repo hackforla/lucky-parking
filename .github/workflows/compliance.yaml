@@ -30,8 +30,7 @@ jobs:
           const match = prBody.match(regex);
           let commentFlag = false;
           if (match) {
-            keyword = match[1];
-            linkNumber = match[2];
+            let [ keyword, linkNumber ] = match;
             console.log('Found a keyword: \'' + keyword + '\'. Checking for legitimate linked issue…');
             try {
               const response = await github.rest.issues.get({
