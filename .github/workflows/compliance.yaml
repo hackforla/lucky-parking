@@ -33,14 +33,14 @@ jobs:
             keyword = match[1];
             linkNumber = match[2];
             console.log('Found a keyword: \'' + keyword + '\'. Checking for legitimate linked issue…');
-            const response = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: linkNumber,
-            });
-            if (response.status === 200) {
+            try {
+              const response = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: linkNumber,
+              });
               console.log('Found an issue: \'#' + linkNumber + '\' in repo. Confirmed for a legitimate linked issue.');
-            } else {
+            } catch (error) {
               console.log('Couldn\'t find issue #' + linkNumber + ' in repo. Posting comment...');
               commentFlag = true;
             }
