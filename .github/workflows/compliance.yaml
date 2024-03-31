@@ -14,46 +14,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-        
-    - name: Check for keyword and issue number
-      id: check-for-keyword 
-      uses: actions/github-script@v7
-      with:
-        script: |
-          // Retrieve body of context.payload and search for GitHub keywords and issue number
-          const prBody = context.payload.pull_request.body;
-          const prNumber = context.payload.pull_request.number;
-          const prOwner = context.payload.pull_request.user.login;
-          const regex = /(?<!Example:\s*)(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)/i;
-          const match = prBody.match(regex);
-          let commentFlag = false;
-          if (match) {
-            let [ , keyword, linkNumber ] = match;
-            console.log('Found a keyword: \'' + keyword + '\'. Checking for legitimate linked issue…');
-            try {
-              const response = await github.rest.issues.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: linkNumber,
-              });
-              console.log('Found an issue: \'#' + linkNumber + '\' in repo. Confirmed for a legitimate linked issue.');
-            } catch (error) {
-              console.log('Couldn\'t find issue #' + linkNumber + ' in repo. Posting comment...');
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for keyword and issue number
+        id: check-for-keyword
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Retrieve body of context.payload and search for GitHub keywords and issue number
+            const prBody = context.payload.pull_request.body;
+            const prNumber = context.payload.pull_request.number;
+            const prOwner = context.payload.pull_request.user.login;
+            const regex = /(?<!Example:\s*)(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)/i;
+            const match = prBody.match(regex);
+            let commentFlag = false;
+            if (match) {
+              let [ , keyword, linkNumber ] = match;
+              console.log('Found a keyword: \'' + keyword + '\'. Checking for legitimate linked issue…');
+              try {
+                const response = await github.rest.issues.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: linkNumber,
+                });
+                console.log('Found an issue: \'#' + linkNumber + '\' in repo. Confirmed for a legitimate linked issue.');
+              } catch (error) {
+                console.log('Couldn\'t find issue #' + linkNumber + ' in repo. Posting comment...');
+                commentFlag = true;
+              }
+            } else {
+              console.log('PR does not have a properly linked issue. Posting comment...');
               commentFlag = true;
             }
-          } else {
-            console.log('PR does not have a properly linked issue. Posting comment...');
-            commentFlag = true;
-          }
-          if (commentFlag) {
-            const prComment = `@${prOwner}, this Pull Request is not linked to a valid issue. Please provide a valid linked issue in "Related Issues" above, using the format of "Resolves #" + issue number.`;
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-              body: prComment,
-            });
-          }
-  
+            if (commentFlag) {
+              const prComment = `@${prOwner}, this Pull Request is not linked to a valid issue. Please provide a valid linked issue in "Related Issues" above, using the format of "Resolves #" + issue number.`;
+              github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: prComment,
+              });
+            }
