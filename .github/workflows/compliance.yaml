@@ -39,7 +39,7 @@ jobs:
               issue_number: linkNumber,
             });
             if (response.status === 200) {
-              console.log('Repo issue #' + linkNumber + ' found in repo. Workflow will continue...');
+              console.log('Found an issue \'#' + linkNumber + '\' in repo. Workflow will finish.');
             } else {
               console.log('Couldn\'t find issue #' + linkNumber + ' in repo. Posting comment...');
               commentFlag = true;
