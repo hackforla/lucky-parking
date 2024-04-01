@@ -5,6 +5,21 @@ export type MONTHS_OPTION = {
   text: string;
 };
 
+export const MONTH_NAMES: string[] = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export const MONTHS_RANGE: MONTHS_OPTION[] = [
   { value: 0, text: "January" },
   { value: 1, text: "February" },
