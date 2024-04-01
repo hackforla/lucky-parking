@@ -31,7 +31,7 @@ jobs:
             let commentFlag = false;
             if (match) {
               let [ , keyword, linkNumber ] = match;
-              console.log('Found a keyword: \'' + keyword + '\'. Checking for legitimate linked issue…');
+              console.log('Found a keyword: \'' + keyword + '\'. Checking for legitimate linked issue...');
               try {
                 const response = await github.rest.issues.get({
                   owner: context.repo.owner,
