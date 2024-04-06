@@ -141,6 +141,7 @@ export default function Calendar({ initDate = new Date(), onSelectValueChange }:
                   return (
                     <td
                       key={key}
+                      data-testid={key}
                       onClick={() => handleSelected(ele as CalendarDate)}
                       className={clsx(
                         "h-8 w-8 text-center text-xs font-normal leading-[18.8px]",

@@ -49,7 +49,7 @@ describe("Date Input", () => {
     expect(monthOptions).toHaveTextContent(month);
     expect(yearOptions).toHaveTextContent(year);
 
-    expect(screen.getByText(day).getAttribute("class")).toContain("rounded-full");
+    expect(screen.getByTestId(`${today.getMonth()}/${day}/${year}`).getAttribute("class")).toContain("rounded-full");
   });
 
   test("date input value updates when date is selected in Calendar", async () => {
