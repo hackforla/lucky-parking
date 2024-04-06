@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "pnpm nx run-many --target=build --output-style=stream --all",
-    "ci:format": "pnpm dlx prettier --check --ignore-unknown '**/*.{css,js,json,jsx,md,ts,tsx,yaml}'",
-    "ci:lint": "pnpm dlx eslint --fix-dry-run '**/*.{js,jsx,ts,tsx}'",
+    "ci:format": "prettier --check --ignore-unknown '**/*.{css,js,json,jsx,md,ts,tsx,yaml}'",
+    "ci:lint": "eslint --fix-dry-run '**/*.{js,jsx,ts,tsx}'",
     "clean": "rm -rf dist node_modules && pnpm --recursive --parallel exec rm -rf dist node_modules",
     "dev": "pnpm nx run-many --target=dev --output-style=stream --all",
     "graph": "pnpm nx graph",
