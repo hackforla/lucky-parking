@@ -54,24 +54,24 @@ export default function DatePicker(props: DatePickerProps) {
         break;
       }
 
-      case RelativeDatePresets.YTD: {
-        const firstDateOfTheYear = startOfYear(today);
-        setStartDate(firstDateOfTheYear);
+      case RelativeDatePresets.MONTHS_3: {
+        const threeMonthAgo = addMonths(today, -3);
+        setStartDate(threeMonthAgo);
         setEndDate(today);
         break;
       }
 
       case RelativeDatePresets.MONTHS_1: {
-        const oneMonthFromToday = addMonths(today, 1);
-        setStartDate(today);
-        setEndDate(oneMonthFromToday);
+        const oneMonthAgo = addMonths(today, -1);
+        setStartDate(oneMonthAgo);
+        setEndDate(today);
         break;
       }
 
-      case RelativeDatePresets.MONTHS_3: {
-        const threeMonthFromToday = addMonths(today, 3);
-        setStartDate(today);
-        setEndDate(threeMonthFromToday);
+      case RelativeDatePresets.YTD: {
+        const firstDateOfTheYear = startOfYear(today);
+        setStartDate(firstDateOfTheYear);
+        setEndDate(today);
         break;
       }
 
