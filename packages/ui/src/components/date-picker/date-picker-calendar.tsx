@@ -101,7 +101,7 @@ export default function DatePickerCalendar(props: DatePickerCalendarProps) {
           <table className="border-collaspse">
             <thead>
               <tr>
-                {["M", "T", "W", "T", "F", "S", "S"].map((ele: string, index: number) => (
+                {["S", "M", "T", "W", "T", "F", "S"].map((ele: string, index: number) => (
                   <td
                     key={ele + index}
                     className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">
@@ -145,7 +145,7 @@ export default function DatePickerCalendar(props: DatePickerCalendarProps) {
           <table className="border-collaspse">
             <thead>
               <tr>
-                {["M", "T", "W", "T", "F", "S", "S"].map((ele: string, index: number) => (
+                {["S", "M", "T", "W", "T", "F", "S"].map((ele: string, index: number) => (
                   <td
                     key={ele + index}
                     className="text-black-400 h-8 w-8 p-px text-center text-xs font-normal leading-[16.8px]">

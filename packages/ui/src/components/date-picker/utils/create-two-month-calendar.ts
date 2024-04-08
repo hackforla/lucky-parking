@@ -11,7 +11,7 @@ export function createTwoMonthCalendar(year: number, month: number) {
 }
 
 export function createCalendarMonth(year: number, month: number) {
-  const startDay = 1;
+  const startDay = 0;
   const currentDate = new Date(year, month, 1);
 
   currentDate.setDate(currentDate.getDate() - ((currentDate.getDay() - startDay + 7) % 7));
