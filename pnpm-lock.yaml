@@ -18,6 +18,8 @@ importers:
         specifier: 5.8.2
         version: 5.8.2
 
+  configs/typescript: {}
+
 packages:
 
   prettier@3.5.3:
