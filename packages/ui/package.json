@@ -1,0 +1,43 @@
+{
+  "name": "@lucky-parking/ui",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "exports": {
+    "./theme.css": "./src/theme/theme.css",
+    "./tokens/*": "./src/theme/tokens/*.ts",
+    "./*": "./src/components/*/index.ts"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@lucky-parking/types": "workspace:*",
+    "@lucky-parking/utilities": "workspace:*",
+    "@mui/icons-material": "^6.4.7",
+    "@mui/material": "^6.4.7",
+    "@nivo/bar": "^0.88.0",
+    "@nivo/core": "^0.88.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lodash": "^4.17.21",
+    "radix-ui": "^1.1.3",
+    "react": "^19.0.0",
+    "tailwind-merge": "^3.0.2"
+  },
+  "devDependencies": {
+    "@lucky-parking/jest": "workspace:*",
+    "@lucky-parking/typescript": "workspace:*",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^29.5.14",
+    "@types/lodash": "^4.17.16",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "jest": "^29.7.0",
+    "tailwindcss": "3.4.17",
+    "typescript": "latest"
+  }
+}

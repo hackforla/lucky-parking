@@ -1,0 +1,13 @@
+{
+  "extends": "@lucky-parking/typescript/react.json",
+  "compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"]
+		},
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
