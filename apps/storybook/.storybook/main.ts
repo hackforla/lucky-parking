@@ -20,6 +20,9 @@ const config: StorybookConfig = {
     getAbsolutePath('@chromatic-com/storybook'),
     getAbsolutePath("@storybook/experimental-addon-test")
   ],
+	"core": {
+		disableTelemetry: true
+	},
   "framework": {
     "name": getAbsolutePath('@storybook/react-vite'),
     "options": {}
