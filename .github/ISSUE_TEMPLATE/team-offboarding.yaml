@@ -1,0 +1,122 @@
+name: Offboarding
+description: Template for offboarding members.
+title: "[Onboarding] <Name>"
+body:
+  - type: input
+    id: name
+    attributes:
+      label: First/Preferred Name
+      description: Enter your first or preferred name.
+    validations:
+      required: true
+  - type: input
+    id: email
+    attributes:
+      label: Email Address
+      description: Enter your email address.
+    validations:
+      required: true
+  - type: input
+    id: github-username
+    attributes:
+      label: GitHub Username
+      description: Enter your GitHub username.
+    validations:
+      required: true
+  - type: input
+    id: slack-name
+    attributes:
+      label: Slack Display Name
+      description: Enter your name as it appears on Slack.
+    validations:
+      required: true
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team
+      options:
+        - Data
+        - Development
+        - Product
+        - UX
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |-
+        ---
+
+        The following sections are to be completed with a Product Manager.
+  - type: dropdown
+    id: lead
+    attributes:
+      label: Lead
+      description: Are you joining as a lead for the team selected above?
+      options:
+        - "No"
+        - "Yes"
+  - type: checkboxes
+    id: onboarding-github
+    attributes:
+      label: "Onboarding: GitHub"
+      options:
+        - label: Remove from all teams
+          required: false
+  - type: checkboxes
+    id: onboarding-roster
+    attributes:
+      label: "Onboarding: Roster"
+      options:
+        - label: Mark as inactive
+          required: false
+  - type: checkboxes
+    id: onboarding-google
+    attributes:
+      label: "Onboarding: Google"
+      options:
+        - label: Remove from Google Calendar events
+          required: false
+        - label: Remove access from the shared Google Drive
+          required: false
+        - label: Remove from team email
+          required: false
+  - type: checkboxes
+    id: onboarding-slack
+    attributes:
+      label: "Onboarding: Slack"
+      options:
+        - label: Remove from all Slack channels
+          required: false
+  - type: checkboxes
+    id: onboarding-figma
+    attributes:
+      label: "Onboarding: Figma"
+      options:
+        - label: Remove access to Figma design file
+          required: false
+  - type: checkboxes
+    id: onboarding-1password
+    attributes:
+      label: "Onboarding: 1Password"
+      options:
+        - label: Remove from all vaults
+          required: false
+        - label: Remove from Hack for LA account
+          required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+  - type: markdown
+    attributes:
+      value: >-
+        ---
+        
+        
+        ## References
+        
+        
+        **Hack for LA**
+        
+        - [Organization Onboarding/Offboarding Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)
+
