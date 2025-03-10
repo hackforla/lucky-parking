@@ -1,0 +1,15 @@
+{
+  "extends": "@lucky-parking/typescript/base.json",
+  "compilerOptions": {
+		"baseUrl": "./",
+		"module": "NodeNext",
+    "moduleResolution": "NodeNext",
+		"paths": {
+			"@/*": ["src/*"]
+		},
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@lucky-parking/api",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "lodash": "^4.17.21",
+    "mongodb": "^6.14.2",
+    "morgan": "^1.10.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@lucky-parking/typescript": "workspace:*",
+    "@types/body-parser": "^1.19.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/lodash": "^4.17.16",
+    "@types/morgan": "^1.9.9"
+  }
+}
