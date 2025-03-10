@@ -4,59 +4,41 @@
 
 A [Hack for LA](https://www.hackforla.org/) project to help city planners and the community make informed decisions about parking politices in the City of Los Angeles.
 
-## Prerequisites
+The Lucky Parking repository is a [Turborepo](https://turbo.build/repo/docs)-powered monorepo that manages our backend, frontend, shared libraries, and data science workflows.
 
-- Install [Node.js 18](https://nodejs.org/).
-- Install [pnpm](https://pnpm.io/).
+## Getting Started
+
+### Prerequisites
+
+- Install [Node.js 22](https://nodejs.org/).
+- Install [pnpm 9](https://pnpm.io/).
 - Fork the repository: https://github.com/hackforla/lucky-parking/fork.
 - Clone your fork to your computer for local development.
 - Add remote to this repository:
 
-```
+```bash
 git remote add upstream git@github.com:hackforla/lucky-parking.git
 ```
 
-## Scripts
+### Install Dependencies
 
-In the project directory, you can run the following:
+We use `pnpm` as our package manager. To install all dependencies, run:
 
-### pnpm install
-
-Installs all dependencies defined in `package.json`. This step is required before running the project locally.
-
-To install a new dependency, run `pnpm install -w <package>`.
-
-To install a new dev dependency, run `pnpm install -wD <package>'`.
-
-### pnpm install
-
-Installs the dependencies for all packages.
-
-### pnpm clean
-
-Deletes any build artifacts and dependencies from the workspace and packages. You will need to re-execute `pnpm install` to run the project locally.
-
-### pnpm dev
-
-Runs the website app in development mode. Open [http://localhost:5173/](http://localhost:5173/) in your browser to view the client application.
-
-Runs the express server in development mode at [http://localhost:3000/](http://localhost:3000/).
-
-Runs the Storybook instance of the UI library. Open [http://localhost:6006/](http://localhost:6006/) in your browser to explore the UI library.
-
-### pnpm build
-
-Builds the website app and express server.
-
-## Docker
-
+```bash
+pnpm install
 ```
-docker build . --target website --tag website:latest
-docker compose up
-```
+
+### Useful Commands
+
+| Command | Description |
+|---------|------------|
+| `pnpm install` | Install all dependencies |
+| `pnpm build` | Build all apps and packages |
+| `pnpm dev` | Start all development servers |
+| `pnpm test` | Run tests across the monorepo |
 
 ## Contributing
 
 Contributions are always welcome!
 
-To get started, following our organization [onboarding](https://www.hackforla.org/getting-started) steps, and as always, please adhere to [Hack for LA's Code of Conduct](https://github.com/hackforla/codeofconduct).
+To get started, follow our organization [onboarding](https://www.hackforla.org/getting-started) steps, and as always, please adhere to [Hack for LA's Code of Conduct](https://github.com/hackforla/codeofconduct).
