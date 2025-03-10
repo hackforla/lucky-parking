@@ -1,84 +1,62 @@
-# Turborepo starter
+# Lucky Parking
 
-This Turborepo starter is maintained by the Turborepo core team.
+![Lucky Parking](lucky-parking.png)
 
-## Using this example
+A [Hack for LA](https://www.hackforla.org/) project to help city planners and the community make informed decisions about parking politices in the City of Los Angeles.
 
-Run the following command:
+## Prerequisites
 
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+- Install [Node.js 18](https://nodejs.org/).
+- Install [pnpm](https://pnpm.io/).
+- Fork the repository: https://github.com/hackforla/lucky-parking/fork.
+- Clone your fork to your computer for local development.
+- Add remote to this repository:
 
 ```
-cd my-turborepo
-pnpm build
+git remote add upstream git@github.com:hackforla/lucky-parking.git
 ```
 
-### Develop
+## Scripts
 
-To develop all apps and packages, run the following command:
+In the project directory, you can run the following:
+
+### pnpm install
+
+Installs all dependencies defined in `package.json`. This step is required before running the project locally.
+
+To install a new dependency, run `pnpm install -w <package>`.
+
+To install a new dev dependency, run `pnpm install -wD <package>'`.
+
+### pnpm install
+
+Installs the dependencies for all packages.
+
+### pnpm clean
+
+Deletes any build artifacts and dependencies from the workspace and packages. You will need to re-execute `pnpm install` to run the project locally.
+
+### pnpm dev
+
+Runs the website app in development mode. Open [http://localhost:5173/](http://localhost:5173/) in your browser to view the client application.
+
+Runs the express server in development mode at [http://localhost:3000/](http://localhost:3000/).
+
+Runs the Storybook instance of the UI library. Open [http://localhost:6006/](http://localhost:6006/) in your browser to explore the UI library.
+
+### pnpm build
+
+Builds the website app and express server.
+
+## Docker
 
 ```
-cd my-turborepo
-pnpm dev
+docker build . --target website --tag website:latest
+docker compose up
 ```
 
-### Remote Caching
+## Contributing
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Contributions are always welcome!
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+To get started, following our organization [onboarding](https://www.hackforla.org/getting-started) steps, and as always, please adhere to [Hack for LA's Code of Conduct](https://github.com/hackforla/codeofconduct).
