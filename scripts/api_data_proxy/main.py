@@ -33,8 +33,8 @@ How to Use:
    uvicorn main:app --reload
 
 4. Open in your browser:
-   http://localhost:8000/citations  
-   http://localhost:8000/ping  
+   http://localhost:8000/citations
+   http://localhost:8000/ping
    http://localhost:8000/docs  (Swagger UI)
 
 5. To switch modes, edit the .env file:
