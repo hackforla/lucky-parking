@@ -7,20 +7,22 @@ This script runs a FastAPI app to serve citation data from:
 
 Endpoints:
 ----------
+
 1. GET /citations
-   - Returns citation data from either static file or live API
-   - Accepts ?limit=<int> (default 100, max 1000)
+   - Returns citation data from either the static file or the live API
+   - Accepts a `?limit=<int>` parameter (default 100, max 1000)
 
 2. GET /ping
    - Always accessible
    - Returns:
-     - "Running in static mode" if using mock data
-     - "API is up" if using live mode and API responds
-     - "Live API unreachable — please set USE_STATIC_DATA=true" if live mode
-            but API is down
+     - "Running in static mode" — using mock data
+     - "API is up" — using live mode and the API is responsive
+     - "Live API unreachable — please set USE_STATIC_DATA=true"
+       — using live mode, but the API is down
 
 How to Use:
 -----------
+
 1. Navigate to this folder:
    scripts/api_data_proxy/
 
@@ -30,16 +32,16 @@ How to Use:
 3. Run the development server:
    uvicorn main:app --reload
 
-4. Open in browser:
-   http://localhost:8000/citations
-   http://localhost:8000/ping
-   http://localhost:8000/docs (Swagger UI)
+4. Open in your browser:
+   http://localhost:8000/citations  
+   http://localhost:8000/ping  
+   http://localhost:8000/docs  (Swagger UI)
 
-5. Set mode in .env:
-   USE_STATIC_DATA=true   → loads from static_data.json
-   USE_STATIC_DATA=false  → tries to fetch from source API
-
+5. To switch modes, edit the .env file:
+   USE_STATIC_DATA=true    # Loads from static_data.json
+   USE_STATIC_DATA=false   # Uses live LA Open Data API
 """
+
 from fastapi import FastAPI, Query
 from source_api import fetch_live_data
 from static_loader import load_static_data
