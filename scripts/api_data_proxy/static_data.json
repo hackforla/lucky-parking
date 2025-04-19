@@ -1,0 +1,59 @@
+[
+    {
+      "ticket_number": "1101234567",
+      "issue_date": "2024-04-01T08:15:00Z",
+      "issue_time": 815,
+      "meter_id": "12345",
+      "marked_time": "08:00",
+      "rp_state_plate": "CA",
+      "plate_expiry_date": "2025-01-01",
+      "vin": "1HGCM82633A004352",
+      "make": "TOYOTA",
+      "body_style": "SD",
+      "color": "WH",
+      "location": "100 MAIN ST",
+      "route": "12",
+      "agency": 1,
+      "violation_code": "80.56E",
+      "violation_description": "PARKED OVER 72 HOURS",
+      "fine_amount": 65,
+      "agency_desc": "LADOT",
+      "color_desc": "White",
+      "body_style_desc": "Sedan",
+      "loc_lat": 34.052235,
+      "loc_long": -118.243683,
+      "geolocation": {
+        "type": "Point",
+        "coordinates": [-118.243683, 34.052235]
+      }
+    },
+    {
+      "ticket_number": "1107654321",
+      "issue_date": "2024-04-02T14:30:00Z",
+      "issue_time": 1430,
+      "meter_id": "54321",
+      "marked_time": "14:00",
+      "rp_state_plate": "CA",
+      "plate_expiry_date": "2024-09-15",
+      "vin": "1FAFP40412F123456",
+      "make": "FORD",
+      "body_style": "CP",
+      "color": "BK",
+      "location": "200 SPRING ST",
+      "route": "15",
+      "agency": 2,
+      "violation_code": "85.01",
+      "violation_description": "EXPIRED METER",
+      "fine_amount": 73,
+      "agency_desc": "LAPD",
+      "color_desc": "Black",
+      "body_style_desc": "Coupe",
+      "loc_lat": 34.053690,
+      "loc_long": -118.242766,
+      "geolocation": {
+        "type": "Point",
+        "coordinates": [-118.242766, 34.053690]
+      }
+    }
+  ]
+  
