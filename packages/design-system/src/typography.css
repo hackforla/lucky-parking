@@ -1,0 +1,99 @@
+@layer components {
+  .heading-1 {
+    font-weight: 600;
+    font-size: 55px;
+    line-height: 120%;
+  }
+
+  .heading-2 {
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 120%;
+  }
+
+  .heading-3 {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 120%;
+  }
+
+  .heading-4 {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 120%;
+  }
+
+  .heading-5 {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 120%;
+  }
+
+  .paragraph-1 {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 140%;
+  }
+
+  .paragraph-2 {
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 140%;
+	}
+
+  .paragraph-3 {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+  }
+
+  .heading-1-sm {
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 150%;
+  }
+
+  .heading-2-sm {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 150%;
+  }
+
+  .heading-3-sm {
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 150%;
+  }
+
+  .subtitle {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 150%;
+  }
+
+  .body-1 {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 150%;
+  }
+
+  .body-2 {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 150%;
+  }
+
+  .overline {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 150%;
+    letter-spacing: 1.5px;
+  }
+
+  .caption {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    letter-spacing: 0.4px;
+  }
+}

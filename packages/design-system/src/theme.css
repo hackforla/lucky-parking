@@ -1,0 +1,10 @@
+@import "./typography.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Work Sans";
+  src: url("./assets/fonts/work-sans.ttf") format("truetype");
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@lucky-parking/design-system",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm build:tokens && tsc --project tsconfig.json",
+		"build:tokens": "style-dictionary build --config style-dictionary.config.js",
+    "dev": "nodemon --config nodemon.config.json"
+  },
+  "exports": {
+		"./theme.css": "./src/theme.css",
+		"./tokens": "./src/dictionary/styles.js",
+		".": "./src/index.ts"
+	},
+  "devDependencies": {
+    "@lucky-parking/typescript": "workspace:*",
+    "nodemon": "^3.1.9",
+    "style-dictionary": "^4.3.3",
+    "tailwindcss": "3.4.17",
+    "typescript": "latest"
+  }
+}
