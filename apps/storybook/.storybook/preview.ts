@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react'
+import "@lucky-parking/design-system/theme.css";
 
 const preview: Preview = {
   parameters: {

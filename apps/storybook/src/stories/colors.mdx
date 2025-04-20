@@ -1,11 +1,42 @@
 import _ from 'lodash';
 import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
-import colors from '@lucky-parking/ui/tokens/colors';
+import tokens from '@lucky-parking/design-system/tokens';
 
 <Meta title="Theme/Colors" />
 
-<ColorPalette>
- {_.map(colors, (shades, color) => (
-    <ColorItem title={color} subtitle={""} colors={shades} key={color} />
+# Color Tokens
+
+export const SHADE_ORDER = ["100", "200", "300", "400", "500", "600", "700"];
+
+<div style={{ display: "grid", gap: "48px" }}>
+  {Object.entries(tokens.color).map(([group, shades]) => (
+    <div key={group}>
+      <h3 style={{ fontFamily: "sans-serif" }}>{group}</h3>
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(${SHADE_ORDER.length}, minmax(100px, 1fr))`,
+        gap: "12px",
+        marginTop: "16px"
+      }}>
+        {SHADE_ORDER.map((shade) => {
+          const value = shades[shade];
+          return (
+            <div key={shade} style={{ fontFamily: "sans-serif", textAlign: "center", opacity: value ? 1 : 0.3 }}>
+              <div style={{
+                backgroundColor: value || "#f3f3f3",
+                height: "48px",
+                borderRadius: "4px",
+                border: "1px solid #ccc"
+              }} />
+              <div style={{ marginTop: "4px", fontSize: "13px" }}>
+                <strong>{shade}</strong>
+                <br />
+                <code>{value || "—"}</code>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   ))}
-</ColorPalette>
+</div>

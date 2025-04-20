@@ -1,66 +1,8 @@
 import { Meta } from "@storybook/blocks";
-import typography from "@lucky-parking/ui/tokens/typography"; // Adjust path as needed
+import tokens from "@lucky-parking/design-system/tokens";
 
 <Meta title="Theme/Typography" />
 
 # Typography Tokens
 
-Your typography tokens define the styles for different text elements in your design system. Below are the available styles for **screen** and **mobile**.
-
-## **Screen Typography**
-<TypographyList category="screen" />
-
-## **Mobile Typography**
-<TypographyList category="mobile" />
-
-export function TypographyList({ category }) {
-  return (
-    <div style={{ display: "grid", gap: "32px" }}>
-      {Object.entries(typography[category]).map(([name, styles]) => (
-        <div
-          key={name}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
-            padding: "20px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            backgroundColor: "#f9f9f9",
-            textAlign: "center"
-          }}
-        >
-          {/* Typography Preview */}
-          <div
-            style={{
-              fontFamily: styles.fontFamily,
-              fontSize: styles.fontSize,
-              fontWeight: styles.fontWeight,
-              lineHeight: styles.lineHeight,
-              letterSpacing: styles.letterSpacing,
-              display: "block",
-              width: "100%",
-              padding: "12px 0",
-              backgroundColor: "#fff",
-              borderRadius: "6px",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
-            }}
-          >
-            Jumpy valets zigzag quickly to assign packed parking spots.
-          </div>
-
-          {/* Metadata */}
-          <div style={{ fontSize: "14px", fontFamily: "sans-serif", textAlign: "left", padding: "0 10px" }}>
-            <strong>{name}</strong>
-            <br />
-            Font: {styles.fontFamily} <br />
-            Size: {styles.fontSize} <br />
-            Weight: {styles.fontWeight} <br />
-            Line Height: {styles.lineHeight} <br />
-            Letter Spacing: {styles.letterSpacing ?? "—"} <br />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+⚠️ The typography tokens are currently being standardized. This documentation will be updated once the token structure is finalized.
