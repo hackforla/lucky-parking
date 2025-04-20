@@ -17,7 +17,7 @@ export default function HowItWorksButton() {
       <ModalTrigger aria-label="open-modal" asChild>
         <Button variant={ButtonVariant.secondary}>HOW IT WORKS</Button>
       </ModalTrigger>
-      <ModalContent className="flex h-auto !w-[448px] flex-col">
+      <ModalContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white-400 w-[448px] z-50 p-6 rounded-lg">
         <ModalTitle className="text-black-500 mb-6 text-3xl font-medium leading-9">How it Works</ModalTitle>
         <ModalDescription className="mb-4 text-base leading-6">
           Parking Insights lets you get <span className="font-semibold">data on Los Angeles parking tickets</span> data

@@ -1,4 +1,4 @@
-import colors from "@lucky-parking/ui/tokens/colors";
+import tokens from "@lucky-parking/design-system/tokens";
 
 const activeStyles = [
   // Line stroke
@@ -11,7 +11,7 @@ const activeStyles = [
       "line-join": "round",
     },
     paint: {
-      "line-color": colors.blue["500"],
+      "line-color": tokens.color.blue["500"],
       "line-width": 3,
     },
   },
@@ -22,7 +22,7 @@ const activeStyles = [
     type: "fill",
     filter: ["all", ["==", "$type", "Polygon"], ["!=", "mode", "static"]],
     paint: {
-      "fill-color": colors.blue["300"],
+      "fill-color": tokens.color.blue["300"],
       "fill-opacity": 0.5,
     },
   },
@@ -49,7 +49,7 @@ const activeStyles = [
       "line-join": "round",
     },
     paint: {
-      "line-color": colors.blue["500"],
+      "line-color": tokens.color.blue["500"],
       "line-width": 3,
     },
   },
@@ -72,7 +72,7 @@ const activeStyles = [
     filter: ["all", ["==", "meta", "vertex"], ["==", "$type", "Point"], ["!=", "mode", "static"]],
     paint: {
       "circle-radius": 3,
-      "circle-color": colors.blue["500"],
+      "circle-color": tokens.color.blue["500"],
     },
   },
 ];

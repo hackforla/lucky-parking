@@ -16,7 +16,7 @@ export default function Header() {
     <div className="flex h-[60px] flex-1 items-center justify-between px-5 py-2">
       {/* Branding */}
       <div className="flex flex-1 items-center space-x-6">
-        <Link to={PATHS.HOME}>
+        <Link to={PATHS.HOME} reloadDocument={true} className="flex items-center space-x-2">
           <Logo onClick={handleLogoClick} />
         </Link>
 
