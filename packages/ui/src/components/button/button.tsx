@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { PropsWithChildren, forwardRef } from "react";
 import clsx from "clsx";
+import "@lucky-parking/design-system/theme.css";
 
 export enum ButtonSize {
   small = "small",

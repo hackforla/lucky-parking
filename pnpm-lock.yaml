@@ -346,6 +346,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.14.0
         version: 11.14.0(@emotion/react@11.14.0(@types/react@19.1.2)(react@19.1.0))(@types/react@19.1.2)(react@19.1.0)
+      '@lucky-parking/design-system':
+        specifier: workspace:*
+        version: link:../design-system
       '@lucky-parking/types':
         specifier: workspace:*
         version: link:../types

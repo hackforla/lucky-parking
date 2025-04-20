@@ -5,13 +5,12 @@
     "build": "tsc"
   },
   "exports": {
-    "./theme.css": "./src/theme/theme.css",
-    "./tokens/*": "./src/theme/tokens/*.ts",
     "./*": "./src/components/*/index.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+		"@lucky-parking/design-system": "workspace:*",
     "@lucky-parking/types": "workspace:*",
     "@lucky-parking/utilities": "workspace:*",
     "@mui/icons-material": "^6.4.7",
