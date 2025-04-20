@@ -1,8 +1,8 @@
 {
   "name": "@lucky-parking/api",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "tsup",
+    "dev": "tsx watch src/index.ts"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
@@ -20,6 +20,8 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/lodash": "^4.17.16",
-    "@types/morgan": "^1.9.9"
+    "@types/morgan": "^1.9.9",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3"
   }
 }
