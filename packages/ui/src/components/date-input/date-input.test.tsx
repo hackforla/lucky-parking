@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import DateInput from "./date-input";
+import { DateInput } from "./date-input";
 
 describe("Date Input", () => {
   const user = userEvent.setup();

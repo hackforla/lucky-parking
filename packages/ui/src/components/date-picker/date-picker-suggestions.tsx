@@ -1,5 +1,5 @@
 import _ from "lodash";
-import RadioGroup from "../radio-group";
+import { RadioGroup } from "../radio-group";
 
 interface DatePickerSuggestion {
   onSuggestionChange: (arg0: string) => void;

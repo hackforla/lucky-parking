@@ -101,7 +101,7 @@ export default function DatePickerCalendar(props: DatePickerCalendarProps) {
                 </tr>
               </thead>
               <tbody>
-                {firstMonth.map((week: CALENDAR_MONTH[], weekIdx: number) => (
+                {firstMonth?.map((week: CALENDAR_MONTH[], weekIdx: number) => (
                   <tr key={"first-month" + weekIdx}>
                     {week.map((ele: CALENDAR_MONTH, colIdx: number) => {
                       if (isEmpty(ele)) {
@@ -162,7 +162,7 @@ export default function DatePickerCalendar(props: DatePickerCalendarProps) {
                 </tr>
               </thead>
               <tbody>
-                {secondMonth.map((week: CALENDAR_MONTH[], weekIdx: number) => (
+                {secondMonth?.map((week: CALENDAR_MONTH[], weekIdx: number) => (
                   <tr key={"second-month" + weekIdx}>
                     {week.map((ele: CALENDAR_MONTH, colIdx: number) => {
                       if (isEmpty(ele)) {

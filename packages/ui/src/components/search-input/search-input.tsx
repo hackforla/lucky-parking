@@ -9,7 +9,7 @@ interface SearchInputProps extends PropsWithChildren {
   value: string;
 }
 
-export default function SearchInput(props: SearchInputProps) {
+export const SearchInput = (props: SearchInputProps) => {
   const { children, isDisabled = false, onChange = _.noop, placeholder = "Search", value } = props;
 
   const hasSuggestions = useMemo(() => children && !_.isEmpty(children), [children]);

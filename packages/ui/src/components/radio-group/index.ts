@@ -1,1 +1,3 @@
-export { default } from "./radio-group";
+import "@lucky-parking/design-system/theme.css";
+
+export * from "./radio-group";

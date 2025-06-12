@@ -1,0 +1,15 @@
+{
+  "name": "@lucky-parking/types",
+  "type": "module",
+  "scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch"
+	},
+  "exports": {
+		".": "./src/index.ts"
+	},
+  "devDependencies": {
+    "@lucky-parking/typescript": "workspace:*",
+    "typescript": "latest"
+  }
+}

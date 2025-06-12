@@ -18,7 +18,7 @@ export const MONTH_NAMES: string[] = [
   "October",
   "November",
   "December",
-];
+] as const;
 
 export const MONTHS_RANGE: MONTHS_OPTION[] = [
   { value: 0, text: "January" },

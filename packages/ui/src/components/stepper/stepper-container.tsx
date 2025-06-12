@@ -1,3 +1,4 @@
+import { isObject } from "lodash";
 import { Children, ReactNode, createElement, isValidElement } from "react";
 
 interface StepperContainerProps {
@@ -17,7 +18,7 @@ export function StepperContainer({ currentStep = 0, children }: StepperContainer
           key: idx,
           isCurrent: currentStep === idx,
           isLast: idx === len - 1,
-          ...child.props,
+          ...(isObject(child.props) ? child.props : {}),
         });
       })}
     </div>

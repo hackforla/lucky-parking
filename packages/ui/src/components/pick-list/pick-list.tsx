@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { Content, Group, Icon, Item, ItemText, Portal, Root, Trigger, Value, Viewport } from "@radix-ui/react-select";
+import { Select as RadixSelect } from "radix-ui";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
@@ -13,13 +13,13 @@ interface PickListProps<T> {
   value?: T;
 }
 
-export default function PickList<T>({ id, className, options, onChange, placeholder, value }: PickListProps<T>) {
+export const PickList = <T,>({ id, className, options, onChange, placeholder, value }: PickListProps<T>) => {
   const eleRef = useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Root name={id} value={value as string} onOpenChange={setIsOpen} onValueChange={onChange}>
-      <Trigger aria-label={id} asChild>
+    <RadixSelect.Root name={id} value={value as string} onOpenChange={setIsOpen} onValueChange={onChange}>
+      <RadixSelect.Trigger aria-label={id} asChild>
         <button
           ref={eleRef}
           className={twMerge(
@@ -28,18 +28,18 @@ export default function PickList<T>({ id, className, options, onChange, placehol
             "text-base font-normal text-blue-500",
             className,
           )}>
-          <Value placeholder={placeholder} />
-          <Icon>
+          <RadixSelect.Value placeholder={placeholder} />
+          <RadixSelect.Icon>
             {isOpen ? (
               <ArrowDropUpIcon sx={{ fontSize: 24, color: "#205CA2" }} />
             ) : (
               <ArrowDropDownIcon sx={{ fontSize: 24, color: "#205CA2" }} />
             )}
-          </Icon>
+          </RadixSelect.Icon>
         </button>
-      </Trigger>
-      <Portal>
-        <Content
+      </RadixSelect.Trigger>
+      <RadixSelect.Portal>
+        <RadixSelect.Content
           position="popper"
           sideOffset={4}
           className="bg-white-100 z-40 drop-shadow-md"
@@ -47,10 +47,10 @@ export default function PickList<T>({ id, className, options, onChange, placehol
             //tailwind does not allow dynamic styling :(
             width: eleRef.current?.offsetWidth,
           }}>
-          <Viewport>
-            <Group>
+          <RadixSelect.Viewport>
+            <RadixSelect.Group>
               {options.map(({ text, value }: any) => (
-                <Item
+                <RadixSelect.Item
                   key={text}
                   value={value}
                   className={twMerge(
@@ -58,13 +58,13 @@ export default function PickList<T>({ id, className, options, onChange, placehol
                     "text-black-500 text-sm leading-[19.6px]",
                     "data-[highlighted]:text-white-100 data-[highlighted]:bg-blue-500 data-[highlighted]:outline-none",
                   )}>
-                  <ItemText>{text}</ItemText>
-                </Item>
+                  <RadixSelect.ItemText>{text}</RadixSelect.ItemText>
+                </RadixSelect.Item>
               ))}
-            </Group>
-          </Viewport>
-        </Content>
-      </Portal>
-    </Root>
+            </RadixSelect.Group>
+          </RadixSelect.Viewport>
+        </RadixSelect.Content>
+      </RadixSelect.Portal>
+    </RadixSelect.Root>
   );
 }

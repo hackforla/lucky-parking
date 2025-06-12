@@ -1,1 +1,3 @@
-export { Modal, ModalClose, ModalContent, ModalDescription, ModalTitle, ModalTrigger } from "./modal";
+import "@lucky-parking/design-system/theme.css";
+
+export * from "./modal";

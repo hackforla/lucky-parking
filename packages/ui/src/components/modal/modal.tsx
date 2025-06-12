@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { Root, Trigger, Overlay, Portal, Content, Title, Description, Close } from "@radix-ui/react-dialog";
+import { ReactNode, forwardRef } from "react";
+import { Dialog as RadixDialog } from "radix-ui";
 import CloseIcon from "@mui/icons-material/Close";
 import clsx from "clsx";
 
@@ -11,12 +11,14 @@ interface ModalContentProps {
   showTopRightCloseButton?: boolean;
 }
 
-export const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
-  ({ className = "", title, description, children, showTopRightCloseButton = true, ...props }, forwardedRef) => (
-    <Portal>
-      <Overlay className="bg-black-500 fixed inset-0 z-50 opacity-60" />
-      <Content
-        ref={forwardedRef}
+function ModalContentComponent(props: ModalContentProps, ref: any) {
+	const { className = "", title, description, children, showTopRightCloseButton = true, ...rest } = props;
+
+  return (
+    <RadixDialog.Portal>
+      <RadixDialog.Overlay className="bg-black-500 fixed inset-0 z-50 opacity-60" />
+      <RadixDialog.Content
+        ref={ref}
         className={clsx(
           "bg-white-100 absolute left-0 right-0 top-[20%] z-50 m-auto",
           "flex h-min w-min flex-col rounded-md p-6 shadow-md",
@@ -25,23 +27,24 @@ export const ModalContent = React.forwardRef<HTMLDivElement, ModalContentProps>(
         {...props}>
         {title && showTopRightCloseButton && (
           <div className={clsx("mb-1 flex justify-end", !!title && "items-center justify-between")}>
-            {title && <Title className="text-black-500 text-xl leading-5">{title}</Title>}
+            {title && <RadixDialog.Title className="text-black-500 text-xl leading-5">{title}</RadixDialog.Title>}
             {showTopRightCloseButton && (
-              <Close aria-label="close-modal">
+              <RadixDialog.Close aria-label="close-modal">
                 <CloseIcon sx={{ fontSize: 24, color: "#1F1F1F" }} />
-              </Close>
+              </RadixDialog.Close>
             )}
           </div>
         )}
-        {description && <Description className="text-black-400 mb-3">{description}</Description>}
+        {description && <RadixDialog.Description className="text-black-400 mb-3">{description}</RadixDialog.Description>}
         {children}
-      </Content>
-    </Portal>
-  ),
-);
+      </RadixDialog.Content>
+    </RadixDialog.Portal>
+  );
+};
 
-export const Modal = Root;
-export const ModalDescription = Description;
-export const ModalTitle = Title;
-export const ModalTrigger = Trigger;
-export const ModalClose = Close;
+export const Modal = RadixDialog.Root;
+export const ModalDescription = RadixDialog.Description;
+export const ModalTitle = RadixDialog.Title;
+export const ModalContent = forwardRef(ModalContentComponent);
+export const ModalTrigger = RadixDialog.Trigger;
+export const ModalClose = RadixDialog.Close;

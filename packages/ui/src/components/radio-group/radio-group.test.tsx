@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
-import RadioGroup from "./index";
+import { RadioGroup } from "./index";
 
 describe("Radio Group Component", () => {
   let currOption: string;
@@ -10,7 +10,7 @@ describe("Radio Group Component", () => {
       <RadioGroup
         name="rick-roll"
         options={lyrics}
-        onChange={(e) => {
+        onChange={(e: string) => {
           currOption = e;
         }}
       />,

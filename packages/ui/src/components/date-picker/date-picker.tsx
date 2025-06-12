@@ -6,11 +6,11 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import { addMonths, addYears, startOfYear } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
-import Button, { ButtonVariant } from "../button";
+import { Button, ButtonVariant } from "../button";
 import DatePickerSuggestions, { RelativeDatePresets } from "./date-picker-suggestions";
 import DatePickerCalendar from "./date-picker-calendar";
-import Input from "../input";
-import { formatToMiddleEndian } from "@lucky-parking/utilities/dist/date";
+import { Input } from "../input";
+import { formatToMiddleEndian } from "@lucky-parking/utilities/date";
 
 interface DatePickerProps {
   onDateRangeValueChange?: (arg0: { [key: string]: Date }) => void | null;
@@ -18,7 +18,7 @@ interface DatePickerProps {
 
 type selectedCalendar = "exact" | "suggestions";
 
-export default function DatePicker(props: DatePickerProps) {
+export const DatePicker = (props: DatePickerProps) => {
   const { onDateRangeValueChange = null } = props;
 
   const [isCalendarVisible, setCalendarVisible] = useState(false);

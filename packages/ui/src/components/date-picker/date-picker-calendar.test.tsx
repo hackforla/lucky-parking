@@ -32,17 +32,19 @@ describe("Date Range 2 month Calendar", () => {
   test("renders current month and next month", () => {
     const currMonthIdx = todayDate.getMonth();
     const nextMonthIdx = (currMonthIdx + 1) % 12;
+		const month = MONTH_NAMES[currMonthIdx] ?? 'Unknown Month';
 
-    expect(screen.getByText(MONTH_NAMES[currMonthIdx])).toBeInTheDocument();
-    expect(screen.getByText(MONTH_NAMES[nextMonthIdx])).toBeInTheDocument();
+    expect(screen.getByText(month)).toBeInTheDocument();
+    expect(screen.getByText(month)).toBeInTheDocument();
   });
 
   test("render current month's year and next month's year", () => {
     const currMonthIdx = todayDate.getMonth();
     const nextMonthIdx = (currMonthIdx + 1) % 12;
+		const month = MONTH_NAMES[currMonthIdx] ?? 'Unknown Month';
 
-    expect(screen.getByText(MONTH_NAMES[currMonthIdx])).toBeInTheDocument();
-    expect(screen.getByText(MONTH_NAMES[nextMonthIdx])).toBeInTheDocument();
+    expect(screen.getByText(month)).toBeInTheDocument();
+    expect(screen.getByText(month)).toBeInTheDocument();
   });
 });
 

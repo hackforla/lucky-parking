@@ -1,3 +1,5 @@
-export { default } from "./search-input";
-export { default as SearchSuggestion } from "./search-suggestion";
-export { default as SearchSuggestionHeader } from "./search-suggestion-header";
+import "@lucky-parking/design-system/theme.css";
+
+export * from "./search-input";
+export * from "./search-suggestion";
+export * from "./search-suggestion-header";

@@ -1,3 +1,3 @@
-/* istanbul ignore file */
+import "@lucky-parking/design-system/theme.css";
 
-export { default } from "./date-input";
+export * from "./date-input";

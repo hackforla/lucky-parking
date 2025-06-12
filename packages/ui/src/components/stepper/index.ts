@@ -1,2 +1,4 @@
-export { StepperContainer } from "./stepper-container";
-export { StepperItem } from "./stepper-item";
+import "@lucky-parking/design-system/theme.css";
+
+export * from "./stepper-container";
+export * from "./stepper-item";

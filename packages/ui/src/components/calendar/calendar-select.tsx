@@ -1,6 +1,6 @@
 import { useState } from "react";
 import clsx from "clsx";
-import { Content, Group, Icon, Item, ItemText, Portal, Root, Trigger, Value, Viewport } from "@radix-ui/react-select";
+import { Select as RadixSelect } from "radix-ui";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 interface SelectProps<T> {
@@ -32,21 +32,21 @@ export default function Select<T>({
   );
 
   return (
-    <Root name={id} value={value as string} onOpenChange={setIsOpen} onValueChange={onChange}>
-      <Trigger
+    <RadixSelect.Root name={id} value={value as string} onOpenChange={setIsOpen} onValueChange={onChange}>
+      <RadixSelect.Trigger
         aria-label={id}
         className={clsx("flex h-[17px] items-center", "text-black-300 z-50 text-xs font-normal outline-none")}>
-        <Value placeholder={placeholder} />
-        <Icon>{renderIcon}</Icon>
-      </Trigger>
-      <Portal container={parentContainer}>
-        <Content
+        <RadixSelect.Value placeholder={placeholder} />
+        <RadixSelect.Icon>{renderIcon}</RadixSelect.Icon>
+      </RadixSelect.Trigger>
+      <RadixSelect.Portal container={parentContainer}>
+        <RadixSelect.Content
           position="popper"
           className={clsx("bg-white-100 z-40 z-40 py-1 drop-shadow-md", optionWidth && `w-[${optionWidth}px]`)}>
-          <Viewport>
-            <Group>
+          <RadixSelect.Viewport>
+            <RadixSelect.Group>
               {options.map(({ text, value }: any) => (
-                <Item
+                <RadixSelect.Item
                   key={text}
                   value={value}
                   className={clsx(
@@ -55,13 +55,13 @@ export default function Select<T>({
                     "data-[highlighted]:text-white-100 data-[highlighted]:bg-blue-500 data-[highlighted]:outline-none",
                     center && "justify-center px-1",
                   )}>
-                  <ItemText>{text}</ItemText>
-                </Item>
+                  <RadixSelect.ItemText>{text}</RadixSelect.ItemText>
+                </RadixSelect.Item>
               ))}
-            </Group>
-          </Viewport>
-        </Content>
-      </Portal>
-    </Root>
+            </RadixSelect.Group>
+          </RadixSelect.Viewport>
+        </RadixSelect.Content>
+      </RadixSelect.Portal>
+    </RadixSelect.Root>
   );
 }

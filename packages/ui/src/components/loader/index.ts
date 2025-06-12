@@ -1,1 +1,3 @@
-export { default } from "./loader";
+import "@lucky-parking/design-system/theme.css";
+
+export * from "./loader";

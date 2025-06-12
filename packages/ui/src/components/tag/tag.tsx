@@ -23,7 +23,7 @@ interface TagProps extends PropsWithChildren {
   color?: TagColor;
 }
 
-export default function Tag(props: TagProps) {
+export const Tag = (props: TagProps) => {
   const { children, color = "black" } = props;
 
   if (!children) return null;

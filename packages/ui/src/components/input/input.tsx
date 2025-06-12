@@ -10,7 +10,7 @@ interface InputProps {
   onBlur?: () => void;
 }
 
-export default forwardRef<HTMLInputElement, InputProps>(function Input(props, ref) {
+function InputComponent(props: InputProps, ref: any) {
   const { id, className = "", onBlur = () => null, onChange = () => null, type = "text", value } = props;
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -40,4 +40,6 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(props, re
       value={value}
     />
   );
-});
+};
+
+export const Input = forwardRef(InputComponent);

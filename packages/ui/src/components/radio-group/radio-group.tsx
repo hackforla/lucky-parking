@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { onEvent } from "@lucky-parking/typings";
+import type { onEvent } from "@lucky-parking/types";
 import RadioOption from "./radio-option";
 
 interface RadioGroupProps {
@@ -9,7 +9,7 @@ interface RadioGroupProps {
   savedSelection?: string;
 }
 
-export default function RadioGroup(props: RadioGroupProps) {
+export const RadioGroup = (props: RadioGroupProps) => {
   const { name, onChange, options, savedSelection } = props;
 
   const [value, setValue] = useState(savedSelection);

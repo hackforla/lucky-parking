@@ -28,7 +28,7 @@ interface LoaderProps {
   backgroundColor?: string;
 }
 
-const Loader = ({
+export const Loader = ({
   height = "16",
   width = "16",
   textColor = "blue-500",
@@ -56,5 +56,3 @@ const Loader = ({
     </div>
   );
 };
-
-export default Loader;

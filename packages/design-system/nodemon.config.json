@@ -1,0 +1,11 @@
+{
+  "watch": ["src"],
+  "ext": "css,js,json,ts",
+  "ignore": [
+    "src/dictionary",
+    "src/dictionary/**"
+  ],
+  "delay": "500ms",
+  "verbose": true,
+  "exec": "pnpm build"
+}

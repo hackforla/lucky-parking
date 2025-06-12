@@ -17,24 +17,24 @@ export function createCalendarMonth(year: number, month: number) {
   currentDate.setDate(currentDate.getDate() - ((currentDate.getDay() - startDay + 7) % 7));
 
   // Initialize a two-dimensional array to hold the calendar
-  const calendar: CALENDAR_MONTH[][] = [];
+  const calendar: CALENDAR_MONTH[][] = []; // Empty calendar
+
   // Populate the calendar with dates
   for (let row = 0; row < 5; row++) {
-    calendar[row] = [];
+		const week: CALENDAR_MONTH[] = [];
+
     for (let col = 0; col < 7; col++) {
-      //append days for current month and next month
+			const day = currentDate.getMonth() === month ? {
+				day: currentDate.getDate(),
+				month: currentDate.getMonth(),
+				year: currentDate.getFullYear(),
+			} : {};
 
-      calendar[row][col] =
-        currentDate.getMonth() === month
-          ? {
-              day: currentDate.getDate(),
-              month: currentDate.getMonth(),
-              year: currentDate.getFullYear(),
-            }
-          : {};
-
+			week.push(day);
       currentDate.setDate(currentDate.getDate() + 1);
     }
+
+		calendar.push(week);
   }
   return calendar;
 }

@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import Input from "./input";
+import { Input } from "./input";
 
 describe("Input", () => {
   render(<Input id="Tyrell Corp Corporation" value="More human than human is our motto" />);

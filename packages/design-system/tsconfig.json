@@ -1,0 +1,12 @@
+{
+  "extends": "@lucky-parking/typescript/base.json",
+  "compilerOptions": {
+		"allowJs": true,
+		"checkJs": false,
+		"baseUrl": "./",
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["src/dictionary", "node_modules", "dist"]
+}

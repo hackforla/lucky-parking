@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { PropsWithChildren, forwardRef } from "react";
 import clsx from "clsx";
+import "@lucky-parking/design-system/theme.css";
 
 export enum ButtonSize {
   small = "small",
@@ -41,7 +42,7 @@ export interface ButtonProps extends PropsWithChildren {
   onClick?: (arg0: any) => void;
 }
 
-export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(props: ButtonProps, ref) {
+function ButtonComponent(props: ButtonProps, ref: any) {
   const {
     children,
     className = "",
@@ -71,4 +72,6 @@ export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(props:
       </span>
     </button>
   );
-});
+};
+
+export const Button = forwardRef(ButtonComponent);

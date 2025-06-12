@@ -1,1 +1,3 @@
-export { default } from "./date-picker.tsx";
+import "@lucky-parking/design-system/theme.css";
+
+export * from "./date-picker"

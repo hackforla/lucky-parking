@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Loader from "./loader";
+import { Loader } from "./loader";
 
 // Test case for basic rendering and text
 test("Renders the Loader component correctly", () => {

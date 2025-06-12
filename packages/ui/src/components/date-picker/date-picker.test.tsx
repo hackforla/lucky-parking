@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import DatePicker from "./date-picker";
+import { DatePicker } from "./date-picker";
 import userEvent from "@testing-library/user-event";
 
 describe("Date Input", () => {

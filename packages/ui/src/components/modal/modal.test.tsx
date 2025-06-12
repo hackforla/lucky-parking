@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Modal, ModalClose, ModalContent, ModalDescription, ModalTitle, ModalTrigger } from "./modal";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
-import Button, { ButtonVariant } from "../button/button";
+import { Button, ButtonVariant } from "../button/button";
 
 describe("Default Modal and click modal trigger", () => {
   const user = userEvent.setup();

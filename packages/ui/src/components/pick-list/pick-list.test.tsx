@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import PickList from "./pick-list";
+import { PickList } from "./pick-list";
 import { LIST_OPTIONS } from "./pick-list-test-data";
 
 describe("Pick List", () => {
@@ -11,7 +11,7 @@ describe("Pick List", () => {
         id="Cars"
         key={1}
         placeholder="Select a Manufacturer"
-        onChange={(val) => console.log(val)}
+        onChange={(val: string) => console.log(val)}
         options={LIST_OPTIONS}
       />,
     );
@@ -34,7 +34,7 @@ describe("Pick List's User Interaction", () => {
         id="Car2"
         key={2}
         placeholder="Select a car"
-        onChange={(val) => console.log(val)}
+        onChange={(val: string) => console.log(val)}
         options={LIST_OPTIONS}
       />,
     );

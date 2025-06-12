@@ -23,8 +23,8 @@ describe("Date Utilities", () => {
 
   describe("formatToRangeString", () => {
     it("formats to date range string", () => {
-      const dates1 = [new Date("2023-01-01"), new Date("2023-12-31")];
-      const dates2 = [new Date("1994-11-08"), new Date("2012-07-25")];
+      const dates1: [Date, Date] = [new Date("2023-01-01"), new Date("2023-12-31")];
+      const dates2: [Date, Date] = [new Date("1994-11-08"), new Date("2012-07-25")];
 
       expect(formatToRangeString(dates1)).toStrictEqual("01/01/2023 - 12/31/2023");
       expect(formatToRangeString(dates2)).toStrictEqual("11/08/1994 - 07/25/2012");

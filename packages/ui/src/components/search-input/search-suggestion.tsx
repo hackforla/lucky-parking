@@ -5,7 +5,7 @@ interface SearchSuggestionProps extends PropsWithChildren {
   onClick: () => void;
 }
 
-export default function SearchSuggestion({ children, ...props }: SearchSuggestionProps) {
+export const SearchSuggestion = ({ children, ...props }: SearchSuggestionProps) => {
   const { onClick = _.noop } = props;
 
   const onSuggestionClick = (event: any) => {

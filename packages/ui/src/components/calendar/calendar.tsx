@@ -19,7 +19,7 @@ const [minYear, maxYear] = getMinMaxYear(YEAR_RANGE);
 const minDate = new Date(minYear, 0, 1);
 const maxDate = new Date(maxYear, 11, 31);
 
-export default function Calendar({ initDate = new Date(), onSelectValueChange }: CalendarProps) {
+export const Calendar = ({ initDate = new Date(), onSelectValueChange }: CalendarProps) => {
   const [parentContainer, setContainer] = useState<HTMLDivElement | null>(null);
   const [selected, setSelected] = useState<Date | null>(null);
   const [date, setDate] = useState(initDate);

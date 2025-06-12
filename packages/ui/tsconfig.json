@@ -1,16 +1,13 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "@lucky-parking/typescript/react.json",
   "compilerOptions": {
-    "baseUrl": "./",
-    "jsx": "react-jsx",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "module": "CommonJS"
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"]
+		},
+    "outDir": "dist",
+    "rootDir": "src"
   },
-  "references": [
-    {
-      "path": "../../tsconfig.node.json"
-    }
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
