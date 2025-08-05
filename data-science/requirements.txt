@@ -3,7 +3,6 @@
 
 # external requirements
 click
-Sphinx
 coverage
 awscli
 flake8
