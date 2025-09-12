@@ -1,0 +1,51 @@
+name: ✨ User Story
+description: Submit a user story for a new feature or improvement.
+title: "<title>"
+projects:
+  - "hackforla/21"
+body:
+  - id: user-story
+    type: textarea
+    attributes:
+      label: User Story
+      description: >-
+        A short, simple description of a feature told from the perspective of the person who desires the new capability.
+      value: >-
+        As a [persona], I want to <...> , so that <...>
+
+  - id: description
+    type: textarea
+    attributes:
+      label: Description
+      description: >-
+        A clear and concise description of what you want to happen, including project impact, etc.
+        This will be used to break down the epic into smaller user stories or tasks.
+    validations:
+      required: true
+
+  - id: acceptance-criteria
+    type: textarea
+    attributes:
+      label: Acceptance Criteria
+      description: >-
+        Define the conditions that must be met for the user story to be considered complete. This helps ensure that the development team understands what is expected.
+      value: |-
+        - [ ] Criterion 1
+
+  - id: references
+    type: textarea
+    attributes:
+      label: References (Design, Technical, etc.)
+      description: >-
+        Links to designs, technical documentation, or other relevant information.
+      placeholder: >-
+        (e.g., technical documentation, wireframes, mockups, code examples, etc.)
+        
+  - id: additional-information
+    type: textarea
+    attributes:
+      label: Additional Information
+      description: >-
+        Include any other information that might be relevant to the epic, such as dependencies, constraints, or related projects.
+      placeholder: >-
+        e.g., This epic is dependent on the completion of [related project], or This epic must comply with [specific regulations].

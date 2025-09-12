@@ -1,0 +1,44 @@
+name: [INTERNAL] 🚀 Epic
+title: "[Epic]: <title>"
+description: "Create an epic (Internal Use Only)"
+labels:
+  - 'agile: epic'
+projects:
+  - "hackforla/21"
+body:
+  - id: user-story
+    type: textarea
+    attributes:
+      label: User Story
+      description: >-
+        A short, simple description of a feature told from the perspective of the person who desires the new capability.
+      value: >-
+        As a [persona], I want to <...> , so that <...>
+
+  - id: description
+    type: textarea
+    attributes:
+      label: Description
+      description: >-
+        A clear and concise description of what you want to happen, including project impact, etc.
+        This will be used to break down the epic into smaller user stories or tasks.
+    validations:
+      required: true
+
+  - id: success-metrics
+    type: textarea
+    attributes:
+      label: Success Metrics
+      description: >-
+        Define how you will measure the success of this epic. This could include specific KPIs, user engagement metrics, or other relevant indicators.
+      placeholder: >-
+        e.g., Increase user retention by 20%, Achieve 95% customer satisfaction, etc.
+
+  - id: additional-information
+    type: textarea
+    attributes:
+      label: Additional Information
+      description: >-
+        Include any other information that might be relevant to the epic, such as dependencies, constraints, or related projects.
+      placeholder: >-
+        e.g., This epic is dependent on the completion of [related project], or This epic must comply with [specific regulations].

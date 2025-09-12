@@ -1,0 +1,72 @@
+name: 🐞 Defect report
+title: "[Defect] <title>"
+description: File a defect report to help us identify and fix the issue.
+labels:
+  - "agile: bug"
+projects:
+  - "hackforla/21"
+body:
+  - id: description
+    type: textarea
+    attributes:
+      label: Description
+      description: >-
+        A summary that briefly describes the defect and its impact.
+        Please include the link to the page where you saw the defect, if applicable.
+      placeholder: >-
+        What happened? What is the defect? Where did you see it?
+    validations:
+      required: true
+
+  - id: steps-to-reproduce
+    type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: >-
+        A list of steps that, when followed, will precisely reproduce the defect.
+        Please be as detailed as possible so we can reliably reproduce the issue.
+      value: >-
+        1. Go to ...
+        2. Click on ...
+        3. Scroll down to ...
+        4. See error
+
+  - id: behavior-expected
+    type: textarea
+    attributes:
+      label: Expected Behavior
+      description: >-
+        A clear and concise summary of what you expected to happen.
+        For example, what you expected the correct, non-defective behavior to be.
+      placeholder: >-
+        I expected to see that ...
+
+  - id: behavior-actual
+    type: textarea
+    attributes:
+      label: Actual Behavior
+      description: >-
+        A clear and concise summary of what actually happened instead of the expected behavior.
+      placeholder: >-
+        Instead, I saw that ...
+
+  - id: environment
+    type: textarea
+    attributes:
+      label: Environment
+      description: >-
+        Information about the environment where you encountered the defect.
+        This may include details about your device, operating system, web browser, and any relevant links.
+      value: |-
+        - **Browser**:
+        - **Device**:
+        - **Operating System**:
+        - **Screen Resolution**:
+
+  - id: additional-information
+    type: textarea
+    attributes:
+      label: Additional Information
+      description: >-
+        Any additional information that may help us diagnose and fix the defect.
+        This may include screenshots, error messages, logs, etc.

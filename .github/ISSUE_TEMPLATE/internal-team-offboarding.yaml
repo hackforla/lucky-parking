@@ -1,0 +1,109 @@
+name: [INTERNAL] 🚶‍♂️ Team Offboarding
+title: "[Offboarding] <name>"
+description: Offboarding checklist for team members.
+projects:
+  - "hackforla/21"
+body:
+  - id: name
+    type: input
+    attributes:
+      label: First/Preferred Name
+    validations:
+      required: true
+
+  - id: email
+    type: input
+    attributes:
+      label: Email Address
+    validations:
+      required: true
+
+  - id: github-user
+    type: input
+    attributes:
+      label: GitHub Username
+    validations:
+      required: true
+
+  - id: slack-user
+    type: input
+    attributes:
+      label: Slack Name
+    validations:
+      required: true
+
+  - id: offboarding-checklist
+    type: markdown
+    attributes:
+      label: Offboarding Checklist
+      value: |-
+        ---
+        The following checklist will be completed by your team lead or a product manager.
+
+  - id: github
+    type: checkboxes
+    attributes:
+      label: "GitHub"
+      options:
+        - label: Remove from all teams
+          required: false
+
+  - id: google
+    type: checkboxes
+    attributes:
+      label: "Google"
+      options:
+        - label: Remove from Google Calendar
+          required: false
+        - label: Remove access from the shared Google Drive
+          required: false
+        - label: Remove from team email
+          required: false
+
+  - id: slack
+    type: checkboxes
+    attributes:
+      label: "Slack"
+      options:
+        - label: Remove from all Slack channels
+          required: false
+
+  - id: figma
+    type: checkboxes
+    attributes:
+      label: "Figma"
+      options:
+        - label: Remove access to Figma design file
+          required: false
+
+  - id: 1password
+    type: checkboxes
+    attributes:
+      label: "1Password"
+      options:
+        - label: Remove from all vaults
+          required: false
+        - label: Remove from Hack for LA account
+          required: false
+
+  - id: roster
+    type: checkboxes
+    attributes:
+      label: "Roster"
+      options:
+        - label: Mark as inactive
+          required: false
+
+  - id: notes
+    type: textarea
+    attributes:
+      label: Notes
+
+  - id: resources
+    type: markdown
+    attributes:
+      label: Resources
+      value: >-
+        ---
+        **Hack for LA**
+        - [Organization Onboarding/Offboarding Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)

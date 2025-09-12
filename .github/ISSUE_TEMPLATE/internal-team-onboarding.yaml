@@ -1,0 +1,154 @@
+name: [INTERNAL] 👋 Team Onboarding
+title: "[Onboarding] <name>"
+description: Onboarding checklist for new team members.
+projects:
+  - "hackforla/21"
+body:
+  - id: name-first
+    type: input
+    attributes:
+      label: First Name
+    validations:
+      required: true
+
+  - id: name-preferred
+    type: input
+    attributes:
+      label: Preferred Name
+      description: >-
+        If different from first name (e.g., you go by middle name or nickname).
+
+  - id: team
+    type: dropdown
+    attributes:
+      label: Team
+      description: >-
+        Which team are you joining?
+        Select `General` if you are not joining a specific team.
+        If you are unsure, choose `Other` and we will help you determine the best fit.
+      options:
+        - General
+        - Data
+        - Design
+        - Development
+        - Product
+        - Other
+    validations:
+      required: true
+
+  - id: team-lead
+    type: checkboxes
+    attributes:
+      label: Team Lead
+      description: Are you joining as a team lead?
+      options:
+        - label: Yes, I am joining as a team lead.
+          value: true
+
+  - id: onboarding-checklist
+    type: markdown
+    attributes:
+      label: Onboarding Checklist
+      value: |-
+        ---
+        Please work with your team lead or a product manager to complete the checklist below.
+
+  - id: github
+    type: checkboxes
+    attributes:
+      label: "GitHub"
+      options:
+        - label: "[All] Set GitHub profile to public"
+          required: false
+        - label: "[All] Set up 2FA for GitHub account"
+          required: false
+        - label: "[All] Invite to the lucky-parking-write team with maintainer access"
+          required: false
+
+  - id: google
+    type: checkboxes
+    attributes:
+      label: "Google"
+      options:
+        - label: "[All] Invite to team Google Calendar"
+          required: false
+        - label: "[Leads] Add to team email"
+          required: false
+        - label: "[Data/Design/Dev] Invite to the shared Google Drive with content manager access"
+          required: false
+        - label: "[PM] Invite to the shared Google Drive with manager access"
+          required: false
+
+  - id: slack
+    type: checkboxes
+    attributes:
+      label: "Slack"
+      options:
+        - label: "[All] Add to the `#lucky-parking` channel"
+          required: false
+        - label: "[Leads] Add to the `#lucky-parking-core` channel"
+          required: false
+        - label: "[Data] Add to `#lucky-parking-data-science` and other team channels"
+          required: false
+        - label: "[Dev] Add to `#lucky-parking-dev` and other team channels"
+          required: false
+
+  - id: figma
+    type: checkboxes
+    attributes:
+      label: "Figma"
+      options:
+        - label: "[All] Invite to Figma design file with view access"
+          required: false
+
+  - id: 1password
+    type: checkboxes
+    attributes:
+      label: "1Password"
+      options:
+        - label: "[All] Invite to Hack for LA account"
+          required: false
+        - label: "[All] Add to Lucky Parking vault"
+          required: false
+        - label: "[All] Add to the Lucky Parking Project Design vault"
+          required: false
+        - label: "[All] Add to the Zoom vault"
+          required: false
+
+  - id: roster
+    type: checkboxes
+    attributes:
+      label: "Roster"
+      options:
+        - label: "[All] Add to roster with all details"
+          required: false
+
+  - id: notes
+    type: textarea
+    attributes:
+      label: Notes
+
+  - id: resources
+    type: markdown
+    attributes:
+      label: Resources
+      value: >-
+        ---
+        **Figma**
+        - [Figma Design File](https://www.figma.com/file/R3N7mvDtlFbFgQm4OXcMih/Lucky-Parking)
+
+        **GitHub**        
+        - [Configuring two-factor authentication](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication)
+        - [lucky-parking-write team](https://github.com/orgs/hackforla/teams/lucky-parking-write)
+        
+        **Roster**        
+        - [Roster spreadsheet](https://docs.google.com/spreadsheets/d/1rtou2FkVwKV7-2RKiRDXb2uAq_w0jHakFydzUhoW2dU/edit)
+        
+        **Slack**
+        - [#lucky-parking](https://hackforla.slack.com/archives/CPFDMSV6V)
+        - [#lucky-parking-core](https://hackforla.slack.com/archives/C0522K72NAU)
+        - [#lucky-parking-dev](https://hackforla.slack.com/archives/C049S985R7W)
+        - [#lucky-parking-data-science](https://hackforla.slack.com/archives/C044H1DETLH)
+        
+        **Hack for LA**
+        - [Organization Onboarding/Offboarding Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)
