@@ -35,9 +35,10 @@ body:
   - id: offboarding-checklist
     type: markdown
     attributes:
-      label: Offboarding Checklist
       value: |-
         ---
+        ### Offboarding Checklist
+        
         The following checklist will be completed by your team lead or a product manager.
 
   - id: github
@@ -102,8 +103,9 @@ body:
   - id: resources
     type: markdown
     attributes:
-      label: Resources
-      value: >-
+      value: |-
         ---
+        ### Resources
+        
         **Hack for LA**
         - [Organization Onboarding/Offboarding Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)

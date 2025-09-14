@@ -42,15 +42,16 @@ body:
       label: Team Lead
       description: Are you joining as a team lead?
       options:
-        - label: Yes, I am joining as a team lead.
-          value: true
+        - "Yes"
+        - "No"
 
   - id: onboarding-checklist
     type: markdown
     attributes:
-      label: Onboarding Checklist
       value: |-
         ---
+        ### Onboarding Checklist
+      
         Please work with your team lead or a product manager to complete the checklist below.
 
   - id: github
@@ -131,9 +132,10 @@ body:
   - id: resources
     type: markdown
     attributes:
-      label: Resources
-      value: >-
+      value: |-
         ---
+        ### Resources
+        
         **Figma**
         - [Figma Design File](https://www.figma.com/file/R3N7mvDtlFbFgQm4OXcMih/Lucky-Parking)
 
