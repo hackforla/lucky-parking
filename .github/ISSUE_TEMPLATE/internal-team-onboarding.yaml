@@ -40,7 +40,8 @@ body:
     type: checkboxes
     attributes:
       label: Team Lead
-      description: Are you joining as a team lead?
+      description: >-
+        Are you joining as a team lead?
       options:
         - "Yes"
         - "No"

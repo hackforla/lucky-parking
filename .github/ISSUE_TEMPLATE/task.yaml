@@ -17,7 +17,8 @@ body:
     type: textarea
     attributes:
       label: Action Items
-      description: A list of action items to complete the task.
+      description: >-
+        A list of action items to complete the task.
       value: |-
         - [ ]
     validations:

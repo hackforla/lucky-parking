@@ -12,7 +12,7 @@ body:
       label: User Story
       description: >-
         A short, simple description of a feature told from the perspective of the person who desires the new capability.
-      value: >-
+      placeholder: >-
         As a [persona], I want to <...> , so that <...>
 
   - id: description
