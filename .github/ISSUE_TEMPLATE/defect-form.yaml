@@ -25,7 +25,7 @@ body:
       description: >-
         A list of steps that, when followed, will precisely reproduce the defect.
         Please be as detailed as possible so we can reliably reproduce the issue.
-      value: >-
+      placeholder: |-
         1. Go to ...
         2. Click on ...
         3. Scroll down to ...
@@ -57,7 +57,7 @@ body:
       description: >-
         Information about the environment where you encountered the defect.
         This may include details about your device, operating system, web browser, and any relevant links.
-      value: |-
+      placeholder: |-
         - **Browser**:
         - **Device**:
         - **Operating System**:

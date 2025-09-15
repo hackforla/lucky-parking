@@ -40,88 +40,73 @@ body:
     type: checkboxes
     attributes:
       label: Team Lead
-      description: Are you joining as a team lead?
+      description: >-
+        Are you joining as a team lead?
       options:
-        - label: Yes, I am joining as a team lead.
-          value: true
+        - label: "Yes"
+        - label: "No"
 
   - id: onboarding-checklist
     type: markdown
     attributes:
-      label: Onboarding Checklist
       value: |-
         ---
+        ### Onboarding Checklist
+      
         Please work with your team lead or a product manager to complete the checklist below.
 
   - id: github
     type: checkboxes
     attributes:
-      label: "GitHub"
+      label: GitHub
       options:
         - label: "[All] Set GitHub profile to public"
-          required: false
         - label: "[All] Set up 2FA for GitHub account"
-          required: false
         - label: "[All] Invite to the lucky-parking-write team with maintainer access"
-          required: false
 
   - id: google
     type: checkboxes
     attributes:
-      label: "Google"
+      label: Google
       options:
         - label: "[All] Invite to team Google Calendar"
-          required: false
         - label: "[Leads] Add to team email"
-          required: false
         - label: "[Data/Design/Dev] Invite to the shared Google Drive with content manager access"
-          required: false
         - label: "[PM] Invite to the shared Google Drive with manager access"
-          required: false
 
   - id: slack
     type: checkboxes
     attributes:
-      label: "Slack"
+      label: Slack
       options:
         - label: "[All] Add to the `#lucky-parking` channel"
-          required: false
         - label: "[Leads] Add to the `#lucky-parking-core` channel"
-          required: false
         - label: "[Data] Add to `#lucky-parking-data-science` and other team channels"
-          required: false
         - label: "[Dev] Add to `#lucky-parking-dev` and other team channels"
-          required: false
 
   - id: figma
     type: checkboxes
     attributes:
-      label: "Figma"
+      label: Figma
       options:
         - label: "[All] Invite to Figma design file with view access"
-          required: false
 
   - id: 1password
     type: checkboxes
     attributes:
-      label: "1Password"
+      label: 1Password
       options:
         - label: "[All] Invite to Hack for LA account"
-          required: false
         - label: "[All] Add to Lucky Parking vault"
-          required: false
         - label: "[All] Add to the Lucky Parking Project Design vault"
-          required: false
         - label: "[All] Add to the Zoom vault"
-          required: false
 
   - id: roster
     type: checkboxes
     attributes:
-      label: "Roster"
+      label: Roster
       options:
         - label: "[All] Add to roster with all details"
-          required: false
 
   - id: notes
     type: textarea
@@ -131,9 +116,10 @@ body:
   - id: resources
     type: markdown
     attributes:
-      label: Resources
-      value: >-
+      value: |-
         ---
+        ### Resources
+        
         **Figma**
         - [Figma Design File](https://www.figma.com/file/R3N7mvDtlFbFgQm4OXcMih/Lucky-Parking)
 
