@@ -43,8 +43,8 @@ body:
       description: >-
         Are you joining as a team lead?
       options:
-        - "Yes"
-        - "No"
+        - label: "Yes"
+        - label: "No"
 
   - id: onboarding-checklist
     type: markdown
@@ -58,7 +58,7 @@ body:
   - id: github
     type: checkboxes
     attributes:
-      label: "GitHub"
+      label: GitHub
       options:
         - label: "[All] Set GitHub profile to public"
         - label: "[All] Set up 2FA for GitHub account"
@@ -67,7 +67,7 @@ body:
   - id: google
     type: checkboxes
     attributes:
-      label: "Google"
+      label: Google
       options:
         - label: "[All] Invite to team Google Calendar"
         - label: "[Leads] Add to team email"
@@ -77,7 +77,7 @@ body:
   - id: slack
     type: checkboxes
     attributes:
-      label: "Slack"
+      label: Slack
       options:
         - label: "[All] Add to the `#lucky-parking` channel"
         - label: "[Leads] Add to the `#lucky-parking-core` channel"
@@ -87,14 +87,14 @@ body:
   - id: figma
     type: checkboxes
     attributes:
-      label: "Figma"
+      label: Figma
       options:
         - label: "[All] Invite to Figma design file with view access"
 
   - id: 1password
     type: checkboxes
     attributes:
-      label: "1Password"
+      label: 1Password
       options:
         - label: "[All] Invite to Hack for LA account"
         - label: "[All] Add to Lucky Parking vault"
@@ -104,7 +104,7 @@ body:
   - id: roster
     type: checkboxes
     attributes:
-      label: "Roster"
+      label: Roster
       options:
         - label: "[All] Add to roster with all details"
 
