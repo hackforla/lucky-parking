@@ -47,7 +47,6 @@ body:
       label: "GitHub"
       options:
         - label: Remove from all teams
-          required: false
 
   - id: google
     type: checkboxes
@@ -55,11 +54,8 @@ body:
       label: "Google"
       options:
         - label: Remove from Google Calendar
-          required: false
         - label: Remove access from the shared Google Drive
-          required: false
         - label: Remove from team email
-          required: false
 
   - id: slack
     type: checkboxes
@@ -67,7 +63,6 @@ body:
       label: "Slack"
       options:
         - label: Remove from all Slack channels
-          required: false
 
   - id: figma
     type: checkboxes
@@ -75,7 +70,6 @@ body:
       label: "Figma"
       options:
         - label: Remove access to Figma design file
-          required: false
 
   - id: 1password
     type: checkboxes
@@ -83,9 +77,7 @@ body:
       label: "1Password"
       options:
         - label: Remove from all vaults
-          required: false
         - label: Remove from Hack for LA account
-          required: false
 
   - id: roster
     type: checkboxes
@@ -93,7 +85,6 @@ body:
       label: "Roster"
       options:
         - label: Mark as inactive
-          required: false
 
   - id: notes
     type: textarea
