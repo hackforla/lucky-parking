@@ -36,10 +36,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm ci:format
+        run: pnpm format
 
       - name: Check linting
-        run: pnpm ci:lint
+        run: pnpm lint
 
   test:
     runs-on: ubuntu-latest
