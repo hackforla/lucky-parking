@@ -1,0 +1,44 @@
+# Build Outputs
+.next/
+.turbo/
+build/
+dist/
+out/
+storybook-static/
+
+# CI/CD
+.github/
+
+# Dependencies
+.pnp/
+.pnp.js
+node_modules/
+
+# Deployment
+.vercel/
+
+# Documentation
+*.md
+docs/
+
+# Environment Variables
+**/.env*
+
+# IDE
+.history/
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# OS Files
+.DS_Store
+*.pem
+
+# Testing
+coverage/
+
+# Version Control
+.git
+.gitignore
