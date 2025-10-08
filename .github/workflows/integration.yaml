@@ -14,6 +14,9 @@ on:
       - main
       - stable
 
+env:
+  TURBO_TELEMETRY_DISABLED: ${{ vars.TURBO_TELEMETRY_DISABLED }}
+
 jobs:
   code-analysis:
     runs-on: ubuntu-latest
