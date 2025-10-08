@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "test": "jest"
+    "test": "TZ=UTC jest"
   },
   "exports": {
 		"./*": "./src/*.ts"

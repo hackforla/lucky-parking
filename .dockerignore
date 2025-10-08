@@ -6,6 +6,9 @@ dist/
 out/
 storybook-static/
 
+# CI/CD
+.github/
+
 # Dependencies
 .pnp/
 .pnp.js
@@ -14,10 +17,12 @@ node_modules/
 # Deployment
 .vercel/
 
+# Documentation
+*.md
+docs/
+
 # Environment Variables
 **/.env*
-!**/.env.example
-!**/.env.schema
 
 # IDE
 .history/
@@ -33,3 +38,7 @@ node_modules/
 
 # Testing
 coverage/
+
+# Version Control
+.git
+.gitignore

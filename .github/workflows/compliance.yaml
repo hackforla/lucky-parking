@@ -9,6 +9,9 @@ on:
       - reopened
       - unassigned
 
+env:
+  TURBO_TELEMETRY_DISABLED: ${{ vars.TURBO_TELEMETRY_DISABLED }}
+
 jobs:
   check-for-linked-issue:
     runs-on: ubuntu-latest
@@ -38,7 +41,7 @@ jobs:
             else {
               let [ , keyword, linkNumber ] = match;
               console.log('Found a keyword: \'' + keyword + '\'. Checking for legitimate linked issue...');
-              
+
               try {
                 const response = await github.rest.issues.get({
                   owner: context.repo.owner,

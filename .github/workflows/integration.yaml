@@ -14,6 +14,9 @@ on:
       - main
       - stable
 
+env:
+  TURBO_TELEMETRY_DISABLED: ${{ vars.TURBO_TELEMETRY_DISABLED }}
+
 jobs:
   code-analysis:
     runs-on: ubuntu-latest
@@ -24,7 +27,7 @@ jobs:
       - name: Set up package manager
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -36,10 +39,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm ci:format
+        run: pnpm format
 
       - name: Check linting
-        run: pnpm ci:lint
+        run: pnpm lint
 
   test:
     runs-on: ubuntu-latest
@@ -50,7 +53,7 @@ jobs:
       - name: Set up package manager
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9
 
       - name: Install Node.js
         uses: actions/setup-node@v4
