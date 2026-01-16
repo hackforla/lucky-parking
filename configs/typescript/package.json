@@ -1,8 +1,0 @@
-{
-	"name": "@lucky-parking/typescript",
-	"version": "0.0.0",
-	"private": true,
-	"publishConfig": {
-		"access": "public"
-	}
-}

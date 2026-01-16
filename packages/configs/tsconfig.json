@@ -1,0 +1,9 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "./src/typescript/react-library.json",
+	"compilerOptions": {
+		"composite": true
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}

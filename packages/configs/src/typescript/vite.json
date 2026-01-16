@@ -1,0 +1,15 @@
+{
+	"extends": "./base.json",
+	"compilerOptions": {
+		"lib": ["ESNext", "DOM"],
+		"module": "ESNext",
+		"noEmit": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"target": "ESNext",
+		"useDefineForClassFields": true
+	}
+}

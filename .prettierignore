@@ -1,0 +1,7 @@
+.next/
+.storybook/
+build/
+coverage/
+dist/
+node_modules/
+pnpm-lock.yaml
