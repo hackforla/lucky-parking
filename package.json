@@ -1,21 +1,35 @@
 {
-  "name": "lucky-parking",
-  "private": true,
-  "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
-    "test": "turbo run test"
-  },
-  "devDependencies": {
-    "prettier": "^3.5.3",
-    "turbo": "^2.4.4",
-    "typescript": "5.8.2"
-  },
-  "packageManager": "pnpm@9.0.0",
-  "engines": {
-    "node": ">=18"
-  }
+	"name": "lucky-parking",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"check-types": "turbo run check-types",
+		"clean": "rm -rf .turbo && turbo run clean",
+		"dev": "turbo run dev",
+		"lint": "turbo run lint",
+		"prepare": "husky",
+		"test": "turbo run test"
+	},
+	"lint-staged": {
+		"**/*": [
+			"prettier --check --ignore-unknown --config ./packages/configs/src/prettier/prettier.config.ts"
+		],
+		"**/*.{cjs,js,jsx,mjs,ts,tsx}": [
+			"eslint --fix-dry-run --config ./packages/configs/src/eslint/eslint.config.mjs"
+		],
+		"**/*.{cts,d.cts,d.mts,d.ts,mts,ts,tsx}": [
+			"node ./scripts/typecheck.mjs"
+		]
+	},
+	"devDependencies": {
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7",
+		"prettier": "^3.8.0",
+		"turbo": "^2.7.2",
+		"typescript": "5.8.2"
+	},
+	"packageManager": "pnpm@9.0.0",
+	"engines": {
+		"node": ">=18"
+	}
 }
