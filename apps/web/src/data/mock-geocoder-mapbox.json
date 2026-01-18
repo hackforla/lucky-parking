@@ -1,0 +1,262 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"id": "dXJuOm1ieHBsYzorQ3pz",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-118.32555, 34.047707]
+			},
+			"properties": {
+				"mapbox_id": "dXJuOm1ieHBsYzorQ3pz",
+				"feature_type": "neighborhood",
+				"full_address": "Arlington Heights, Los Angeles, California, United States",
+				"name": "Arlington Heights",
+				"name_preferred": "Arlington Heights",
+				"coordinates": {
+					"longitude": -118.32555,
+					"latitude": 34.047707
+				},
+				"place_formatted": "Los Angeles, California, United States",
+				"bbox": [-118.33108, 34.039878, -118.317602, 34.047823],
+				"context": {
+					"postcode": {
+						"mapbox_id": "dXJuOm1ieHBsYzpFZVJPN0E",
+						"name": "90019"
+					},
+					"place": {
+						"mapbox_id": "dXJuOm1ieHBsYzpDM2ZvN0E",
+						"name": "Los Angeles",
+						"wikidata_id": "Q65",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Los Angeles"
+							}
+						}
+					},
+					"district": {
+						"mapbox_id": "dXJuOm1ieHBsYzoxbWJz",
+						"name": "Los Angeles County",
+						"wikidata_id": "Q104994",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Los Angeles County"
+							}
+						}
+					},
+					"region": {
+						"mapbox_id": "dXJuOm1ieHBsYzpCbVRz",
+						"name": "California",
+						"wikidata_id": "Q99",
+						"region_code": "CA",
+						"region_code_full": "US-CA",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "California"
+							}
+						}
+					},
+					"country": {
+						"mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+						"name": "United States",
+						"wikidata_id": "Q30",
+						"country_code": "US",
+						"country_code_alpha_3": "USA",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "United States"
+							}
+						}
+					},
+					"neighborhood": {
+						"mapbox_id": "dXJuOm1ieHBsYzorQ3pz",
+						"name": "Arlington Heights",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Arlington Heights"
+							}
+						},
+						"wikidata_id": "Q4792323"
+					}
+				}
+			}
+		},
+		{
+			"type": "Feature",
+			"id": "dXJuOm1ieHBsYzorK3pz",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-118.316086, 34.01463]
+			},
+			"properties": {
+				"mapbox_id": "dXJuOm1ieHBsYzorK3pz",
+				"feature_type": "neighborhood",
+				"full_address": "Arlington Park, Los Angeles, California, United States",
+				"name": "Arlington Park",
+				"name_preferred": "Arlington Park",
+				"coordinates": {
+					"longitude": -118.316086,
+					"latitude": 34.01463
+				},
+				"place_formatted": "Los Angeles, California, United States",
+				"bbox": [-118.318261, 34.010827, -118.315171, 34.018274],
+				"context": {
+					"postcode": {
+						"mapbox_id": "dXJuOm1ieHBsYzpFZW11N0E",
+						"name": "90062"
+					},
+					"place": {
+						"mapbox_id": "dXJuOm1ieHBsYzpDM2ZvN0E",
+						"name": "Los Angeles",
+						"wikidata_id": "Q65",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Los Angeles"
+							}
+						}
+					},
+					"district": {
+						"mapbox_id": "dXJuOm1ieHBsYzoxbWJz",
+						"name": "Los Angeles County",
+						"wikidata_id": "Q104994",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Los Angeles County"
+							}
+						}
+					},
+					"region": {
+						"mapbox_id": "dXJuOm1ieHBsYzpCbVRz",
+						"name": "California",
+						"wikidata_id": "Q99",
+						"region_code": "CA",
+						"region_code_full": "US-CA",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "California"
+							}
+						}
+					},
+					"country": {
+						"mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+						"name": "United States",
+						"wikidata_id": "Q30",
+						"country_code": "US",
+						"country_code_alpha_3": "USA",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "United States"
+							}
+						}
+					},
+					"neighborhood": {
+						"mapbox_id": "dXJuOm1ieHBsYzorK3pz",
+						"name": "Arlington Park",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Arlington Park"
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"type": "Feature",
+			"id": "dXJuOm1ieHBsYzoraXpz",
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-118.33982, 34.039837]
+			},
+			"properties": {
+				"mapbox_id": "dXJuOm1ieHBsYzoraXpz",
+				"feature_type": "neighborhood",
+				"full_address": "Arlington Heights Terrace, Los Angeles, California, United States",
+				"name": "Arlington Heights Terrace",
+				"name_preferred": "Arlington Heights Terrace",
+				"coordinates": {
+					"longitude": -118.33982,
+					"latitude": 34.039837
+				},
+				"place_formatted": "Los Angeles, California, United States",
+				"bbox": [-118.34619, 34.039823, -118.337624, 34.046216],
+				"context": {
+					"postcode": {
+						"mapbox_id": "dXJuOm1ieHBsYzpFZVB1N0E",
+						"name": "90016"
+					},
+					"place": {
+						"mapbox_id": "dXJuOm1ieHBsYzpDM2ZvN0E",
+						"name": "Los Angeles",
+						"wikidata_id": "Q65",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Los Angeles"
+							}
+						}
+					},
+					"district": {
+						"mapbox_id": "dXJuOm1ieHBsYzoxbWJz",
+						"name": "Los Angeles County",
+						"wikidata_id": "Q104994",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Los Angeles County"
+							}
+						}
+					},
+					"region": {
+						"mapbox_id": "dXJuOm1ieHBsYzpCbVRz",
+						"name": "California",
+						"wikidata_id": "Q99",
+						"region_code": "CA",
+						"region_code_full": "US-CA",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "California"
+							}
+						}
+					},
+					"country": {
+						"mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+						"name": "United States",
+						"wikidata_id": "Q30",
+						"country_code": "US",
+						"country_code_alpha_3": "USA",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "United States"
+							}
+						}
+					},
+					"neighborhood": {
+						"mapbox_id": "dXJuOm1ieHBsYzoraXpz",
+						"name": "Arlington Heights Terrace",
+						"translations": {
+							"en": {
+								"language": "en",
+								"name": "Arlington Heights Terrace"
+							}
+						}
+					}
+				}
+			}
+		}
+	],
+	"attribution": "NOTICE: © 2026 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."
+}

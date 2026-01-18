@@ -1,10 +1,15 @@
 {
-  "extends": "@lucky-parking/typescript/react.json",
-  "compilerOptions": {
-		"baseUrl": "./",
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+	"extends": "@lucky-parking/configs/typescript/next.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"baseUrl": "src/",
+		"composite": true,
+		"lib": ["ES2024"],
+		"outDir": "dist",
+		"paths": { "@/*": ["./*"] },
+		"plugins": [{ "name": "next" }],
+		"resolveJsonModule": true
+	},
+	"include": ["**/*.json", "**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.ts", ".next/types/**/*.ts"],
+	"exclude": ["node_modules"]
 }
