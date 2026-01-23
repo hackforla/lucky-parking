@@ -3,6 +3,7 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",
+		"build:docker:web": "docker build . --file apps/web/Dockerfile --tag lucky-parking/web",
 		"check-types": "turbo run check-types",
 		"clean": "rm -rf .turbo && turbo run clean",
 		"dev": "turbo run dev",
