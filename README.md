@@ -28,6 +28,13 @@ We use `pnpm` as our package manager. To install all dependencies, run:
 pnpm install
 ```
 
+### Running Locally
+
+```bash
+cd apps/web/
+pnpm dev
+```
+
 ### Useful Commands
 
 | Command | Description |
