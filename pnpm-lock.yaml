@@ -209,8 +209,8 @@ importers:
   packages/configs:
     dependencies:
       '@homer0/prettier-plugin-jsdoc':
-        specifier: ^11.0.1
-        version: 11.0.1(prettier@3.8.0)
+        specifier: ^11.0.2
+        version: 11.0.2(prettier@3.8.0)
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^6.0.2
         version: 6.0.2(prettier@3.8.0)
@@ -646,6 +646,12 @@ packages:
 
   '@homer0/prettier-plugin-jsdoc@11.0.1':
     resolution: {integrity: sha512-NpN8oJrNkZvEDlmXu9zzKYG6h96RybSbEYGIFYZZJs2EwL2CTaAn0Rd4rmXnKvQGS0f9i8l4UN2SNQAIhuCSzw==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      prettier: ^3.5.3
+
+  '@homer0/prettier-plugin-jsdoc@11.0.2':
+    resolution: {integrity: sha512-+BzWB8z61dExvX1Z5EjBHeregU8M51MyTJvxOQdalO0LhGAXoBesSZqU1HWe1DnxAZvY69ItwXfTtCyj2f+4gQ==}
     engines: {node: '>=20'}
     peerDependencies:
       prettier: ^3.5.3
@@ -2628,6 +2634,10 @@ packages:
 
   comment-parser@1.4.4:
     resolution: {integrity: sha512-0D6qSQ5IkeRrGJFHRClzaMOenMeT0gErz3zIw3AprKMqhRN6LNU2jQOdkPG/FZ+8bCgXE1VidrgSzlBBDZRr8A==}
+    engines: {node: '>= 12.0.0'}
+
+  comment-parser@1.4.5:
+    resolution: {integrity: sha512-aRDkn3uyIlCFfk5NUA+VdwMmMsh8JGhc4hapfV4yxymHGQ3BVskMQfoXGpCo5IoBuQ9tS5iiVKhCpTcB4pW4qw==}
     engines: {node: '>= 12.0.0'}
 
   concat-map@0.0.1:
@@ -5367,6 +5377,12 @@ snapshots:
       prettier: 3.8.0
       ramda: 0.32.0
 
+  '@homer0/prettier-plugin-jsdoc@11.0.2(prettier@3.8.0)':
+    dependencies:
+      comment-parser: 1.4.5
+      prettier: 3.8.0
+      ramda: 0.32.0
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -8005,6 +8021,8 @@ snapshots:
   commander@4.1.1: {}
 
   comment-parser@1.4.4: {}
+
+  comment-parser@1.4.5: {}
 
   concat-map@0.0.1: {}
 
