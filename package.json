@@ -7,6 +7,7 @@
 		"check-types": "turbo run check-types",
 		"clean": "rm -rf .turbo && turbo run clean",
 		"dev": "turbo run dev",
+		"format": "turbo run format",
 		"lint": "turbo run lint",
 		"prepare": "husky",
 		"test": "turbo run test"
