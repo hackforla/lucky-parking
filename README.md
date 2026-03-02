@@ -27,6 +27,9 @@ We use `pnpm` as our package manager. To install all dependencies, run:
 ```bash
 pnpm install
 ```
+### Input Tokens
+
+Copy the .env.schema file in app/web to a .env file and input your Mapbox and La City Data Socrata tokens into the .env file. You can sign up for free on Mapbox and https://data.lacity.org/login
 
 ### Running Locally
 
