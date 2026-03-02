@@ -7,13 +7,14 @@
 		"check-types": "turbo run check-types",
 		"clean": "rm -rf .turbo && turbo run clean",
 		"dev": "turbo run dev",
+		"format": "turbo run format",
 		"lint": "turbo run lint",
 		"prepare": "husky",
 		"test": "turbo run test"
 	},
 	"lint-staged": {
 		"**/*": [
-			"prettier --check --ignore-unknown --config ./packages/configs/src/prettier/prettier.config.ts"
+			"prettier --check --ignore-unknown --config ./packages/configs/src/prettier/prettier.config.mjs"
 		],
 		"**/*.{cjs,js,jsx,mjs,ts,tsx}": [
 			"eslint --fix-dry-run --config ./packages/configs/src/eslint/eslint.config.mjs"
@@ -31,6 +32,6 @@
 	},
 	"packageManager": "pnpm@9.0.0",
 	"engines": {
-		"node": ">=18"
+		"node": ">=24 <25"
 	}
 }

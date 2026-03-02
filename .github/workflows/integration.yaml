@@ -1,4 +1,4 @@
-name: integration
+name: Integration
 
 on:
   pull_request:
@@ -32,7 +32,8 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: package.json
+          check-latest: true
           cache: pnpm
 
       - name: Install dependencies
@@ -58,7 +59,8 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: package.json
+          check-latest: true
           cache: pnpm
 
       - name: Install dependencies
