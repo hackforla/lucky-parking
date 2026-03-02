@@ -14,7 +14,7 @@
 	},
 	"lint-staged": {
 		"**/*": [
-			"prettier --check --ignore-unknown --config ./packages/configs/src/prettier/prettier.config.ts"
+			"prettier --check --ignore-unknown --config ./packages/configs/src/prettier/prettier.config.mjs"
 		],
 		"**/*.{cjs,js,jsx,mjs,ts,tsx}": [
 			"eslint --fix-dry-run --config ./packages/configs/src/eslint/eslint.config.mjs"

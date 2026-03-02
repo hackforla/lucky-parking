@@ -14,8 +14,8 @@
 		"clean": "rm -rf .turbo node_modules dist",
 		"dev:components": "tsc --watch",
 		"dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
-		"format": "NODE_OPTIONS='--experimental-strip-types' prettier . --check --ignore-unknown",
-		"format:fix": "NODE_OPTIONS='--experimental-strip-types' prettier . --write --ignore-unknown"
+		"format": "prettier . --check --ignore-unknown",
+		"format:fix": "prettier . --write --ignore-unknown"
 	},
 	"dependencies": {
 		"@radix-ui/react-accordion": "^1.2.12",

@@ -1,9 +1,8 @@
-import { type Config } from "prettier";
-
 /**
+ * @type {import('prettier').Config}
  * @see https://prettier.io/docs/configuration
  */
-export const config: Config = {
+export const config = {
 	/**
 	 * Prettier options
 	 * @see https://prettier.io/docs/options

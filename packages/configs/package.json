@@ -4,12 +4,12 @@
 	"exports": {
 		"./*": "./src/*",
 		"./eslint": "./src/eslint/eslint.config.mjs",
-		"./prettier": "./src/prettier/prettier.config.ts",
+		"./prettier": "./src/prettier/prettier.config.mjs",
 		"./tailwind/postcss": "./src/tailwind/postcss.config.js"
 	},
 	"scripts": {
-		"format": "NODE_OPTIONS='--experimental-strip-types' prettier . --check --ignore-unknown",
-		"format:fix": "NODE_OPTIONS='--experimental-strip-types' prettier . --write --ignore-unknown"
+		"format": "prettier . --check --ignore-unknown",
+		"format:fix": "prettier . --write --ignore-unknown"
 	},
 	"peerDependencies": {
 		"@homer0/prettier-plugin-jsdoc": "^11.0.1",
