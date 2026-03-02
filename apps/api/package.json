@@ -2,9 +2,7 @@
 	"name": "@lucky-parking/api",
 	"scripts": {
 		"build": "tsup",
-		"dev": "tsx watch src/index.ts",
-		"format": "NODE_OPTIONS='--experimental-strip-types' prettier . --check --ignore-unknown --config ./prettier.config.ts",
-		"format:fix": "NODE_OPTIONS='--experimental-strip-types' prettier . --write --ignore-unknown --config ./prettier.config.ts"
+		"dev": "tsx watch src/index.ts"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.3",
