@@ -8,6 +8,8 @@ import csv
 from datetime import date
 import pandas as pd
 import random
+import io
+import json
 from pyproj import Transformer
 from typing import Union
 import geopandas as gpd
@@ -21,19 +23,23 @@ PROJECT_DIR = Path(os.path.abspath(__file__).replace(
 @click.command()
 @click.argument("input_filedir", type=click.Path(exists=True))
 @click.argument("output_filedir", type=click.Path())
-def main(input_filedir: str, output_filedir: str):
+@click.argument("download_input", type=click.BOOL)
+def main(input_filedir: str, output_filedir: str, download_input: bool):
     """
     Downloads full dataset from lacity.org, and runs data processing
     scripts to turn raw data into cleaned data ready
     to be analyzed. 
     """
-    try:
+    if download_input:
         clean(
-            create_sample(download_raw(input_filedir), "data/interim", 0.01),
+            create_sample(download_raw(input_filedir), "data/interim", 1),
             output_filedir,
         )
-    except Exception as e:
-        print(e.message, e.args)
+    else:
+        clean(
+            create_sample(input_filedir, "data/interim", 1),
+            output_filedir,
+        )
 
 
 def download_raw(input_filedir: str) -> Path:
@@ -55,11 +61,23 @@ def download_raw(input_filedir: str) -> Path:
 
         # Setup connection and download into raw data folder
         http = urllib3.PoolManager()
-        url = "https://data.lacity.org/api/views/wjz9-h9np/rows.csv?accessType=DOWNLOAD"
-        with http.request("GET", url, preload_content=False) as res, open(
-            RAW_DATA_FILEPATH, "wb"
-        ) as out_file:
-            shutil.copyfileobj(res, out_file)
+        # https://data.lacity.org/Transportation/Parking-Citations/4f5p-udkv/about_data
+        url_template = "https://data.lacity.org/resource/4f5p-udkv.json?$offset=%s"
+
+        page = 0
+        while True:
+            with http.request("GET", url_template % (1000 * page), preload_content=False) as res, open(
+                RAW_DATA_FILEPATH, "w"
+            ) as out_file:
+                raw_data = res.read()
+                data_list = json.loads(raw_data.decode('utf-8'))
+                df = pd.json_normalize(data_list)
+                
+                out_file.write(df.to_csv(index=False, lineterminator="\n"))
+            page += 1
+
+            if len(df) < 1000:
+                break
 
         print("Finished downloading raw dataset")
 
@@ -109,6 +127,40 @@ def create_sample(
     return SAMPLE_FILEPATH
 
 
+def isvalid(time: str) -> bool:
+    if pd.isna(time):
+        return False
+    time = str(time)
+    if type(time) != str:
+        return False
+    if len(time) < 3:
+        return False
+    if not time.isdigit():
+        return False
+    if int(time[-2:]) > 59:
+        return False
+    if int(time[:-2]) > 23:
+        return False
+    return True
+
+def splittime(time: int) -> tuple[str, str] | tuple[None, None]:
+    time = str(time).rjust(4, '0')
+    return time[:len(time)-2], time[-2:]
+
+def create_datetime(row):
+    time_val = row['issue_time']
+    if isvalid(time_val):
+        time_str = str(int(float(time_val))).rjust(4, '0') # Handles floats/ints cleanly
+        # date = row["issue_date"]
+        hours = int(time_str[:-2])
+        minutes = int(time_str[-2:])
+    
+        # Combine date with the calculated time
+        date_part = row['issue_date'].split()[0]
+        return pd.to_datetime(date_part).replace(hour=hours, minute=minutes)
+    else:
+        return pd.to_datetime(row['issue_date'])
+
 def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     """Removes unnecessary columns, erroneous data points and aliases,
     changes geometry projection from epsg:2229 to epsg:4326, and converts
@@ -124,6 +176,23 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     df = pd.read_csv(target_file, low_memory=False)
 
     # Select columns of interest
+    
+    translation_dict = { "issue_date": "Issue Date", 
+               "issue_time": "Issue time", 
+               "rp_state_plate": "RP State Plate", 
+               "make": "Make", 
+               "body_style": "Body Style", 
+               "color": "Color", 
+               "location": "Location", 
+               "violation_code": 
+               "Violation code", 
+               "violation_description": "Violation Description", 
+               "fine_amount": "Fine amount", 
+               "loc_lat": "Latitude", 
+               "loc_long": "Longitude" }
+    
+    df.rename(columns=translation_dict, inplace=True)
+
     df = df[
         [
             "Issue Date",
@@ -149,11 +218,10 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
 
     # Filter out bad coordinates
     df = df[
-        (df['latitude'] < 6561666.667) &
-        (df['latitude'] > 6332985.07046223) &
-        (df['longitude'] < 2004341.8099511159) &
-        (df['longitude'] > 1641269.8177664774)
-    ]
+        (df['latitude'] > 33.6) & (df['latitude'] < 34.4) & 
+        (df['longitude'] > -118.7) & (df['longitude'] < -118.1)
+]
+    
     # Filter out data points with no time/date stamps
     df = df[
         (df["issue_date"].notna())
@@ -161,13 +229,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         & (df["fine_amount"].notna())
     ]
 
-    # Convert Issue time and Issue Date strings into a combined datetime type
-    df["issue_time"] = df["issue_time"].apply(
-        lambda x: "0" * (4 - len(str(int(x)))) + str(int(x))
-    )
-    df["datetime"] = pd.to_datetime(
-        df["issue_date"] + " " + df["issue_time"], format="%m/%d/%Y %H%M"
-    )
+    df['datetime'] = df.apply(create_datetime, axis=1)
 
     # Drop original date/time columns
     df = df.drop(["issue_date", "issue_time"], axis=1)
