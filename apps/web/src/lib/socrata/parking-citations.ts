@@ -1,7 +1,7 @@
 import { multiPolygon } from "@turf/turf";
 import _ from "lodash";
 import { type GeoJSONGeometry, stringify } from "wellknown";
-import { ParkingCitationFeatureCollection, ParkingCitationProperties } from "@/types";
+import { ParkingCitationFeatureCollection, ParkingCitationFeatureCollectionSchema } from "./parking-citations.schema";
 
 type FetchParkingCitationsInput = {
 	token?: string;
@@ -24,7 +24,7 @@ const ISSUE_DATE_COLUMN = "issue_date";
 
 const EMPTY_PARKING_CITATION_FEATURE_COLLECTION = {
 	type: "FeatureCollection",
-	features: [] satisfies ParkingCitationProperties[],
+	features: [],
 } satisfies ParkingCitationFeatureCollection;
 
 const toSocrataDate = (date: Date) => date.toISOString().split("T")[0];
@@ -82,5 +82,13 @@ export const fetchParkingCitations = async ({
 		return EMPTY_PARKING_CITATION_FEATURE_COLLECTION;
 	}
 
-	return response.json();
+	const json: unknown = await response.json();
+	const parsed = ParkingCitationFeatureCollectionSchema.safeParse(json);
+
+	if (!parsed.success) {
+		console.error("Invalid parking citations response", parsed.error);
+		return EMPTY_PARKING_CITATION_FEATURE_COLLECTION;
+	}
+
+	return parsed.data;
 };

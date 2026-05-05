@@ -8,7 +8,7 @@ import { MapLayerCircles, MAP_LAYER_CIRCLES_ID } from "@/components/map-layer-ci
 import { MapLayerHeatmap } from "@/components/map-layer-heatmap";
 import { useMapResizer } from "@/hooks/use-map-resizer";
 import { usePublicConfig } from "@/hooks/use-public-config";
-import { ParkingCitationFeature } from "@/types";
+import { ParkingCitationFeature } from "@/lib/socrata/parking-citations.schema";
 import { MapSourceCitations } from "./map-source-citations";
 import "mapbox-gl/dist/mapbox-gl.css";
 

@@ -1,7 +1,7 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@lucky-parking/design/components";
 import { useIsFetching } from "@tanstack/react-query";
 import { useCitations } from "hooks/use-citations";
-import { ParkingCitationFeature } from "@/types";
+import { ParkingCitationFeature } from "@/lib/socrata/parking-citations.schema";
 
 const calculateStatistics = (citations: ParkingCitationFeature[] = []) => {
 	const empty = { citations: { total: "--" }, fines: { total: "--", average: "--" } };
