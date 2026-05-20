@@ -1,0 +1,12 @@
+{
+	"name": "@lucky-parking/contracts",
+	"type": "module",
+	"scripts": {
+		"dev": "tsc --watch",
+		"build": "tsc"
+	},
+	"devDependencies": {
+		"@lucky-parking/configs": "workspace:^",
+		"typescript": "latest"
+	}
+}

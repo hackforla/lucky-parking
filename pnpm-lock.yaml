@@ -245,6 +245,15 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/contracts:
+    devDependencies:
+      '@lucky-parking/configs':
+        specifier: workspace:^
+        version: link:../configs
+      typescript:
+        specifier: latest
+        version: 6.0.3
+
   packages/design:
     dependencies:
       '@radix-ui/react-accordion':
@@ -4876,6 +4885,11 @@ packages:
 
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -10498,6 +10512,8 @@ snapshots:
   typescript@5.8.2: {}
 
   typescript@5.9.3: {}
+
+  typescript@6.0.3: {}
 
   typewise-core@1.2.0: {}
 
