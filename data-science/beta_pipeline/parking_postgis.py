@@ -226,6 +226,11 @@ def _build_parser() -> argparse.ArgumentParser:
     p_load = sub.add_parser("load-csv", help="Bulk-load CSV into PostGIS.")
     p_load.add_argument("csv", help="Path to Parking_Citations CSV")
     p_load.add_argument("--batch-size", type=int, default=100_000)
+    p_load.add_argument(
+        "--clean",
+        action="store_true",
+        help="Rebuild citations_clean after load (see parking_pipeline.py).",
+    )
 
     sub.add_parser("stats", help="Show DB stats.")
     return p
@@ -240,6 +245,10 @@ def main(argv: list[str] | None = None) -> int:
     elif args.cmd == "load-csv":
         n = bulk_load_csv(args.csv, dsn, batch_size=args.batch_size)
         print(f"Loaded {n:,} rows into {database_url(dsn)}")
+        if args.clean:
+            from parking_clean import rebuild_clean
+
+            rebuild_clean(dsn)
     elif args.cmd == "stats":
         print(json.dumps(db_stats(dsn), indent=2, default=str))
     return 0
