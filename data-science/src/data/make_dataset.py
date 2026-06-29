@@ -1,46 +1,104 @@
 #!/usr/bin/env conda run -n citation-analysis python
+
+from contextlib import contextmanager
 import click
 from pathlib import Path
 import urllib3
 import shutil
 import os
 import csv
+import datetime
 from datetime import date
+import time
 import pandas as pd
 import random
 import io
 import json
 from pyproj import Transformer
 from typing import Union
+from multiprocessing import Process, Event
+import signal
+
+
 import geopandas as gpd
 from shapely.geometry import Point
+from pandas.api.types import is_numeric_dtype
+
+"""
+Downloads full dataset from lacity.org, and runs data processing
+scripts to turn raw data into cleaned data ready
+to be analyzed.
+
+Sample usage:
+    python src/data/make_dataset.py --input_filedir data/external --output_filedir data/processed --download_input
+    python src/data/make_dataset.py --input_filedir data/external --output_filedir data/processed
+    python src/data/make_dataset.py --input_filedir data/external/2026-06-22_raw.csv --output_filedir data/processed
+"""
 
 # Load project directory
 PROJECT_DIR = Path(os.path.abspath(__file__).replace(
     '\\', '/')).resolve().parents[2]
 
+INTERIM_DIR = PROJECT_DIR / "data" / "interim"
+SKIP_RATE = 1  # Fraction of data to keep when creating sample dataset
+CHUNK_SIZE = 100000
+
 
 @click.command()
-@click.argument("input_filedir", type=click.Path(exists=True))
-@click.argument("output_filedir", type=click.Path())
-@click.argument("download_input", type=click.BOOL)
+@click.option("-i", "--input_filedir", type=click.Path(), default=None)
+@click.option("-o", "--output_filedir", type=click.Path(), default=None)
+@click.option("-d", "--download_input", is_flag=True, default=False)
 def main(input_filedir: str, output_filedir: str, download_input: bool):
-    """
-    Downloads full dataset from lacity.org, and runs data processing
-    scripts to turn raw data into cleaned data ready
-    to be analyzed. 
-    """
+    
     if download_input:
-        clean(
-            create_sample(download_raw(input_filedir), "data/interim", 1),
-            output_filedir,
-        )
+        # Make a new file or replace the existing one with the latest data
+        raw_filepath = download_raw(input_filedir)
+    elif os.path.isdir(input_filedir):
+        # Load the latest file in the input directory
+        latest_filename = sorted(os.listdir(input_filedir), key=lambda x: os.path.getmtime(os.path.join(input_filedir, x)))[-1]
+        raw_filepath = os.path.join(input_filedir, latest_filename)
     else:
-        clean(
-            create_sample(input_filedir, "data/interim", 1),
-            output_filedir,
-        )
+        # Load from the specified input file path
+        raw_filepath = Path(input_filedir) / f"{date.today().strftime('%Y-%m-%d')}_raw.csv"
+        if raw_filepath.exists():
+            # Add minutes and seconds to the filename if the file already exists
+            raw_filepath = Path(input_filedir) / f"{date.today().strftime('%Y-%m-%d_%H-%M-%S')}_raw.csv"
 
+    interim_path = create_sample(raw_filepath, INTERIM_DIR, SKIP_RATE)
+    clean(interim_path, output_filedir)
+
+def watchdog(target_pid, seconds, timeout_triggered_event):
+    """Sits in the background and waits. If time expires, kills the parent."""
+    time.sleep(seconds)
+    if not timeout_triggered_event.is_set():
+        timeout_triggered_event.set()
+        # On Windows, taskkill is used under the hood; on Unix, SIGTERM
+        os.kill(target_pid, signal.SIGTERM)
+
+@contextmanager
+def multiprocessing_timeout(seconds):
+    # Event to communicate between main process and watchdog
+    timeout_triggered = Event()
+    parent_pid = os.getpid()
+    
+    # Start the watchdog process
+    p = Process(target=watchdog, args=(parent_pid, seconds, timeout_triggered))
+    p.start()
+    
+    try:
+        yield
+    except ProcessLookupError:
+        # Catching potential OS errors during termination
+        pass
+    finally:
+        # Clean up the watchdog process if the block finishes on time
+        if p.is_alive():
+            p.terminate()
+            p.join()
+        
+        # If the watchdog fired, raise the TimeoutError to the user
+        if timeout_triggered.is_set():
+            raise TimeoutError(f"Code block exceeded timeout of {seconds} seconds")
 
 def download_raw(input_filedir: str) -> Path:
     """Downloads raw dataset from lacity.org to input_filedir as {date}
@@ -65,19 +123,30 @@ def download_raw(input_filedir: str) -> Path:
         url_template = "https://data.lacity.org/resource/4f5p-udkv.json?$offset=%s"
 
         page = 0
-        while True:
-            with http.request("GET", url_template % (1000 * page), preload_content=False) as res, open(
-                RAW_DATA_FILEPATH, "w"
-            ) as out_file:
-                raw_data = res.read()
+        error_count = 0
+        with open(RAW_DATA_FILEPATH, "a") as out_file:
+            while True:
+                with multiprocessing_timeout(seconds=5):
+                    with http.request("GET", url_template % (1000 * page), preload_content=False) as res:
+                        raw_data = res.read()
+                time.sleep(0.1) # To avoid overwhelming the server
+                
+                if "internal error" in raw_data.decode('utf-8').lower():
+                    error_count += 1
+                    print(f"Error encountered on page {page}, retrying... (Error count: {error_count})")
+                    if error_count > 20:
+                        print("Too many errors, stopping download.")
+                        break
+                    else:
+                        continue
                 data_list = json.loads(raw_data.decode('utf-8'))
                 df = pd.json_normalize(data_list)
                 
                 out_file.write(df.to_csv(index=False, lineterminator="\n"))
-            page += 1
+                page += 1
 
-            if len(df) < 1000:
-                break
+                if page % 1000 == 0:
+                    print(f"Downloaded {page * 1000} records...")
 
         print("Finished downloading raw dataset")
 
@@ -85,15 +154,15 @@ def download_raw(input_filedir: str) -> Path:
 
 
 def create_sample(
-        target_file: Union[Path, str],
+        interim_file: Union[Path, str],
         output_filedir: str,
         sample_frac: float) -> Path:
     """Samples the raw dataset to create a smaller dataset via random
     sampling according to sample_frac.
     """
     # Change str filepath into Path
-    if isinstance(target_file, str):
-        target_file = Path(target_file)
+    if isinstance(interim_file, str):
+        interim_file = Path(interim_file)
 
     # Check if sample_frac is between 0 and 1
     assert (sample_frac <= 1) and (sample_frac > 0)
@@ -103,7 +172,7 @@ def create_sample(
     SAMPLE_FILEPATH = (
         PROJECT_DIR
         / output_filedir
-        / (target_file.stem + "_" + str(sample_frac).replace(".", "") + "samp.csv")
+        / (interim_file.stem + "_" + str(sample_frac).replace(".", "") + "samp.csv")
     )
 
     # If raw file already exists, then it doesn't download
@@ -115,7 +184,7 @@ def create_sample(
 
         # Read raw data and skiprows using random.random()
         pd.read_csv(
-            target_file,
+            interim_file,
             header=0,
             index_col=0,
             skiprows=lambda i: i > 0 and random.random() > sample_frac,
@@ -193,34 +262,51 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     
     df.rename(columns=translation_dict, inplace=True)
 
-    df = df[
-        [
-            "Issue Date",
-            "Issue time",
-            "RP State Plate",
-            "Make",
-            "Body Style",
-            "Color",
-            "Location",
-            "Violation code",
-            "Violation Description",
-            "Fine amount",
-            "Latitude",
-            "Longitude",
+    try:
+
+        df = df[
+            [
+                "Issue Date",
+                "Issue time",
+                "RP State Plate",
+                "Make",
+                "Body Style",
+                "Color",
+                "Location",
+                "Violation code",
+                "Violation Description",
+                "Fine amount",
+                "Latitude",
+                "Longitude",
+            ]
         ]
-    ]
+    except KeyError as e:
+        print(f"Error: Missing expected column {e}. Please check the raw dataset for changes in column names.")
+        raise
 
     # Make column names more coding friendly
     df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
 
-    # Filter out data points with bad coordinates
-    df = df[(df['latitude'] != 99999) & (df['longitude'] != 99999)]
+    # Convert columns to numeric, turning invalid values into NaN
+    df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
+    df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
 
-    # Filter out bad coordinates
+    # Drop any rows that failed to convert (became NaN)
+    df = df.dropna(subset=['latitude', 'longitude'])
+
+    # Instantiate projection converter and change projection
+    transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
+    df["lat"], df["lon"] = transformer.transform(
+        df["latitude"].values, df["longitude"].values
+    )
+
+    # Filter out data points with bad coordinates
+    df = df[(df['lat'] != 99999) & (df['lon'] != 99999)]
+
     df = df[
-        (df['latitude'] > 33.6) & (df['latitude'] < 34.4) & 
-        (df['longitude'] > -118.7) & (df['longitude'] < -118.1)
-]
+        (df['lat'] > 33.6) & (df['lat'] < 34.4) & 
+        (df['lon'] > -118.7) & (df['lon'] < -118.1)
+        ]
     
     # Filter out data points with no time/date stamps
     df = df[
@@ -263,27 +349,13 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     make_dict = {make: ind for ind, make in enumerate(make_list)}
     df["make_ind"] = df.make.replace(make_dict)
 
-    # Instantiate projection converter and change projection
-    transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
-    df["lat"], df["lon"] = transformer.transform(
-        df["latitude"].values, df["longitude"].values
-    )
-
     # Drop original coordinate columns
     df = df.drop(["latitude", "longitude"], axis=1)
 
+    df["datetime"] = pd.to_datetime(df.datetime)
+
     # Extract weekday and add as column
-    df["weekday"] = df.datetime.dt.weekday.astype(str).replace(
-        {
-            "0": "Monday",
-            "1": "Tuesday",
-            "2": "Wednesday",
-            "3": "Thursday",
-            "4": "Friday",
-            "5": "Saturday",
-            "6": "Sunday",
-        }
-    )
+    df["weekday"] = df['datetime'].dt.day_name()
 
     # Set fine amount as int
     df["fine_amount"] = df.fine_amount.astype(int)
@@ -296,27 +368,29 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
               "rp_state_plate": "state_plate"}, inplace=True)
 
     if geojson:
+        destination = (PROJECT_DIR
+            / output_filedir
+            / (target_file.stem.replace("_raw", "_processed") + ".geojson"))
         gpd.GeoDataFrame(
             df,
             crs="EPSG:4326",
             geometry=[Point(xy) for xy in zip(df.latitude, df.longitude)],
         ).to_file(
-            PROJECT_DIR
-            / output_filedir
-            / (target_file.stem.replace("_raw", "_processed") + ".geojson"),
+            destination,
             driver="GeoJSON",
         )
-        return print("Saved as geojson!")
+        return print("Saved as geojson as %s" % destination)
 
     else:
-        df.to_csv(
-            PROJECT_DIR
+        destination = (PROJECT_DIR
             / output_filedir
-            / (target_file.stem.replace("_raw", "_processed") + ".csv"),
+            / (target_file.stem.replace("_raw", "_processed") + ".csv"))
+        df.to_csv(
+            destination,
             index=False,
             quoting=csv.QUOTE_ALL,
         )
-        return print("Saved as csv!")
+        return print("Saved to csv as %s" % destination)
 
 
 if __name__ == "__main__":
