@@ -40,8 +40,8 @@ PROJECT_DIR = Path(os.path.abspath(__file__).replace(
     '\\', '/')).resolve().parents[2]
 
 INTERIM_DIR = PROJECT_DIR / "data" / "interim"
-SKIP_RATE = 1  # Fraction of data to keep when creating sample dataset
-CHUNK_SIZE = 100000
+SAMPLE_RATE = 0.0001  # Fraction of data to keep when creating sample dataset
+CHUNK_SIZE = 1000000
 
 
 @click.command()
@@ -50,21 +50,24 @@ CHUNK_SIZE = 100000
 @click.option("-d", "--download_input", is_flag=True, default=False)
 def main(input_filedir: str, output_filedir: str, download_input: bool):
     
+    project_relative_input_dir = PROJECT_DIR / input_filedir
+    project_relative_output_dir = PROJECT_DIR / input_filedir
+
     if download_input:
         # Make a new file or replace the existing one with the latest data
-        raw_filepath = download_raw(input_filedir)
-    elif os.path.isdir(input_filedir):
+        raw_filepath = download_raw(project_relative_input_dir)
+    elif os.path.isdir(project_relative_input_dir):
         # Load the latest file in the input directory
-        latest_filename = sorted(os.listdir(input_filedir), key=lambda x: os.path.getmtime(os.path.join(input_filedir, x)))[-1]
-        raw_filepath = os.path.join(input_filedir, latest_filename)
+        latest_filename = sorted(os.listdir(project_relative_input_dir), key=lambda x: os.path.getmtime(os.path.join(project_relative_input_dir, x)))[-1]
+        raw_filepath = os.path.join(project_relative_input_dir, latest_filename)
     else:
         # Load from the specified input file path
-        raw_filepath = Path(input_filedir) / f"{date.today().strftime('%Y-%m-%d')}_raw.csv"
+        raw_filepath = Path(project_relative_input_dir) / f"{date.today().strftime('%Y-%m-%d')}_raw.csv"
         if raw_filepath.exists():
             # Add minutes and seconds to the filename if the file already exists
-            raw_filepath = Path(input_filedir) / f"{date.today().strftime('%Y-%m-%d_%H-%M-%S')}_raw.csv"
+            raw_filepath = Path(project_relative_input_dir) / f"{date.today().strftime('%Y-%m-%d_%H-%M-%S')}_raw.csv"
 
-    interim_path = create_sample(raw_filepath, INTERIM_DIR, SKIP_RATE)
+    interim_path = create_sample(raw_filepath, INTERIM_DIR, SAMPLE_RATE)
     clean(interim_path, output_filedir)
 
 def watchdog(target_pid, seconds, timeout_triggered_event):
@@ -108,6 +111,9 @@ def download_raw(input_filedir: str) -> Path:
     date_string = date.today().strftime("%Y-%m-%d")
     RAW_DATA_FILEPATH = PROJECT_DIR / \
         input_filedir / (date_string + "_raw.csv")
+    
+    # We don't trust the raw dataset to have consistent headers among multiple pages, so we define them here
+    RAW_HEADERS = "ticket_number,issue_date,issue_time,marked_time,rp_state_plate,plate_expiry_date,make,body_style,color,location,agency,violation_code,violation_description,fine_amount,agency_desc,color_desc,body_style_desc,loc_lat,loc_long,geocodelocation.type,geocodelocation.coordinates,meter_id,route".split(",")
 
     # If raw file already exists, then it doesn't download
     if RAW_DATA_FILEPATH.is_file():
@@ -125,6 +131,7 @@ def download_raw(input_filedir: str) -> Path:
         page = 0
         error_count = 0
         with open(RAW_DATA_FILEPATH, "a") as out_file:
+            out_file.write(",".join(RAW_HEADERS) + "\n")  # Write headers to the file
             while True:
                 with multiprocessing_timeout(seconds=5):
                     with http.request("GET", url_template % (1000 * page), preload_content=False) as res:
@@ -133,7 +140,7 @@ def download_raw(input_filedir: str) -> Path:
                 
                 if "internal error" in raw_data.decode('utf-8').lower():
                     error_count += 1
-                    print(f"Error encountered on page {page}, retrying... (Error count: {error_count})")
+                    print(f"Internal error encountered on page {page}, retrying... (Error count: {error_count})")
                     if error_count > 20:
                         print("Too many errors, stopping download.")
                         break
@@ -141,8 +148,14 @@ def download_raw(input_filedir: str) -> Path:
                         continue
                 data_list = json.loads(raw_data.decode('utf-8'))
                 df = pd.json_normalize(data_list)
+
+                unexpected_cols = set(df.columns) - set(RAW_HEADERS)
+                if unexpected_cols:
+                    print(f"Found unexpected columns in JSON that will be dropped: {unexpected_cols}")
+
+                df = df.reindex(columns=RAW_HEADERS)
                 
-                out_file.write(df.to_csv(index=False, lineterminator="\n"))
+                out_file.write(df.to_csv(header=False, index=False, lineterminator="\n"))
                 page += 1
 
                 if page % 1000 == 0:
@@ -235,18 +248,9 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     changes geometry projection from epsg:2229 to epsg:4326, and converts
     time to datetime type.
     """
-    # Change str filepath into Path
-    if isinstance(target_file, str):
-        target_file = Path(target_file)
 
-    print("Cleaning dataset")
-
-    # Read file into dataframe
-    df = pd.read_csv(target_file, low_memory=False)
-
-    # Select columns of interest
     
-    translation_dict = { "issue_date": "Issue Date", 
+    TRANSLATION_DICT = { "issue_date": "Issue Date", 
                "issue_time": "Issue time", 
                "rp_state_plate": "RP State Plate", 
                "make": "Make", 
@@ -259,122 +263,143 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
                "fine_amount": "Fine amount", 
                "loc_lat": "Latitude", 
                "loc_long": "Longitude" }
-    
-    df.rename(columns=translation_dict, inplace=True)
 
-    try:
+    DESIRED_COLUMNS =   [
+                            "Issue Date",
+                            "Issue time",
+                            "RP State Plate",
+                            "Make",
+                            "Body Style",
+                            "Color",
+                            "Location",
+                            "Violation code",
+                            "Violation Description",
+                            "Fine amount",
+                            "Latitude",
+                            "Longitude",
+                        ]
+
+    # Change str filepath into Path
+    if isinstance(target_file, str):
+        target_file = Path(target_file)
+
+    print("Cleaning dataset")
+
+    # Read file into dataframe
+    chunk_iterator = pd.read_csv(target_file, low_memory=True, chunksize=CHUNK_SIZE)
+
+    results = pd.DataFrame()  # Initialize an empty DataFrame to hold results
+
+    for (chunk_number, df) in enumerate(chunk_iterator):
+    
+        df.rename(columns=TRANSLATION_DICT, inplace=True)
+
+        try:
+
+            df = df[DESIRED_COLUMNS]
+        except KeyError as e:
+            print(f"Error: Missing expected column {e}. Please check the raw dataset for changes in column names.")
+            raise
+
+        # Make column names more coding friendly
+        df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
+
+        # Convert columns to numeric, turning invalid values into NaN
+        df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
+        df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
+
+        # Drop any rows that failed to convert (became NaN)
+        df = df.dropna(subset=['latitude', 'longitude'])
+
+        # Instantiate projection converter and change projection
+        # transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
+        # df["lat"], df["lon"] = transformer.transform(
+        #     df["latitude"].values, df["longitude"].values
+        # )
+
+        df['lat'] = pd.to_numeric(df['latitude'], errors='coerce')
+        df['lon'] = pd.to_numeric(df['longitude'], errors='coerce')
+
+        # Filter out data points with bad coordinates
+        df = df[(df['lat'] != 99999) & (df['lon'] != 99999)]
 
         df = df[
-            [
-                "Issue Date",
-                "Issue time",
-                "RP State Plate",
-                "Make",
-                "Body Style",
-                "Color",
-                "Location",
-                "Violation code",
-                "Violation Description",
-                "Fine amount",
-                "Latitude",
-                "Longitude",
+            (df['lat'] > 33.6) & (df['lat'] < 34.4) & 
+            (df['lon'] > -118.7) & (df['lon'] < -118.1)
             ]
+        
+        # Filter out data points with no time/date stamps
+        df = df[
+            (df["issue_date"].notna())
+            & (df["issue_time"].notna())
+            & (df["fine_amount"].notna())
         ]
-    except KeyError as e:
-        print(f"Error: Missing expected column {e}. Please check the raw dataset for changes in column names.")
-        raise
 
-    # Make column names more coding friendly
-    df.columns = [_.lower().replace(' ', '_') for _ in df.columns]
+        df['datetime'] = df.apply(create_datetime, axis=1)
 
-    # Convert columns to numeric, turning invalid values into NaN
-    df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce')
-    df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce')
+        # Drop original date/time columns
+        df = df.drop(["issue_date", "issue_time"], axis=1)
 
-    # Drop any rows that failed to convert (became NaN)
-    df = df.dropna(subset=['latitude', 'longitude'])
+        # Read in make aliases
+        make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
+        make_df["alias"] = make_df.alias.apply(lambda x: x.split(","))
 
-    # Instantiate projection converter and change projection
-    transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
-    df["lat"], df["lon"] = transformer.transform(
-        df["latitude"].values, df["longitude"].values
-    )
+        # Iterate over makes and replace aliases
+        for row in make_df.itertuples():
+            df = df.replace(row[2], row[1])
 
-    # Filter out data points with bad coordinates
-    df = df[(df['lat'] != 99999) & (df['lon'] != 99999)]
+        # Car makes to keep (Top 70 by count)
+        with open(PROJECT_DIR / 'references/top_makes.txt', 'r') as file:
+            make_list = [_.strip('\n') for _ in file.readlines()]
 
-    df = df[
-        (df['lat'] > 33.6) & (df['lat'] < 34.4) & 
-        (df['lon'] > -118.7) & (df['lon'] < -118.1)
-        ]
-    
-    # Filter out data points with no time/date stamps
-    df = df[
-        (df["issue_date"].notna())
-        & (df["issue_time"].notna())
-        & (df["fine_amount"].notna())
-    ]
+        # Turn all other makes into "MISC."
+        df.loc[~df.make.isin(make_list), "make"] = "MISC."
+        make_list.append("MISC.")
 
-    df['datetime'] = df.apply(create_datetime, axis=1)
+        # Read in violation regex rules
+        vio_regex = pd.read_csv(
+            PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
 
-    # Drop original date/time columns
-    df = df.drop(["issue_date", "issue_time"], axis=1)
+        # Iterate over makes and replace aliases
+        for key in vio_regex.itertuples():
+            df.loc[df["violation_code"] == row[1],
+                "violation_description"] = row[2]
 
-    # Read in make aliases
-    make_df = pd.read_csv(PROJECT_DIR / "references/make.csv", delimiter=",")
-    make_df["alias"] = make_df.alias.apply(lambda x: x.split(","))
+        # Enumerate list of car makes and replace with keys
+        make_dict = {make: ind for ind, make in enumerate(make_list)}
+        df["make_ind"] = df.make.replace(make_dict)
 
-    # Iterate over makes and replace aliases
-    for row in make_df.itertuples():
-        df = df.replace(row[2], row[1])
+        # Drop original coordinate columns
+        df = df.drop(["latitude", "longitude"], axis=1)
 
-    # Car makes to keep (Top 70 by count)
-    with open(PROJECT_DIR / 'references/top_makes.txt', 'r') as file:
-        make_list = [_.strip('\n') for _ in file.readlines()]
+        df["datetime"] = pd.to_datetime(df.datetime)
 
-    # Turn all other makes into "MISC."
-    df.loc[~df.make.isin(make_list), "make"] = "MISC."
-    make_list.append("MISC.")
+        # Extract weekday and add as column
+        df["weekday"] = df['datetime'].dt.day_name()
 
-    # Read in violation regex rules
-    vio_regex = pd.read_csv(
-        PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
+        # Set fine amount as int
+        df["fine_amount"] = df.fine_amount.astype(int)
 
-    # Iterate over makes and replace aliases
-    for key in vio_regex.itertuples():
-        df.loc[df["violation_code"] == row[1],
-               "violation_description"] = row[2]
+        # Drop filtered index and add new one
+        df.reset_index(inplace=True)
 
-    # Enumerate list of car makes and replace with keys
-    make_dict = {make: ind for ind, make in enumerate(make_list)}
-    df["make_ind"] = df.make.replace(make_dict)
+        # To keep compatibility with website
+        df.rename(columns={"lat": "latitude", "lon": "longitude",
+                "rp_state_plate": "state_plate"}, inplace=True)
 
-    # Drop original coordinate columns
-    df = df.drop(["latitude", "longitude"], axis=1)
+        results = pd.concat([results, df], ignore_index=True)
 
-    df["datetime"] = pd.to_datetime(df.datetime)
-
-    # Extract weekday and add as column
-    df["weekday"] = df['datetime'].dt.day_name()
-
-    # Set fine amount as int
-    df["fine_amount"] = df.fine_amount.astype(int)
-
-    # Drop filtered index and add new one
-    df.reset_index(inplace=True)
-
-    # To keep compatibility with website
-    df.rename(columns={"lat": "latitude", "lon": "longitude",
-              "rp_state_plate": "state_plate"}, inplace=True)
+        # Print progress so we know it's working
+        print(f"Processed chunk {chunk_number}: {len(df)} rows")
 
     if geojson:
         destination = (PROJECT_DIR
             / output_filedir
             / (target_file.stem.replace("_raw", "_processed") + ".geojson"))
         gpd.GeoDataFrame(
-            df,
+            results,
             crs="EPSG:4326",
-            geometry=[Point(xy) for xy in zip(df.latitude, df.longitude)],
+            geometry=[Point(xy) for xy in zip(results.latitude, results.longitude)],
         ).to_file(
             destination,
             driver="GeoJSON",
@@ -385,7 +410,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         destination = (PROJECT_DIR
             / output_filedir
             / (target_file.stem.replace("_raw", "_processed") + ".csv"))
-        df.to_csv(
+        results.to_csv(
             destination,
             index=False,
             quoting=csv.QUOTE_ALL,
@@ -407,10 +432,4 @@ if __name__ == "__main__":
             with open(PROJECT_DIR / "data" / _ / ".gitkeep", "w"):
                 pass
 
-    # Run main function
-    # logger = logging.getLogger(__name__)
-    # logger.info(
-    #     'Starting download of raw dataset: this will take a few minutes'
-    # )
     main()
-    # logger.info('Finished downloading!')
