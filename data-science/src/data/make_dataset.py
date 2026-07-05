@@ -29,6 +29,8 @@ Downloads full dataset from lacity.org, and runs data processing
 scripts to turn raw data into cleaned data ready
 to be analyzed.
 
+These sample usage commands assume that the current working directory is the data-science directory.
+
 Sample usage:
     python src/data/make_dataset.py --input_filedir data/external --output_filedir data/processed --download_input
     python src/data/make_dataset.py --input_filedir data/external --output_filedir data/processed
