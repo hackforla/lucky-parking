@@ -1,23 +1,5 @@
 #!/usr/bin/env conda run -n citation-analysis python
 
-from contextlib import contextmanager
-import click
-from pathlib import Path
-import urllib3
-import os
-import csv
-from datetime import date
-import time
-import pandas as pd
-import random
-import json
-from typing import Union
-from multiprocessing import Process, Event
-import signal
-
-import geopandas as gpd
-from shapely.geometry import Point
-
 """
 Downloads full dataset from lacity.org, and runs data processing
 scripts to turn raw data into cleaned data ready
@@ -30,6 +12,25 @@ Sample usage:
     python src/data/make_dataset.py --input_filedir data/external --output_filedir data/processed
     python src/data/make_dataset.py --input_filedir data/external/2026-06-22_raw.csv --output_filedir data/processed
 """
+
+from contextlib import contextmanager
+
+from pathlib import Path
+import os
+import csv
+from datetime import date
+import time
+import random
+import json
+from typing import Union
+from multiprocessing import Process, Event
+import signal
+
+import pandas as pd
+import urllib3
+import click
+import geopandas as gpd
+from shapely.geometry import Point
 
 # Load project directory
 PROJECT_DIR = Path(os.path.abspath(__file__).replace(
@@ -77,6 +78,8 @@ def watchdog(target_pid, seconds, timeout_triggered_event):
 
 @contextmanager
 def multiprocessing_timeout(seconds):
+    """Context manager to run a block of code with a timeout using multiprocessing."""
+
     # Event to communicate between main process and watchdog
     timeout_triggered = Event()
     parent_pid = os.getpid()
@@ -207,19 +210,19 @@ def create_sample(
     return SAMPLE_FILEPATH
 
 
-def isvalid(time: str) -> bool:
-    if pd.isna(time):
+def isvalid(time_value: str) -> bool:
+    if pd.isna(time_value):
         return False
-    time = str(time)
-    if not isinstance(time, str):
+    time_value = str(time_value)
+    if not isinstance(time_value, str):
         return False
-    if len(time) < 3:
+    if len(time_value) < 3:
         return False
-    if not time.isdigit():
+    if not time_value.isdigit():
         return False
-    if int(time[-2:]) > 59:
+    if int(time_value[-2:]) > 59:
         return False
-    if int(time[:-2]) > 23:
+    if int(time_value[:-2]) > 23:
         return False
     return True
 
@@ -291,7 +294,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     results = pd.DataFrame()  # Initialize an empty DataFrame to hold results
 
     for (chunk_number, df) in enumerate(chunk_iterator):
-    
+
         df.rename(columns=TRANSLATION_DICT, inplace=True)
 
         try:
@@ -343,7 +346,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
             df = df.replace(row[2], row[1])
 
         # Car makes to keep (Top 70 by count)
-        with open(PROJECT_DIR / 'references/top_makes.txt', 'r') as file:
+        with open(PROJECT_DIR / 'references/top_makes.txt', 'r', encoding='utf-8') as file:
             make_list = [_.strip('\n') for _ in file.readlines()]
 
         # Turn all other makes into "MISC."
@@ -355,7 +358,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
             PROJECT_DIR / "references/vio_regex.csv", delimiter=",")
 
         # Iterate over makes and replace aliases
-        for key in vio_regex.itertuples():
+        for row in vio_regex.itertuples():
             df.loc[df["violation_code"] == row[1],
             "violation_description"] = row[2]
 
@@ -398,7 +401,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
             destination,
             driver="GeoJSON",
         )
-        return print("Saved as geojson as %s" % destination)
+        return print(f"Saved as geojson as {destination}")
 
     else:
         destination = (PROJECT_DIR
@@ -409,7 +412,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
             index=False,
             quoting=csv.QUOTE_ALL,
         )
-        return print("Saved to csv as %s" % destination)
+        return print(f"Saved to csv as {destination}")
 
 
 if __name__ == "__main__":
@@ -423,7 +426,7 @@ if __name__ == "__main__":
     for _ in data_folders:
         if not os.path.exists(PROJECT_DIR / "data" / _):
             os.makedirs(PROJECT_DIR / "data" / _)
-            with open(PROJECT_DIR / "data" / _ / ".gitkeep", "w"):
+            with open(PROJECT_DIR / "data" / _ / ".gitkeep", "w", encoding="utf-8"):
                 pass
 
     main()
