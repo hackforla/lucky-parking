@@ -4,25 +4,19 @@ from contextlib import contextmanager
 import click
 from pathlib import Path
 import urllib3
-import shutil
 import os
 import csv
-import datetime
 from datetime import date
 import time
 import pandas as pd
 import random
-import io
 import json
-from pyproj import Transformer
 from typing import Union
 from multiprocessing import Process, Event
 import signal
 
-
 import geopandas as gpd
 from shapely.geometry import Point
-from pandas.api.types import is_numeric_dtype
 
 """
 Downloads full dataset from lacity.org, and runs data processing
@@ -51,9 +45,8 @@ CHUNK_SIZE = 1000000
 @click.option("-o", "--output_filedir", type=click.Path(), default=None)
 @click.option("-d", "--download_input", is_flag=True, default=False)
 def main(input_filedir: str, output_filedir: str, download_input: bool):
-    
+
     project_relative_input_dir = PROJECT_DIR / input_filedir
-    project_relative_output_dir = PROJECT_DIR / input_filedir
 
     if download_input:
         # Make a new file or replace the existing one with the latest data
@@ -72,6 +65,7 @@ def main(input_filedir: str, output_filedir: str, download_input: bool):
     interim_path = create_sample(raw_filepath, INTERIM_DIR, SAMPLE_RATE)
     clean(interim_path, output_filedir)
 
+
 def watchdog(target_pid, seconds, timeout_triggered_event):
     """Sits in the background and waits. If time expires, kills the parent."""
     time.sleep(seconds)
@@ -80,16 +74,17 @@ def watchdog(target_pid, seconds, timeout_triggered_event):
         # On Windows, taskkill is used under the hood; on Unix, SIGTERM
         os.kill(target_pid, signal.SIGTERM)
 
+
 @contextmanager
 def multiprocessing_timeout(seconds):
     # Event to communicate between main process and watchdog
     timeout_triggered = Event()
     parent_pid = os.getpid()
-    
+
     # Start the watchdog process
     p = Process(target=watchdog, args=(parent_pid, seconds, timeout_triggered))
     p.start()
-    
+
     try:
         yield
     except ProcessLookupError:
@@ -100,10 +95,11 @@ def multiprocessing_timeout(seconds):
         if p.is_alive():
             p.terminate()
             p.join()
-        
+
         # If the watchdog fired, raise the TimeoutError to the user
         if timeout_triggered.is_set():
             raise TimeoutError(f"Code block exceeded timeout of {seconds} seconds")
+
 
 def download_raw(input_filedir: str) -> Path:
     """Downloads raw dataset from lacity.org to input_filedir as {date}
@@ -113,7 +109,7 @@ def download_raw(input_filedir: str) -> Path:
     date_string = date.today().strftime("%Y-%m-%d")
     RAW_DATA_FILEPATH = PROJECT_DIR / \
         input_filedir / (date_string + "_raw.csv")
-    
+
     # We don't trust the raw dataset to have consistent headers among multiple pages, so we define them here
     RAW_HEADERS = "ticket_number,issue_date,issue_time,marked_time,rp_state_plate,plate_expiry_date,make,body_style,color,location,agency,violation_code,violation_description,fine_amount,agency_desc,color_desc,body_style_desc,loc_lat,loc_long,geocodelocation.type,geocodelocation.coordinates,meter_id,route".split(",")
 
@@ -138,8 +134,8 @@ def download_raw(input_filedir: str) -> Path:
                 with multiprocessing_timeout(seconds=5):
                     with http.request("GET", url_template % (1000 * page), preload_content=False) as res:
                         raw_data = res.read()
-                time.sleep(0.1) # To avoid overwhelming the server
-                
+                time.sleep(0.1)     # To avoid overwhelming the server
+
                 if "internal error" in raw_data.decode('utf-8').lower():
                     error_count += 1
                     print(f"Internal error encountered on page {page}, retrying... (Error count: {error_count})")
@@ -156,7 +152,7 @@ def download_raw(input_filedir: str) -> Path:
                     print(f"Found unexpected columns in JSON that will be dropped: {unexpected_cols}")
 
                 df = df.reindex(columns=RAW_HEADERS)
-                
+
                 out_file.write(df.to_csv(header=False, index=False, lineterminator="\n"))
                 page += 1
 
@@ -215,7 +211,7 @@ def isvalid(time: str) -> bool:
     if pd.isna(time):
         return False
     time = str(time)
-    if type(time) != str:
+    if not isinstance(time, str):
         return False
     if len(time) < 3:
         return False
@@ -227,9 +223,11 @@ def isvalid(time: str) -> bool:
         return False
     return True
 
+
 def splittime(time: int) -> tuple[str, str] | tuple[None, None]:
     time = str(time).rjust(4, '0')
     return time[:len(time)-2], time[-2:]
+
 
 def create_datetime(row):
     time_val = row['issue_time']
@@ -238,12 +236,13 @@ def create_datetime(row):
         # date = row["issue_date"]
         hours = int(time_str[:-2])
         minutes = int(time_str[-2:])
-    
+
         # Combine date with the calculated time
         date_part = row['issue_date'].split()[0]
         return pd.to_datetime(date_part).replace(hour=hours, minute=minutes)
     else:
         return pd.to_datetime(row['issue_date'])
+
 
 def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     """Removes unnecessary columns, erroneous data points and aliases,
@@ -251,20 +250,19 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
     time to datetime type.
     """
 
-    
-    TRANSLATION_DICT = { "issue_date": "Issue Date", 
-               "issue_time": "Issue time", 
-               "rp_state_plate": "RP State Plate", 
-               "make": "Make", 
-               "body_style": "Body Style", 
-               "color": "Color", 
-               "location": "Location", 
-               "violation_code": 
-               "Violation code", 
-               "violation_description": "Violation Description", 
-               "fine_amount": "Fine amount", 
-               "loc_lat": "Latitude", 
-               "loc_long": "Longitude" }
+    TRANSLATION_DICT = {"issue_date": "Issue Date",
+               "issue_time": "Issue time",
+               "rp_state_plate": "RP State Plate",
+               "make": "Make",
+               "body_style": "Body Style",
+               "color": "Color",
+               "location": "Location",
+               "violation_code":
+               "Violation code",
+               "violation_description": "Violation Description",
+               "fine_amount": "Fine amount",
+               "loc_lat": "Latitude",
+               "loc_long": "Longitude"}
 
     DESIRED_COLUMNS =   [
                             "Issue Date",
@@ -313,12 +311,6 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         # Drop any rows that failed to convert (became NaN)
         df = df.dropna(subset=['latitude', 'longitude'])
 
-        # Instantiate projection converter and change projection
-        # transformer = Transformer.from_crs("EPSG:2229", "EPSG:4326")
-        # df["lat"], df["lon"] = transformer.transform(
-        #     df["latitude"].values, df["longitude"].values
-        # )
-
         df['lat'] = pd.to_numeric(df['latitude'], errors='coerce')
         df['lon'] = pd.to_numeric(df['longitude'], errors='coerce')
 
@@ -326,10 +318,10 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         df = df[(df['lat'] != 99999) & (df['lon'] != 99999)]
 
         df = df[
-            (df['lat'] > 33.6) & (df['lat'] < 34.4) & 
+            (df['lat'] > 33.6) & (df['lat'] < 34.4) &
             (df['lon'] > -118.7) & (df['lon'] < -118.1)
             ]
-        
+
         # Filter out data points with no time/date stamps
         df = df[
             (df["issue_date"].notna())
@@ -365,7 +357,7 @@ def clean(target_file: Union[Path, str], output_filedir: str, geojson=False):
         # Iterate over makes and replace aliases
         for key in vio_regex.itertuples():
             df.loc[df["violation_code"] == row[1],
-                "violation_description"] = row[2]
+            "violation_description"] = row[2]
 
         # Enumerate list of car makes and replace with keys
         make_dict = {make: ind for ind, make in enumerate(make_list)}
