@@ -1,7 +1,7 @@
 """Orchestrate PostGIS load → clean pipeline.
 
 After the raw ``citations`` table is updated from the city CSV, rebuild the
-cleaned ``citations_clean`` table.
+cleaned ``citations_clean`` table, then drop rows missing datetime or loc_lat.
 
 CLI:
     python parking_pipeline.py run Parking_Citations_20250811.csv
@@ -13,7 +13,7 @@ import argparse
 import json
 import sys
 
-from parking_clean import clean_stats, rebuild_clean
+from parking_clean import clean_stats, drop_incomplete, rebuild_clean
 from parking_postgis import bulk_load_csv, database_url, db_stats
 
 
@@ -25,16 +25,20 @@ def run_pipeline(
     skip_load: bool = False,
     progress: bool = True,
 ) -> dict[str, object]:
-    """Load raw citations (optional) then rebuild citations_clean."""
+    """Load raw citations (optional), rebuild clean datetimes, drop incomplete."""
     if not skip_load:
         if not csv_path:
             raise ValueError("csv_path is required unless skip_load=True")
         bulk_load_csv(csv_path, dsn, batch_size=batch_size, progress=progress)
+    # 1) Combined issue_datetime from issue_date + issue_time
     rebuild_clean(dsn, progress=progress)
+    # 2) Require both datetime and loc_lat
+    dropped = drop_incomplete(dsn, progress=progress)
     return {
         "database_url": database_url(dsn),
         "raw": db_stats(dsn),
         "clean": clean_stats(dsn),
+        "dropped_incomplete": dropped,
     }
 
 

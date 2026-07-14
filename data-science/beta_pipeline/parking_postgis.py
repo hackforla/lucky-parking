@@ -246,9 +246,10 @@ def main(argv: list[str] | None = None) -> int:
         n = bulk_load_csv(args.csv, dsn, batch_size=args.batch_size)
         print(f"Loaded {n:,} rows into {database_url(dsn)}")
         if args.clean:
-            from parking_clean import rebuild_clean
+            from parking_clean import drop_incomplete, rebuild_clean
 
             rebuild_clean(dsn)
+            drop_incomplete(dsn)
     elif args.cmd == "stats":
         print(json.dumps(db_stats(dsn), indent=2, default=str))
     return 0

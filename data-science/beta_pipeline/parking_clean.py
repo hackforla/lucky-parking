@@ -2,7 +2,8 @@
 
 Reads the full raw table populated by ``parking_postgis`` and writes
 ``citations_clean`` with a combined issue timestamp, trimmed text fields,
-and geometry copied from the source row.
+and geometry copied from the source row. ``drop_incomplete`` then removes
+rows that lack ``issue_datetime`` or source ``loc_lat``.
 
 CLI:
     python parking_clean.py init
@@ -79,6 +80,15 @@ WHERE ticket_number IS NOT NULL
   AND issue_date IS NOT NULL
 """
 
+# Runs after datetime creation: keep only rows that have both a datetime and
+# a source latitude (loc_lat on the raw citations row).
+DROP_INCOMPLETE_SQL = f"""
+DELETE FROM {CLEAN_TABLE} AS c
+USING citations AS r
+WHERE c.ticket_number = r.ticket_number
+  AND (c.issue_datetime IS NULL OR r.loc_lat IS NULL)
+"""
+
 
 def init_clean(dsn: str | None = None) -> None:
     """Ensure raw + cleaned schemas exist (idempotent)."""
@@ -90,8 +100,32 @@ def init_clean(dsn: str | None = None) -> None:
         conn.commit()
 
 
+def drop_incomplete(dsn: str | None = None, *, progress: bool = True) -> int:
+    """Remove clean rows missing ``issue_datetime`` or source ``loc_lat``.
+
+    Intended to run after datetime creation in ``rebuild_clean``.
+    Returns the number of rows deleted.
+    """
+    with connect(dsn) as conn:
+        with conn.cursor() as cur:
+            cur.execute(DROP_INCOMPLETE_SQL)
+            deleted = cur.rowcount if cur.rowcount is not None and cur.rowcount >= 0 else 0
+        conn.commit()
+
+    if progress:
+        print(
+            f"  dropped {deleted:,} rows missing issue_datetime or loc_lat",
+            flush=True,
+        )
+    return deleted
+
+
 def rebuild_clean(dsn: str | None = None, *, progress: bool = True) -> int:
-    """Replace ``citations_clean`` from ``citations``. Returns row count."""
+    """Replace ``citations_clean`` from ``citations`` with combined datetimes.
+
+    Does not filter on ``loc_lat`` — call ``drop_incomplete`` afterward.
+    Returns row count after the datetime INSERT.
+    """
     init_clean(dsn)
     started = time.time()
     if progress:
@@ -109,7 +143,7 @@ def rebuild_clean(dsn: str | None = None, *, progress: bool = True) -> int:
         elapsed = time.time() - started
         rate = count / elapsed if elapsed else 0
         print(
-            f"  {count:,} rows in {CLEAN_TABLE}  "
+            f"  {count:,} rows in {CLEAN_TABLE} after datetime build  "
             f"elapsed={elapsed:.1f}s  rate={rate:,.0f} rows/s",
             flush=True,
         )
@@ -162,6 +196,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Initialized {CLEAN_TABLE} at {database_url(dsn)}")
     elif args.cmd == "rebuild":
         rebuild_clean(dsn)
+        drop_incomplete(dsn)
     elif args.cmd == "stats":
         print(json.dumps(clean_stats(dsn), indent=2, default=str))
     return 0
