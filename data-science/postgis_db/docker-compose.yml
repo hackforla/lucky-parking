@@ -1,0 +1,34 @@
+# Local PostGIS (also deployable on IONOS VPS S+).
+#   docker compose up -d --build
+# Override password: POSTGRES_PASSWORD=... docker compose up -d
+services:
+  postgis:
+    build: .
+    image: lucky-parking-postgis:boundaries
+    platform: linux/amd64
+    container_name: lucky-parking-postgis
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lucky_parking}
+      POSTGRES_USER: ${POSTGRES_USER:-lucky}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+      # Host CSV dumps for ad-hoc loads (e.g. scripts/load_citations.sql)
+      - ./raw_data:/raw_data:ro
+      - ./scripts:/scripts:ro
+    # Local Mac has plenty of RAM; raise for large CSV loads.
+    # On the 2 GB VPS, set COMPOSE_MEM_LIMIT=1536m (and load in chunks).
+    mem_limit: ${COMPOSE_MEM_LIMIT:-8g}
+    memswap_limit: ${COMPOSE_MEM_LIMIT:-8g}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  postgis_data:

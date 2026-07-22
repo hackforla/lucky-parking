@@ -1,0 +1,107 @@
+apiVersion: "v3.1.0"
+kind: "DataContract"
+id: "example-id"
+version: "0.0.1"
+status: "draft"
+name: "Lucky Parking Data Contract"
+schema:
+  - name: "single_data"
+    businessName: "Schema 1"
+    physicalType: "table"
+    properties:
+      - name: "region_type"
+        logicalType: "string"
+        required: true
+        primaryKey: false
+        quality:
+          - type: "library"
+            metric: "invalidValues"
+            description: "Region Type should be one of the valid region types"
+            mustBe: 0
+            arguments:
+              validValues:
+                - "Neighborhood Council"
+                - "Zip Code"
+                - "Place (Radius)"
+            dimension: "conformity"
+      - name: "region"
+        logicalType: "string"
+        required: false
+        primaryKey: false
+      - name: "date_min"
+        logicalType: "date"
+        required: true
+        primaryKey: false
+      - name: "date_max"
+        logicalType: "date"
+        required: true
+        primaryKey: false
+      - name: "chart_type"
+        logicalType: "string"
+        required: false
+        primaryKey: false
+        quality:
+          - type: "library"
+            mustBe: 0
+            metric: "invalidValues"
+            arguments:
+              validValues:
+                - "Total # Citations"
+                - "Citations per Sq. Mile (Density)"
+                - "Violation Type"
+                - "Total $ Fine Amount"
+                - "Fine $ Amount per Sq. Mile (Density)"
+                - "Day of the Week"
+            dimension: "conformity"
+  - name: "compare_mode"
+    businessName: "Schema 2"
+    physicalType: "table"
+    properties:
+      - name: "region_type"
+        logicalType: "string"
+        primaryKey: false
+        required: true
+        quality:
+          - type: "library"
+            metric: "invalidValues"
+            arguments:
+              validValues:
+                - "Neighborhood Council"
+                - "Zip Code"
+                - "Place (Radius)"
+            mustBe: 0
+            description: "Region Type should be one of the valid region types"
+            dimension: "conformity"
+      - name: "region_1"
+        logicalType: "string"
+        required: false
+        primaryKey: false
+      - name: "region_2"
+        logicalType: "string"
+        required: false
+        primaryKey: false
+      - name: "date_min"
+        logicalType: "date"
+        required: true
+        primaryKey: false
+      - name: "date_max"
+        logicalType: "date"
+        required: true
+        primaryKey: false
+      - name: "chart_type"
+        logicalType: "string"
+        required: false
+        primaryKey: false
+        quality:
+          - type: "library"
+            mustBe: 0
+            metric: "invalidValues"
+            arguments:
+              validValues:
+                - "Total # Citations"
+                - "Citations per Sq. Mile (Density)"
+                - "Violation Type"
+                - "Total $ Fine Amount"
+                - "Fine $ Amount per Sq. Mile (Density)"
+                - "Day of the Week"
+            dimension: "conformity"

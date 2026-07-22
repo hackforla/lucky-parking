@@ -1,0 +1,12 @@
+raw_data/
+**/shapefile/
+**/*_shapefile.zip
+**/.DS_Store
+**/__pycache__/
+*.md
+datacontract.yaml
+.dockerignore
+Dockerfile
+docker-compose.yml
+.env
+.env.*
