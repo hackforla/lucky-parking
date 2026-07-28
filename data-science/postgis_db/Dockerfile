@@ -1,5 +1,5 @@
 # PostGIS for IONOS VPS S+ (2 vCPU / 2 GB RAM / 90 GB NVMe).
-# Loads neighborhood_councils and zipcodes on first boot.
+# Loads boundary polygons + place points on first boot.
 # postgis/postgis publishes amd64 only; pin platform so Apple Silicon
 # can still build/run locally via emulation (VPS is amd64 natively).
 FROM --platform=linux/amd64 postgis/postgis:16-3.5
@@ -15,9 +15,12 @@ ENV POSTGRES_DB=lucky_parking \
     # Checksums help catch NVMe corruption; cheap at this data size.
     POSTGRES_INITDB_ARGS="--data-checksums"
 
-# Boundary layers only (citation CSVs are excluded via .dockerignore).
+# Reference layers only (citation CSVs are excluded via .dockerignore).
 COPY boundaries/neighborhood_councils/neighborhood_councils.geojson /data/neighborhood_councils.geojson
 COPY boundaries/zipcodes/zipcodes.geojson /data/zipcodes.geojson
+COPY boundaries/council_districts/council_districts.geojson /data/council_districts.geojson
+COPY boundaries/neighborhoods/neighborhoods.geojson /data/neighborhoods.geojson
+COPY boundaries/places/places.geojson /data/places.geojson
 COPY init/01_extensions.sql /docker-entrypoint-initdb.d/01_extensions.sql
 COPY init/02_load_boundaries.sh /docker-entrypoint-initdb.d/02_load_boundaries.sh
 
@@ -35,5 +38,5 @@ CMD ["postgres", \
      "-c", "checkpoint_completion_target=0.9"]
 
 EXPOSE 5432
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=5 \
+HEALTHCHECK --interval=30s --timeout=5s --retries=5 --start-period=60s \
   CMD pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" || exit 1

@@ -21,7 +21,9 @@ schema:
             arguments:
               validValues:
                 - "Neighborhood Council"
+                - "Neighborhood"
                 - "Zip Code"
+                - "City Council District"
                 - "Place (Radius)"
             dimension: "conformity"
       - name: "region"
@@ -67,7 +69,9 @@ schema:
             arguments:
               validValues:
                 - "Neighborhood Council"
+                - "Neighborhood"
                 - "Zip Code"
+                - "City Council District"
                 - "Place (Radius)"
             mustBe: 0
             description: "Region Type should be one of the valid region types"
