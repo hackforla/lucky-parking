@@ -120,12 +120,14 @@ WHERE ticket_number IS NOT NULL
   AND loc_long BETWEEN -180 AND 180
 ORDER BY ticket_number;
 
-CREATE INDEX idx_citations_issue_datetime ON citations_new (issue_datetime);
-CREATE INDEX idx_citations_violation_code ON citations_new (violation_code);
-CREATE INDEX idx_citations_geom ON citations_new USING GIST (geom);
-
+-- Drop the old table first so its index names are free for the new table.
 DROP TABLE IF EXISTS citations;
 ALTER TABLE citations_new RENAME TO citations;
+
+CREATE INDEX idx_citations_issue_datetime ON citations (issue_datetime);
+CREATE INDEX idx_citations_violation_code ON citations (violation_code);
+CREATE INDEX idx_citations_geom ON citations USING GIST (geom);
+
 DROP TABLE IF EXISTS citations_staging;
 
 ANALYZE citations;

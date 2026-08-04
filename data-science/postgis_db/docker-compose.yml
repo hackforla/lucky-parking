@@ -14,6 +14,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-lucky_parking}
       POSTGRES_USER: ${POSTGRES_USER:-lucky}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      # Set to 1 to skip CSV load on first boot (e.g. restore from pg_dump only).
+      SKIP_CITATIONS_LOAD: ${SKIP_CITATIONS_LOAD:-0}
     volumes:
       - postgis_data:/var/lib/postgresql/data
       # Host CSV dumps for ad-hoc loads (e.g. scripts/load_citations.sql)
@@ -28,7 +30,8 @@ services:
       interval: 30s
       timeout: 5s
       retries: 5
-      start_period: 60s
+      # First boot can spend a long time loading citations from CSV.
+      start_period: 3600s
 
 volumes:
   postgis_data:

@@ -2,3 +2,8 @@
 polars>=1.30,<2
 psycopg[binary]>=3.2,<4
 python-dotenv>=1.0
+pydantic>=2.10,<3
+pytest>=8.0,<9
+fastapi>=0.115,<1
+uvicorn[standard]>=0.32,<1
+httpx>=0.28,<1
