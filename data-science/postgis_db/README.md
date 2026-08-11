@@ -4,6 +4,37 @@ PostGIS database packaging for Lucky Parking: boundary layers baked into a Docke
 
 Designed to **build and load locally** (or on a larger VPS), then **serve** on a small host such as IONOS VPS S+ (2 GB RAM / 90 GB NVMe) via a database dump restore.
 
+## Quick start
+
+Requires Docker and a citations CSV at `raw_data/Parking_Citations_*.csv`. First boot loads all boundary tables, then citations (can take a long time).
+
+```bash
+cd data-science/postgis_db
+
+# 1. Preflight
+bash scripts/check_boundaries.sh
+bash scripts/check_raw_data.sh
+
+# 2. Start PostGIS (boundaries + citations on empty volume)
+docker compose up -d --build
+docker compose logs -f   # Ctrl+C when healthy / load finished
+
+# 3. Python tooling + local explorer UI
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/uvicorn web_sheet.app:app --reload --port 8080
+# Open http://localhost:8080
+```
+
+Defaults: `localhost:5432`, db/user `lucky_parking` / `lucky`, password `changeme`.
+
+Already have a DB volume but missing neighborhood/place tables?
+
+```bash
+docker compose up -d --build
+bash scripts/reload_boundaries_docker.sh
+```
+
 ## Layout
 
 ```
