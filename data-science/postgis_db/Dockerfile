@@ -27,12 +27,17 @@ COPY boundaries/zipcodes/zipcodes.geojson /data/zipcodes.geojson
 COPY boundaries/council_districts/council_districts.geojson /data/council_districts.geojson
 COPY boundaries/neighborhoods/neighborhoods.geojson /data/neighborhoods.geojson
 COPY boundaries/places/places.geojson /data/places.geojson
+
+# Portable boundary loader (also used by init/02_load_boundaries.sh).
+RUN mkdir -p /usr/local/lib/lucky-parking
+COPY scripts/load_boundaries.sh scripts/normalize_boundaries.sql /usr/local/lib/lucky-parking/
 COPY scripts/load_contract_citations.py /usr/local/bin/load_contract_citations.py
 COPY init/01_extensions.sql /docker-entrypoint-initdb.d/01_extensions.sql
 COPY init/02_load_boundaries.sh /docker-entrypoint-initdb.d/02_load_boundaries.sh
 COPY init/03_load_citations.sh /docker-entrypoint-initdb.d/03_load_citations.sh
 
 RUN chmod +x \
+      /usr/local/lib/lucky-parking/load_boundaries.sh \
       /docker-entrypoint-initdb.d/02_load_boundaries.sh \
       /docker-entrypoint-initdb.d/03_load_citations.sh
 

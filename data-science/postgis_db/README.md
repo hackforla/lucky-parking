@@ -25,6 +25,11 @@ postgis_db/
 │   ├── 02_load_boundaries.sh
 │   └── 03_load_citations.sh  # Last: CSV → citations (if /raw_data has a dump)
 ├── scripts/
+│   ├── check_boundaries.sh          # Preflight: all required GeoJSON present
+│   ├── check_raw_data.sh            # Preflight: citations CSV present
+│   ├── load_boundaries.sh           # Portable GeoJSON → boundary/place tables
+│   ├── normalize_boundaries.sql     # Column renames / indexes after ogr2ogr
+│   ├── reload_boundaries_docker.sh  # Re-run loader in a running compose DB
 │   ├── load_citations.sql           # Full-column SQL COPY load (legacy/raw)
 │   ├── load_contract_citations.py   # Slim CSV → contract-oriented citations table
 │   └── query_contract.py            # CLI for data-contract queries (FastAPI-ready core)
@@ -58,6 +63,8 @@ The database itself is **not** a file in this repo. On Docker Desktop it is the 
 
 ### Boundaries & places (loaded on first container init)
 
+On **first** start with an empty Postgres volume, `init/02_load_boundaries.sh` runs the portable loader and populates **all** of these tables (fails the boot if any GeoJSON is missing):
+
 | Layer | Source | Features | Table | Geometry |
 |-------|--------|----------|-------|----------|
 | Neighborhood councils | [LA GeoHub Boundaries MapServer/18](https://maps.lacity.org/lahub/rest/services/Boundaries/MapServer/18) | 99 | `neighborhood_councils` | MultiPolygon |
@@ -67,6 +74,8 @@ The database itself is **not** a file in this repo. On Docker Desktop it is the 
 | Places (POIs) | OpenStreetMap Overpass (museums/galleries/arts centres) + [city cultural centers](https://data.lacity.org/Arts-Culture/Cultural-Centers-Theaters-Historic-Sites-and-Galle/vdjf-if28) | ~257 | `places` | Point |
 
 Polygon layers use `geometry(MultiPolygon, 4326)` with GIST indexes (`ST_MakeValid` on load). `places` uses `geometry(Point, 4326)` for `Place (Radius)` buffers. Some zip codes appear more than once (disjoint parts), so `zip` is indexed but **not** unique.
+
+GeoJSON is `COPY`’d into the image at `/data/<name>.geojson`. Host checkout layout is `boundaries/<name>/<name>.geojson`. Scripts resolve paths from env / repo location — **no machine-specific absolute paths**.
 
 A larger optional file `boundaries/neighborhoods/neighborhoods_comprehensive.geojson` (270 features, city + county named places) is kept on disk but **not** loaded by Docker init.
 
@@ -178,6 +187,19 @@ curl -s http://localhost:8000/chart \
   }'
 ```
 
+### Citation explorer UI (local-only service)
+
+Separate from Docker — pick a **region type**, type a **region** (live autocomplete of 5 alphabetical matches), choose dates, then view results as a **Chart (sheet)** or a **Map** with Leaflet markers on citation coordinates. Place (Radius) also shows a radius (m) field.
+
+```bash
+cd postgis_db
+# PostGIS must already be running
+.venv/bin/uvicorn web_sheet.app:app --reload --port 8080
+# Open http://localhost:8080
+```
+
+Default row cap is 1000 (adjustable in the form, max 10 000). Autocomplete: `GET /api/regions/suggest?region_type=...&q=...&limit=5`.
+
 ### Query the contract (CLI)
 
 ```bash
@@ -218,10 +240,11 @@ Requires Docker Desktop (or compatible engine). On Apple Silicon the image is pi
 ```bash
 cd data-science/postgis_db
 
-# Preflight: raw_data/ + Parking_Citations_*.csv must exist
+# Preflight (portable; paths relative to this repo)
+bash scripts/check_boundaries.sh
 bash scripts/check_raw_data.sh
 
-# First empty volume: boundaries, then citations from raw_data/Parking_Citations_*.csv
+# First empty volume: ALL boundary/place tables, then citations from raw_data/
 # (citations step can take a long time — watch: docker compose logs -f)
 docker compose up -d --build
 
@@ -229,7 +252,7 @@ docker compose up -d --build
 # POSTGRES_PASSWORD='your-secret' docker compose up -d --build
 
 # Shell into psql
-docker exec -it lucky-parking-postgis psql -U lucky -d lucky_parking
+docker compose exec -it postgis psql -U lucky -d lucky_parking
 ```
 
 Verify after init finishes:
@@ -242,6 +265,29 @@ SELECT
   (SELECT count(*) FROM council_districts) AS council_districts,
   (SELECT count(*) FROM places) AS places,
   (SELECT count(*) FROM citations) AS citations;
+```
+
+Expected boundary counts (approx.): councils 99, neighborhoods 114, zipcodes 313, council districts 15, places ~257.
+
+### Re-load boundaries on an existing volume
+
+Init scripts only run on an **empty** data volume. If a volume was created before all layers were in the image, or you need to refresh boundaries without wiping citations:
+
+```bash
+cd data-science/postgis_db
+# Rebuild so /data/*.geojson + /usr/local/lib/lucky-parking/load_boundaries.sh are current
+docker compose up -d --build
+bash scripts/reload_boundaries_docker.sh
+```
+
+Same loader, host Postgres + GDAL (no Docker), using the repo tree:
+
+```bash
+cd data-science/postgis_db
+export PGHOST=localhost PGPORT=5432
+export POSTGRES_DB=lucky_parking POSTGRES_USER=lucky POSTGRES_PASSWORD=changeme
+bash scripts/load_boundaries.sh
+# or explicitly: BOUNDARIES_DIR="$(pwd)/boundaries" bash scripts/load_boundaries.sh
 ```
 
 ### Re-load or smoke-test citations manually
@@ -272,12 +318,22 @@ LIMIT 10;
 
 - Base: `postgis/postgis:16-3.5` (`linux/amd64`)
 - Installs `gdal-bin` (boundaries) and Python + Polars/psycopg (citations)
+- Bakes all five boundary GeoJSON files into `/data/` and the portable loader into `/usr/local/lib/lucky-parking/`
 - On **first** start with an empty data volume:
   1. `01_extensions.sql` — `postgis`, `postgis_topology`
-  2. `02_load_boundaries.sh` — GeoJSON → boundary/place tables
+  2. `02_load_boundaries.sh` → `load_boundaries.sh` — **all** of `neighborhood_councils`, `zipcodes`, `council_districts`, `neighborhoods`, `places` (boot fails if any GeoJSON is missing)
   3. `03_load_citations.sh` — require `/raw_data` + `Parking_Citations_*.csv`, then load (or `SKIP_CITATIONS_LOAD=1`)
 - Postgres memory flags in `Dockerfile` `CMD` are sized for a **2 GB** VPS (e.g. `shared_buffers=256MB`)
 - Compose `mem_limit` defaults to `8g` locally; on S+ use `COMPOSE_MEM_LIMIT=1536m` and prefer dump restore over CSV init
+
+### Boundary loader env vars
+
+| Variable | Purpose |
+|----------|---------|
+| `BOUNDARY_GEOJSON_DIR` | Flat dir of `<name>.geojson` (Docker default `/data`) |
+| `BOUNDARIES_DIR` | Repo tree `boundaries/<name>/<name>.geojson` |
+| `PG_CONN` | Optional full GDAL `PG:...` connection string |
+| `POSTGRES_DB` / `USER` / `PASSWORD` / `HOST` / `PORT` | DB target (also accepts `PG*` names) |
 
 ## Deploy to a small VPS (e.g. IONOS S+)
 

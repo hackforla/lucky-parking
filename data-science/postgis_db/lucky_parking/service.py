@@ -173,6 +173,171 @@ class QueryService:
                 cur.execute(sql, {"limit": limit})
                 return [str(row["label"]) for row in cur.fetchall()]
 
+    def suggest_regions(
+        self,
+        region_type: RegionType,
+        query: str,
+        *,
+        limit: int = 5,
+    ) -> list[str]:
+        """Return up to ``limit`` region labels matching live typing (alphabetical)."""
+        config = REGION_CONFIG[region_type]
+        q = query.strip()
+        params: dict[str, Any] = {"limit": limit}
+        if q:
+            # Prefix match preferred; fall back to contains if needed via OR.
+            params["prefix"] = f"{q}%"
+            params["contains"] = f"%{q}%"
+            where = (
+                f"({config.label_column} ILIKE %(prefix)s "
+                f"OR {config.label_column} ILIKE %(contains)s)"
+            )
+            if config.alt_match_column:
+                where = (
+                    f"({where} OR {config.alt_match_column}::text ILIKE %(prefix)s "
+                    f"OR {config.alt_match_column}::text ILIKE %(contains)s)"
+                )
+        else:
+            where = "TRUE"
+
+        sql = f"""
+        SELECT DISTINCT {config.label_column} AS label
+        FROM {config.table}
+        WHERE {where}
+        ORDER BY 1
+        LIMIT %(limit)s
+        """
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute(sql, params)
+                return [str(row["label"]) for row in cur.fetchall()]
+
+    def fetch_region_citations(
+        self,
+        region_type: RegionType,
+        region: str,
+        date_min,
+        date_max,
+        *,
+        limit: int = 1000,
+        radius_meters: float = 500.0,
+    ) -> dict[str, Any]:
+        """Return citation rows for a contract region + date range (sheet/map UI).
+
+        Includes lon/lat from ``geom`` for map markers. Results capped at ``limit``.
+        """
+        config = REGION_CONFIG[region_type]
+        region = region.strip()
+        params: dict[str, Any] = {
+            "region": region,
+            "date_min": date_min,
+            "date_max": date_max,
+            "limit": limit,
+            "radius_meters": radius_meters,
+        }
+
+        if config.geom_kind == "polygon":
+            spatial = "ST_Contains(r.geom, c.geom)"
+        else:
+            spatial = (
+                "ST_DWithin(c.geom::geography, r.geom::geography, %(radius_meters)s)"
+            )
+
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    f"""
+                    SELECT 1 FROM {config.table}
+                    WHERE {region_where_clause(config)}
+                    LIMIT 1
+                    """,
+                    {"region": region},
+                )
+                if cur.fetchone() is None:
+                    raise RegionNotFoundError(
+                        f"No {region_type.value} matching {region!r}"
+                    )
+
+                cur.execute(
+                    f"""
+                    WITH region AS (
+                        SELECT geom
+                        FROM {config.table}
+                        WHERE {region_where_clause(config)}
+                        LIMIT 1
+                    )
+                    SELECT count(*)::int AS total
+                    FROM citations c
+                    INNER JOIN region r ON TRUE
+                    WHERE c.geom IS NOT NULL
+                      AND c.issue_datetime >= %(date_min)s
+                      AND c.issue_datetime < %(date_max)s
+                      AND {spatial}
+                    """,
+                    params,
+                )
+                total = int(cur.fetchone()["total"])
+
+                cur.execute(
+                    f"""
+                    WITH region AS (
+                        SELECT geom
+                        FROM {config.table}
+                        WHERE {region_where_clause(config)}
+                        LIMIT 1
+                    )
+                    SELECT
+                        c.ticket_number,
+                        c.issue_datetime,
+                        c.violation_code,
+                        c.violation_description,
+                        c.fine_amount,
+                        ST_Y(c.geom::geometry) AS lat,
+                        ST_X(c.geom::geometry) AS lon
+                    FROM citations c
+                    INNER JOIN region r ON TRUE
+                    WHERE c.geom IS NOT NULL
+                      AND c.issue_datetime >= %(date_min)s
+                      AND c.issue_datetime < %(date_max)s
+                      AND {spatial}
+                    ORDER BY c.issue_datetime DESC, c.ticket_number
+                    LIMIT %(limit)s
+                    """,
+                    params,
+                )
+                rows = cur.fetchall()
+
+        return {
+            "region_type": region_type.value,
+            "region": region,
+            "total": total,
+            "limit": limit,
+            "truncated": total > limit,
+            "radius_meters": radius_meters
+            if region_type == RegionType.PLACE_RADIUS
+            else None,
+            "rows": rows,
+        }
+
+    def fetch_zip_citations(
+        self,
+        zip_code: str,
+        date_min,
+        date_max,
+        *,
+        limit: int = 1000,
+    ) -> dict[str, Any]:
+        """Backward-compatible wrapper around ``fetch_region_citations``."""
+        result = self.fetch_region_citations(
+            RegionType.ZIP_CODE,
+            zip_code,
+            date_min,
+            date_max,
+            limit=limit,
+        )
+        result["zip"] = result["region"]
+        return result
+
     def _params_base(
         self,
         region: str,
