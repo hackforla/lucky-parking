@@ -220,7 +220,7 @@ curl -s http://localhost:8000/chart \
 
 ### Citation explorer UI (local-only service)
 
-Separate from Docker — pick a **region type**, type a **region** (live autocomplete of 5 alphabetical matches), choose dates, then view results as a **Chart (sheet)** or a **Map** with Leaflet markers on citation coordinates. Place (Radius) also shows a radius (m) field.
+Separate from Docker — toggle **Single-region** or **Compare mode** at the top. Pick a region type, type region(s) (live autocomplete of 5 alphabetical matches), choose dates, then view results as a **Chart (sheet)** or a **Map**. Compare mode shows two region inputs and two side-by-side sheets/maps. Place (Radius) also shows a radius (m) field.
 
 ```bash
 cd postgis_db

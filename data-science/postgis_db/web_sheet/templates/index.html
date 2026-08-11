@@ -11,14 +11,25 @@
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <main class="page">
+  <main class="page {% if query_mode == 'compare' %}page-wide{% endif %}">
     <header class="hero">
       <p class="brand">Lucky Parking</p>
       <h1>Citation explorer</h1>
-      <p class="lede">Filter by region type, region, and dates. View matching citations as a spreadsheet or a map with coordinate markers.</p>
+      <p class="lede">Filter by region type, region, and dates. View matching citations as a spreadsheet or a map with coordinate markers. Use compare mode for two regions side by side.</p>
     </header>
 
+    <div class="mode-switch" role="group" aria-label="Query mode">
+      <button type="button" class="mode-btn {% if query_mode == 'single' %}active{% endif %}" data-mode="single">
+        Single-region
+      </button>
+      <button type="button" class="mode-btn {% if query_mode == 'compare' %}active{% endif %}" data-mode="compare">
+        Compare mode
+      </button>
+    </div>
+
     <form class="filters" method="post" action="/lookup" id="lookup-form">
+      <input type="hidden" name="query_mode" id="query-mode" value="{{ query_mode }}" />
+
       <label>
         <span>Region type</span>
         <select name="region_type" id="region-type" required>
@@ -28,22 +39,59 @@
         </select>
       </label>
 
-      <label class="region-field">
-        <span>Region</span>
-        <div class="suggest-wrap">
-          <input
-            name="region"
-            id="region-input"
-            type="text"
-            required
-            autocomplete="off"
-            value="{{ region }}"
-            aria-autocomplete="list"
-            aria-controls="region-suggestions"
-          />
-          <ul id="region-suggestions" class="suggestions" hidden role="listbox"></ul>
-        </div>
-      </label>
+      <div id="single-region-fields" class="region-inputs" {% if query_mode != 'single' %}hidden{% endif %}>
+        <label class="region-field">
+          <span>Region</span>
+          <div class="suggest-wrap" data-suggest>
+            <input
+              name="region"
+              id="region-input"
+              type="text"
+              {% if query_mode == 'single' %}required{% endif %}
+              autocomplete="off"
+              value="{{ region }}"
+              data-region-input
+              aria-autocomplete="list"
+            />
+            <ul class="suggestions" hidden role="listbox"></ul>
+          </div>
+        </label>
+      </div>
+
+      <div id="compare-region-fields" class="region-inputs compare-inputs" {% if query_mode != 'compare' %}hidden{% endif %}>
+        <label class="region-field">
+          <span>Region 1</span>
+          <div class="suggest-wrap" data-suggest>
+            <input
+              name="region_1"
+              id="region-1-input"
+              type="text"
+              {% if query_mode == 'compare' %}required{% endif %}
+              autocomplete="off"
+              value="{{ region_1 }}"
+              data-region-input
+              aria-autocomplete="list"
+            />
+            <ul class="suggestions" hidden role="listbox"></ul>
+          </div>
+        </label>
+        <label class="region-field">
+          <span>Region 2</span>
+          <div class="suggest-wrap" data-suggest>
+            <input
+              name="region_2"
+              id="region-2-input"
+              type="text"
+              {% if query_mode == 'compare' %}required{% endif %}
+              autocomplete="off"
+              value="{{ region_2 }}"
+              data-region-input
+              aria-autocomplete="list"
+            />
+            <ul class="suggestions" hidden role="listbox"></ul>
+          </div>
+        </label>
+      </div>
 
       <label id="radius-field" {% if region_type != 'Place (Radius)' %}hidden{% endif %}>
         <span>Radius (m)</span>
@@ -76,8 +124,8 @@
     <p class="error" role="alert">{{ error }}</p>
     {% endif %}
 
-    {% if result %}
-    <section class="sheet-wrap" aria-label="Citation results">
+    {% macro result_panel(result, map_id, markers_id, panel_label) %}
+    <section class="sheet-wrap" aria-label="{{ panel_label }}">
       <div class="sheet-meta">
         <strong>{{ result.region_type }} · {{ result.region }}</strong>
         {% if result.radius_meters %}
@@ -92,8 +140,8 @@
       </div>
 
       {% if view_mode == 'map' %}
-      <div id="map" class="map" role="region" aria-label="Citation map"></div>
-      <script type="application/json" id="map-markers">{{ result.rows | tojson }}</script>
+      <div id="{{ map_id }}" class="map" data-map role="region" aria-label="{{ panel_label }} map"></div>
+      <script type="application/json" id="{{ markers_id }}" data-map-markers>{{ result.rows | tojson }}</script>
       {% else %}
       <div class="sheet">
         <table>
@@ -127,6 +175,25 @@
       </div>
       {% endif %}
     </section>
+    {% endmacro %}
+
+    {% if query_mode == 'single' and result %}
+      {{ result_panel(result, 'map', 'map-markers', 'Citation results') }}
+    {% elif query_mode == 'compare' and (result_1 or result_2) %}
+    <div class="compare-results">
+      {% if result_1 %}
+      <div class="compare-pane">
+        <h2 class="pane-title">Region 1</h2>
+        {{ result_panel(result_1, 'map-1', 'map-markers-1', 'Region 1 results') }}
+      </div>
+      {% endif %}
+      {% if result_2 %}
+      <div class="compare-pane">
+        <h2 class="pane-title">Region 2</h2>
+        {{ result_panel(result_2, 'map-2', 'map-markers-2', 'Region 2 results') }}
+      </div>
+      {% endif %}
+    </div>
     {% endif %}
   </main>
 

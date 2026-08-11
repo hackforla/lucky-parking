@@ -29,6 +29,42 @@ body {
   padding: 2.5rem 0 4rem;
 }
 
+.page.page-wide {
+  width: min(1400px, calc(100% - 2rem));
+}
+
+.mode-switch {
+  display: inline-flex;
+  gap: 0;
+  margin: 0 0 1rem;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.mode-btn {
+  padding: 0.55rem 1rem;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mode-btn + .mode-btn {
+  border-left: 1px solid var(--line);
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  color: #f4fffb;
+}
+
+.mode-btn:not(.active):hover {
+  background: #eef6f3;
+  color: var(--accent-ink);
+}
+
 .hero .brand {
   margin: 0 0 0.35rem;
   font-family: "Fraunces", Georgia, serif;
@@ -61,6 +97,45 @@ body {
   padding: 1rem 1.1rem;
   background: var(--panel);
   border: 1px solid var(--line);
+}
+
+.region-inputs,
+.compare-inputs {
+  display: contents;
+}
+
+.region-inputs[hidden],
+.compare-inputs[hidden] {
+  display: none !important;
+}
+
+.compare-results {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+  align-items: start;
+}
+
+.compare-pane .sheet-wrap {
+  margin-top: 0.5rem;
+}
+
+.pane-title {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--accent-ink);
+}
+
+.compare-pane .map {
+  min-height: 360px;
+  height: min(55vh, 560px);
+}
+
+.compare-pane .sheet {
+  max-height: min(55vh, 560px);
 }
 
 .filters label {
@@ -257,7 +332,10 @@ tbody tr:hover td {
   .filters {
     grid-template-columns: 1fr 1fr;
   }
-  .filters button {
+  .filters button[type="submit"] {
     grid-column: 1 / -1;
+  }
+  .compare-results {
+    grid-template-columns: 1fr;
   }
 }

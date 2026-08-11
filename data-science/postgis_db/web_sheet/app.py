@@ -54,14 +54,19 @@ def _base_ctx(**overrides) -> dict:
     today = date.today()
     ctx = {
         "region_types": REGION_TYPES,
+        "query_mode": "single",
         "region_type": RegionType.ZIP_CODE.value,
         "region": "90024",
+        "region_1": "Westwood",
+        "region_2": "Hollywood",
         "date_min": date(today.year, 1, 1).isoformat(),
         "date_max": today.isoformat(),
         "limit": DEFAULT_LIMIT,
         "radius_meters": DEFAULT_PLACE_RADIUS_METERS,
         "view_mode": "chart",
         "result": None,
+        "result_1": None,
+        "result_2": None,
         "error": None,
     }
     ctx.update(overrides)
@@ -86,6 +91,37 @@ def _serialize_rows(raw_rows: list) -> list[dict]:
             }
         )
     return rows
+
+
+def _pack_result(raw: dict) -> dict:
+    return {
+        "region_type": raw["region_type"],
+        "region": raw["region"],
+        "total": raw["total"],
+        "limit": raw["limit"],
+        "truncated": raw["truncated"],
+        "radius_meters": raw["radius_meters"],
+        "rows": _serialize_rows(raw["rows"]),
+    }
+
+
+def _validate_common(
+    date_min: str,
+    date_max: str,
+    limit: int,
+    radius_meters: float,
+) -> tuple[datetime, datetime]:
+    d_min = _parse_date(date_min, "date_min")
+    d_max = _parse_date(date_max, "date_max")
+    if d_min > d_max:
+        raise ValueError("date_min must be on or before date_max")
+    if limit < 1 or limit > 10_000:
+        raise ValueError("limit must be between 1 and 10000")
+    if radius_meters <= 0 or radius_meters > 50_000:
+        raise ValueError("radius_meters must be between 0 and 50000")
+    start = datetime.combine(d_min, datetime.min.time())
+    end = datetime.combine(d_max + timedelta(days=1), datetime.min.time())
+    return start, end
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -113,17 +149,24 @@ async def suggest_regions(
 @app.post("/lookup", response_class=HTMLResponse)
 async def lookup(
     request: Request,
+    query_mode: str = Form("single"),
     region_type: str = Form(...),
-    region: str = Form(...),
     date_min: str = Form(...),
     date_max: str = Form(...),
     view_mode: str = Form("chart"),
     limit: int = Form(DEFAULT_LIMIT),
     radius_meters: float = Form(DEFAULT_PLACE_RADIUS_METERS),
+    region: str = Form(""),
+    region_1: str = Form(""),
+    region_2: str = Form(""),
 ) -> HTMLResponse:
+    mode = query_mode if query_mode in {"single", "compare"} else "single"
     ctx = _base_ctx(
+        query_mode=mode,
         region_type=region_type,
         region=region.strip(),
+        region_1=region_1.strip(),
+        region_2=region_2.strip(),
         date_min=date_min,
         date_max=date_max,
         limit=limit,
@@ -132,34 +175,36 @@ async def lookup(
     )
     try:
         rt = RegionType(region_type)
-        d_min = _parse_date(date_min, "date_min")
-        d_max = _parse_date(date_max, "date_max")
-        if d_min > d_max:
-            raise ValueError("date_min must be on or before date_max")
-        if limit < 1 or limit > 10_000:
-            raise ValueError("limit must be between 1 and 10000")
-        if radius_meters <= 0 or radius_meters > 50_000:
-            raise ValueError("radius_meters must be between 0 and 50000")
+        start, end = _validate_common(date_min, date_max, limit, radius_meters)
+        svc = QueryService()
 
-        start = datetime.combine(d_min, datetime.min.time())
-        end = datetime.combine(d_max + timedelta(days=1), datetime.min.time())
-        raw = QueryService().fetch_region_citations(
-            rt,
-            region,
-            start,
-            end,
-            limit=limit,
-            radius_meters=radius_meters,
-        )
-        ctx["result"] = {
-            "region_type": raw["region_type"],
-            "region": raw["region"],
-            "total": raw["total"],
-            "limit": raw["limit"],
-            "truncated": raw["truncated"],
-            "radius_meters": raw["radius_meters"],
-            "rows": _serialize_rows(raw["rows"]),
-        }
+        if mode == "single":
+            if not region.strip():
+                raise ValueError("region is required")
+            raw = svc.fetch_region_citations(
+                rt,
+                region,
+                start,
+                end,
+                limit=limit,
+                radius_meters=radius_meters,
+            )
+            ctx["result"] = _pack_result(raw)
+        else:
+            r1 = region_1.strip()
+            r2 = region_2.strip()
+            if not r1 or not r2:
+                raise ValueError("region_1 and region_2 are required")
+            if r1.casefold() == r2.casefold():
+                raise ValueError("region_1 and region_2 must differ")
+            raw1 = svc.fetch_region_citations(
+                rt, r1, start, end, limit=limit, radius_meters=radius_meters
+            )
+            raw2 = svc.fetch_region_citations(
+                rt, r2, start, end, limit=limit, radius_meters=radius_meters
+            )
+            ctx["result_1"] = _pack_result(raw1)
+            ctx["result_2"] = _pack_result(raw2)
     except (ValueError, RegionNotFoundError) as exc:
         ctx["error"] = str(exc)
     except Exception as exc:  # noqa: BLE001
