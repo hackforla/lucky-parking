@@ -14,7 +14,7 @@ from collections.abc import Generator
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import ValidationError as PydanticValidationError
 
 # Ensure ``lucky_parking`` resolves when uvicorn loads ``api.main``.
@@ -53,6 +53,12 @@ def get_query_service() -> Generator[QueryService, None, None]:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/", include_in_schema=False)
+def root() -> RedirectResponse:
+    """Contract API has no HTML UI — redirect browsers to OpenAPI docs."""
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/chart-types", response_model=list[str])

@@ -1,0 +1,97 @@
+# Production stack: PostGIS (internal) + contract API + explorer UI.
+#
+#   cp .env.example .env   # set POSTGRES_PASSWORD
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# PostGIS is NOT published to the host. Only API (8000) and web UI (8080) are.
+# Restore a local pg_dump after first boot — see deploy/VPS.md
+services:
+  postgis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lucky-parking-postgis:prod
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lucky_parking}
+      POSTGRES_USER: ${POSTGRES_USER:-lucky}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      SKIP_CITATIONS_LOAD: ${SKIP_CITATIONS_LOAD:-1}
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+      # Optional: place lucky_parking.dump here for scripts/prod_restore.sh
+      - ./dumps:/dumps:ro
+    networks:
+      - internal
+    mem_limit: ${COMPOSE_MEM_LIMIT_POSTGIS:-2560m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_POSTGIS:-2560m}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 300s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: lucky-parking-api:prod
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    networks:
+      - internal
+    mem_limit: ${COMPOSE_MEM_LIMIT_API:-512m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_API:-512m}
+    depends_on:
+      postgis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    image: lucky-parking-api:prod
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+    ports:
+      - "${WEB_PORT:-8080}:8080"
+    networks:
+      - internal
+    mem_limit: ${COMPOSE_MEM_LIMIT_WEB:-512m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_WEB:-512m}
+    depends_on:
+      postgis:
+        condition: service_healthy
+      api:
+        condition: service_started
+    command:
+      - uvicorn
+      - web_sheet.app:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8080"
+      - --workers
+      - "1"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  postgis_data:

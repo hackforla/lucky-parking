@@ -32,12 +32,14 @@ COPY boundaries/places/places.geojson /data/places.geojson
 RUN mkdir -p /usr/local/lib/lucky-parking
 COPY scripts/load_boundaries.sh scripts/normalize_boundaries.sql /usr/local/lib/lucky-parking/
 COPY scripts/load_contract_citations.py /usr/local/bin/load_contract_citations.py
+COPY scripts/postgis-healthcheck.sh /usr/local/bin/postgis-healthcheck.sh
 COPY init/01_extensions.sql /docker-entrypoint-initdb.d/01_extensions.sql
 COPY init/02_load_boundaries.sh /docker-entrypoint-initdb.d/02_load_boundaries.sh
 COPY init/03_load_citations.sh /docker-entrypoint-initdb.d/03_load_citations.sh
 
 RUN chmod +x \
       /usr/local/lib/lucky-parking/load_boundaries.sh \
+      /usr/local/bin/postgis-healthcheck.sh \
       /docker-entrypoint-initdb.d/02_load_boundaries.sh \
       /docker-entrypoint-initdb.d/03_load_citations.sh
 

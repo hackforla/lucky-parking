@@ -52,6 +52,10 @@ def _parse_date(value: str, field: str) -> date:
 
 def _base_ctx(**overrides) -> dict:
     today = date.today()
+    # City CSV dumps lag the calendar year; default to prior Jan 1 → today so
+    # a fresh load (e.g. Parking_Citations_20250811.csv) returns rows without
+    # manually widening dates when the year rolls over.
+    date_min_default = date(today.year - 1, 1, 1)
     ctx = {
         "region_types": REGION_TYPES,
         "query_mode": "single",
@@ -59,7 +63,7 @@ def _base_ctx(**overrides) -> dict:
         "region": "90024",
         "region_1": "Westwood",
         "region_2": "Hollywood",
-        "date_min": date(today.year, 1, 1).isoformat(),
+        "date_min": date_min_default.isoformat(),
         "date_max": today.isoformat(),
         "limit": DEFAULT_LIMIT,
         "radius_meters": DEFAULT_PLACE_RADIUS_METERS,

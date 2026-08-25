@@ -1,6 +1,15 @@
-# Local PostGIS (also deployable on IONOS VPS S+).
+# Local dev stack — one command after preflight:
+#
+#   bash scripts/preflight.sh          # macOS / Linux
+#   scripts\preflight.cmd              # Windows (no execution-policy change)
 #   docker compose up -d --build
-# Override password: POSTGRES_PASSWORD=... docker compose up -d
+#   docker compose logs -f postgis     # first boot: boundaries + citations (hours)
+#
+# Then open http://localhost:8080 (explorer) and http://localhost:8000/docs (API).
+# PostGIS stays private to the compose network except :5432 for local psql/tools.
+#
+# Fresh database: docker compose down -v && docker compose up -d --build
+# Status: bash scripts/db-status.sh  or  scripts\db-status.cmd
 services:
   postgis:
     build: .
@@ -18,20 +27,83 @@ services:
       SKIP_CITATIONS_LOAD: ${SKIP_CITATIONS_LOAD:-0}
     volumes:
       - postgis_data:/var/lib/postgresql/data
-      # Host CSV dumps for ad-hoc loads (e.g. scripts/load_citations.sql)
       - ./raw_data:/raw_data:ro
       - ./scripts:/scripts:ro
+      # Host loader stays in sync without rebuilding the PostGIS image.
+      - ./scripts/load_contract_citations.py:/usr/local/bin/load_contract_citations.py:ro
+      - ./scripts/postgis-healthcheck.sh:/usr/local/bin/postgis-healthcheck.sh:ro
     # Local Mac has plenty of RAM; raise for large CSV loads.
     # On the 2 GB VPS, set COMPOSE_MEM_LIMIT=1536m (and load in chunks).
     mem_limit: ${COMPOSE_MEM_LIMIT:-8g}
     memswap_limit: ${COMPOSE_MEM_LIMIT:-8g}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      # Waits for init scripts (boundaries + citations) before api/web start.
+      test: ["CMD", "/usr/local/bin/postgis-healthcheck.sh"]
       interval: 30s
-      timeout: 5s
+      timeout: 10s
       retries: 5
       # First boot can spend a long time loading citations from CSV.
-      start_period: 3600s
+      start_period: 7200s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: lucky-parking-api:local
+    container_name: lucky-parking-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD:-changeme}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./lucky_parking:/app/lucky_parking:ro
+      - ./api:/app/api:ro
+    mem_limit: ${COMPOSE_MEM_LIMIT_API:-512m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_API:-512m}
+    depends_on:
+      postgis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    image: lucky-parking-api:local
+    container_name: lucky-parking-web
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD:-changeme}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+    ports:
+      - "${WEB_PORT:-8080}:8080"
+    volumes:
+      - ./lucky_parking:/app/lucky_parking:ro
+      - ./web_sheet:/app/web_sheet:ro
+    mem_limit: ${COMPOSE_MEM_LIMIT_WEB:-512m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_WEB:-512m}
+    depends_on:
+      postgis:
+        condition: service_healthy
+      api:
+        condition: service_started
+    command:
+      - uvicorn
+      - web_sheet.app:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8080"
+      - --workers
+      - "1"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 volumes:
   postgis_data:

@@ -10,6 +10,7 @@ set -euo pipefail
 
 if [[ "${SKIP_CITATIONS_LOAD:-}" == "1" ]]; then
   echo "SKIP_CITATIONS_LOAD=1; skipping citations load."
+  touch /var/lib/postgresql/data/.lucky_parking_init_done
   exit 0
 fi
 
@@ -59,3 +60,4 @@ python3 /usr/local/bin/load_contract_citations.py \
   --dsn "postgresql://${POSTGRES_USER}@/${POSTGRES_DB}?host=/var/run/postgresql"
 
 echo "Citations load finished."
+touch /var/lib/postgresql/data/.lucky_parking_init_done

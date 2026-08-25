@@ -18,8 +18,11 @@ tables (``neighborhood_councils``, ``zipcodes``, ``council_districts``), not
 the CSV. Place (Radius) still needs an external geocoder.
 
 Example:
+    python scripts/load_contract_citations.py
+
+    # Explicit CSV path:
     python scripts/load_contract_citations.py \\
-        --csv raw_data/Parking_Citations_20260720.csv
+        --csv raw_data/Parking_Citations_20250811.csv
 
     # Smoke test on 100k rows:
     python scripts/load_contract_citations.py --limit 100000
@@ -38,7 +41,18 @@ import polars as pl
 import psycopg
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CSV = ROOT / "raw_data" / "Parking_Citations_20260720.csv"
+RAW_DATA_DIR = ROOT / "raw_data"
+
+
+def default_csv_path() -> Path:
+    """Newest ``Parking_Citations_*.csv`` under ``raw_data/`` (matches Docker init)."""
+    candidates = sorted(RAW_DATA_DIR.glob("Parking_Citations_*.csv"))
+    if candidates:
+        return candidates[-1]
+    return RAW_DATA_DIR / "Parking_Citations_YYYYMMDD.csv"
+
+
+DEFAULT_CSV = default_csv_path()
 DEFAULT_DSN = os.getenv(
     "DATABASE_URL",
     "postgresql://lucky:changeme@localhost:5432/lucky_parking",
@@ -56,8 +70,11 @@ SOURCE_COLUMNS = (
     "loc_long",
 )
 
-# Matches city CSV dumps and beta_pipeline/parking_db.py
-CSV_DATE_FORMAT = "%Y %b %d %I:%M:%S %p"
+# Legacy city dumps: "2025 Apr 26 03:45:00 PM"
+CSV_DATE_FORMAT_LEGACY = "%Y %b %d %I:%M:%S %p"
+# data.lacity.org export (2025+): "04/26/2025 12:00:00 AM" + issue_time HHMM
+CSV_DATE_FORMAT_US = "%m/%d/%Y %I:%M:%S %p"
+CSV_DATE_FORMAT_US_DATE_ONLY = "%m/%d/%Y"
 
 POLARS_SCHEMA: dict[str, pl.DataType] = {
     "ticket_number": pl.String,
@@ -163,11 +180,19 @@ def transform_batch(df: pl.DataFrame) -> pl.DataFrame:
         .fill_null(0)
     )
 
-    issue_date = pl.col("issue_date").str.strptime(
-        pl.Datetime, format=CSV_DATE_FORMAT, strict=False
+    issue_date_parsed = pl.coalesce(
+        pl.col("issue_date").str.strptime(
+            pl.Datetime, format=CSV_DATE_FORMAT_US, strict=False
+        ),
+        pl.col("issue_date").str.strptime(
+            pl.Datetime, format=CSV_DATE_FORMAT_LEGACY, strict=False
+        ),
+        pl.col("issue_date").str.strptime(
+            pl.Datetime, format=CSV_DATE_FORMAT_US_DATE_ONLY, strict=False
+        ),
     )
     issue_datetime = (
-        issue_date.dt.truncate("1d") + pl.duration(seconds=seconds)
+        issue_date_parsed.dt.truncate("1d") + pl.duration(seconds=seconds)
     ).dt.replace_time_zone("UTC")
 
     fine = (
@@ -190,6 +215,7 @@ def transform_batch(df: pl.DataFrame) -> pl.DataFrame:
             loc_long=lon,
         )
         .filter(pl.col("ticket_number").is_not_null() & (pl.col("ticket_number") != ""))
+        .filter(pl.col("issue_datetime").is_not_null())
         .select(
             "ticket_number",
             "issue_datetime",
@@ -273,7 +299,11 @@ def load_citations(
     limit: int | None = None,
 ) -> dict[str, int | str]:
     if not csv_path.is_file():
-        raise FileNotFoundError(csv_path)
+        raise FileNotFoundError(
+            f"{csv_path}\n"
+            f"No citations CSV found. Add Parking_Citations_*.csv under {RAW_DATA_DIR} "
+            f"or pass --csv explicitly."
+        )
 
     started = time.time()
     loaded = 0
@@ -299,6 +329,15 @@ def load_citations(
 
         print("  swapping into citations (dedupe + geom + indexes)...", flush=True)
         with conn.cursor() as cur:
+            cur.execute(
+                "SELECT count(*) FILTER (WHERE issue_datetime IS NULL) FROM citations_staging"
+            )
+            (staging_null_dt,) = cur.fetchone()
+            if loaded and staging_null_dt == loaded:
+                raise RuntimeError(
+                    "All staged rows have NULL issue_datetime — "
+                    f"check issue_date/issue_time format in {csv_path.name}"
+                )
             cur.execute(SWAP_SQL)
             cur.execute(
                 """
@@ -330,8 +369,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument(
         "--csv",
         type=Path,
-        default=DEFAULT_CSV,
-        help=f"Path to parking citations CSV (default: {DEFAULT_CSV})",
+        default=default_csv_path(),
+        help="Path to parking citations CSV (default: newest Parking_Citations_*.csv in raw_data/)",
     )
     p.add_argument(
         "--dsn",
@@ -350,7 +389,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    print(f"Loading {args.csv} → {args.dsn}", flush=True)
+    print(f"Loading {args.csv} -> {args.dsn}", flush=True)
     if args.limit:
         print(f"  limit={args.limit:,}", flush=True)
     try:
