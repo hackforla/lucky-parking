@@ -38,7 +38,8 @@ services:
     memswap_limit: ${COMPOSE_MEM_LIMIT:-8g}
     healthcheck:
       # Waits for init scripts (boundaries + citations) before api/web start.
-      test: ["CMD", "/usr/local/bin/postgis-healthcheck.sh"]
+      # Invoke via bash: host bind-mount may not preserve the executable bit.
+      test: ["CMD", "bash", "/usr/local/bin/postgis-healthcheck.sh"]
       interval: 30s
       timeout: 10s
       retries: 5
