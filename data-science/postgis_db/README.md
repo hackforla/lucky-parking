@@ -6,7 +6,7 @@ Designed to **build and load locally** (or on a larger VPS), then **serve** on a
 
 ## Quick start (Docker only)
 
-**Requires:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) and one LA citations CSV in `raw_data/Parking_Citations_*.csv` (~5 GB). No host Python or venv needed to run the stack.
+**Requires:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) and one LA citations CSV in `raw_data/Parking_Citations_*.csv` (~5 GB). Download the flat file from the [Parking Citations dataset](https://data.lacity.org/Transportation/Parking-Citations/4f5p-udkv/about_data) on the LA Open Data Portal. No host Python or venv needed to run the stack.
 
 `docker compose up` builds and starts **PostGIS**, then (after the database is healthy on first boot) the **contract API** and **citation explorer**.
 
@@ -20,7 +20,7 @@ There is **no authentication** on the API or explorer.
 
 ### 1. Add the citations CSV
 
-Download a city dump from [data.lacity.org](https://data.lacity.org/) and place it here (any date in the filename is fine):
+Download the **Parking Citations** flat file (CSV export) from the [LA Open Data Portal](https://data.lacity.org/Transportation/Parking-Citations/4f5p-udkv/about_data) and place it here (any date in the filename is fine):
 
 ```text
 postgis_db/raw_data/Parking_Citations_YYYYMMDD.csv
@@ -234,7 +234,7 @@ A larger optional file `boundaries/neighborhoods/neighborhoods_comprehensive.geo
 
 | Source | Notes |
 |--------|--------|
-| LA parking citations CSV dump | e.g. `raw_data/Parking_Citations_20260720.csv` (~6 GB, ~25M rows), mounted at `/raw_data` |
+| [Parking Citations](https://data.lacity.org/Transportation/Parking-Citations/4f5p-udkv/about_data) (LA Open Data Portal) | Export CSV → e.g. `raw_data/Parking_Citations_20260720.csv` (~6 GB, ~25M rows), mounted at `/raw_data` |
 | Loader | `init/03_load_citations.sh` → `load_contract_citations.py` (contract schema) |
 
 On **first** start with an empty volume, after boundaries load, init checks that `/raw_data` exists and contains a non-empty `Parking_Citations_*.csv`, then loads the newest match into `public.citations`. Missing folder/CSV **fails init** (container exits). For dump-only deploys, set `SKIP_CITATIONS_LOAD=1`.
