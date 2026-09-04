@@ -2,7 +2,7 @@ import "dotenv/config";
 import { connect } from "./database/db";
 import app from "./app";
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 connect();
 
