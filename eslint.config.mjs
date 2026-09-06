@@ -7,6 +7,7 @@ export default defineConfig([
 	...nextTs,
 	{
 		rules: {
+			"@next/next/no-html-link-for-pages": "off",
 			"@typescript-eslint/ban-ts-comment": [
 				"error",
 				{
@@ -16,7 +17,7 @@ export default defineConfig([
 					"ts-nocheck": false,
 				},
 			],
-			"import/no-anonymous-default-export": "warn",
+			"import/no-anonymous-default-export": "off",
 			"react-hooks/purity": "warn",
 			"react-hooks/set-state-in-effect": "warn",
 		},

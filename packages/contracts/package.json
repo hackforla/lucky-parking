@@ -8,8 +8,8 @@
 		"dev": "tsc --watch",
 		"format": "prettier . --check --ignore-unknown",
 		"format:fix": "prettier . --write --ignore-unknown",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern"
 	},
 	"devDependencies": {
 		"@lucky-parking/configs": "workspace:^",

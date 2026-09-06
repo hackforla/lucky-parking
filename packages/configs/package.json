@@ -3,7 +3,6 @@
 	"type": "module",
 	"exports": {
 		"./*": "./src/*",
-		"./eslint": "./src/eslint/eslint.config.mjs",
 		"./prettier": "./src/prettier/prettier.config.mjs",
 		"./tailwind/postcss": "./src/tailwind/postcss.config.js"
 	},
@@ -28,5 +27,7 @@
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"tailwindcss": "^4.1.18",
 		"typescript": "catalog:tooling"
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern"
 	}
 }

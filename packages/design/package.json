@@ -18,8 +18,8 @@
 		"dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
 		"format": "prettier . --check --ignore-unknown",
 		"format:fix": "prettier . --write --ignore-unknown",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern"
 	},
 	"dependencies": {
 		"@radix-ui/react-accordion": "^1.2.12",

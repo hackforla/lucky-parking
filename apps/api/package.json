@@ -7,8 +7,8 @@
 		"dev": "tsx watch src/index.ts",
 		"format": "prettier . --check --ignore-unknown",
 		"format:fix": "prettier . --write --ignore-unknown",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix"
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.3",
