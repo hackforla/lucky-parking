@@ -4,18 +4,18 @@
 		"**/*.css"
 	],
 	"exports": {
-		"./styles.css": "./dist/index.css",
+		"./styles.css": "./dist/styles.css",
 		"./*": "./dist/*/index.js"
 	},
 	"scripts": {
 		"build": "pnpm build:components && pnpm build:styles",
 		"build:components": "tsc",
-		"build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+		"build:styles": "tailwindcss -i ./src/css/styles.css -o ./dist/styles.css",
 		"check-types": "tsc --noEmit",
 		"clean": "rimraf .turbo dist node_modules",
 		"dev": "concurrently --kill-others-on-fail \"pnpm run dev:components\" \"pnpm run dev:styles\"",
 		"dev:components": "tsc --watch",
-		"dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
+		"dev:styles": "tailwindcss -i ./src/css/styles.css -o ./dist/styles.css --watch",
 		"format": "prettier . --check --ignore-unknown",
 		"format:fix": "prettier . --write --ignore-unknown",
 		"lint": "eslint . --no-error-on-unmatched-pattern",
