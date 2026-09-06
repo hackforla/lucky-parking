@@ -7,6 +7,7 @@
 	},
 	"devDependencies": {
 		"@lucky-parking/configs": "workspace:^",
-		"typescript": "latest"
+		"@typescript/native": "catalog:tooling",
+		"typescript": "catalog:tooling"
 	}
 }

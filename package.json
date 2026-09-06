@@ -24,17 +24,19 @@
 		]
 	},
 	"devDependencies": {
-		"husky": "^9.1.7",
-		"lint-staged": "^16.2.7",
-		"prettier": "^3.8.0",
-		"turbo": "^2.7.2",
-		"typescript": "5.8.2"
+		"@homer0/prettier-plugin-jsdoc": "catalog:tooling",
+		"@trivago/prettier-plugin-sort-imports": "catalog:tooling",
+		"@xeonlink/prettier-plugin-organize-attributes": "catalog:tooling",
+		"eslint": "catalog:tooling",
+		"eslint-config-next": "catalog:tooling",
+		"husky": "catalog:tooling",
+		"lint-staged": "catalog:tooling",
+		"prettier": "catalog:tooling",
+		"prettier-plugin-css-order": "catalog:tooling",
+		"prettier-plugin-tailwindcss": "catalog:tooling",
+		"react": "catalog:",
+		"rimraf": "catalog:tooling",
+		"turbo": "catalog:tooling"
 	},
-	"devEngines": {
-		"packageManager": {
-			"name": "pnpm",
-			"version": "12.3.4",
-			"onFail": "error"
-		}
-	}
+	"packageManager": "pnpm@12.3.4"
 }

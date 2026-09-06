@@ -1,8 +1,52 @@
 packages:
+  # Deployable applications
   - "apps/*"
+  # Reusable internal packages
   - "packages/*"
+
+catalog:
+  # Shared application/runtime dependencies
+  date-fns: ^4.4.0
+  lodash: ^4.18.1
+  lucide-react: ^1.41.0
+  react: ^19.2.8
+  react-day-picker: ^10.0.1
+  react-dom: ^19.2.8
+  zod: ^4.5.4
+
+catalogs:
+  tooling:
+    # Shared repository-standard tools
+    "@homer0/prettier-plugin-jsdoc": ^12.0.0
+    "@tailwindcss/cli": ^4.3.3
+    "@trivago/prettier-plugin-sort-imports": ^6.0.2
+    "@typescript/native": "npm:typescript@^7.0.2" # Exposes TS 7's tsc executable
+    "@xeonlink/prettier-plugin-organize-attributes": ^1.1.0
+    concurrently: ^10.0.5
+    eslint: ^9.39.5
+    eslint-config-next: ^16.3.4
+    husky: ^9.1.7
+    lint-staged: ^17.5.0
+    prettier: ^3.9.6
+    prettier-plugin-css-order: ^2.2.0
+    prettier-plugin-tailwindcss: 0.8.1
+    rimraf: ^6.1.3
+    tailwindcss: ^4.3.3
+    turbo: ^2.10.12
+    typescript: "npm:@typescript/typescript6@^6.0.2" # Tooling receives the TS 6 API
+  types:
+    # Shared declaration-only packages
+    "@types/lodash": ^4.17.25
+    "@types/node": ^24.1.0
+    "@types/react": ^19.2.18
+    "@types/react-dom": ^19.2.7
+
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  esbuild: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  "@parcel/watcher": true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+
+catalogMode: strict
+catalogPrune: true
+pmOnFail: error

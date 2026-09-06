@@ -51,13 +51,13 @@
 		"@types/react-map-gl": "^6.1.7",
 		"@types/wellknown": "^0.5.8",
 		"@xeonlink/prettier-plugin-organize-attributes": "^1.1.0",
-		"eslint": "^9.39.2",
+		"eslint": "catalog:tooling",
 		"eslint-config-next": "16.1.1",
 		"postcss": "^8.5.3",
-		"prettier": "^3.8.0",
+		"prettier": "catalog:tooling",
 		"prettier-plugin-css-order": "^2.2.0",
 		"prettier-plugin-tailwindcss": "^0.7.2",
 		"tailwindcss": "^4",
-		"typescript": "^5"
+		"typescript": "catalog:tooling"
 	}
 }

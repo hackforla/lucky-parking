@@ -40,8 +40,9 @@
 	"devDependencies": {
 		"@lucky-parking/configs": "workspace:^",
 		"@tailwindcss/cli": "^4.1.18",
+		"@typescript/native": "catalog:tooling",
 		"@types/react": "^19.1.2",
 		"@types/react-dom": "^19.0.4",
-		"typescript": "latest"
+		"typescript": "catalog:tooling"
 	}
 }
