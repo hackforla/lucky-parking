@@ -365,8 +365,8 @@ importers:
         specifier: catalog:tooling
         version: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
       eslint-config-next:
-        specifier: 16.1.1
-        version: 16.1.1(@typescript-eslint/parser@8.69.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0))(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
+        specifier: catalog:tooling
+        version: 16.3.4(@typescript-eslint/parser@8.69.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0))(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
       postcss:
         specifier: ^8.5.3
         version: 8.5.28
@@ -374,11 +374,11 @@ importers:
         specifier: catalog:tooling
         version: 3.9.6
       prettier-plugin-css-order:
-        specifier: ^2.2.0
+        specifier: catalog:tooling
         version: 2.2.0(postcss@8.5.28)(prettier@3.9.6)
       prettier-plugin-tailwindcss:
-        specifier: ^0.7.2
-        version: 0.7.4(@trivago/prettier-plugin-sort-imports@6.0.2(prettier@3.9.6)(supports-color@7.2.0))(prettier-plugin-css-order@2.2.0(postcss@8.5.28)(prettier@3.9.6))(prettier@3.9.6)
+        specifier: catalog:tooling
+        version: 0.8.1(@trivago/prettier-plugin-sort-imports@6.0.2(prettier@3.9.6)(supports-color@7.2.0))(prettier-plugin-css-order@2.2.0(postcss@8.5.28)(prettier@3.9.6))(prettier@3.9.6)
       tailwindcss:
         specifier: ^4
         version: 4.3.3
@@ -8910,6 +8910,26 @@ snapshots:
   eslint-config-next@16.1.1(@typescript-eslint/parser@8.69.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0))(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
       '@next/eslint-plugin-next': 16.1.1
+      eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
+      eslint-import-resolver-node: 0.3.10(supports-color@7.2.0)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.69.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
+      eslint-plugin-jsx-a11y: 6.10.2(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))
+      eslint-plugin-react: 7.37.5(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))
+      eslint-plugin-react-hooks: 7.1.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
+      globals: 16.4.0
+      typescript-eslint: 8.69.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
+    optionalDependencies:
+      typescript: '@typescript/typescript6@6.0.2'
+    transitivePeerDependencies:
+      - '@typescript-eslint/parser'
+      - eslint-import-resolver-webpack
+      - eslint-plugin-import-x
+      - supports-color
+
+  eslint-config-next@16.3.4(@typescript-eslint/parser@8.69.0(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0))(@typescript/typescript6@6.0.2)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0):
+    dependencies:
+      '@next/eslint-plugin-next': 16.3.4(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
       eslint-import-resolver-node: 0.3.10(supports-color@7.2.0)
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)

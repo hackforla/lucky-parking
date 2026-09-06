@@ -3,15 +3,16 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"build": "next build",
+		"build:docker": "cd ../.. && docker buildx build --file apps/web/Dockerfile --tag lucky-parking/web --load .",
+		"check-types": "tsc --noEmit",
 		"clean": "rm -rf .next node_modules",
-		"build:docker": "pnpm -w build:docker:web",
+		"dev": "next dev",
 		"format": "prettier . --check --ignore-unknown",
 		"format:fix": "prettier . --write --ignore-unknown",
-		"build": "next build",
-		"start": "next start",
-		"lint": "eslint . --fix-dry-run --config ./eslint.config.mjs",
-		"lint:check": "eslint . --fix --config ./eslint.config.mjs"
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"start": "next start"
 	},
 	"dependencies": {
 		"@lucky-parking/design": "workspace:^",
@@ -52,11 +53,11 @@
 		"@types/wellknown": "^0.5.8",
 		"@xeonlink/prettier-plugin-organize-attributes": "^1.1.0",
 		"eslint": "catalog:tooling",
-		"eslint-config-next": "16.1.1",
+		"eslint-config-next": "catalog:tooling",
 		"postcss": "^8.5.3",
 		"prettier": "catalog:tooling",
-		"prettier-plugin-css-order": "^2.2.0",
-		"prettier-plugin-tailwindcss": "^0.7.2",
+		"prettier-plugin-css-order": "catalog:tooling",
+		"prettier-plugin-tailwindcss": "catalog:tooling",
 		"tailwindcss": "^4",
 		"typescript": "catalog:tooling"
 	}

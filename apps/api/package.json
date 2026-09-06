@@ -2,7 +2,13 @@
 	"name": "@lucky-parking/api",
 	"scripts": {
 		"build": "tsup",
-		"dev": "tsx watch src/index.ts"
+		"check-types": "tsc --noEmit",
+		"clean": "rimraf .turbo dist node_modules",
+		"dev": "tsx watch src/index.ts",
+		"format": "prettier . --check --ignore-unknown",
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.3",

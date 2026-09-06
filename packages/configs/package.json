@@ -8,8 +8,12 @@
 		"./tailwind/postcss": "./src/tailwind/postcss.config.js"
 	},
 	"scripts": {
+		"check-types": "tsc --noEmit",
+		"clean": "rimraf .turbo node_modules",
 		"format": "prettier . --check --ignore-unknown",
-		"format:fix": "prettier . --write --ignore-unknown"
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"peerDependencies": {
 		"@homer0/prettier-plugin-jsdoc": "^11.0.2",

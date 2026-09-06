@@ -8,14 +8,18 @@
 		"./*": "./dist/*/index.js"
 	},
 	"scripts": {
+		"build": "pnpm build:components && pnpm build:styles",
 		"build:components": "tsc",
 		"build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
 		"check-types": "tsc --noEmit",
-		"clean": "rm -rf .turbo node_modules dist",
+		"clean": "rimraf .turbo dist node_modules",
+		"dev": "concurrently --kill-others-on-fail \"pnpm run dev:components\" \"pnpm run dev:styles\"",
 		"dev:components": "tsc --watch",
 		"dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
 		"format": "prettier . --check --ignore-unknown",
-		"format:fix": "prettier . --write --ignore-unknown"
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"@radix-ui/react-accordion": "^1.2.12",

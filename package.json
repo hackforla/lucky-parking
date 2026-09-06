@@ -3,14 +3,22 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",
-		"build:docker:web": "docker build . --file apps/web/Dockerfile --tag lucky-parking/web",
+		"build:components": "turbo run build:components",
+		"build:docker": "turbo run build:docker",
+		"build:styles": "turbo run build:styles",
 		"check-types": "turbo run check-types",
-		"clean": "rm -rf .turbo && turbo run clean",
+		"clean": "rimraf .turbo node_modules && turbo run clean",
 		"dev": "turbo run dev",
-		"format": "turbo run format",
-		"lint": "turbo run lint",
+		"dev:components": "turbo run dev:components",
+		"dev:styles": "turbo run dev:styles",
+		"format": "prettier . --check --ignore-unknown",
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern",
 		"prepare": "husky",
-		"test": "turbo run test"
+		"start": "turbo run start",
+		"test": "turbo run test",
+		"verify": "turbo run check-types lint format test build"
 	},
 	"lint-staged": {
 		"**/*": [

@@ -1,5 +1,5 @@
 .next/
-.storybook/
+.turbo/
 build/
 coverage/
 dist/
