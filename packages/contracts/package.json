@@ -1,5 +1,6 @@
 {
 	"name": "@lucky-parking/contracts",
+	"private": true,
 	"type": "module",
 	"scripts": {
 		"build": "tsc",

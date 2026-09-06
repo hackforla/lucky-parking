@@ -1,6 +1,6 @@
-import { Search } from "lucide-react";
 import { Input } from "./input";
 import { Label } from "./label";
+import { Search } from "lucide-react";
 import React from "react";
 
 type SearchInputProps = {

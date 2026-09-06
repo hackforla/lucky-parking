@@ -11,11 +11,11 @@ import {
 	PopoverAnchor,
 	PopoverContent,
 } from "@lucky-parking/design/components";
-import { useGeocoder } from "hooks/use-geocoder";
-import { useStore } from "hooks/use-store";
 import { Search } from "lucide-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { PlaceItem } from "@/components/place-item";
+import { useGeocoder } from "@/hooks/use-geocoder";
+import { useStore } from "@/hooks/use-store";
 import { GeocoderResult } from "@/types";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
@@ -24,13 +24,16 @@ export function SearchGeocoder() {
 	const addPlace = useStore((state) => state.addPlace);
 	const [query, clearQuery, setQuery] = useStore((state) => [state.query, state.clearQuery, state.setQuery]);
 	const [open, setOpen] = useState<boolean>(false);
+	const hasResults = query.trim().length > 0 && data.length > 0;
 
 	const onSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
-		setQuery(event.target.value);
+		const nextQuery = event.currentTarget.value;
+		setQuery(nextQuery);
+		setOpen(nextQuery.trim().length > 0);
 	};
 
 	const onSearchFocus = async () => {
-		if (query.trim().length > 0 && data.length > 0) {
+		if (query.trim().length > 0) {
 			setOpen(true);
 		}
 	};
@@ -38,16 +41,13 @@ export function SearchGeocoder() {
 	const onResultClick = (result: GeocoderResult) => {
 		addPlace(result);
 		clearQuery();
+		setOpen(false);
 	};
-
-	useEffect(() => {
-		setOpen(query.trim().length > 0 && data.length > 0);
-	}, [query, data]);
 
 	return (
 		<div className="w-full">
 			<Popover
-				open={open}
+				open={open && hasResults}
 				onOpenChange={setOpen}>
 				<div className="relative">
 					<Label

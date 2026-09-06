@@ -3,6 +3,7 @@ import { Trash } from "lucide-react";
 import { type Result as MapboxGeocoderResult } from "mapbox__mapbox-gl-geocoder";
 import { PlaceItem } from "@/components/place-item";
 import { useStore } from "@/hooks/use-store";
+import { GeocoderResult } from "@/types";
 
 export const DataPlaceList = () => {
 	const [places, removePlace] = useStore((state) => [state.getPlaces(), state.removePlace]);
@@ -17,7 +18,7 @@ export const DataPlaceList = () => {
 
 	return (
 		<ul className="space-y-2">
-			{places.map((place) => (
+			{places.map((place: GeocoderResult) => (
 				<li
 					key={place.properties.name}
 					className="group/place relative rounded-lg border bg-white">

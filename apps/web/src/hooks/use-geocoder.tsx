@@ -1,11 +1,11 @@
+import { useStore } from "./use-store";
 import { useQuery } from "@tanstack/react-query";
 import { bbox, center } from "@turf/turf";
-import neighborhoodCouncilCollection from "data/los-angeles-neighborhood-councils.json";
-import cityCollection from "data/los-angeles.json";
 import _ from "lodash";
+import neighborhoodCouncilCollection from "@/data/los-angeles-neighborhood-councils.json";
+import cityCollection from "@/data/los-angeles.json";
 import { usePublicConfig } from "@/hooks/use-public-config";
 import { GeocoderResult, NeighborhoodCouncilFeature } from "@/types";
-import { useStore } from "./use-store";
 
 const ENGLISH_LANGUAGE_CODE = "en";
 const MAPBOX_API_URL = "https://api.mapbox.com";

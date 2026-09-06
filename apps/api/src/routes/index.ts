@@ -1,5 +1,5 @@
-import { Router } from "express";
 import citationRouter from "./citations";
+import { Router } from "express";
 
 const router: Router = Router();
 

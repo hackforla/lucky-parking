@@ -1,7 +1,9 @@
-.next/
-.turbo/
-build/
-coverage/
-dist/
-node_modules/
+**/.next/**
+**/.turbo/**
+**/build/**
+**/coverage/**
+**/dist/**
+**/node_modules/**
+**/out/**
+**/storybook-static/**
 pnpm-lock.yaml
