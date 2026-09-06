@@ -20,17 +20,6 @@
 		"test": "turbo run test",
 		"verify": "turbo run check-types lint format test build"
 	},
-	"lint-staged": {
-		"**/*": [
-			"prettier --check --ignore-unknown --config ./packages/configs/src/prettier/prettier.config.mjs"
-		],
-		"**/*.{cjs,js,jsx,mjs,ts,tsx}": [
-			"eslint --fix-dry-run --config ./packages/configs/src/eslint/eslint.config.mjs"
-		],
-		"**/*.{cts,d.cts,d.mts,d.ts,mts,ts,tsx}": [
-			"node ./scripts/typecheck.mjs"
-		]
-	},
 	"devDependencies": {
 		"@homer0/prettier-plugin-jsdoc": "catalog:tooling",
 		"@trivago/prettier-plugin-sort-imports": "catalog:tooling",
