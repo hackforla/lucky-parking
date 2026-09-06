@@ -2,8 +2,7 @@
 	"name": "@lucky-parking/configs",
 	"type": "module",
 	"exports": {
-		"./*": "./src/*",
-		"./tailwind/postcss": "./src/tailwind/postcss.config.js"
+		"./*": "./src/*"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",
