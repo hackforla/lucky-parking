@@ -1,11 +1,12 @@
-import { Search } from "lucide-react";
 import { Input } from "./input";
 import { Label } from "./label";
+import { Search } from "lucide-react";
+import React from "react";
 
 type SearchInputProps = {
 	label: string;
 	placeholder: string;
-	suggestions: unknown[];
+	suggestions: React.ReactNode[];
 };
 
 export const SearchInput = ({ label, placeholder = "Search...", suggestions = [] }: SearchInputProps) => {

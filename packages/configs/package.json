@@ -1,27 +1,15 @@
 {
 	"name": "@lucky-parking/configs",
+	"private": true,
 	"type": "module",
 	"exports": {
-		"./*": "./src/*",
-		"./eslint": "./src/eslint/eslint.config.mjs",
-		"./prettier": "./src/prettier/prettier.config.mjs",
-		"./tailwind/postcss": "./src/tailwind/postcss.config.js"
+		"./*": "./src/*"
 	},
 	"scripts": {
+		"clean": "rimraf .turbo",
 		"format": "prettier . --check --ignore-unknown",
-		"format:fix": "prettier . --write --ignore-unknown"
-	},
-	"peerDependencies": {
-		"@homer0/prettier-plugin-jsdoc": "^11.0.2",
-		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
-		"@xeonlink/prettier-plugin-organize-attributes": "^1.1.0",
-		"eslint": "^9.39.2",
-		"eslint-config-next": "16.1.1",
-		"postcss": "^8.5.3",
-		"prettier": "^3.5.3",
-		"prettier-plugin-css-order": "^2.2.0",
-		"prettier-plugin-tailwindcss": "^0.7.2",
-		"tailwindcss": "^4.1.18",
-		"typescript": "^5.9.3"
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern"
 	}
 }

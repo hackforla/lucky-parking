@@ -7,6 +7,7 @@ export default defineConfig([
 	...nextTs,
 	{
 		rules: {
+			"@next/next/no-html-link-for-pages": "off",
 			"@typescript-eslint/ban-ts-comment": [
 				"error",
 				{
@@ -16,9 +17,19 @@ export default defineConfig([
 					"ts-nocheck": false,
 				},
 			],
+			"import/no-anonymous-default-export": "off",
 			"react-hooks/purity": "warn",
 			"react-hooks/set-state-in-effect": "warn",
 		},
 	},
-	globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+	globalIgnores([
+		"**/node_modules/**",
+		"**/.turbo/**",
+		"**/.next/**",
+		"**/out/**",
+		"**/build/**",
+		"**/dist/**",
+		"**/coverage/**",
+		"**/next-env.d.ts",
+	]),
 ]);

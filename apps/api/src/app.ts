@@ -1,8 +1,8 @@
-import express, { Application } from "express";
 import bodyParser from "./middleware/body-parser";
 import cors from "./middleware/cors";
 import httplogger from "./middleware/http-logger";
 import router from "./routes";
+import express, { Application } from "express";
 
 const { API_VERSION } = process.env;
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "styles/globals.css";
+import "@/styles/main.css";
 
 export const metadata: Metadata = { title: "Lucky Parking", description: "Lucky Parking" };
 

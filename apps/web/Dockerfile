@@ -1,15 +1,16 @@
 # syntax=docker/dockerfile:1
 
-FROM node:lts-alpine AS base
+FROM node:24-alpine AS base
 
 RUN corepack enable
 
 FROM base AS pruner
 WORKDIR /app
+ENV TURBO_TELEMETRY_DISABLED=1
 
 COPY . .
 
-RUN pnpm dlx turbo prune @lucky-parking/web --docker
+RUN pnpm dlx turbo@2.10.12 prune @lucky-parking/web --docker
 
 FROM base AS deps
 WORKDIR /app
@@ -25,7 +26,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN pnpm run build
 
-FROM node:lts-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1

@@ -3,35 +3,37 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo run build",
-		"build:docker:web": "docker build . --file apps/web/Dockerfile --tag lucky-parking/web",
+		"build:components": "turbo run build:components",
+		"build:docker": "turbo run build:docker",
+		"build:styles": "turbo run build:styles",
 		"check-types": "turbo run check-types",
-		"clean": "rm -rf .turbo && turbo run clean",
+		"clean": "rimraf .turbo node_modules && turbo run clean",
 		"dev": "turbo run dev",
-		"format": "turbo run format",
-		"lint": "turbo run lint",
+		"dev:components": "turbo run dev:components",
+		"dev:styles": "turbo run dev:styles",
+		"format": "prettier . --check --ignore-unknown",
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern",
 		"prepare": "husky",
-		"test": "turbo run test"
-	},
-	"lint-staged": {
-		"**/*": [
-			"prettier --check --ignore-unknown --config ./packages/configs/src/prettier/prettier.config.mjs"
-		],
-		"**/*.{cjs,js,jsx,mjs,ts,tsx}": [
-			"eslint --fix-dry-run --config ./packages/configs/src/eslint/eslint.config.mjs"
-		],
-		"**/*.{cts,d.cts,d.mts,d.ts,mts,ts,tsx}": [
-			"node ./scripts/typecheck.mjs"
-		]
+		"start": "turbo run start",
+		"test": "turbo run test",
+		"verify": "turbo run check-types lint format test build build:docker"
 	},
 	"devDependencies": {
-		"husky": "^9.1.7",
-		"lint-staged": "^16.2.7",
-		"prettier": "^3.8.0",
-		"turbo": "^2.7.2",
-		"typescript": "5.8.2"
+		"@homer0/prettier-plugin-jsdoc": "catalog:tooling",
+		"@trivago/prettier-plugin-sort-imports": "catalog:tooling",
+		"@xeonlink/prettier-plugin-organize-attributes": "catalog:tooling",
+		"eslint": "catalog:tooling",
+		"eslint-config-next": "catalog:tooling",
+		"husky": "catalog:tooling",
+		"lint-staged": "catalog:tooling",
+		"prettier": "catalog:tooling",
+		"prettier-plugin-css-order": "catalog:tooling",
+		"prettier-plugin-tailwindcss": "catalog:tooling",
+		"react": "catalog:",
+		"rimraf": "catalog:tooling",
+		"turbo": "catalog:tooling"
 	},
-	"packageManager": "pnpm@9.0.0",
-	"engines": {
-		"node": ">=24 <25"
-	}
+	"packageManager": "pnpm@12.3.4"
 }

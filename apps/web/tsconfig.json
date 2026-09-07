@@ -2,14 +2,21 @@
 	"extends": "@lucky-parking/configs/typescript/next.json",
 	"compilerOptions": {
 		"allowJs": true,
-		"baseUrl": "src/",
 		"composite": true,
-		"lib": ["ES2024"],
+		"lib": ["ES2024", "DOM"],
 		"outDir": "dist",
-		"paths": { "@/*": ["./*"] },
+		"paths": { "@/*": ["./src/*"] },
 		"plugins": [{ "name": "next" }],
 		"resolveJsonModule": true
 	},
-	"include": ["**/*.json", "**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.ts", ".next/types/**/*.ts"],
+	"include": [
+		"**/*.d.ts",
+		"**/*.json",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		"next-env.d.ts",
+		"next.config.ts"
+	],
 	"exclude": ["node_modules"]
 }

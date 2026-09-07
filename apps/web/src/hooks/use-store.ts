@@ -1,7 +1,7 @@
-import { store, type Store } from "store";
 import type { StoreApi } from "zustand";
 import { shallow } from "zustand/shallow";
 import { useStoreWithEqualityFn } from "zustand/traditional";
+import { store, type Store } from "@/store";
 
 /* ——————————————— Overloads ——————————————— */
 

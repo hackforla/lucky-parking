@@ -1,7 +1,7 @@
-import neighborhoodCouncilCollection from "data/los-angeles-neighborhood-councils.json";
 import { BBox, Feature, FeatureCollection, Point, Polygon } from "geojson";
 import "mapbox-gl";
 import { RefObject } from "react";
+import neighborhoodCouncilCollection from "@/data/los-angeles-neighborhood-councils.json";
 
 /**
  * A React ref

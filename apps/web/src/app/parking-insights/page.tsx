@@ -1,9 +1,9 @@
 "use client";
 
 import { SidebarInset, SidebarProvider } from "@lucky-parking/design/components";
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { MapProvider, useMap } from "react-map-gl/mapbox";
+import { MapProvider } from "react-map-gl/mapbox";
 import { AppHeader } from "@/components/header";
 import { ParkingCitationsMap } from "@/components/map";
 import { AppSidebar } from "@/components/sidebar";
@@ -13,7 +13,6 @@ const queryClient = new QueryClient();
 
 export default function App() {
 	const store = useStore((state) => ({ isHydrated: state.isHydrated }));
-	const { map } = useMap();
 
 	if (!store.isHydrated) return null;
 

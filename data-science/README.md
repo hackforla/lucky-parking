@@ -5,10 +5,11 @@ Hack for LA analysis of parking citation data
 
 Check out our [data contributor's Wiki](https://github.com/hackforla/lucky-parking/wiki/Data-Team-Contributing-Guide)
 
-
 #### Running it locally:
+
 It is suggested that you work on a fork of the code. Use the fork button on the repo page to create your own copy.
-``` 
+
+```
 # If you're using Windows, install WSL2
 https://docs.microsoft.com/en-us/windows/wsl/install
 
@@ -60,6 +61,7 @@ bash
 rm Miniconda3-latest-Linux-x86_64.sh
 
 ```
+
 If using VSCode, use Remote-SSH extension as your development environment:
 [Remote-SSH Tutorial](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
 
@@ -101,11 +103,13 @@ https://github.com/hackforla/lucky-parking/wiki/Guide-to-Docker
 
 
 ```
-#### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder: 
+
+#### To create an AWS EC2 instance to run this repo, follow the steps documented in the references folder:
+
 [Link to screenshots](references/awsEC2.pdf)
 
 ```
-# Once you have setup your AWS instance, make sure you run 
+# Once you have setup your AWS instance, make sure you run
 chmod 400 your_pem_file.pem
 
 # If you're running Windows
@@ -119,12 +123,14 @@ ssh -i ~/.ssh/your_pem_file.pem ubuntu@your_aws_host_name_here
 ```
 
 #### Uploading your changes to your fork
-If you haven't already, create a fork of the repo--this is your version of our code from which you will do pull requests from. 
-Make sure that you have 2-factor authentication activated. 
-Create a personal token by clicking on your avatar the top right corner and then going to -> Settings -> Developer settings -> Personal access tokens and create a new token with the appropriate permissions. Copy this resulting token.
-Use the credential store to locally store your password `git config credential.helper cache`
-Make changes to your code, add them `git add .`, commit it `git commit -m 'your comment here'`, and push your changes to your fork `git push origin citation-analysis`. 
-Enter your username and the token string as your password. Now you can upload changes to your repo using the command line.
+
+If you haven't already, create a fork of the repo--this is your version of our code from which you will do pull requests
+from. Make sure that you have 2-factor authentication activated. Create a personal token by clicking on your avatar the
+top right corner and then going to -> Settings -> Developer settings -> Personal access tokens and create a new token
+with the appropriate permissions. Copy this resulting token. Use the credential store to locally store your password
+`git config credential.helper cache` Make changes to your code, add them `git add .`, commit it
+`git commit -m 'your comment here'`, and push your changes to your fork `git push origin citation-analysis`. Enter your
+username and the token string as your password. Now you can upload changes to your repo using the command line.
 
 Project Organization
 ------------
@@ -173,10 +179,7 @@ Project Organization
     │       └── visualize.py
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
-    
---------
+
+---
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
-
-
-

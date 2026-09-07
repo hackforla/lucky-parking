@@ -1,7 +1,7 @@
+import { ParkingCitationFeatureCollection, ParkingCitationFeatureCollectionSchema } from "./parking-citations.schema";
 import { multiPolygon } from "@turf/turf";
 import _ from "lodash";
 import { type GeoJSONGeometry, stringify } from "wellknown";
-import { ParkingCitationFeatureCollection, ParkingCitationFeatureCollectionSchema } from "./parking-citations.schema";
 
 type FetchParkingCitationsInput = {
 	token?: string;

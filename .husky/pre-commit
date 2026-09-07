@@ -1,1 +1,1 @@
-NODE_OPTIONS="--experimental-strip-types" pnpm exec lint-staged
+pnpm exec lint-staged

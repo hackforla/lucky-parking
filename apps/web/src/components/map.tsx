@@ -1,15 +1,15 @@
-import losAngelesCountyFeatures from "data/los-angeles-county.json";
-import losAngelesFeatures from "data/los-angeles.json";
+import { MapSourceCitations } from "./map-source-citations";
 import _ from "lodash";
 import { type MapMouseEvent } from "mapbox-gl";
 import { useState, useRef } from "react";
 import MapboxMap, { NavigationControl, LngLatBoundsLike, MapEvent, MapRef, Popup } from "react-map-gl/mapbox";
 import { MapLayerCircles, MAP_LAYER_CIRCLES_ID } from "@/components/map-layer-circles";
 import { MapLayerHeatmap } from "@/components/map-layer-heatmap";
+import losAngelesCountyFeatures from "@/data/los-angeles-county.json";
+import losAngelesFeatures from "@/data/los-angeles.json";
 import { useMapResizer } from "@/hooks/use-map-resizer";
 import { usePublicConfig } from "@/hooks/use-public-config";
 import { ParkingCitationFeature } from "@/lib/socrata/parking-citations.schema";
-import { MapSourceCitations } from "./map-source-citations";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MAP_INITIAL_VIEW = { bounds: _.first(losAngelesFeatures.features)?.bbox as LngLatBoundsLike, zoom: 10 };

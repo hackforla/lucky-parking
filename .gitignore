@@ -1,4 +1,5 @@
 # Build Outputs
+**/next-env.d.ts
 .next/
 .turbo/
 build/
@@ -22,7 +23,8 @@ node_modules/
 # IDE
 .history/
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
 
 # Logs
 *.log

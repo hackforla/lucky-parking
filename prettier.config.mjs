@@ -2,7 +2,7 @@
  * @type {import('prettier').Config}
  * @see https://prettier.io/docs/configuration
  */
-export const config = {
+export default {
 	/**
 	 * Prettier options
 	 * @see https://prettier.io/docs/options
@@ -38,7 +38,7 @@ export const config = {
 		"@trivago/prettier-plugin-sort-imports",
 		"@xeonlink/prettier-plugin-organize-attributes",
 		"prettier-plugin-css-order",
-		"prettier-plugin-tailwindcss",
+		"prettier-plugin-tailwindcss", // Must load last
 	],
 
 	/**
@@ -46,14 +46,12 @@ export const config = {
 	 * @see https://github.com/trivago/prettier-plugin-sort-imports?tab=readme-ov-file#usage
 	 */
 	importOrder: [
-		"^\u0000", // Side-effect imports
+		"^^\\\u0000", // Side-effect imports
 		"^(fs|path|crypto|os|http|https|child_process|events|util|url)$", // Node.js modules
 		"<THIRD_PARTY_MODULES>", // Third-party modules
 		"^@/.+$", // Internal imports
 		"^\.\./.+$", // Parent imports
-		"^\\./.+$", // Sibling imports
+		"^\\\\./.+$", // Sibling imports
 		"\\.css$", // CSS imports
 	],
 };
-
-export default config;

@@ -23,9 +23,8 @@ body:
     attributes:
       label: Team
       description: >-
-        Which team are you joining?
-        Select `General` if you are not joining a specific team.
-        If you are unsure, choose `Other` and we will help you determine the best fit.
+        Which team are you joining? Select `General` if you are not joining a specific team. If you are unsure, choose
+        `Other` and we will help you determine the best fit.
       options:
         - General
         - Data
@@ -52,7 +51,7 @@ body:
       value: |-
         ---
         ### Onboarding Checklist
-      
+
         Please work with your team lead or a product manager to complete the checklist below.
 
   - id: github
@@ -119,22 +118,22 @@ body:
       value: |-
         ---
         ### Resources
-        
+
         **Figma**
         - [Figma Design File](https://www.figma.com/file/R3N7mvDtlFbFgQm4OXcMih/Lucky-Parking)
 
         **GitHub**        
         - [Configuring two-factor authentication](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication)
         - [lucky-parking-write team](https://github.com/orgs/hackforla/teams/lucky-parking-write)
-        
+
         **Roster**        
         - [Roster spreadsheet](https://docs.google.com/spreadsheets/d/1rtou2FkVwKV7-2RKiRDXb2uAq_w0jHakFydzUhoW2dU/edit)
-        
+
         **Slack**
         - [#lucky-parking](https://hackforla.slack.com/archives/CPFDMSV6V)
         - [#lucky-parking-core](https://hackforla.slack.com/archives/C0522K72NAU)
         - [#lucky-parking-dev](https://hackforla.slack.com/archives/C049S985R7W)
         - [#lucky-parking-data-science](https://hackforla.slack.com/archives/C044H1DETLH)
-        
+
         **Hack for LA**
         - [Organization Onboarding/Offboarding Template](https://github.com/hackforla/.github-hackforla-base-repo-template/blob/main/.github/ISSUE_TEMPLATE/onboard---offboard--product.md)

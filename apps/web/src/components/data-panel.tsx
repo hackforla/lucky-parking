@@ -1,10 +1,10 @@
+import { DataVisuals } from "./data-visuals";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@lucky-parking/design/components";
 import { DataAbout } from "@/components/data-about";
 import { DataLegeend } from "@/components/data-legend";
 import { DataPlaceList } from "@/components/data-place-list";
 import { useStore } from "@/hooks/use-store";
 import { MAX_PLACES } from "@/store";
-import { DataVisuals } from "./data-visuals";
 
 export const DataPanel = () => {
 	const places = useStore((state) => state.getPlaces());

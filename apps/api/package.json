@@ -1,27 +1,38 @@
 {
 	"name": "@lucky-parking/api",
+	"private": true,
 	"scripts": {
 		"build": "tsup",
-		"dev": "tsx watch src/index.ts"
+		"build:docker": "cd ../.. && docker buildx build --file apps/api/Dockerfile --tag lucky-parking/api --load .",
+		"check-types": "tsc --noEmit",
+		"clean": "rimraf .turbo dist node_modules",
+		"dev": "tsx watch src/index.ts",
+		"format": "prettier . --check --ignore-unknown",
+		"format:fix": "prettier . --write --ignore-unknown",
+		"lint": "eslint . --no-error-on-unmatched-pattern",
+		"lint:fix": "eslint . --fix --no-error-on-unmatched-pattern"
 	},
 	"dependencies": {
 		"body-parser": "^1.20.3",
 		"cors": "^2.8.5",
 		"dotenv": "^16.4.7",
-		"express": "^4.21.2",
-		"lodash": "^4.17.21",
+		"express": "^5.2.1",
+		"lodash": "catalog:",
 		"mongodb": "^6.14.2",
 		"morgan": "^1.10.0",
-		"zod": "^3.24.2"
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@lucky-parking/configs": "workspace:*",
 		"@types/body-parser": "^1.19.5",
 		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
-		"@types/lodash": "^4.17.16",
+		"@types/lodash": "catalog:types",
 		"@types/morgan": "^1.9.9",
+		"@types/node": "catalog:types",
+		"@typescript/native": "catalog:tooling",
 		"tsup": "^8.4.0",
-		"tsx": "^4.19.3"
+		"tsx": "^4.19.3",
+		"typescript": "catalog:tooling"
 	}
 }

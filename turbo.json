@@ -3,23 +3,53 @@
 	"ui": "stream",
 	"tasks": {
 		"build": {
-			"dependsOn": ["^build"],
+			"dependsOn": ["^build", "check-types"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": [".next/**", "!.next/cache/**", "dist/**", "storybook-static/**"]
+			"outputs": [".next/**", "dist/**", "storybook-static/**", "!.next/cache/**", "!.next/dev/**"]
+		},
+		"build:components": {
+			"outputs": ["dist/**", "!dist/styles.css"]
+		},
+		"build:docker": {
+			"cache": false
+		},
+		"build:styles": {
+			"outputs": ["dist/styles.css"]
 		},
 		"check-types": {
-			"dependsOn": ["^check-types"]
+			"dependsOn": ["^check-types", "^build"]
+		},
+		"clean": {
+			"cache": false
 		},
 		"dev": {
 			"cache": false,
 			"persistent": true
 		},
-		"format": {
-			"cache": true,
+		"dev:components": {
+			"cache": false,
 			"persistent": true
 		},
+		"dev:styles": {
+			"cache": false,
+			"persistent": true
+		},
+		"format": {
+			"cache": true
+		},
+		"format:fix": {
+			"cache": false
+		},
 		"lint": {
+			"cache": true,
 			"dependsOn": ["^lint"]
+		},
+		"lint:fix": {
+			"cache": false
+		},
+		"start": {
+			"cache": false,
+			"persistent": true
 		},
 		"test": {}
 	}

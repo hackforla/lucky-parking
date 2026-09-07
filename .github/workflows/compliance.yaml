@@ -10,6 +10,7 @@ on:
       - unassigned
 
 env:
+  NEXT_TELEMETRY_DISABLED: ${{ vars.NEXT_TELEMETRY_DISABLED }}
   TURBO_TELEMETRY_DISABLED: ${{ vars.TURBO_TELEMETRY_DISABLED }}
 
 jobs:

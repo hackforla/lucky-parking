@@ -1,0 +1,4 @@
+{
+	"**/*": ["prettier --check --ignore-unknown"],
+	"**/*.{cjs,js,jsx,mjs,ts,tsx}": ["eslint --fix-dry-run --no-warn-ignored --no-error-on-unmatched-pattern"]
+}

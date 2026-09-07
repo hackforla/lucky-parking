@@ -1,9 +1,12 @@
-import "dotenv/config";
-import { connect } from "./database/db";
 import app from "./app";
+import "dotenv/config";
+import { connect } from "@/database";
 
 const { PORT = 3001 } = process.env;
 
-connect();
+async function start() {
+	await connect();
+	app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+}
 
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+void start();

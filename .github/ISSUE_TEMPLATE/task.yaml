@@ -29,6 +29,8 @@ body:
     attributes:
       label: Additional Information
       description: >-
-        Include any other information that might be relevant to the epic, such as dependencies, constraints, or related projects.
+        Include any other information that might be relevant to the epic, such as dependencies, constraints, or related
+        projects.
       placeholder: >-
-        e.g., This epic is dependent on the completion of [related project], or This epic must comply with [specific regulations].
+        e.g., This epic is dependent on the completion of [related project], or This epic must comply with [specific
+        regulations].
