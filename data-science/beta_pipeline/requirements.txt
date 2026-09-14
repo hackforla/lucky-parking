@@ -1,3 +1,10 @@
 polars>=1.40,<2
 python-dotenv>=1.0
 psycopg[binary]>=3.2,<4
+
+# notebooks (violation_analysis.ipynb)
+pandas>=2.2
+numpy>=2.0
+matplotlib>=3.9
+seaborn>=0.13
+geopandas>=1.0
