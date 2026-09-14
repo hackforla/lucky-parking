@@ -36,7 +36,7 @@ from pydantic import ValidationError as PydanticValidationError
 
 from lucky_parking.errors import QueryError
 from lucky_parking.models import ChartType, CompareModeRequest, RegionType, SingleDataRequest
-from lucky_parking.service import DEFAULT_DSN, QueryService
+from lucky_parking.service import QueryService, default_dsn
 
 
 def _add_date_args(p: argparse.ArgumentParser) -> None:
@@ -48,8 +48,8 @@ def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
         "--dsn",
-        default=DEFAULT_DSN,
-        help="Postgres DSN (default: DATABASE_URL or local compose)",
+        default=None,
+        help="Postgres DSN (default: DATABASE_URL, else built from POSTGRES_*)",
     )
     sub = p.add_subparsers(dest="cmd", required=True)
 
@@ -155,6 +155,12 @@ def cmd_query(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
+    if args.dsn is None:
+        try:
+            args.dsn = default_dsn()
+        except QueryError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
     if args.cmd == "list-regions":
         return cmd_list_regions(args)
     if args.cmd == "list-chart-types":

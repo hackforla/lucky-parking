@@ -1,4 +1,4 @@
-"""Local region/date sheet + map UI (separate from the PostGIS Docker image).
+"""Region/date sheet + map UI (separate from the PostGIS Docker image).
 
 Requires PostGIS running (``docker compose up -d`` in postgis_db).
 
@@ -6,16 +6,21 @@ Requires PostGIS running (``docker compose up -d`` in postgis_db).
     .venv/bin/uvicorn web_sheet.app:app --reload --port 8080
 
 Open http://localhost:8080
+
+Pages require HTTP basic auth against ``WEB_USER`` / ``WEB_PASSWORD``. Set
+``ALLOW_UNAUTHENTICATED=1`` to disable that for local development only.
 """
 
 from __future__ import annotations
 
+import logging
 import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-from fastapi import FastAPI, Form, Query, Request
+from fastapi import Depends, FastAPI, Form, HTTPException, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -32,13 +37,75 @@ except ImportError:
 
 from lucky_parking.errors import RegionNotFoundError
 from lucky_parking.models import DEFAULT_PLACE_RADIUS_METERS, RegionType
+from lucky_parking.ratelimit import SlidingWindowLimiter, requests_per_minute
+from lucky_parking.security import (
+    allow_unauthenticated,
+    basic_auth_configured,
+    check_basic_auth,
+)
 from lucky_parking.service import QueryService
+
+log = logging.getLogger("lucky_parking.web")
 
 HERE = Path(__file__).resolve().parent
 DEFAULT_LIMIT = 1000
 REGION_TYPES = [rt.value for rt in RegionType]
+# The UI runs two spatial queries per compare lookup, so it gets a tighter
+# budget than the API's default.
+WEB_REQUESTS_PER_MINUTE = 30
 
-app = FastAPI(title="Lucky Parking Citation Sheet", docs_url=None, redoc_url=None)
+_basic = HTTPBasic(realm="Lucky Parking", auto_error=False)
+_limiter = SlidingWindowLimiter()
+
+
+def require_basic_auth(
+    credentials: HTTPBasicCredentials | None = Depends(_basic),
+) -> str:
+    """Gate every page behind basic auth; return a log-safe identity."""
+    if allow_unauthenticated():
+        return "unauthenticated"
+    if not basic_auth_configured():
+        log.error("WEB_USER/WEB_PASSWORD are unset and ALLOW_UNAUTHENTICATED is not set")
+        raise HTTPException(status_code=503, detail="Server is not configured for access")
+    username = credentials.username if credentials else None
+    password = credentials.password if credentials else None
+    if not check_basic_auth(username, password):
+        raise HTTPException(
+            status_code=401,
+            detail="Not authorized",
+            headers={"WWW-Authenticate": 'Basic realm="Lucky Parking"'},
+        )
+    return f"user:{username}"
+
+
+def enforce_rate_limit(
+    request: Request,
+    identity: str = Depends(require_basic_auth),
+) -> str:
+    bucket = identity
+    if bucket == "unauthenticated":
+        client = request.client
+        bucket = f"ip:{client.host}" if client else "ip:unknown"
+    retry_after = _limiter.check(
+        bucket, max_requests=requests_per_minute(WEB_REQUESTS_PER_MINUTE)
+    )
+    if retry_after is not None:
+        raise HTTPException(
+            status_code=429,
+            detail="Too many requests — wait a moment and try again.",
+            headers={"Retry-After": str(max(int(retry_after) + 1, 1))},
+        )
+    return identity
+
+
+app = FastAPI(
+    title="Lucky Parking Citation Sheet",
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
+)
+# Static assets (Leaflet, CSS, JS) carry no citation data, so they stay open;
+# every data route below is guarded.
 app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 templates = Jinja2Templates(directory=str(HERE / "templates"))
 
@@ -128,12 +195,12 @@ def _validate_common(
     return start, end
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse, dependencies=[Depends(require_basic_auth)])
 async def index(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request, "index.html", _base_ctx())
 
 
-@app.get("/api/regions/suggest")
+@app.get("/api/regions/suggest", dependencies=[Depends(enforce_rate_limit)])
 async def suggest_regions(
     region_type: str = Query(...),
     q: str = Query(""),
@@ -142,15 +209,16 @@ async def suggest_regions(
     try:
         rt = RegionType(region_type)
     except ValueError:
-        return JSONResponse({"error": f"Invalid region_type: {region_type}"}, status_code=400)
+        return JSONResponse({"error": "Invalid region_type"}, status_code=400)
     try:
         labels = QueryService().suggest_regions(rt, q, limit=limit)
-    except Exception as exc:  # noqa: BLE001
-        return JSONResponse({"error": str(exc)}, status_code=503)
+    except Exception:  # noqa: BLE001 - driver text names the host and SQL
+        log.exception("Region suggest failed")
+        return JSONResponse({"error": "Suggestions unavailable"}, status_code=503)
     return JSONResponse({"suggestions": labels})
 
 
-@app.post("/lookup", response_class=HTMLResponse)
+@app.post("/lookup", response_class=HTMLResponse, dependencies=[Depends(enforce_rate_limit)])
 async def lookup(
     request: Request,
     query_mode: str = Form("single"),
@@ -210,8 +278,10 @@ async def lookup(
             ctx["result_1"] = _pack_result(raw1)
             ctx["result_2"] = _pack_result(raw2)
     except (ValueError, RegionNotFoundError) as exc:
+        # Both describe the user's own input, so they are safe to show.
         ctx["error"] = str(exc)
-    except Exception as exc:  # noqa: BLE001
-        ctx["error"] = f"Query failed: {exc}"
+    except Exception:  # noqa: BLE001 - detail stays in the server log
+        log.exception("Lookup failed")
+        ctx["error"] = "Query failed — the database may be unavailable. Try again shortly."
 
     return templates.TemplateResponse(request, "index.html", ctx)

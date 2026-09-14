@@ -3,12 +3,14 @@ FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
+# curl is used by the Compose healthchecks for both services.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# constraints.txt pins the exact resolution so rebuilds are reproducible.
+COPY requirements.txt constraints.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -c constraints.txt
 
 COPY lucky_parking ./lucky_parking
 COPY api ./api
@@ -18,6 +20,11 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
 EXPOSE 8000 8080
+
+# Neither app writes to disk, so it runs unprivileged against root-owned,
+# read-only application files.
+RUN useradd --create-home --uid 10001 --shell /usr/sbin/nologin appuser
+USER appuser
 
 # Default: contract API. Compose `web` overrides command to web_sheet on :8080.
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

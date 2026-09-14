@@ -59,6 +59,10 @@ target/
 # DotEnv configuration
 .env
 
+# Database dumps (multi-GB pg_dump files staged for prod restore)
+postgis_db/dumps/*
+!postgis_db/dumps/.gitkeep
+
 # Database
 *.db
 *.rdb

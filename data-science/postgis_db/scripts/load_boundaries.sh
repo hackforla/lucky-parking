@@ -17,7 +17,7 @@
 #
 # Examples:
 #   BOUNDARY_GEOJSON_DIR=/data ./load_boundaries.sh
-#   BOUNDARIES_DIR=./boundaries PGHOST=localhost PGPASSWORD=changeme ./load_boundaries.sh
+#   BOUNDARIES_DIR=./boundaries PGHOST=localhost PGPASSWORD="$YOUR_PASSWORD" ./load_boundaries.sh
 #   docker compose exec -T postgis env BOUNDARY_GEOJSON_DIR=/data \
 #     bash /usr/local/lib/lucky-parking/load_boundaries.sh
 set -euo pipefail

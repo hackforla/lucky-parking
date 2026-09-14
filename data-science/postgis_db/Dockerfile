@@ -1,4 +1,4 @@
-# PostGIS for IONOS VPS S+ (2 vCPU / 2 GB RAM / 90 GB NVMe).
+# PostGIS sized for a small VPS (2 vCPU / 2 GB RAM / 90 GB NVMe).
 # First boot: boundary layers, then citations from /raw_data if present.
 # postgis/postgis publishes amd64 only; pin platform so Apple Silicon
 # can still build/run locally via emulation (VPS is amd64 natively).
@@ -15,9 +15,10 @@ RUN apt-get update \
         'psycopg[binary]>=3.2,<4' \
     && rm -rf /var/lib/apt/lists/*
 
+# No POSTGRES_PASSWORD default on purpose: the entrypoint refuses to
+# initialize without one, which is safer than baking in a known value.
 ENV POSTGRES_DB=lucky_parking \
     POSTGRES_USER=lucky \
-    POSTGRES_PASSWORD=changeme \
     # Checksums help catch NVMe corruption; cheap at this data size.
     POSTGRES_INITDB_ARGS="--data-checksums"
 
@@ -37,7 +38,17 @@ COPY init/01_extensions.sql /docker-entrypoint-initdb.d/01_extensions.sql
 COPY init/02_load_boundaries.sh /docker-entrypoint-initdb.d/02_load_boundaries.sh
 COPY init/03_load_citations.sh /docker-entrypoint-initdb.d/03_load_citations.sh
 
-RUN chmod +x \
+# Strip CR before chmod. .gitattributes should already guarantee LF, but a
+# contributor cloning on Windows with a stale config would otherwise ship
+# CRLF scripts that bash refuses to run. Cheap insurance on first boot.
+RUN sed -i 's/\r$//' \
+      /usr/local/lib/lucky-parking/load_boundaries.sh \
+      /usr/local/lib/lucky-parking/normalize_boundaries.sql \
+      /usr/local/bin/postgis-healthcheck.sh \
+      /docker-entrypoint-initdb.d/01_extensions.sql \
+      /docker-entrypoint-initdb.d/02_load_boundaries.sh \
+      /docker-entrypoint-initdb.d/03_load_citations.sh \
+  && chmod +x \
       /usr/local/lib/lucky-parking/load_boundaries.sh \
       /usr/local/bin/postgis-healthcheck.sh \
       /docker-entrypoint-initdb.d/02_load_boundaries.sh \

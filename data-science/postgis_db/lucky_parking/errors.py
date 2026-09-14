@@ -11,3 +11,7 @@ class ValidationError(QueryError):
 
 class RegionNotFoundError(QueryError):
     """Named region does not exist for the given region_type."""
+
+
+class ConfigurationError(QueryError):
+    """Required configuration (e.g. database credentials) is missing."""

@@ -1,8 +1,11 @@
 # Local dev stack — one command after preflight:
 #
-#   bash scripts/preflight.sh          # macOS / Linux
+#   bash scripts/preflight.sh          # macOS / Linux (also writes .env)
 #   scripts\preflight.cmd              # Windows (no execution-policy change)
 #   docker compose up -d --build
+#
+# Auth is off here (ALLOW_UNAUTHENTICATED=1) so localhost stays one command.
+# Production turns it on — see docker-compose.prod.yml and deploy/VPS.md.
 #   docker compose logs -f postgis     # first boot: boundaries + citations (hours)
 #
 # Then open http://localhost:8080 (explorer) and http://localhost:8000/docs (API).
@@ -22,9 +25,11 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-lucky_parking}
       POSTGRES_USER: ${POSTGRES_USER:-lucky}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env (run scripts/preflight.sh)}
       # Set to 1 to skip CSV load on first boot (e.g. restore from pg_dump only).
       SKIP_CITATIONS_LOAD: ${SKIP_CITATIONS_LOAD:-0}
+      # Set to e.g. 200000 to load a sample and finish first boot in minutes.
+      CITATIONS_LOAD_LIMIT: ${CITATIONS_LOAD_LIMIT:-}
     volumes:
       - postgis_data:/var/lib/postgresql/data
       - ./raw_data:/raw_data:ro
@@ -54,7 +59,11 @@ services:
     container_name: lucky-parking-api
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD:-changeme}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+      ALLOW_UNAUTHENTICATED: ${ALLOW_UNAUTHENTICATED:-1}
+      API_KEYS: ${API_KEYS:-}
+      API_DOCS_PUBLIC: ${API_DOCS_PUBLIC:-1}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-0}
     ports:
       - "${API_PORT:-8000}:8000"
     volumes:
@@ -77,7 +86,11 @@ services:
     container_name: lucky-parking-web
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD:-changeme}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+      ALLOW_UNAUTHENTICATED: ${ALLOW_UNAUTHENTICATED:-1}
+      WEB_USER: ${WEB_USER:-}
+      WEB_PASSWORD: ${WEB_PASSWORD:-}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-0}
     ports:
       - "${WEB_PORT:-8080}:8080"
     volumes:

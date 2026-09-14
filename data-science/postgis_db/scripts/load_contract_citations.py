@@ -36,6 +36,7 @@ import sys
 import time
 from pathlib import Path
 from typing import Iterator
+from urllib.parse import quote, urlsplit, urlunsplit
 
 import polars as pl
 import psycopg
@@ -53,10 +54,44 @@ def default_csv_path() -> Path:
 
 
 DEFAULT_CSV = default_csv_path()
-DEFAULT_DSN = os.getenv(
-    "DATABASE_URL",
-    "postgresql://lucky:changeme@localhost:5432/lucky_parking",
-)
+
+
+def default_dsn() -> str:
+    """Resolve the DSN from the environment.
+
+    This script also runs inside the PostGIS image, where ``lucky_parking`` is
+    not importable, so the logic is duplicated from
+    ``lucky_parking.service.default_dsn``. There is no fallback password on
+    purpose — a missing one should fail rather than try a known default.
+    """
+    url = os.getenv("DATABASE_URL", "").strip()
+    if url:
+        return url
+    password = os.getenv("POSTGRES_PASSWORD", "")
+    if not password:
+        raise SystemExit(
+            "error: no database credentials. Set DATABASE_URL, or "
+            "POSTGRES_PASSWORD (plus optional POSTGRES_USER / POSTGRES_DB / "
+            "PGHOST / PGPORT)."
+        )
+    user = os.getenv("POSTGRES_USER", "lucky")
+    database = os.getenv("POSTGRES_DB", "lucky_parking")
+    host = os.getenv("PGHOST", "localhost")
+    port = os.getenv("PGPORT", "5432")
+    return (
+        f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}"
+        f"@{host}:{port}/{quote(database, safe='')}"
+    )
+
+
+def redact_dsn(dsn: str) -> str:
+    """Strip the password so progress output is safe to paste into an issue."""
+    parsed = urlsplit(dsn)
+    if not parsed.password:
+        return dsn
+    userinfo = f"{parsed.username or ''}:***@"
+    netloc = userinfo + parsed.netloc.rsplit("@", 1)[-1]
+    return urlunsplit(parsed._replace(netloc=netloc))
 
 # Source columns required to build the contract-oriented table.
 SOURCE_COLUMNS = (
@@ -374,8 +409,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument(
         "--dsn",
-        default=DEFAULT_DSN,
-        help="Postgres DSN (default: DATABASE_URL or local compose defaults)",
+        default=None,
+        help="Postgres DSN (default: DATABASE_URL, else built from POSTGRES_*)",
     )
     p.add_argument("--batch-size", type=int, default=100_000)
     p.add_argument(
@@ -389,7 +424,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    print(f"Loading {args.csv} -> {args.dsn}", flush=True)
+    if args.dsn is None:
+        args.dsn = default_dsn()
+    print(f"Loading {args.csv} -> {redact_dsn(args.dsn)}", flush=True)
     if args.limit:
         print(f"  limit={args.limit:,}", flush=True)
     try:

@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import os
 from typing import Any
+from urllib.parse import quote
 
 import psycopg
 from psycopg.rows import dict_row
 
-from lucky_parking.errors import RegionNotFoundError
+from lucky_parking.errors import ConfigurationError, RegionNotFoundError
 from lucky_parking.models import (
     ChartResult,
     ChartRow,
@@ -20,12 +21,49 @@ from lucky_parking.models import (
 )
 from lucky_parking.regions import REGION_CONFIG, RegionConfig, region_where_clause
 
-DEFAULT_DSN = os.getenv(
-    "DATABASE_URL",
-    "postgresql://lucky:changeme@localhost:5432/lucky_parking",
-)
-
 SQ_MI = 2589988.110336  # sq meters per sq mile
+
+DEFAULT_CONNECT_TIMEOUT_SECONDS = 5
+DEFAULT_STATEMENT_TIMEOUT_MS = 15_000
+
+
+def default_dsn() -> str:
+    """Resolve the Postgres DSN from the environment.
+
+    ``DATABASE_URL`` wins. Otherwise assemble one from the ``POSTGRES_*``
+    variables that Compose and ``.env`` already define. There is deliberately
+    no fallback password: a missing one must fail loudly rather than let a
+    well-known default reach a deployed database.
+    """
+    url = os.getenv("DATABASE_URL", "").strip()
+    if url:
+        return url
+
+    password = os.getenv("POSTGRES_PASSWORD", "")
+    if not password:
+        raise ConfigurationError(
+            "No database credentials. Set DATABASE_URL, or POSTGRES_PASSWORD "
+            "(plus optional POSTGRES_USER / POSTGRES_DB / PGHOST / PGPORT). "
+            "Run scripts/ensure_env.sh to generate a local .env."
+        )
+    user = os.getenv("POSTGRES_USER", "lucky")
+    database = os.getenv("POSTGRES_DB", "lucky_parking")
+    host = os.getenv("PGHOST", "localhost")
+    port = os.getenv("PGPORT", "5432")
+    return (
+        f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}"
+        f"@{host}:{port}/{quote(database, safe='')}"
+    )
+
+
+def _int_env(name: str, default: int) -> int:
+    raw = os.getenv(name, "").strip()
+    if not raw:
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        return default
 
 
 def _spatial_predicate(config: RegionConfig) -> str:
@@ -155,10 +193,26 @@ class QueryService:
     """Contract query executor — inject into FastAPI routes later."""
 
     def __init__(self, dsn: str | None = None) -> None:
-        self.dsn = dsn or DEFAULT_DSN
+        self.dsn = dsn or default_dsn()
 
     def connect(self) -> psycopg.Connection:
-        return psycopg.connect(self.dsn, row_factory=dict_row)
+        """Open a connection with both a connect and a per-statement deadline.
+
+        Without these, one expensive spatial query (or an unreachable database)
+        holds a worker open indefinitely and a handful of callers can exhaust
+        ``max_connections``.
+        """
+        statement_timeout_ms = _int_env(
+            "DB_STATEMENT_TIMEOUT_MS", DEFAULT_STATEMENT_TIMEOUT_MS
+        )
+        return psycopg.connect(
+            self.dsn,
+            row_factory=dict_row,
+            connect_timeout=_int_env(
+                "DB_CONNECT_TIMEOUT_SECONDS", DEFAULT_CONNECT_TIMEOUT_SECONDS
+            ),
+            options=f"-c statement_timeout={statement_timeout_ms}",
+        )
 
     def list_regions(self, region_type: RegionType, *, limit: int = 500) -> list[str]:
         config = REGION_CONFIG[region_type]
