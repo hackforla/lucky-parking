@@ -1,0 +1,59 @@
+# Line-ending policy for postgis_db.
+#
+# Git for Windows defaults to core.autocrlf=true, which rewrites checked-out
+# files to CRLF. Shell scripts with CRLF break inside Linux containers: bash
+# reads the trailing \r as part of the command and fails with errors like
+# "$'\r': command not found" or "bad interpreter". The Docker build COPYs
+# init/*.sh and scripts/*.sh into the PostGIS image, and compose bind-mounts
+# postgis-healthcheck.sh, so a Windows clone would fail on first boot without
+# this file.
+#
+# Scoped to this directory rather than the repo root so it stays easy to
+# upstream and does not impose a policy on the JS/TS side of the monorepo.
+# The Dockerfile also strips CR before chmod as a second line of defence.
+
+* text=auto eol=lf
+
+# Must be LF: executed by bash/psql/python inside Linux containers.
+*.sh    text eol=lf
+*.sql   text eol=lf
+*.py    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.ini   text eol=lf
+*.txt   text eol=lf
+Dockerfile      text eol=lf
+Dockerfile.*    text eol=lf
+Caddyfile       text eol=lf
+.env.example    text eol=lf
+
+# Batch files are the one case where CRLF genuinely matters: cmd.exe can
+# mis-parse LF-only files. PowerShell handles LF fine, so .ps1 stays LF to
+# avoid needless churn for contributors on macOS/Linux.
+*.cmd   text eol=crlf
+*.ps1   text eol=lf
+
+# Binary - never touch. `text=auto` would normally auto-detect these, but
+# being explicit avoids any chance of a shapefile or marker image being
+# mangled by an unusual client config.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.zip   binary
+*.gz    binary
+*.dump  binary
+*.pdf   binary
+*.shp   binary
+*.shx   binary
+*.dbf   binary
+*.prj   binary
+*.cpg   binary
+*.sbn   binary
+*.sbx   binary
+
+# Large data files: keep LF, but skip diffing them.
+*.geojson   text eol=lf -diff
+*.csv       text eol=lf -diff

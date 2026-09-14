@@ -7,6 +7,8 @@ set -euo pipefail
 #
 # Requires ./raw_data mounted at /raw_data with a Parking_Citations_*.csv file.
 # For dump-only deploys (no CSV), set SKIP_CITATIONS_LOAD=1.
+# To verify a fresh install in minutes instead of hours, set
+# CITATIONS_LOAD_LIMIT=200000 to load only the first N rows.
 
 if [[ "${SKIP_CITATIONS_LOAD:-}" == "1" ]]; then
   echo "SKIP_CITATIONS_LOAD=1; skipping citations load."
@@ -52,11 +54,26 @@ if [[ ! -s "${CSV}" ]]; then
 fi
 
 echo "Using citations CSV: ${CSV} ($(du -h "${CSV}" | awk '{print $1}'))"
-echo "Loading citations (this can take a long time)..."
+
+# A row cap turns a multi-hour first boot into a few minutes, which is what
+# makes a clean-machine install testable end to end.
+LIMIT_ARGS=()
+if [[ -n "${CITATIONS_LOAD_LIMIT:-}" ]]; then
+  if ! [[ "${CITATIONS_LOAD_LIMIT}" =~ ^[0-9]+$ ]] || ((CITATIONS_LOAD_LIMIT == 0)); then
+    echo "ERROR: CITATIONS_LOAD_LIMIT must be a positive integer, got '${CITATIONS_LOAD_LIMIT}'." >&2
+    exit 1
+  fi
+  LIMIT_ARGS=(--limit "${CITATIONS_LOAD_LIMIT}")
+  echo "CITATIONS_LOAD_LIMIT=${CITATIONS_LOAD_LIMIT}; loading a partial sample (not the full dataset)."
+else
+  echo "Loading all citations (this can take a long time)..."
+fi
 
 # Socket auth is trusted during docker-entrypoint-initdb.d.
+# ${arr[@]+...} keeps an empty LIMIT_ARGS from tripping `set -u` on older bash.
 python3 /usr/local/bin/load_contract_citations.py \
   --csv "${CSV}" \
+  ${LIMIT_ARGS[@]+"${LIMIT_ARGS[@]}"} \
   --dsn "postgresql://${POSTGRES_USER}@/${POSTGRES_DB}?host=/var/run/postgresql"
 
 echo "Citations load finished."

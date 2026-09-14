@@ -3,7 +3,13 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-docker compose exec -T postgis psql -U lucky -d lucky_parking -v ON_ERROR_STOP=0 <<'SQL'
+# Respect a customized POSTGRES_USER / POSTGRES_DB in .env.
+# shellcheck disable=SC1091
+source .env 2>/dev/null || true
+PGUSER="${POSTGRES_USER:-lucky}"
+PGDB="${POSTGRES_DB:-lucky_parking}"
+
+docker compose exec -T postgis psql -U "$PGUSER" -d "$PGDB" -v ON_ERROR_STOP=0 <<'SQL'
 SELECT tablename
 FROM pg_tables
 WHERE schemaname = 'public'

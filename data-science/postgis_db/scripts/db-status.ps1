@@ -24,4 +24,22 @@ SELECT min(issue_datetime) AS min_dt, max(issue_datetime) AS max_dt
 FROM citations;
 '@
 
-$sql | docker compose exec -T postgis psql -U lucky -d lucky_parking -v ON_ERROR_STOP=0
+# Respect a customized POSTGRES_USER / POSTGRES_DB in .env.
+$envFile = Join-Path $Root '.env'
+if (Test-Path -LiteralPath $envFile) {
+  Get-Content -LiteralPath $envFile | ForEach-Object {
+    $line = $_.Trim()
+    if ($line -eq '' -or $line.StartsWith('#')) { return }
+    $eq = $line.IndexOf('=')
+    if ($eq -lt 1) { return }
+    $name = $line.Substring(0, $eq).Trim()
+    $value = $line.Substring($eq + 1).Trim().Trim("'").Trim('"')
+    if (-not [string]::IsNullOrEmpty($name) -and -not [Environment]::GetEnvironmentVariable($name)) {
+      Set-Item -Path "Env:$name" -Value $value
+    }
+  }
+}
+$PgUser = if ($env:POSTGRES_USER) { $env:POSTGRES_USER } else { 'lucky' }
+$PgDb = if ($env:POSTGRES_DB) { $env:POSTGRES_DB } else { 'lucky_parking' }
+
+$sql | docker compose exec -T postgis psql -U $PgUser -d $PgDb -v ON_ERROR_STOP=0

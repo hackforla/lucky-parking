@@ -1,5 +1,6 @@
 # Host-side preflight: ensure raw_data/ and a Parking_Citations_*.csv exist
-# before first-boot docker compose (which mounts ./raw_data → /raw_data).
+# before first-boot docker compose (which mounts ./raw_data to /raw_data).
+# ASCII-only: Windows PowerShell 5.1 reads a BOM-less UTF-8 .ps1 as ANSI.
 $ErrorActionPreference = 'Stop'
 
 $Root = Split-Path -Parent $PSScriptRoot
