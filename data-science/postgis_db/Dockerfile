@@ -5,15 +5,38 @@
 FROM --platform=linux/amd64 postgis/postgis:16-3.5
 
 # gdal → ogr2ogr for GeoJSON; Python → contract citations loader.
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+#
+# This base image is Debian 11 (bullseye), which reached end-of-LTS on
+# 2026-08-31. Its .deb files have since been withdrawn from deb.debian.org, so
+# a fresh build fails: `apt-get update` still succeeds and advertises
+# python3.9 3.9.2-1+deb11u7, but fetching it 404s and apt exits 100. Builds
+# only appeared to work while the layer was still warm in a local cache.
+#
+# Staying on bullseye is deliberate. postgis/postgis ships no bookworm/trixie
+# build for PostGIS 3.5 on PG16 - 17-3.5 is bullseye too, and the only current
+# option (18-3.6, Debian 13) would force a PostgreSQL major upgrade that makes
+# existing data directories unreadable. So take packages from
+# archive.debian.org, which still serves bullseye:
+#   - bullseye-security has no suite on archive.debian.org, so drop it. There
+#     will be no further security updates for this release either way; moving
+#     to 18-3.6 with a pg_upgrade is the real fix when there is time for it.
+#   - Archived Release files are past Valid-Until, hence Check-Valid-Until=0.
+# apt.postgresql.org is a separate, still-live repo and is left alone.
+RUN set -eux; \
+    sed -i \
+      -e '/bullseye-security/d' \
+      -e 's|http://deb.debian.org/debian|http://archive.debian.org/debian|' \
+      /etc/apt/sources.list; \
+    apt-get -o Acquire::Check-Valid-Until=false update; \
+    apt-get install -y --no-install-recommends \
         gdal-bin \
         python3 \
-        python3-pip \
-    && pip3 install --no-cache-dir \
+        python3-pip; \
+    pip3 install --no-cache-dir \
         'polars>=1.30,<2' \
-        'psycopg[binary]>=3.2,<4' \
-    && rm -rf /var/lib/apt/lists/*
+        'psycopg[binary]>=3.2,<4'; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*
 
 # No POSTGRES_PASSWORD default on purpose: the entrypoint refuses to
 # initialize without one, which is safer than baking in a known value.

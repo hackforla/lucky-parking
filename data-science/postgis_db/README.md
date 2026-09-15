@@ -250,6 +250,39 @@ Two changes are not backward compatible with a volume created before them:
   `password authentication failed`. Either put the original password in `.env`,
   or start clean with `docker compose down -v`.
 
+### Build fails with `exit code: 100`
+
+If `docker compose build` fails in the PostGIS image with:
+
+```
+target postgis: failed to solve: process "/bin/sh -c apt-get update ..."
+did not complete successfully: exit code: 100
+```
+
+scroll up in the build output. If you see `404 Not Found` on Python packages:
+
+```
+Err:19 http://deb.debian.org/debian-security bullseye-security/main amd64 python3-pip
+  404  Not Found
+E: Unable to fetch some archives
+```
+
+then you are on a version of the `Dockerfile` from before this was fixed.
+`postgis/postgis:16-3.5` is built on Debian 11 (bullseye), which reached
+end-of-LTS on 2026-08-31; its packages have since been withdrawn from
+`deb.debian.org`, so `apt-get update` still succeeds while the actual
+downloads 404. The current `Dockerfile` pulls from `archive.debian.org`
+instead — pull the latest and rebuild.
+
+This is worth knowing about even if your builds work: a warm Docker layer
+cache hides it completely, so the image can keep building on a machine that
+built it earlier while failing for everyone else. `docker compose build
+--no-cache postgis` is the way to find out what a new contributor actually
+gets. Note that only `18-3.6` is on a supported Debian (13, trixie), and
+moving to it means a PostgreSQL major upgrade that existing data directories
+cannot be read across, so bullseye plus `archive.debian.org` is the smaller
+change for now.
+
 ## Windows notes
 
 Windows helpers are **`scripts\*.cmd`** wrappers around the PowerShell scripts (they always use `-ExecutionPolicy Bypass`). You do **not** need `Set-ExecutionPolicy` if you use the `.cmd` files.
