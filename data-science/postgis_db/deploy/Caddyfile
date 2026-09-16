@@ -1,0 +1,41 @@
+# Caddy terminates TLS for the contract API and the explorer UI.
+#
+# Certificates are obtained and renewed automatically from Let's Encrypt, so
+# both domains must already resolve to this host and ports 80/443 must be open.
+#
+# Set API_DOMAIN, WEB_DOMAIN, and ACME_EMAIL in .env before starting Compose.
+# For a host with no DNS name yet, set both to the same value and use
+# `caddy` with `tls internal` (see deploy/VPS.md).
+{
+	email {$ACME_EMAIL}
+	# Uncomment to test against Let's Encrypt staging and avoid rate limits:
+	# acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+(common) {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		# Caddy advertises itself by default; no reason to name the stack.
+		-Server
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
+
+{$API_DOMAIN} {
+	import common
+	reverse_proxy api:8000
+}
+
+{$WEB_DOMAIN} {
+	import common
+	reverse_proxy web:8080
+}

@@ -1,0 +1,145 @@
+# Production stack: PostGIS (internal) + contract API + explorer UI + Caddy TLS.
+#
+#   cp .env.example .env
+#   bash scripts/gen_secrets.sh >> .env   # POSTGRES_PASSWORD, API_KEYS, WEB_PASSWORD
+#   nano .env                             # set API_DOMAIN, WEB_DOMAIN, ACME_EMAIL
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Only Caddy publishes to the internet (80/443). PostGIS is not published at
+# all; api/web bind to 127.0.0.1 so they are reachable for local curl checks
+# but never directly from outside. Restore a pg_dump after first boot —
+# see deploy/VPS.md
+services:
+  postgis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lucky-parking-postgis:prod
+    platform: linux/amd64
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lucky_parking}
+      POSTGRES_USER: ${POSTGRES_USER:-lucky}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      SKIP_CITATIONS_LOAD: ${SKIP_CITATIONS_LOAD:-1}
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+      # Optional: place lucky_parking.dump here for scripts/prod_restore.sh
+      - ./dumps:/dumps:ro
+    networks:
+      - internal
+    mem_limit: ${COMPOSE_MEM_LIMIT_POSTGIS:-2560m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_POSTGIS:-2560m}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 300s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: lucky-parking-api:prod
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+      API_KEYS: ${API_KEYS:?Set API_KEYS in .env (see scripts/gen_secrets.sh)}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-60}
+      DB_CONNECT_TIMEOUT_SECONDS: ${DB_CONNECT_TIMEOUT_SECONDS:-5}
+      DB_STATEMENT_TIMEOUT_MS: ${DB_STATEMENT_TIMEOUT_MS:-15000}
+      # Leave unset to keep /docs and /openapi.json off in production.
+      API_DOCS_PUBLIC: ${API_DOCS_PUBLIC:-}
+    ports:
+      # Loopback only — Caddy reaches this over the compose network.
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    networks:
+      - internal
+    mem_limit: ${COMPOSE_MEM_LIMIT_API:-512m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_API:-512m}
+    depends_on:
+      postgis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    image: lucky-parking-api:prod
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lucky}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgis:5432/${POSTGRES_DB:-lucky_parking}
+      WEB_USER: ${WEB_USER:?Set WEB_USER in .env}
+      WEB_PASSWORD: ${WEB_PASSWORD:?Set WEB_PASSWORD in .env (see scripts/gen_secrets.sh)}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-30}
+      DB_CONNECT_TIMEOUT_SECONDS: ${DB_CONNECT_TIMEOUT_SECONDS:-5}
+      DB_STATEMENT_TIMEOUT_MS: ${DB_STATEMENT_TIMEOUT_MS:-15000}
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8080}:8080"
+    networks:
+      - internal
+    mem_limit: ${COMPOSE_MEM_LIMIT_WEB:-512m}
+    memswap_limit: ${COMPOSE_MEM_LIMIT_WEB:-512m}
+    depends_on:
+      postgis:
+        condition: service_healthy
+      api:
+        condition: service_started
+    command:
+      - uvicorn
+      - web_sheet.app:app
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8080"
+      - --workers
+      - "1"
+      # Caddy is the only thing in front, so trust its forwarded headers.
+      - --proxy-headers
+      - --forwarded-allow-ips
+      - "*"
+    healthcheck:
+      # 401 is the healthy answer once basic auth is on, so probe with -o and
+      # accept any HTTP response rather than -f.
+      test: ["CMD-SHELL", "curl -sS -o /dev/null http://127.0.0.1:8080/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?Set API_DOMAIN in .env}
+      WEB_DOMAIN: ${WEB_DOMAIN:?Set WEB_DOMAIN in .env}
+      ACME_EMAIL: ${ACME_EMAIL:?Set ACME_EMAIL in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      # Persist issued certificates so restarts do not re-request them.
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - internal
+    depends_on:
+      api:
+        condition: service_started
+      web:
+        condition: service_started
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  postgis_data:
+  caddy_data:
+  caddy_config:

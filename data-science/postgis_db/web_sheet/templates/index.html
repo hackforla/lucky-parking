@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Citation sheet + map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/vendor/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="page {% if query_mode == 'compare' %}page-wide{% endif %}">
+    <header class="hero">
+      <p class="brand">Lucky Parking</p>
+      <h1>Citation explorer</h1>
+      <p class="lede">Filter by region type, region, and dates. View matching citations as a spreadsheet or a map with coordinate markers. Use compare mode for two regions side by side.</p>
+    </header>
+
+    <div class="mode-switch" role="group" aria-label="Query mode">
+      <button type="button" class="mode-btn {% if query_mode == 'single' %}active{% endif %}" data-mode="single">
+        Single-region
+      </button>
+      <button type="button" class="mode-btn {% if query_mode == 'compare' %}active{% endif %}" data-mode="compare">
+        Compare mode
+      </button>
+    </div>
+
+    <form class="filters" method="post" action="/lookup" id="lookup-form">
+      <input type="hidden" name="query_mode" id="query-mode" value="{{ query_mode }}" />
+
+      <label>
+        <span>Region type</span>
+        <select name="region_type" id="region-type" required>
+          {% for rt in region_types %}
+          <option value="{{ rt }}" {% if rt == region_type %}selected{% endif %}>{{ rt }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <div id="single-region-fields" class="region-inputs" {% if query_mode != 'single' %}hidden{% endif %}>
+        <label class="region-field">
+          <span>Region</span>
+          <div class="suggest-wrap" data-suggest>
+            <input
+              name="region"
+              id="region-input"
+              type="text"
+              {% if query_mode == 'single' %}required{% endif %}
+              autocomplete="off"
+              value="{{ region }}"
+              data-region-input
+              aria-autocomplete="list"
+            />
+            <ul class="suggestions" hidden role="listbox"></ul>
+          </div>
+        </label>
+      </div>
+
+      <div id="compare-region-fields" class="region-inputs compare-inputs" {% if query_mode != 'compare' %}hidden{% endif %}>
+        <label class="region-field">
+          <span>Region 1</span>
+          <div class="suggest-wrap" data-suggest>
+            <input
+              name="region_1"
+              id="region-1-input"
+              type="text"
+              {% if query_mode == 'compare' %}required{% endif %}
+              autocomplete="off"
+              value="{{ region_1 }}"
+              data-region-input
+              aria-autocomplete="list"
+            />
+            <ul class="suggestions" hidden role="listbox"></ul>
+          </div>
+        </label>
+        <label class="region-field">
+          <span>Region 2</span>
+          <div class="suggest-wrap" data-suggest>
+            <input
+              name="region_2"
+              id="region-2-input"
+              type="text"
+              {% if query_mode == 'compare' %}required{% endif %}
+              autocomplete="off"
+              value="{{ region_2 }}"
+              data-region-input
+              aria-autocomplete="list"
+            />
+            <ul class="suggestions" hidden role="listbox"></ul>
+          </div>
+        </label>
+      </div>
+
+      <label id="radius-field" {% if region_type != 'Place (Radius)' %}hidden{% endif %}>
+        <span>Radius (m)</span>
+        <input name="radius_meters" type="number" min="1" max="50000" step="1" value="{{ radius_meters }}" />
+      </label>
+
+      <label>
+        <span>Date min</span>
+        <input name="date_min" type="date" required value="{{ date_min }}" />
+      </label>
+      <label>
+        <span>Date max</span>
+        <input name="date_max" type="date" required value="{{ date_max }}" />
+      </label>
+      <label>
+        <span>View</span>
+        <select name="view_mode" id="view-mode">
+          <option value="chart" {% if view_mode == 'chart' %}selected{% endif %}>Chart (sheet)</option>
+          <option value="map" {% if view_mode == 'map' %}selected{% endif %}>Map</option>
+        </select>
+      </label>
+      <label>
+        <span>Row limit</span>
+        <input name="limit" type="number" min="1" max="10000" value="{{ limit }}" />
+      </label>
+      <button type="submit">Load</button>
+    </form>
+
+    {% if error %}
+    <p class="error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    {% macro result_panel(result, map_id, markers_id, panel_label) %}
+    <section class="sheet-wrap" aria-label="{{ panel_label }}">
+      <div class="sheet-meta">
+        <strong>{{ result.region_type }} · {{ result.region }}</strong>
+        {% if result.radius_meters %}
+        <span>{{ result.radius_meters|int }} m radius</span>
+        {% endif %}
+        <span>{{ result.total }} matching citation{% if result.total != 1 %}s{% endif %}</span>
+        {% if result.truncated %}
+        <span class="warn">Showing first {{ result.rows|length }} of {{ result.total }}</span>
+        {% else %}
+        <span>Showing all {{ result.rows|length }} rows</span>
+        {% endif %}
+      </div>
+
+      {% if view_mode == 'map' %}
+      <div id="{{ map_id }}" class="map" data-map role="region" aria-label="{{ panel_label }} map"></div>
+      <script type="application/json" id="{{ markers_id }}" data-map-markers>{{ result.rows | tojson }}</script>
+      {% else %}
+      <div class="sheet">
+        <table>
+          <thead>
+            <tr>
+              <th>ticket_number</th>
+              <th>issue_datetime</th>
+              <th>violation_code</th>
+              <th>violation_description</th>
+              <th class="num">fine_amount</th>
+              <th class="num">lat</th>
+              <th class="num">lon</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in result.rows %}
+            <tr>
+              <td>{{ row.ticket_number }}</td>
+              <td>{{ row.issue_datetime }}</td>
+              <td>{{ row.violation_code }}</td>
+              <td>{{ row.violation_description }}</td>
+              <td class="num">{% if row.fine_amount is not none %}{{ "%.2f"|format(row.fine_amount) }}{% endif %}</td>
+              <td class="num">{% if row.lat is not none %}{{ "%.5f"|format(row.lat) }}{% endif %}</td>
+              <td class="num">{% if row.lon is not none %}{{ "%.5f"|format(row.lon) }}{% endif %}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="empty">No citations in this range.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </section>
+    {% endmacro %}
+
+    {% if query_mode == 'single' and result %}
+      {{ result_panel(result, 'map', 'map-markers', 'Citation results') }}
+    {% elif query_mode == 'compare' and (result_1 or result_2) %}
+    <div class="compare-results">
+      {% if result_1 %}
+      <div class="compare-pane">
+        <h2 class="pane-title">Region 1</h2>
+        {{ result_panel(result_1, 'map-1', 'map-markers-1', 'Region 1 results') }}
+      </div>
+      {% endif %}
+      {% if result_2 %}
+      <div class="compare-pane">
+        <h2 class="pane-title">Region 2</h2>
+        {{ result_panel(result_2, 'map-2', 'map-markers-2', 'Region 2 results') }}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </main>
+
+  <script src="/static/vendor/leaflet/leaflet.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+raw_data/
+**/shapefile/
+**/*_shapefile.zip
+**/.DS_Store
+**/__pycache__/
+*.md
+datacontract.yaml
+.dockerignore
+Dockerfile
+docker-compose.yml
+.env
+.env.*
+
+# Never needed in either image, and .venv alone is ~260 MB of build context
+# that would otherwise be uploaded to the daemon on every build.
+.venv/
+.git/
+.gitattributes
+dumps/
+tests/
+deploy/
+*.ps1
+*.cmd
