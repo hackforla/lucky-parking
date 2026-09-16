@@ -12,6 +12,9 @@ storybook-static/
 .pnp.js
 node_modules/
 
+# Python virtual environments
+.venv/
+
 # Deployment
 .vercel/
 
@@ -38,3 +41,6 @@ coverage/
 
 # TypeScript
 **/*.tsbuildinfo
+
+# Local datasets (the raw citations CSV is multi-GB)
+raw_data/
