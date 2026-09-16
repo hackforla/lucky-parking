@@ -10,17 +10,17 @@ informed decisions about parking policies in the City of Los Angeles.
 The repository manages deployable applications, reusable packages, and project documentation altogether as a pnpm
 workspace.
 
-| Path                                          | Purpose                                        |
-| --------------------------------------------- | ---------------------------------------------- |
-| [`docs/`](.)                                  | Project and contributor documentation          |
-| [`apps/`](../apps/)                           | Deployable applications                        |
-| [`apps/web`](../apps/web)                     | [Next.js](https://nextjs.org/) web application |
-| [`apps/api`](../apps/api)                     | [Express](https://expressjs.com/) API          |
-| [`packages/`](../packages/)                   | Reusable packages for internal consumers       |
-| [`packages/design`](../packages/design)       | Shared UI components and styles                |
-| [`packages/contracts`](../packages/contracts) | Shared data contracts                          |
-| [`packages/configs`](../packages/configs)     | Shared project configuration                   |
-| [`data-science/`](../data-science)            | Parking citation analysis                      |
+| Path                                                   | Purpose                                        |
+| ------------------------------------------------------ | ---------------------------------------------- |
+| [`docs/`](.)                                           | Project and contributor documentation          |
+| [`apps/`](../apps/)                                    | Deployable applications                        |
+| [`apps/web`](../apps/web)                              | [Next.js](https://nextjs.org/) web application |
+| [`apps/api`](../apps/api)                              | [Express](https://expressjs.com/) API          |
+| [`packages/`](../packages/)                            | Reusable packages for internal consumers       |
+| [`packages/design`](../packages/design)                | Shared UI components and styles                |
+| [`packages/contracts`](../packages/contracts)          | Shared data contracts                          |
+| [`projects/`](../projects/)                            | Project-specific workspaces and tooling        |
+| [`projects/data-science/`](../projects/data-science)   | Parking citation analysis                      |
 
 ## Getting Started
 
