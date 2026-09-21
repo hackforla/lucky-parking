@@ -22,7 +22,7 @@ API** and **citation explorer**.
 | Contract API | http://localhost:8000/docs | Chart queries (`/chart`, `/regions`, …)              |
 | PostGIS      | `localhost:5432`           | Direct SQL (`lucky` / _generated_ / `lucky_parking`) |
 
-`scripts/preflight.sh` writes `postgis_db/.env` with a generated `POSTGRES_PASSWORD` on first run; compose refuses to
+`scripts/preflight.sh` writes `projects/data-science/postgis_db/.env` with a generated `POSTGRES_PASSWORD` on first run; compose refuses to
 start without one. Local compose sets `ALLOW_UNAUTHENTICATED=1`, so **localhost needs no API key or login**. Anything
 reachable from the internet must not — see [Security](#security).
 
@@ -33,7 +33,7 @@ Download the **Parking Citations** flat file (CSV export) from the
 (any date in the filename is fine):
 
 ```text
-postgis_db/raw_data/Parking_Citations_YYYYMMDD.csv
+projects/data-science/postgis_db/raw_data/Parking_Citations_YYYYMMDD.csv
 ```
 
 ### 2. Preflight + start
@@ -43,7 +43,7 @@ postgis_db/raw_data/Parking_Citations_YYYYMMDD.csv
 **macOS / Linux**
 
 ```bash
-cd data-science/postgis_db
+cd projects/data-science/postgis_db
 bash scripts/start.sh
 docker compose logs -f postgis
 ```
@@ -51,7 +51,7 @@ docker compose logs -f postgis
 **Windows** (Command Prompt or PowerShell — `.cmd` shims, no execution-policy change)
 
 ```bat
-cd data-science\postgis_db
+cd projects\data-science\postgis_db
 scripts\start.cmd
 docker compose logs -f postgis
 ```
@@ -61,7 +61,7 @@ docker compose logs -f postgis
 **macOS / Linux**
 
 ```bash
-cd data-science/postgis_db
+cd projects/data-science/postgis_db
 bash scripts/preflight.sh
 docker compose up -d --build
 docker compose logs -f postgis
@@ -70,7 +70,7 @@ docker compose logs -f postgis
 **Windows**
 
 ```bat
-cd data-science\postgis_db
+cd projects\data-science\postgis_db
 scripts\preflight.cmd
 docker compose up -d --build
 docker compose logs -f postgis
@@ -156,7 +156,7 @@ the first N rows so a complete clean install finishes in a few minutes. Everythi
 API, explorer — behaves identically.
 
 ```bash
-cd data-science/postgis_db
+cd projects/data-science/postgis_db
 docker compose down -v                       # discard any existing volume
 CITATIONS_LOAD_LIMIT=200000 bash scripts/start.sh
 docker compose logs -f postgis                # wait for "Citations load finished."
@@ -166,7 +166,7 @@ bash scripts/smoke_test.sh
 Windows:
 
 ```bat
-cd data-science\postgis_db
+cd projects\data-science\postgis_db
 docker compose down -v
 set CITATIONS_LOAD_LIMIT=200000
 scripts\start.cmd
@@ -185,7 +185,7 @@ runs**:
    (a `../../../.gitignore` rule hiding something the build needs) and wrong line endings.
 
    ```bash
-   git clone <repo-url> /tmp/lp-clean && cd /tmp/lp-clean/data-science/postgis_db
+   git clone <repo-url> /tmp/lp-clean && cd /tmp/lp-clean/projects/data-science/postgis_db
    ```
 
 2. **Confirm the boundary GeoJSON actually arrived.** All five layers are committed, so this should pass immediately. If
@@ -221,7 +221,7 @@ checked-out files to CRLF; a `.sh` file with CRLF fails inside a Linux container
 before `chmod` as a second line of defence. On the Windows box, confirm the checkout is correct before blaming Docker:
 
 ```powershell
-cd data-science\postgis_db
+cd projects\data-science\postgis_db
 # Should print "lf" for every script. Any "crlf" means .gitattributes was
 # missing when you cloned -- re-clone rather than converting by hand.
 git ls-files --eol scripts init | Select-String 'w/crlf'
@@ -292,9 +292,22 @@ Windows helpers are **`scripts\*.cmd`** wrappers around the PowerShell scripts (
 | `gen_secrets.ps1` / `.sh`      | Print production credentials for `.env`               |
 | `reload_boundaries_docker.cmd` | Re-run boundary loader in compose                     |
 | `prod_restore.cmd`             | Restore dump into prod compose                        |
+| `test_socrata_sync.py` / `.cmd`| Dry-run / apply probe of Socrata → PostGIS sync       |
 
 All PowerShell scripts target **Windows PowerShell 5.1** (the version that ships with Windows), so they avoid .NET
 Core-only APIs and stay ASCII-only. They also work unchanged under PowerShell 7.
+
+### Socrata incremental sync probe
+
+Ports the untested SQLite sync idea from `beta_pipeline/parking_db.py` onto the contract `citations` table. Default is
+**dry-run** (no writes). Needs `SOCRATA_APP_TOKEN` in `.env`.
+
+```bat
+scripts\test_socrata_sync.cmd
+scripts\test_socrata_sync.cmd --max-pages 50 --report dumps\socrata_sync_probe.json
+scripts\test_socrata_sync.cmd --since-db-max --order "issue_date DESC" --no-stop-on-match
+scripts\test_socrata_sync.cmd --since-db-max --order "issue_date DESC" --no-stop-on-match --apply
+```
 
 Direct `.ps1` usage (optional): see [PowerShell execution policy](#powershell-execution-policy-optional) below.
 
@@ -315,7 +328,7 @@ Use `curl.exe` (not the `curl` alias) for health checks on Windows.
 ## Layout
 
 ```
-postgis_db/
+projects/data-science/postgis_db/
 ├── README.md                 # This file
 ├── datacontract.yaml         # Query/filter contract (not a physical table DDL)
 ├── Dockerfile                # PostGIS image (postgis:16-3.5 + boundaries + init)
@@ -375,7 +388,7 @@ postgis_db/
 
 | Artifact                              | Location                                    | In git?                                            | In Docker image?                             |
 | ------------------------------------- | ------------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
-| Dockerfile / compose / init / scripts | `postgis_db/`                               | Yes                                                | Build context (see `../../../.dockerignore`) |
+| Dockerfile / compose / init / scripts | `projects/data-science/postgis_db/`          | Yes                                                | Build context (see `.dockerignore`)          |
 | Boundary GeoJSON                      | `boundaries/*/*.geojson`                    | Untracked unless added                             | **Yes** (`COPY` into `/data`)                |
 | Boundary shapefiles / zips            | `boundaries/*/shapefile`, `*_shapefile.zip` | Untracked unless added                             | **No**                                       |
 | Citation CSV (~6 GB)                  | `raw_data/`                                 | **No** (`raw_data/` in repo `../../../.gitignore`) | **No**                                       |
@@ -501,7 +514,7 @@ Chart JSON for `single_data` and `compare_mode`. Interactive schemas at
 truth).
 
 ```bash
-cd postgis_db
+cd projects/data-science/postgis_db
 docker compose up -d --build   # PostGIS, then API + explorer after data load
 curl -s http://localhost:8000/health
 # OpenAPI: http://localhost:8000/docs
@@ -657,7 +670,7 @@ docker compose up -d --build
 Host-side reload (optional; stop compose `web` first):
 
 ```bash
-cd postgis_db
+cd projects/data-science/postgis_db
 .venv/bin/uvicorn web_sheet.app:app --reload --port 8080
 ```
 
@@ -671,7 +684,7 @@ the prompt.
 ### Query the contract (CLI)
 
 ```bash
-cd postgis_db
+cd projects/data-science/postgis_db
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 # Valid region names (pick one for --region)
@@ -707,7 +720,7 @@ Requires Docker Desktop (or compatible engine). On Apple Silicon the PostGIS ima
 are amd64-only). Host-side scripts: `.sh` on macOS/Linux, `.ps1` on Windows.
 
 ```bash
-cd data-science/postgis_db
+cd projects/data-science/postgis_db
 
 # Preflight (portable; paths relative to this repo)
 bash scripts/preflight.sh
@@ -730,7 +743,7 @@ docker compose exec -it postgis psql -U lucky -d lucky_parking
 Windows:
 
 ```bat
-cd data-science\postgis_db
+cd projects\data-science\postgis_db
 scripts\preflight.cmd
 docker compose up -d --build
 curl.exe -s http://localhost:8000/health
@@ -758,7 +771,7 @@ Init scripts only run on an **empty** data volume. If a volume was created befor
 need to refresh boundaries without wiping citations:
 
 ```bash
-cd data-science/postgis_db
+cd projects/data-science/postgis_db
 # Rebuild so /data/*.geojson + /usr/local/lib/lucky-parking/load_boundaries.sh are current
 docker compose up -d --build
 bash scripts/reload_boundaries_docker.sh
@@ -775,7 +788,7 @@ Same loader, host Postgres + GDAL (no Docker), using the repo tree — **macOS/L
 PATH; use Git Bash or WSL on Windows):
 
 ```bash
-cd data-science/postgis_db
+cd projects/data-science/postgis_db
 export PGHOST=localhost PGPORT=5432
 export POSTGRES_DB=lucky_parking POSTGRES_USER=lucky
 export POSTGRES_PASSWORD='<the value from .env>'
@@ -788,7 +801,7 @@ bash scripts/load_boundaries.sh
 Init only runs on an empty volume. To re-run the contract loader later (or test with `--limit`):
 
 ```bash
-cd data-science/postgis_db
+cd projects/data-science/postgis_db
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python scripts/load_contract_citations.py
 .venv/bin/python scripts/load_contract_citations.py --limit 100000
@@ -797,7 +810,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 Windows:
 
 ```powershell
-cd data-science\postgis_db
+cd projects\data-science\postgis_db
 py -3 -m venv .venv
 .\.venv\Scripts\pip install -r requirements.txt
 .\.venv\Scripts\python scripts\load_contract_citations.py

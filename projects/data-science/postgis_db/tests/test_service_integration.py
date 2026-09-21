@@ -1,7 +1,7 @@
 """Integration tests — require PostGIS with boundaries (+ optional citations).
 
 Run:
-    cd postgis_db && pytest tests/test_service_integration.py -m integration
+    cd projects/data-science/postgis_db && pytest tests/test_service_integration.py -m integration
 """
 
 from datetime import date

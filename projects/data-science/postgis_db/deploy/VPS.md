@@ -20,7 +20,7 @@ Internet ──443──▶ caddy ──▶ api:8000   (X-API-Key)
 On your dev machine (with Docker):
 
 ```bash
-cd postgis_db
+cd projects/data-science/postgis_db
 docker compose up -d --build
 # Wait for boundaries + citations, or:
 # .venv/bin/python scripts/load_contract_citations.py
@@ -81,9 +81,10 @@ From your laptop (replace `user` and `vps-ip`):
 
 ```bash
 rsync -avz --exclude raw_data --exclude .venv --exclude __pycache__ --exclude .env \
-  postgis_db/ user@vps-ip:~/lucky-parking/postgis_db/
+  projects/data-science/postgis_db/ user@vps-ip:~/lucky-parking/postgis_db/
 
-scp dumps/lucky_parking.dump user@vps-ip:~/lucky-parking/postgis_db/dumps/
+scp projects/data-science/postgis_db/dumps/lucky_parking.dump \
+  user@vps-ip:~/lucky-parking/postgis_db/dumps/
 ```
 
 `.env` is excluded on purpose — generate credentials on the VPS instead of copying your local ones.
