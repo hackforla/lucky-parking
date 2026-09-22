@@ -1,8 +1,8 @@
 """Region/date sheet + map UI (separate from the PostGIS Docker image).
 
-Requires PostGIS running (``docker compose up -d`` in postgis_db).
+Requires PostGIS running (``docker compose up -d`` in projects/data-science/postgis_db).
 
-    cd postgis_db
+    cd projects/data-science/postgis_db
     .venv/bin/uvicorn web_sheet.app:app --reload --port 8080
 
 Open http://localhost:8080
