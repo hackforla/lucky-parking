@@ -72,7 +72,13 @@
 						{% for rt in region_types %}
 						<option
 							value="{{ rt }}"
-							{% if rt == region_type %}selected{% endif %}>
+							{%
+							if
+							rt=""
+							="region_type"
+							%}selected{%
+							endif
+							%}>
 							{{ rt }}
 						</option>
 						{% endfor %}
@@ -82,7 +88,13 @@
 				<div
 					id="single-region-fields"
 					class="region-inputs"
-					{% if query_mode != 'single' %}hidden{% endif %}>
+					{%
+					if
+					query_mode
+					!="single"
+					%}hidden{%
+					endif
+					%}>
 					<label class="region-field">
 						<span>Region</span>
 						<div
@@ -92,7 +104,13 @@
 								name="region"
 								id="region-input"
 								type="text"
-								{% if query_mode == 'single' %}required{% endif %}
+								{%
+								if
+								query_mode=""
+								="single"
+								%}required{%
+								endif
+								%}
 								autocomplete="off"
 								value="{{ region }}"
 								data-region-input
@@ -108,7 +126,13 @@
 				<div
 					id="compare-region-fields"
 					class="region-inputs compare-inputs"
-					{% if query_mode != 'compare' %}hidden{% endif %}>
+					{%
+					if
+					query_mode
+					!="compare"
+					%}hidden{%
+					endif
+					%}>
 					<label class="region-field">
 						<span>Region 1</span>
 						<div
@@ -118,7 +142,13 @@
 								name="region_1"
 								id="region-1-input"
 								type="text"
-								{% if query_mode == 'compare' %}required{% endif %}
+								{%
+								if
+								query_mode=""
+								="compare"
+								%}required{%
+								endif
+								%}
 								autocomplete="off"
 								value="{{ region_1 }}"
 								data-region-input
@@ -138,7 +168,13 @@
 								name="region_2"
 								id="region-2-input"
 								type="text"
-								{% if query_mode == 'compare' %}required{% endif %}
+								{%
+								if
+								query_mode=""
+								="compare"
+								%}required{%
+								endif
+								%}
 								autocomplete="off"
 								value="{{ region_2 }}"
 								data-region-input
@@ -153,7 +189,13 @@
 
 				<label
 					id="radius-field"
-					{% if region_type != 'Place (Radius)' %}hidden{% endif %}>
+					{%
+					if
+					region_type
+					!="Place (Radius)"
+					%}hidden{%
+					endif
+					%}>
 					<span>Radius (m)</span>
 					<input
 						name="radius_meters"
@@ -187,12 +229,24 @@
 						id="view-mode">
 						<option
 							value="chart"
-							{% if view_mode == 'chart' %}selected{% endif %}>
+							{%
+							if
+							view_mode=""
+							="chart"
+							%}selected{%
+							endif
+							%}>
 							Chart (sheet)
 						</option>
 						<option
 							value="map"
-							{% if view_mode == 'map' %}selected{% endif %}>
+							{%
+							if
+							view_mode=""
+							="map"
+							%}selected{%
+							endif
+							%}>
 							Map
 						</option>
 					</select>

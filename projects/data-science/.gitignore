@@ -60,7 +60,7 @@ target/
 .env
 
 # Database dumps (multi-GB pg_dump files staged for prod restore)
-postgis_db/dumps/*
+postgis_db/dumps/.gitkeep
 !postgis_db/dumps/.gitkeep
 
 # Database
