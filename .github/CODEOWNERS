@@ -1,0 +1,13 @@
+# Repository code owners
+#
+# Patterns are evaluated from top to bottom. When multiple patterns match a
+# file, the last matching pattern determines its owners.
+#
+# GitHub only requests reviews from CODEOWNERS who have write access to the
+# repository. Keep these assignments current when leads change.
+
+# The development lead reviews changes unless a more specific rule applies.
+* @glenflorendo
+
+# The data science lead reviews changes to the data science project.
+/projects/data-science/ @gregpawin
