@@ -21,19 +21,22 @@ FROM --platform=linux/amd64 postgis/postgis:16-3.5
 #     will be no further security updates for this release either way; moving
 #     to 18-3.6 with a pg_upgrade is the real fix when there is time for it.
 #   - Archived Release files are past Valid-Until, hence Check-Valid-Until=0.
-# apt.postgresql.org is a separate, still-live repo and is left alone.
+#   - Remove the PGDG apt source files inherited from the base image before
+#     updating packages against the archived Bullseye repositories.
 RUN set -eux; \
     sed -i \
       -e '/bullseye-security/d' \
       -e 's|http://deb.debian.org/debian|http://archive.debian.org/debian|' \
       /etc/apt/sources.list; \
+    rm -f /etc/apt/sources.list.d/pgdg.list \
+          /etc/apt/sources.list.d/pgdg.sources; \
     apt-get -o Acquire::Check-Valid-Until=false update; \
     apt-get install -y --no-install-recommends \
         gdal-bin \
         python3 \
         python3-pip; \
     pip3 install --no-cache-dir \
-        'polars>=1.30,<2' \
+        'polars[rtcompat]>=1.30,<2' \
         'psycopg[binary]>=3.2,<4'; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*
