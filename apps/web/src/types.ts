@@ -1,4 +1,4 @@
-import { BBox, Feature, FeatureCollection, Point, Polygon } from "geojson";
+import { BBox, Feature, FeatureCollection, Point, Polygon, MultiPolygon } from "geojson";
 import "mapbox-gl";
 import { RefObject } from "react";
 import neighborhoodCouncilCollection from "@/data/los-angeles-neighborhood-councils.json";
@@ -36,6 +36,7 @@ export type GeocoderNeighborhoodCouncilFeature = NeighborhoodCouncilFeature & {
 
 export type GeocoderResult = {
 	id: string;
+	geometry: Point | Polygon | MultiPolygon;
 	properties: {
 		feature_type: string;
 		name: string;

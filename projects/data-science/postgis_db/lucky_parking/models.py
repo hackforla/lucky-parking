@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 from enum import Enum
+import math
 from typing import Literal, Self
 
 from pydantic import BaseModel, Field, model_validator
@@ -123,3 +124,61 @@ class ChartResult(BaseModel):
     radius_meters: float | None = None
     rows: list[ChartRow]
     meta: dict[str, str | float | int | None] = Field(default_factory=dict)
+
+
+class CitationGeometry(BaseModel):
+    """A bounded GeoJSON selection from the website's geocoder."""
+
+    type: Literal["Point", "Polygon", "MultiPolygon"]
+    coordinates: list
+
+    @model_validator(mode="after")
+    def valid_coordinates(self) -> Self:
+        positions = 0
+
+        def position(value):
+            nonlocal positions
+            positions += 1
+            if positions > 50_000:
+                raise ValueError("Geometry must not exceed 50000 positions")
+            if not isinstance(value, list) or len(value) != 2:
+                raise ValueError("Coordinates must be [longitude, latitude] pairs")
+            if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in value):
+                raise ValueError("Coordinates must be finite numbers")
+            if not (-180 <= value[0] <= 180 and -90 <= value[1] <= 90):
+                raise ValueError("Coordinates are outside longitude/latitude bounds")
+
+        def polygon(rings):
+            if not isinstance(rings, list) or not rings:
+                raise ValueError("Polygon must contain at least one ring")
+            for ring in rings:
+                if not isinstance(ring, list) or len(ring) < 4 or ring[0] != ring[-1]:
+                    raise ValueError("Polygon rings must be closed with at least four positions")
+                for value in ring:
+                    position(value)
+
+        if self.type == "Point":
+            position(self.coordinates)
+        elif self.type == "Polygon":
+            polygon(self.coordinates)
+        else:
+            if not self.coordinates:
+                raise ValueError("MultiPolygon must contain at least one polygon")
+            for rings in self.coordinates:
+                polygon(rings)
+        return self
+
+
+class CitationsRequest(BaseModel):
+    date_min: date
+    date_max: date
+    geometries: list[CitationGeometry] = Field(min_length=1, max_length=2)
+    radius_meters: float = Field(default=DEFAULT_PLACE_RADIUS_METERS, gt=0, le=50_000)
+    limit: int = Field(default=1000, ge=1, le=10_000)
+    offset: int = Field(default=0, ge=0, le=1_000_000)
+
+    @model_validator(mode="after")
+    def dates_ordered(self) -> Self:
+        if not 0 <= (self.date_max - self.date_min).days <= 3660:
+            raise ValueError("Date range must be ordered and no longer than 3660 days")
+        return self

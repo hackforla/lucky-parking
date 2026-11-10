@@ -47,6 +47,7 @@ from lucky_parking.errors import (
 from lucky_parking.models import (
     ChartResult,
     ChartType,
+    CitationsRequest,
     CompareModeRequest,
     RegionType,
     SingleDataRequest,
@@ -167,6 +168,22 @@ def chart_compare(
     svc: QueryService = Depends(get_query_service),
 ) -> ChartResult:
     return _run_query(svc.query_compare, body)
+
+
+@app.post("/citations", dependencies=Guarded)
+def citations(body: CitationsRequest, svc: QueryService = Depends(get_query_service)) -> dict:
+    """Citation GeoJSON and complete totals for the main Lucky Parking website."""
+    return _run_query(svc.query_citations, body)
+
+
+@app.get("/ready", dependencies=Guarded)
+def ready(svc: QueryService = Depends(get_query_service)) -> dict[str, str]:
+    try:
+        with svc.connect() as conn:
+            conn.execute("SELECT ticket_number FROM citations LIMIT 1")
+        return {"status": "ready"}
+    except Exception as exc:
+        raise _sanitized_error(exc) from exc
 
 
 def _sanitized_error(exc: Exception) -> HTTPException:
