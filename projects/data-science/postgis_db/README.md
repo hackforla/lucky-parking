@@ -19,8 +19,32 @@ API** and **citation explorer**.
 | App          | URL                        | Purpose                                              |
 | ------------ | -------------------------- | ---------------------------------------------------- |
 | Explorer UI  | http://localhost:8080      | Spreadsheet + map (region / date filters)            |
-| Contract API | http://localhost:8000/docs | Chart queries (`/chart`, `/regions`, …)              |
+| Contract API | http://localhost:8000/docs | Chart + website `POST /citations`                    |
 | PostGIS      | `localhost:5432`           | Direct SQL (`lucky` / _generated_ / `lucky_parking`) |
+
+### Main website (host Next.js)
+
+The Lucky Parking Next.js app in `apps/web` talks to this API through a server-only
+proxy at `/api/v1/citations`. It never receives database credentials. After the
+API is up:
+
+```bash
+# from the repository root
+cp apps/web/.env.example apps/web/.env.local
+# set MAPBOX_ACCESS_TOKEN; keep PARKING_API_URL=http://127.0.0.1:8000
+pnpm install
+pnpm --filter @lucky-parking/web dev
+```
+
+Open http://localhost:3000. See [api/README.md](api/README.md) for the
+`POST /citations` contract. Example API check (local compose needs no key):
+
+```bash
+curl -s http://127.0.0.1:8000/health
+curl -s -X POST http://127.0.0.1:8000/citations \
+  -H 'Content-Type: application/json' \
+  -d '{"date_min":"2025-04-26","date_max":"2025-04-26","geometries":[{"type":"Point","coordinates":[-118.44,34.06]}],"limit":1}'
+```
 
 `scripts/preflight.sh` writes `projects/data-science/postgis_db/.env` with a generated `POSTGRES_PASSWORD` on first run; compose refuses to
 start without one. Local compose sets `ALLOW_UNAUTHENTICATED=1`, so **localhost needs no API key or login**. Anything
@@ -129,7 +153,7 @@ Compose already serves the API and explorer. Use a venv only for `scripts/query_
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/pytest tests/test_models.py tests/test_api.py -q
+.venv/bin/pytest tests/test_models.py tests/test_api.py tests/test_citations.py -q
 ```
 
 Windows: `py -3 -m venv .venv` then `.\.venv\Scripts\pip install -r requirements.txt`.

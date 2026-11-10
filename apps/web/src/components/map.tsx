@@ -9,7 +9,7 @@ import losAngelesCountyFeatures from "@/data/los-angeles-county.json";
 import losAngelesFeatures from "@/data/los-angeles.json";
 import { useMapResizer } from "@/hooks/use-map-resizer";
 import { usePublicConfig } from "@/hooks/use-public-config";
-import { ParkingCitationFeature } from "@/lib/socrata/parking-citations.schema";
+import { CitationFeature } from "@/lib/citations/schema";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MAP_INITIAL_VIEW = { bounds: _.first(losAngelesFeatures.features)?.bbox as LngLatBoundsLike, zoom: 10 };
@@ -24,7 +24,7 @@ export const ParkingCitationsMap = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const mapRef = useRef<MapRef>(null);
 	const [isMapReady, setIsMapReady] = useState(false);
-	const [selectedFeature, setSelectedFeature] = useState<ParkingCitationFeature | null>(null);
+	const [selectedFeature, setSelectedFeature] = useState<CitationFeature | null>(null);
 	const [cursor, setCursor] = useState<string>("");
 	useMapResizer(mapRef, containerRef);
 
@@ -42,7 +42,7 @@ export const ParkingCitationsMap = () => {
 
 	const onMapClick = (event: MapMouseEvent) => {
 		const [feature] = getFeatures(event);
-		setSelectedFeature(feature as unknown as ParkingCitationFeature);
+		setSelectedFeature(feature as unknown as CitationFeature);
 	};
 
 	const onMapMouseMove = (event: MapMouseEvent) => {
@@ -50,7 +50,7 @@ export const ParkingCitationsMap = () => {
 		setCursor(features.length ? "pointer" : "");
 	};
 
-	if (!data?.mapboxAccessToken) return null;
+	if (!data?.mapboxAccessToken) return <p>A Mapbox access token is required to display the map.</p>;
 
 	return (
 		<div

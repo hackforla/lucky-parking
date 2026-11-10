@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import os
+from datetime import datetime, time, timedelta
 from typing import Any
 from urllib.parse import quote
 
@@ -14,6 +16,7 @@ from lucky_parking.models import (
     ChartResult,
     ChartRow,
     ChartType,
+    CitationsRequest,
     CompareModeRequest,
     QueryMode,
     RegionType,
@@ -49,7 +52,7 @@ def default_dsn() -> str:
     user = os.getenv("POSTGRES_USER", "lucky")
     database = os.getenv("POSTGRES_DB", "lucky_parking")
     host = os.getenv("PGHOST", "localhost")
-    port = os.getenv("PGPORT", "5432")
+    port = os.getenv("PGPORT") or os.getenv("DB_PORT", "5432")
     return (
         f"postgresql://{quote(user, safe='')}:{quote(password, safe='')}"
         f"@{host}:{port}/{quote(database, safe='')}"
@@ -226,6 +229,103 @@ class QueryService:
             with conn.cursor() as cur:
                 cur.execute(sql, {"limit": limit})
                 return [str(row["label"]) for row in cur.fetchall()]
+
+    def query_citations(self, request: CitationsRequest) -> dict[str, Any]:
+        """GeoJSON markers plus aggregates over every match, independent of page size.
+
+        EXISTS makes overlapping selections a union rather than double-counting
+        citations. Polygon boundaries are included; points use a meter radius.
+        Dates follow the CSV loader's current UTC timestamp convention.
+        """
+        params = {
+            "geometries": json.dumps([g.model_dump() for g in request.geometries]),
+            "date_min": datetime.combine(request.date_min, time.min),
+            "date_max": datetime.combine(request.date_max + timedelta(days=1), time.min),
+            "radius": request.radius_meters,
+            "limit": request.limit,
+            "offset": request.offset,
+        }
+        selection = """
+        WITH shapes AS MATERIALIZED (
+            SELECT ST_MakeValid(ST_SetSRID(ST_GeomFromGeoJSON(value::text), 4326)) AS geom
+            FROM jsonb_array_elements(%(geometries)s::jsonb)
+        ), selections AS MATERIALIZED (
+            SELECT geom, ST_GeometryType(geom) = 'ST_Point' AS is_point,
+                   CASE WHEN ST_GeometryType(geom) = 'ST_Point'
+                        THEN ST_Envelope(ST_Buffer(geom::geography, %(radius)s)::geometry)
+                        ELSE ST_Envelope(geom) END AS bbox
+            FROM shapes
+        )
+        """
+        matches = """
+        FROM citations c
+        WHERE c.issue_datetime >= %(date_min)s AND c.issue_datetime < %(date_max)s
+          AND c.geom && (SELECT ST_SetSRID(ST_Extent(bbox)::geometry, 4326) FROM selections)
+          AND EXISTS (
+            SELECT 1 FROM selections s
+            WHERE c.geom && s.bbox
+              AND CASE WHEN s.is_point
+                       THEN ST_DWithin(c.geom::geography, s.geom::geography, %(radius)s)
+                       ELSE ST_Covers(s.geom, c.geom) END
+          )
+        """
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    selection
+                    + """
+                    SELECT count(*) AS total, coalesce(sum(c.fine_amount), 0) AS total_fine,
+                           coalesce(avg(c.fine_amount), 0) AS average_fine
+                    """
+                    + matches,
+                    params,
+                )
+                summary = cur.fetchone()
+                cur.execute(
+                    selection
+                    + """
+                    SELECT c.ticket_number, c.issue_datetime, c.violation_code,
+                           c.violation_description, c.fine_amount,
+                           ST_X(c.geom) AS lon, ST_Y(c.geom) AS lat
+                    """
+                    + matches
+                    + """
+                    ORDER BY c.issue_datetime DESC, c.ticket_number
+                    LIMIT %(limit)s OFFSET %(offset)s
+                    """,
+                    params,
+                )
+                rows = cur.fetchall()
+        total = int(summary["total"])
+        next_offset = request.offset + len(rows)
+        return {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [row["lon"], row["lat"]]},
+                    "properties": {
+                        "ticket_number": row["ticket_number"],
+                        "issue_datetime": row["issue_datetime"].isoformat(),
+                        "violation_code": row["violation_code"],
+                        "violation_description": row["violation_description"],
+                        "fine_amount": row["fine_amount"],
+                    },
+                }
+                for row in rows
+            ],
+            "meta": {
+                "total": total,
+                "total_fine": float(summary["total_fine"]),
+                "average_fine": float(summary["average_fine"]),
+                "returned": len(rows),
+                "limit": request.limit,
+                "offset": request.offset,
+                "truncated": len(rows) < total,
+                "next_offset": next_offset if rows and next_offset < total else None,
+                "radius_meters": request.radius_meters,
+            },
+        }
 
     def suggest_regions(
         self,

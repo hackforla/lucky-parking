@@ -1,4 +1,4 @@
-import { endOfDay, startOfDay, subDays } from "date-fns";
+import { endOfDay, startOfDay, startOfYear, subYears } from "date-fns";
 import { enableMapSet } from "immer";
 import { type Result as MapboxGeocoderResult } from "mapbox__mapbox-gl-geocoder";
 import { type DateRange } from "react-day-picker";
@@ -56,7 +56,7 @@ export const store: BoundStore = createStore<Store>()(
 					}),
 
 				/* ——————————————— Range Slice ——————————————— */
-				range: { from: startOfDay(subDays(new Date(), 6)), to: endOfDay(new Date()) },
+				range: { from: startOfYear(subYears(new Date(), 1)), to: endOfDay(new Date()) },
 				setRange: (range) =>
 					set((state) => {
 						if (!range?.from || !range?.to) return;

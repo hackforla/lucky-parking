@@ -45,12 +45,14 @@ export const useGeocoder = () => {
 
 	return useQuery({
 		enabled: isValidQuery,
-		queryKey: ["geocoder", query],
+		queryKey: ["geocoder", query, Boolean(data?.mapboxAccessToken)],
 		queryFn: async () => {
-			if (!(isValidQuery && data?.mapboxAccessToken)) return [];
+			if (!isValidQuery) return [];
 
 			const neighborhoodCouncils = forwardNeighborhoodCouncils();
-			if (neighborhoodCouncils.length >= MAX_RESULTS_LIMIT) return _.slice(neighborhoodCouncils, 0, MAX_RESULTS_LIMIT);
+			if (neighborhoodCouncils.length >= MAX_RESULTS_LIMIT || !data?.mapboxAccessToken) {
+				return _.slice(neighborhoodCouncils, 0, MAX_RESULTS_LIMIT);
+			}
 
 			const parameters = new URLSearchParams({
 				q: query,
@@ -68,7 +70,7 @@ export const useGeocoder = () => {
 			const response = await fetch(
 				`${MAPBOX_API_URL}/search/geocode/${MAPBOX_GEOCODING_VERSION}/forward?${parameters}`
 			);
-			const body = response.ok ? await response.json() : [];
+			const body = response.ok ? await response.json() : { features: [] };
 
 			return _.slice([...neighborhoodCouncils, ...body.features], 0, MAX_RESULTS_LIMIT) as GeocoderResult[];
 		},

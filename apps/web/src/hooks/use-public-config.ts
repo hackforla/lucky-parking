@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 
 type PublicConfig = {
 	mapboxAccessToken: string;
-	socrataAppToken: string;
 };
 
 export const usePublicConfig = () => {
