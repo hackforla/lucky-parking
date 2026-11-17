@@ -214,6 +214,28 @@ the volume and restore the dump again.
 
 ---
 
+## Workflow 2: local Next.js → this VPS API
+
+With the prod stack running, point the host Next.js app at the cloud API without exposing port 8000 publicly.
+
+1. On your laptop, open an SSH tunnel (use a free local port if `:8000` is already taken by local compose):
+
+   ```bash
+   ssh -N -L 28000:127.0.0.1:8000 ubuntu@VPS_IP
+   ```
+
+2. In `apps/web/.env.local`:
+
+   ```bash
+   PARKING_API_URL=http://127.0.0.1:28000
+   PARKING_API_KEY=lp_…   # one value from the VPS API_KEYS list
+   MAPBOX_ACCESS_TOKEN=…
+   ```
+
+3. `pnpm --filter @lucky-parking/web dev` and open http://localhost:3000.
+
+When you later attach real DNS names, switch `PARKING_API_URL` to `https://api.example.org` and drop the tunnel.
+
 ## Option: no domain
 
 For a private test with no DNS name, replace the two domain blocks in [`Caddyfile`](Caddyfile) with a single site block
