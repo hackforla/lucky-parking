@@ -16,7 +16,11 @@ const MAP_INITIAL_VIEW = { bounds: _.first(losAngelesFeatures.features)?.bbox as
 const MAP_INTERACTIVE_LAYERS = [MAP_LAYER_CIRCLES_ID];
 
 const getFeatures = (event: MapMouseEvent, layers = MAP_INTERACTIVE_LAYERS) => {
-	return event.target.queryRenderedFeatures(event.point, { layers });
+	const map = event.target;
+	// Style reloads / first paint can fire mousemove before our layers exist.
+	const existing = layers.filter((id) => Boolean(map.getLayer(id)));
+	if (existing.length === 0) return [];
+	return map.queryRenderedFeatures(event.point, { layers: existing });
 };
 
 export const ParkingCitationsMap = () => {

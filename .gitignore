@@ -6,14 +6,20 @@ build/
 dist/
 out/
 storybook-static/
+docs/.workflow-slides-build/
 
 # Dependencies
 .pnp/
 .pnp.js
+.pnpm-store/
 node_modules/
 
-# Python virtual environments
+# Python
 .venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
 
 # Deployment
 .vercel/
